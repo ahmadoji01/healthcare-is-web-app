@@ -1,0 +1,15 @@
+export interface Patient {
+    id: Number,
+    name: String,
+    height: Number,
+    weight: Number,
+    birthday: Date,
+    religion: String,
+    job: String,
+    education: String,
+    status: String,
+    gender: Boolean,
+    residentNumber: String,
+    address: String,
+    slug: String,
+}
