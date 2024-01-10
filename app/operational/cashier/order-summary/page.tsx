@@ -1,4 +1,4 @@
-import OrderDetails from "../common/order-details";
+import OrderTotals from "../common/order-totals";
 import PatientOverview from "../common/patient-overview";
 
 const OrderSummary = () => {
@@ -8,8 +8,8 @@ const OrderSummary = () => {
             <div className="w-full">
                 <PatientOverview />
             </div>
-            <div className="w-full">
-                <OrderDetails />
+            <div className="w-full gap-2">
+                <OrderTotals />
             </div>
         </div>
     );

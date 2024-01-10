@@ -8,26 +8,22 @@ const PatientOverview = () => {
                 <PatientAvatar name="Jedi Force" />
             </div>
             <h2 className="text-3xl text-center font-extrabold text-black dark:text-white mb-2">Jedi Force</h2>
-            <div className="grid px-2 md:px-12 lg:px-20 grid-cols-2">
-                <div className="grid grid-cols-3 gap-2 text-black dark:text-white">
-                    <div>Height</div>
-                    <div className="text-right font-extrabold">170</div>
-                    <div>cms</div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-black dark:text-white">
-                    <div>Weight</div>
-                    <div className="text-right font-extrabold">88</div>
-                    <div>kg</div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-black dark:text-white">
+            <div className="grid gap-1 px-2 md:px-3 lg:px-5">
+                <div className="grid grid-cols-2 gap-2 text-black dark:text-white">
                     <div>Age</div>
-                    <div className="text-right font-extrabold">22</div>
-                    <div>y/o</div>
+                    <div className="text-left font-extrabold">22 y/o</div>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-black dark:text-white">
-                    <div>Tension</div>
-                    <div className="text-right font-extrabold">120</div>
-                    <div>mmHg</div>
+                <div className="grid grid-cols-2 gap-2 text-black dark:text-white">
+                    <div>Consenting Rep.</div>
+                    <div className="text-left font-extrabold">Mr. Shane Fillan</div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-black dark:text-white">
+                    <div>Treated by</div>
+                    <div className="text-left font-extrabold">dr. Tika Panggabean</div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-black dark:text-white">
+                    <div>Visit</div>
+                    <div className="text-left font-extrabold">#12</div>
                 </div>
             </div>
         </div>
