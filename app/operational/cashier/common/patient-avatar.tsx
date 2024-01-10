@@ -1,7 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
-
 function stringToColor(string: string) {
   let hash = 0;
   let i;
@@ -37,7 +35,7 @@ interface PatientAvatarProps {
 
 const PatientAvatar = ({ name }: PatientAvatarProps) => {
   return (
-    <Avatar {...stringAvatar(name)} sx={{ width: 192, height: 192, fontSize: 64 }} />
+    <Avatar {...stringAvatar(name)} sx={{ width: 150, height: 150, fontSize: 64 }} />
   );
 }
 
