@@ -15,7 +15,7 @@ const OrderSummary = () => {
     return (
         <>
             <DashboardModal open={modalOpen} handleClose={handleModal} children={ <PatientDeleteConfirmation handleClose={handleModal} /> } title="" /> 
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-2 mb-2">
                 <div className="w-full">
                     <PatientOverview />
                 </div>

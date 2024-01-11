@@ -208,3 +208,14 @@ span.flatpickr-weekday,
 .number{
   margin:100px;
 }
+
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.quantity-input[type=number] {
+  -moz-appearance: textfield;
+}
