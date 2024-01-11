@@ -1,49 +1,31 @@
-import { faHeart, faMapPin, faSearch, faWindowRestore } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faHeart, faMapPin, faSearch, faWindowRestore } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import DarkModeSwitcher from "../Header/DarkModeSwitcher";
 import DropdownNotification from "../Header/DropdownNotification";
 import DropdownMessage from "../Header/DropdownMessage";
 import DropdownUser from "../Header/DropdownUser";
+import Link from "next/link";
 
 const Footer = () => {
 
     return (
         <footer className="sticky bottom-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
             <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
-                <div className="hidden sm:block">
-                <form action="https://formbold.com/s/unique_form_id" method="POST">
-                    <div className="relative">
-                    <button className="absolute left-0 top-1/2 -translate-y-1/2">
-                        <FontAwesomeIcon width={20} icon={faSearch} />
-                    </button>
-                    <input
-                        type="text"
-                        placeholder="Search items..."
-                        className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
-                    />
-                    </div>
-                </form>
+                <div className="block">
+                    Total: Rp. 180000
                 </div>
 
                 <div className="flex items-center gap-3 2xsm:gap-7">
-                <ul className="flex items-center gap-2 2xsm:gap-4">
-                    {/* <!-- Dark Mode Toggler --> */}
-                    <DarkModeSwitcher />
-                    {/* <!-- Dark Mode Toggler --> */}
-
-                    {/* <!-- Notification Menu Area --> */}
-                    <DropdownNotification />
-                    {/* <!-- Notification Menu Area --> */}
-
-                    {/* <!-- Chat Notification Area --> */}
-                    <DropdownMessage />
-                    {/* <!-- Chat Notification Area --> */}
-                </ul>
-
-                {/* <!-- User Area --> */}
-                <DropdownUser />
-                {/* <!-- User Area --> */}
+                    <Link
+                        href="#"
+                        className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+                        >
+                        <span>
+                            <FontAwesomeIcon icon={faCartShopping} />
+                        </span>
+                        Checkout
+                    </Link>
                 </div>
             </div>
         </footer>
