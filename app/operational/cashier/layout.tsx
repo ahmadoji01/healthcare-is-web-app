@@ -8,6 +8,7 @@ import Loader from "@/components/Dashboard/Loader";
 import Header from "./common/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import Sidebar from "./common/Sidebar";
+import Footer from "./common/Footer";
 
 export default function RootLayout({
   children,
@@ -53,6 +54,7 @@ export default function RootLayout({
                     </div>
                   </main>
                 </ThemeProvider>
+                <Footer />
               </div>
             </div>
           )}

@@ -6,15 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Pagination } from "@mui/material";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 
-interface PatientListTableProps {
-  handleEditModal: any,
-  handleDeleteModal: any,
-}
-
-const OrderItemList = ({ handleEditModal, handleDeleteModal }: PatientListTableProps) => {
+const OrderItemList = () => {
   const [patients, setPatients] = useState<Patient[]>();
 
   useEffect(() => {
@@ -82,7 +76,6 @@ const OrderItemList = ({ handleEditModal, handleDeleteModal }: PatientListTableP
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={handleEditModal}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
                     <FontAwesomeIcon width={18} height={18} icon={faPencil} />
@@ -91,7 +84,6 @@ const OrderItemList = ({ handleEditModal, handleDeleteModal }: PatientListTableP
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={handleDeleteModal}
                     style={{ background: "red" }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
