@@ -8,7 +8,21 @@ interface OrderItem {
     name: string,
     description: string,
     price: number,
+    quantity: number,
+    total: number,
     image: string,
+}
+
+export const orderItemCategory = (item:OrderItem) => {
+    if (item.medication !== null) {
+      return "Medicine";
+    }
+  
+    if (item.treatment !== null) {
+      return "Treatment";
+    }
+  
+    return "Other";
 }
 
 export default OrderItem;

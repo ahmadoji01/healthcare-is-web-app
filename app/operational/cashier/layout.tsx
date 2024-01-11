@@ -9,6 +9,7 @@ import Header from "./common/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import Sidebar from "./common/Sidebar";
 import Footer from "./common/Footer";
+import { DeleteModalContext, DeleteModalProvider } from "@/contexts/delete-modal-context";
 
 export default function RootLayout({
   children,
@@ -47,13 +48,15 @@ export default function RootLayout({
                   sidebarOpen={sidebarOpen}
                   setSidebarOpen={setSidebarOpen}
                 />
-                <ThemeProvider theme={theme} >
-                  <main>
-                    <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-                      {children}
-                    </div>
-                  </main>
-                </ThemeProvider>
+                  <DeleteModalProvider>
+                    <ThemeProvider theme={theme} >
+                      <main>
+                        <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                          {children}
+                        </div>
+                      </main>
+                    </ThemeProvider>
+                  </DeleteModalProvider>
                 <Footer />
               </div>
             </div>
