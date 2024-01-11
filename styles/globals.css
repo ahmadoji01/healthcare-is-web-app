@@ -205,4 +205,6 @@ span.flatpickr-weekday,
   background: #2684FF;
 }
 
-.hidden { display: none; }
+.number{
+  margin:100px;
+}
