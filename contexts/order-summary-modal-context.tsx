@@ -1,17 +1,22 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { PaymentMethod } from '@/modules/payment-methods/domain/payment-method';
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
  
 interface OrderSummaryModalContextType {
     deleteModalOpen: boolean,
     itemModalOpen: boolean,
     checkoutModalOpen: boolean,
+    selectedPayment: PaymentMethod|undefined,
     handleModal: (deleteModalOpen: boolean, itemModalOpen: boolean, checkoutModalOpen: boolean) => void,
+    setSelectedPayment: Dispatch<SetStateAction<PaymentMethod|undefined>>
 }
 
 export const OrderSummaryModalContext = createContext<OrderSummaryModalContextType | null>({
     deleteModalOpen: false,
     itemModalOpen: false,
     checkoutModalOpen: false,
+    selectedPayment: undefined,
     handleModal: () => {},
+    setSelectedPayment: () => {},
 });
  
 export const OrderSummaryModalProvider = ({
@@ -22,6 +27,7 @@ export const OrderSummaryModalProvider = ({
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
     const [itemModalOpen, setItemModalOpen] = useState<boolean>(false);
     const [checkoutModalOpen, setCheckoutModalOpen] = useState<boolean>(false);
+    const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>();
 
     const handleModal = (deleteModal:boolean, itemModal:boolean, checkoutModal:boolean) => {
         if (deleteModal) {
@@ -49,7 +55,7 @@ export const OrderSummaryModalProvider = ({
     }
 
     return (
-        <OrderSummaryModalContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, handleModal }}>
+        <OrderSummaryModalContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, selectedPayment, handleModal, setSelectedPayment }}>
             {children}
         </OrderSummaryModalContext.Provider>
     );
