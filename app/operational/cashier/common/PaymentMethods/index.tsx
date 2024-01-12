@@ -14,7 +14,7 @@ const PaymentMethods = () => {
     })
 
     return (
-        <div className="rounded-sm border border-stroke p-6 bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div id="payment_method" className="rounded-sm border border-stroke p-6 bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <h4 className="text-xl font-extrabold text-black dark:text-white">Payment</h4>
             <div className="mt-5 grid grid-cols-3 gap-2">
                 { paymentMethods.map( (method, key) => 
