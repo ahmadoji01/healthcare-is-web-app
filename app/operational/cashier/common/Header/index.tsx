@@ -4,7 +4,7 @@ import DropdownMessage from "./DropdownMessage";
 import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdownUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faArrowLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -59,14 +59,15 @@ const Header = (props: {
         <div className="hidden sm:block">
           <form action="https://formbold.com/s/unique_form_id" method="POST">
             <div className="relative">
-              <button className="absolute left-0 top-1/2 -translate-y-1/2">
-                <FontAwesomeIcon width={20} icon={faSearch} />
-              </button>
-              <input
-                type="text"
-                placeholder="Search items..."
-                className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
-              />
+              <Link
+                href="#"
+                className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+                >
+                <span>
+                    <FontAwesomeIcon icon={faAdd} />
+                </span>
+                Add Item
+              </Link>
             </div>
           </form>
         </div>
