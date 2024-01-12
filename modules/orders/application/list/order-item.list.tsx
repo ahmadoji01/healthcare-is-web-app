@@ -10,13 +10,11 @@ import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { orderItemsFakeData } from "../../infrastructure/order-item.fakes";
 import OrderItem, { orderItemCategory } from "../../domain/order-item";
 import Currency from "@/components/Currency";
+import { useOrderSummaryModalContext } from "@/contexts/order-summary-modal-context";
 
-interface OrderItemListProps {
-  handleDeleteModal: any,
-}
-
-const OrderItemList = ({ handleDeleteModal }:OrderItemListProps) => {
+const OrderItemList = () => {
   const [orderItems, setOrderItems] = useState<OrderItem[]>();
+  const { handleModal } = useOrderSummaryModalContext();
 
   useEffect(() => {
     setOrderItems(orderItemsFakeData);
@@ -95,7 +93,7 @@ const OrderItemList = ({ handleDeleteModal }:OrderItemListProps) => {
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={handleDeleteModal}
+                    onClick={() => handleModal(true, false, false)}
                     style={{ background: "red" }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >

@@ -26,7 +26,7 @@ import { BOARD_SECTIONS } from '../constants';
 import { useDataModalContext } from '@/contexts/data-modal-context';
 import PatientForm from '@/modules/patients/application/form/patient.form';
 import PatientDeleteConfirmation from '@/modules/patients/application/form/patient.delete-confirmation';
-import DashboardModal from '@/components/Dashboard/Modal/Modal';
+import DashboardModal from '@/components/Modal/Modal';
 import { useDoctorContext } from '@/contexts/doctor-context';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

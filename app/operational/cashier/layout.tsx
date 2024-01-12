@@ -9,7 +9,7 @@ import Header from "./common/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import Sidebar from "./common/Sidebar";
 import Footer from "./common/Footer";
-import { DeleteModalContext, DeleteModalProvider } from "@/contexts/delete-modal-context";
+import { OrderSummaryModalProvider } from "@/contexts/order-summary-modal-context";
 
 export default function RootLayout({
   children,
@@ -44,11 +44,11 @@ export default function RootLayout({
                 setSidebarOpen={setSidebarOpen}
               />
               <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                <Header
-                  sidebarOpen={sidebarOpen}
-                  setSidebarOpen={setSidebarOpen}
-                />
-                  <DeleteModalProvider>
+                <OrderSummaryModalProvider>
+                  <Header
+                    sidebarOpen={sidebarOpen}
+                    setSidebarOpen={setSidebarOpen}
+                    />
                     <ThemeProvider theme={theme} >
                       <main>
                         <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
@@ -56,8 +56,8 @@ export default function RootLayout({
                         </div>
                       </main>
                     </ThemeProvider>
-                  </DeleteModalProvider>
-                <Footer />
+                  <Footer />
+                </OrderSummaryModalProvider>
               </div>
             </div>
           )}
