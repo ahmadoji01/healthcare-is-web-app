@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { orderItemsFakeData } from "../../infrastructure/order-item.fakes";
 import OrderItem, { orderItemCategory } from "../../domain/order-item";
+import Currency from "@/components/Currency";
 
 interface OrderItemListProps {
   handleDeleteModal: any,
@@ -64,7 +65,7 @@ const OrderItemList = ({ handleDeleteModal }:OrderItemListProps) => {
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{item.price}</p>
+              <p className="text-meta-3"><Currency value={item.price} /></p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
@@ -86,7 +87,7 @@ const OrderItemList = ({ handleDeleteModal }:OrderItemListProps) => {
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-center text-black dark:text-white">{item.price * item.quantity}</p>
+              <p className="text-center text-black dark:text-white"><Currency value={item.price * item.quantity} /></p>
             </div>
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">

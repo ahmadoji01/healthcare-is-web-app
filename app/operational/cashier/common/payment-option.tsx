@@ -36,7 +36,7 @@ const PaymentOption = ({ id, name, selected, setSelectedOptionId }:PaymentOption
             <div className="ml-2 mr-4">
                 <FontAwesomeIcon icon={getIcon(name)} width={32} height={32} />
             </div>
-            <div className="text-black dark:text-white font-bold">
+            <div className={`${!selected ? 'text-black dark:text-white font-bold' : 'text-red-100 dark:text-orange-100 font-extrabold'}`}>
                 { name }
             </div>
         </div>
