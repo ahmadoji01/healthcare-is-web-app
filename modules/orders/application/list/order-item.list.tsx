@@ -10,11 +10,11 @@ import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { orderItemsFakeData } from "../../infrastructure/order-item.fakes";
 import OrderItem, { orderItemCategory } from "../../domain/order-item";
 import Currency from "@/components/Currency";
-import { useOrderSummaryModalContext } from "@/contexts/order-summary-modal-context";
+import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 
 const OrderItemList = () => {
   const [orderItems, setOrderItems] = useState<OrderItem[]>();
-  const { handleModal } = useOrderSummaryModalContext();
+  const { handleModal } = useOrderSummaryContext();
 
   useEffect(() => {
     setOrderItems(orderItemsFakeData);

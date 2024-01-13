@@ -2,12 +2,12 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import PaymentOption from "../payment-option";
 import { PaymentMethod } from "@/modules/payment-methods/domain/payment-method";
 import { paymentMethodsFakeData } from "@/modules/payment-methods/infrastructure/payment-methods.fakes";
-import { useOrderSummaryModalContext } from "@/contexts/order-summary-modal-context";
+import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 
 const PaymentMethods = () => {
 
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-    const { selectedPayment, setSelectedPayment } = useOrderSummaryModalContext();
+    const { selectedPayment, setSelectedPayment } = useOrderSummaryContext();
 
     useEffect( () => {
         setPaymentMethods(paymentMethodsFakeData);

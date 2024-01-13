@@ -1,14 +1,14 @@
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { useOrderSummaryModalContext } from "@/contexts/order-summary-modal-context";
+import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { PaymentMethod } from "@/modules/payment-methods/domain/payment-method";
 import { Alert, Snackbar } from "@mui/material";
 import { useState } from "react";
 
 const Footer = () => {
 
-    const { selectedPayment, handleModal } = useOrderSummaryModalContext();
+    const { selectedPayment, handleModal } = useOrderSummaryContext();
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
 
     const handleClick = () => {

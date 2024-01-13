@@ -1,4 +1,4 @@
-import { useOrderSummaryModalContext } from "@/contexts/order-summary-modal-context";
+import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import Image from "next/image";
 
 interface PaymentProps {
@@ -7,7 +7,7 @@ interface PaymentProps {
 
 const Payment = () => {
 
-    const { selectedPayment } = useOrderSummaryModalContext();
+    const { selectedPayment } = useOrderSummaryContext();
 
     return (
         <>

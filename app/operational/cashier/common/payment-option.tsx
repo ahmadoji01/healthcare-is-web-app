@@ -1,4 +1,4 @@
-import { useOrderSummaryModalContext } from "@/contexts/order-summary-modal-context";
+import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { PaymentMethod } from "@/modules/payment-methods/domain/payment-method";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faBank, faCreditCard, faMoneyBill, faQrcode } from "@fortawesome/free-solid-svg-icons";
@@ -30,7 +30,7 @@ function getIcon(name:string): IconDefinition {
 
 const PaymentOption = ({ selected, method }:PaymentOptionProps) => {
 
-    const { setSelectedPayment } = useOrderSummaryModalContext();
+    const { setSelectedPayment } = useOrderSummaryContext();
 
     return (
         <div onClick={() => setSelectedPayment(method)} className={`flex rounded-lg border ${selected ? 'border-4 border-black dark:border-white' : 'border-stroke' }
