@@ -8,18 +8,19 @@ import * as React from 'react';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import CheckoutReview from './checkout-review';
 import Link from "next/link";
 import RegisterFinished from "@/app/operational/front-desk/patient-registration/common/register-finished";
-import PatientInputForm from "@/app/operational/front-desk/patient-registration/new-patient/patient-input-form";
 import Payment from "./payment";
+import OrderItemReview from "@/modules/orders/application/list/order-item.review";
+import OrderItem from "@/modules/orders/domain/order-item";
+import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 
 const steps = ['Review Items', 'Payment'];
 
-function getStepContent(step: number, handleNext: () => void) {
+function getStepContent(step: number, orderItems: OrderItem[]|undefined) {
   switch (step) {
     case 0:
-      return <CheckoutReview />;
+      return <OrderItemReview orderItems={orderItems} />;
     case 1:
       return <Payment />;
     default:
@@ -29,6 +30,7 @@ function getStepContent(step: number, handleNext: () => void) {
 
 const Checkout = () => {
     const [activeStep, setActiveStep] = React.useState(0);
+    const { selectedOrder } = useOrderSummaryContext();
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
@@ -54,7 +56,7 @@ const Checkout = () => {
                 <RegisterFinished />
             ) : (
                 <>
-                    {getStepContent(activeStep, handleNext)}
+                    {getStepContent(activeStep, selectedOrder?.orderItems)}
                     <div className="flex justify-end mt-2 gap-x-2">
                         <div className="flex-1 space-x-2">
                             {activeStep !== 0 && (

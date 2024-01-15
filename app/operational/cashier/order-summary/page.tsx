@@ -11,7 +11,7 @@ import Checkout from "../common/Checkout";
 
 const OrderSummary = () => {
 
-    const { deleteModalOpen, itemModalOpen, checkoutModalOpen, handleModal } = useOrderSummaryContext();
+    const { selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, handleModal } = useOrderSummaryContext();
     
     return (
         <>
@@ -28,7 +28,7 @@ const OrderSummary = () => {
             </div>
             <div className="mt-6 text-black dark:text-white">
                 <h3 className="text-3xl font-extrabold mb-2">Order Items</h3>
-                <OrderItemList />
+                <OrderItemList orderItems={selectedOrder?.orderItems} handleModal={() => handleModal(true,false,false)} />
             </div>
             <div className="flex mt-6">
                 <div className="w-full gap-2">

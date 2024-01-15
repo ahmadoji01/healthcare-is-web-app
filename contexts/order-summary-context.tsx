@@ -50,6 +50,9 @@ export const OrderSummaryProvider = ({
 
     useEffect( () => {
         setOrders(ordersFakeData);
+        if (orders.length > 0) {
+            setSelectedOrder(orders[0]);
+        }
     })
 
     const handleModal = (deleteModal:boolean, itemModal:boolean, checkoutModal:boolean) => {
