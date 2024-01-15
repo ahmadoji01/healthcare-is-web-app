@@ -1,4 +1,4 @@
-import { EDUCATION, RELIGION, MARRITAL_STATUS } from "@/modules/patients/domain/patients.constants"
+import { EDUCATION, RELIGION, MARRITAL_STATUS } from "@/modules/patients/domain/patient.constants"
 import { Patient } from "@/modules/patients/domain/patient"
 
 export const patientsFakeData: Patient[] = [

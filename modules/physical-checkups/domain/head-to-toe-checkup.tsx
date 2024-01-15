@@ -96,3 +96,102 @@ export interface HeadToToeCheckup {
         notes: string,
     }
 }
+
+export const emptyHeadToToeCheckup:HeadToToeCheckup = {
+    head: {
+        hairDistribution: "",
+        scalp: "",
+        tenderness: "",
+        facialMovementSymmetry: false,
+        facialSensation: "",
+        notes: "",
+    },
+    eyes: {
+        symmetry: false,
+        eyebrowDistribution: "",
+        eyelashDistribution: "",
+        conjunctiva: "",
+        schlera: "",
+        cornea: "",
+        perrla: false,
+        cardinal: "",
+        snellenChart: "",
+        notes: "",
+    },
+    ears: {
+        auriclePalpation: "",
+        tympanicMembrane: "",
+        weberTest: "",
+        rinneTest: "",
+        whisperTest: "",
+        notes: "",
+    },
+    nose: {
+        symmetryPalpation: "",
+        nostrilInterior: "",
+        naresPatency: "",
+        smell: "",
+        sinusesPalpation: "",
+        notes: "",
+    },
+    mouthThroat: {
+        lips: "",
+        teethGums: "",
+        buccalMucosa: "",
+        tongue: "",
+        jawJoint: "",
+        notes: "",
+    },
+    neckShoulders: {
+        neckRangeOfMotions: "",
+        shoulderShrug: "",
+        lymphNodes: "",
+        neckAndTracheaPalpation: "",
+        jvd: "",
+        notes: "",
+    },
+    lungsThorax: {
+        lungAuscultation: "",
+        respiratoryExclusion: "",
+        thoraxPalpation: "",
+        spinalCurvature: "",
+        notes: "",
+    },
+    circulatorySystem: {
+        carotidArteryPalpation: "",
+        heartAuscultation: "",
+        notes: "",
+    },
+    gastrointestinal: {
+        abdominalInspection: "",
+        bowelSoundAuscultation: "",
+        abdomenPalpation: "",
+        bowelProblem: false,
+        notes: "",
+    },
+    armsHands: {
+        romAndStrength: "",
+        armPulses: "",
+        capRefill: "",
+        skinTurgor: "",
+        sensation: "",
+        notes: "",
+    },
+    legsFeet: {
+        romAndStrength: "",
+        legPulses: "",
+        capRefill: "",
+        sensation: "",
+        gaitAssessment: "",
+        notes: "",
+    },
+    genitourinary: {
+        pubicHair: "",
+        tendernessLumpsLesions: "",
+        notes: "",
+    },
+    breast: {
+        breastPalpation: "",
+        notes: "",
+    }
+}

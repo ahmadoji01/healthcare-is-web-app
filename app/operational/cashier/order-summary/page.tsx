@@ -8,9 +8,6 @@ import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import DashboardModal from "@/components/Modal/Modal";
 import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
 import Checkout from "../common/Checkout";
-import { useState } from "react";
-import { PaymentMethod } from "@/modules/payment-methods/domain/payment-method";
-import { Patient } from "@/modules/patients/domain/patient";
 
 const OrderSummary = () => {
 

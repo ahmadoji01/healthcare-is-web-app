@@ -1,3 +1,5 @@
+import { Order } from '@/modules/orders/domain/order';
+import { ordersFakeData } from '@/modules/orders/infrastructure/order.fakes';
 import { Patient } from '@/modules/patients/domain/patient';
 import { patientsFakeData } from '@/modules/patients/infrastructure/patients.fakes';
 import { PaymentMethod } from '@/modules/payment-methods/domain/payment-method';
@@ -8,12 +10,12 @@ interface OrderSummaryContextType {
     itemModalOpen: boolean,
     checkoutModalOpen: boolean,
     selectedPayment: PaymentMethod|undefined,
-    patients: Patient[],
-    selectedPatient: Patient|undefined,
+    orders: Order[],
+    selectedOrder: Order|undefined,
     handleModal: (deleteModalOpen: boolean, itemModalOpen: boolean, checkoutModalOpen: boolean) => void,
     setSelectedPayment: Dispatch<SetStateAction<PaymentMethod|undefined>>,
-    setPatients: Dispatch<SetStateAction<Patient[]>>,
-    setSelectedPatient: Dispatch<SetStateAction<Patient|undefined>>,
+    setOrders: Dispatch<SetStateAction<Order[]>>,
+    setSelectedOrder: Dispatch<SetStateAction<Order|undefined>>,
 }
 
 export const OrderSummaryContext = createContext<OrderSummaryContextType | null>({
@@ -21,12 +23,12 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     itemModalOpen: false,
     checkoutModalOpen: false,
     selectedPayment: undefined,
-    patients: [],
-    selectedPatient: undefined,
+    orders: [],
+    selectedOrder: undefined,
     handleModal: () => {},
     setSelectedPayment: () => {},
-    setPatients: () => {},
-    setSelectedPatient: () => {},
+    setOrders: () => {},
+    setSelectedOrder: () => {},
 });
  
 export const OrderSummaryProvider = ({
@@ -38,11 +40,11 @@ export const OrderSummaryProvider = ({
     const [itemModalOpen, setItemModalOpen] = useState<boolean>(false);
     const [checkoutModalOpen, setCheckoutModalOpen] = useState<boolean>(false);
     const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>();
-    const [patients, setPatients] = useState<Patient[]>([]);
-    const [selectedPatient, setSelectedPatient] = useState<Patient>();
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [selectedOrder, setSelectedOrder] = useState<Order>();
 
     useEffect( () => {
-        setPatients(patientsFakeData);
+        setOrders(ordersFakeData);
     })
 
     const handleModal = (deleteModal:boolean, itemModal:boolean, checkoutModal:boolean) => {
@@ -71,7 +73,7 @@ export const OrderSummaryProvider = ({
     }
 
     return (
-        <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, patients, selectedPatient, selectedPayment, handleModal, setSelectedPayment, setPatients, setSelectedPatient }}>
+        <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, orders, selectedOrder, selectedPayment, handleModal, setSelectedPayment, setOrders, setSelectedOrder }}>
             {children}
         </OrderSummaryContext.Provider>
     );

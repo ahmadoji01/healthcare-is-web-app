@@ -8,7 +8,7 @@ interface SidebarItemProps {
 }
 
 const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
-    const { patients, selectedPatient, setSelectedPatient } = useOrderSummaryContext();
+    const { orders, selectedOrder, setSelectedOrder } = useOrderSummaryContext();
 
     return (
         <div>
@@ -16,22 +16,22 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                 Patients on Queue
             </h3>
             <ul className="mb-6 flex flex-col gap-1.5">
-                { patients?.map((patient, key) => (
+                { orders?.map((order, key) => (
                     <li>
                         <Link
                             href="#"
                             className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                (patient.id === selectedPatient?.id) &&
+                                (order.id === selectedOrder?.id) &&
                                 "bg-graydark dark:bg-meta-4"
                             }`}
                             onClick={(e) => {
                                 e.preventDefault();
                                 sidebarExpanded
-                                ? setSelectedPatient(patient)
+                                ? setSelectedOrder(order)
                                 : setSidebarExpanded(true);
                             }}
                             >
-                            { patient.name }
+                            { order.patient.name }
                         </Link>
                     </li>
                 ))}

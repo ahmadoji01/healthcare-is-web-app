@@ -17,11 +17,9 @@ export const RELIGION = {
     confucius: 'confucius',
 }
 
-export const MARRITAL_STATUS = {
-    single: 'single',
-    married: 'married',
-    divorced: 'divorced',
-    widow: 'widow',
+export const JOB_STATUS = {
+    part_time: 'part_time',
+    full_time: 'full_time',
 }
 
 export const GENDER = {
