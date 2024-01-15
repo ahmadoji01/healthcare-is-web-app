@@ -5,14 +5,14 @@ import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdownUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faArrowLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useOrderSummaryModalContext } from "@/contexts/order-summary-modal-context";
+import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
 
-  const { handleModal } = useOrderSummaryModalContext();
+  const { handleModal } = useOrderSummaryContext();
 
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">

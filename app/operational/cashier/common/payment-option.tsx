@@ -1,3 +1,5 @@
+import { useOrderSummaryContext } from "@/contexts/order-summary-context";
+import { PaymentMethod } from "@/modules/payment-methods/domain/payment-method";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faBank, faCreditCard, faMoneyBill, faQrcode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -5,10 +7,8 @@ import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 
 interface PaymentOptionProps {
-    id: number,
-    name: string,
     selected: boolean,
-    setSelectedOptionId: Dispatch<SetStateAction<number>>,
+    method: PaymentMethod,
 }
 
 function getIcon(name:string): IconDefinition {
@@ -28,16 +28,18 @@ function getIcon(name:string): IconDefinition {
     return faMoneyBill;
 }
 
-const PaymentOption = ({ id, name, selected, setSelectedOptionId }:PaymentOptionProps) => {
+const PaymentOption = ({ selected, method }:PaymentOptionProps) => {
+
+    const { setSelectedPayment } = useOrderSummaryContext();
 
     return (
-        <div onClick={() => setSelectedOptionId(id)} className={`flex rounded-lg border ${selected ? 'border-4 border-black dark:border-white' : 'border-stroke' }
+        <div onClick={() => setSelectedPayment(method)} className={`flex rounded-lg border ${selected ? 'border-4 border-black dark:border-white' : 'border-stroke' }
             px-2 py-6 bg-white dark:border-strokedark dark:bg-boxdark`}>
             <div className="ml-2 mr-4">
-                <FontAwesomeIcon icon={getIcon(name)} width={32} height={32} />
+                <FontAwesomeIcon icon={getIcon(method.name)} width={32} height={32} />
             </div>
             <div className={`${!selected ? 'text-black dark:text-white font-bold' : 'text-red-100 dark:text-orange-100 font-extrabold'}`}>
-                { name }
+                { method.name }
             </div>
         </div>
     )

@@ -1,24 +1,16 @@
-import { Patient } from "@/modules/patients/domain/patient";
-import moment from "moment";
-import { patientsFakeData } from "@/modules/patients/infrastructure/patients.fakes";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
-import { orderItemsFakeData } from "../../infrastructure/order-item.fakes";
 import OrderItem, { orderItemCategory } from "../../domain/order-item";
 import Currency from "@/components/Currency";
-import { useOrderSummaryModalContext } from "@/contexts/order-summary-modal-context";
 
-const OrderItemList = () => {
-  const [orderItems, setOrderItems] = useState<OrderItem[]>();
-  const { handleModal } = useOrderSummaryModalContext();
+interface OrderItemListProps {
+  orderItems: OrderItem[]|undefined,
+  handleModal: () => void,
+}
 
-  useEffect(() => {
-    setOrderItems(orderItemsFakeData);
-  })
+const OrderItemList = ({ orderItems, handleModal }:OrderItemListProps) => {
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -93,7 +85,7 @@ const OrderItemList = () => {
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={() => handleModal(true, false, false)}
+                    onClick={handleModal}
                     style={{ background: "red" }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
