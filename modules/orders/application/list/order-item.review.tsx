@@ -5,9 +5,10 @@ import Currency from "@/components/Currency";
 
 interface OrderItemReviewProps {
   orderItems: OrderItem[]|undefined,
+  total: number,
 }
 
-const OrderItemReview = ({ orderItems }:OrderItemReviewProps) => {
+const OrderItemReview = ({ orderItems, total = 0 }:OrderItemReviewProps) => {
   
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -60,6 +61,7 @@ const OrderItemReview = ({ orderItems }:OrderItemReviewProps) => {
             </div>
           </div>
         ))}
+        <h4 className="font-extrabold text-2xl text-black dark:text-white">Total: <Currency value={total} /></h4>
       </div>
     </div>
   );
