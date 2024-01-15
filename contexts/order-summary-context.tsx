@@ -12,6 +12,8 @@ interface OrderSummaryContextType {
     selectedPayment: PaymentMethod|undefined,
     orders: Order[],
     selectedOrder: Order|undefined,
+    total: number,
+    setTotal: Dispatch<SetStateAction<number>>,
     handleModal: (deleteModalOpen: boolean, itemModalOpen: boolean, checkoutModalOpen: boolean) => void,
     setSelectedPayment: Dispatch<SetStateAction<PaymentMethod|undefined>>,
     setOrders: Dispatch<SetStateAction<Order[]>>,
@@ -25,6 +27,8 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     selectedPayment: undefined,
     orders: [],
     selectedOrder: undefined,
+    total: 0,
+    setTotal: () => {},
     handleModal: () => {},
     setSelectedPayment: () => {},
     setOrders: () => {},
@@ -42,6 +46,7 @@ export const OrderSummaryProvider = ({
     const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>();
     const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order>();
+    const [total, setTotal] = useState<number>(0);
 
     useEffect( () => {
         setOrders(ordersFakeData);
@@ -73,7 +78,7 @@ export const OrderSummaryProvider = ({
     }
 
     return (
-        <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, orders, selectedOrder, selectedPayment, handleModal, setSelectedPayment, setOrders, setSelectedOrder }}>
+        <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedPayment, handleModal, setSelectedPayment, setTotal, setOrders, setSelectedOrder }}>
             {children}
         </OrderSummaryContext.Provider>
     );
