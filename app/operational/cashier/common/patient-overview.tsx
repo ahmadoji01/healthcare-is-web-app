@@ -9,10 +9,9 @@ import { DoctorName } from "@/utils/doctor-name-format";
 
 const PatientOverview = () => {
 
-    const { selectedOrder, setSelectedOrder } = useOrderSummaryContext();
+    const { selectedOrder } = useOrderSummaryContext();
     const [patient, setPatient] = useState<Patient>();
     const [order, setOrder] = useState<Order>();
-    let age = 0;
 
     useEffect( () => {
         if (typeof(selectedOrder) !== 'undefined') {
@@ -23,27 +22,27 @@ const PatientOverview = () => {
 
     return (
         <div className="rounded-sm border border-stroke p-6 bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="grid grid-cols-2">
+            <div className="flex flex-rows">
                 <div>
                     <div className="w-full flex align-center justify-center mb-4">
                         <PatientAvatar name={patient ? patient.name : "Jedi Force" } />
                     </div>
                     <h2 className="text-3xl text-center font-extrabold text-black dark:text-white mb-2">{patient ? patient.name : "Jedi Force" }</h2>
                 </div>
-                <div className="grid gap-1 px-1 md:px-2 lg:px-3">
-                    <div className="grid grid-cols-2 gap-1 text-black dark:text-white">
+                <div className="items-center justify-center grid px-1 md:px-2 lg:px-3">
+                    <div className="grid grid-cols-2 text-black dark:text-white">
                         <div>Age</div>
                         <div className="text-left font-extrabold">{ patient ? moment().diff(patient.birthday, 'years') : 0} y/o</div>
                     </div>
-                    <div className="grid grid-cols-2 gap-1 text-black dark:text-white">
+                    <div className="grid grid-cols-2 text-black dark:text-white">
                         <div>Rep.</div>
                         <div className="text-left font-extrabold">Mr. Shane Fillan</div>
                     </div>
-                    <div className="grid grid-cols-2 gap-1 text-black dark:text-white">
+                    <div className="grid grid-cols-2 text-black dark:text-white">
                         <div>Treated by</div>
                         <div className="text-left font-extrabold">{ order ? DoctorName(order.medicalRecord.doctor.name, order.medicalRecord.doctor.specialization) : "" }</div>
                     </div>
-                    <div className="grid grid-cols-2 gap-1 text-black dark:text-white">
+                    <div className="grid grid-cols-2 text-black dark:text-white">
                         <div>Visit</div>
                         <div className="text-left font-extrabold">#12</div>
                     </div>

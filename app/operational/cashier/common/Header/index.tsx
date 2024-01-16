@@ -12,7 +12,7 @@ const Header = (props: {
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
 
-  const { handleModal } = useOrderSummaryContext();
+  const { handleModal, selectedOrder } = useOrderSummaryContext();
 
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
@@ -63,16 +63,18 @@ const Header = (props: {
         <div className="hidden sm:block">
           <form action="https://formbold.com/s/unique_form_id" method="POST">
             <div className="relative">
-              <Link
-                href="#"
-                onClick={() => handleModal(false, true, false)}
-                className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-                >
-                <span>
-                    <FontAwesomeIcon icon={faAdd} />
-                </span>
-                Add Item
-              </Link>
+              { typeof(selectedOrder) !== 'undefined' && 
+                <Link
+                  href="#"
+                  onClick={() => handleModal(false, true, false)}
+                  className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+                  >
+                  <span>
+                      <FontAwesomeIcon icon={faAdd} />
+                  </span>
+                  Add Item
+                </Link>
+              }
             </div>
           </form>
         </div>

@@ -1,8 +1,8 @@
 'use client';
 
 import CustomOption from "@/components/CustomOption";
-import Illnesses from "@/modules/constants/illnesses";
-import Treatments from "@/modules/constants/treatments";
+import Illnesses from "@/constants/illnesses";
+import Treatments from "@/constants/treatments";
 
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
 

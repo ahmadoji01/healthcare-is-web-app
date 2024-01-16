@@ -11,8 +11,29 @@ import Checkout from "../common/Checkout";
 
 const OrderSummary = () => {
 
-    const { orders, selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, handleModal } = useOrderSummaryContext();
+    const { orders, selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, setSelectedOrder, handleModal } = useOrderSummaryContext();
     
+    const handleQtyChange = (action:string, itemIndex:number, qty:number) => {
+        if (typeof(selectedOrder) === 'undefined') {
+            return;
+        }
+        let newSelectedOrder = {...selectedOrder}
+        let item = {...newSelectedOrder.orderItems[itemIndex]};
+        if (action === 'substract' && item.quantity === 1) {
+            handleModal(true, false, false);
+            return;
+        }
+        if (action === 'substract') {
+            item.quantity--;
+        }
+        if (action === 'add') {
+            item.quantity++;
+        }
+        newSelectedOrder.orderItems[itemIndex] = item;
+        setSelectedOrder(newSelectedOrder);
+        return;
+    }
+
     return (
         <>
             { (orders.length > 0 && typeof(selectedOrder) !== 'undefined') && 
@@ -30,7 +51,7 @@ const OrderSummary = () => {
                     </div>
                     <div className="mt-6 text-black dark:text-white">
                         <h3 className="text-3xl font-extrabold mb-2">Order Items</h3>
-                        <OrderItemList orderItems={selectedOrder?.orderItems} handleModal={() => handleModal(true,false,false)} />
+                        <OrderItemList orderItems={selectedOrder?.orderItems} handleModal={() => handleModal(true,false,false)} handleQtyChange={handleQtyChange} />
                     </div>
                     <div className="flex mt-6">
                         <div className="w-full gap-2">

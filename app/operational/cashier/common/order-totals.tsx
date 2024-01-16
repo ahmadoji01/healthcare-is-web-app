@@ -17,7 +17,7 @@ const OrderTotals = () => {
             selectedOrder.orderItems.map( (item) => 
             { 
                 if (item.medication !== null) {
-                    medFee += item.medication.medicine.price * item.medication.quantity;
+                    medFee += item.medication.medicine.price * item.quantity;
                     return; 
                 }
                 if (item.treatment !== null) {
