@@ -10,6 +10,7 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import { doctorsFakeData } from "@/modules/doctors/infrastructure/doctors.fakes";
 import { Doctor } from "@/modules/doctors/domain/doctor";
 import { DoctorContext, DoctorProvider } from "@/contexts/doctor-context";
+import Footer from "./common/Footer";
 
 export default function RootLayout({
   children,
@@ -53,6 +54,7 @@ export default function RootLayout({
                       </div>
                     </main>
                   </ThemeProvider>
+                  <Footer />
                 </div>
               </div>
             </DoctorProvider>
