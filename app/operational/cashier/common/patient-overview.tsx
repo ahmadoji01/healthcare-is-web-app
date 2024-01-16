@@ -9,10 +9,9 @@ import { DoctorName } from "@/utils/doctor-name-format";
 
 const PatientOverview = () => {
 
-    const { selectedOrder, setSelectedOrder } = useOrderSummaryContext();
+    const { selectedOrder } = useOrderSummaryContext();
     const [patient, setPatient] = useState<Patient>();
     const [order, setOrder] = useState<Order>();
-    let age = 0;
 
     useEffect( () => {
         if (typeof(selectedOrder) !== 'undefined') {

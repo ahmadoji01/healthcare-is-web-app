@@ -13,10 +13,8 @@ const Footer = () => {
     const { selectedOrder, total, selectedPayment, handleModal } = useOrderSummaryContext();
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
-    const [openAlertModal, setOpenAlertModal] = useState<boolean>(false);
 
     const handleClick = () => {
-        setOpenAlertModal(!openAlertModal);
         if (typeof(selectedOrder) === 'undefined') {
             setOpenSnackbar(true);
             setSnackbarMsg("Choose the patient first!")
@@ -63,7 +61,6 @@ const Footer = () => {
                             { snackbarMsg }
                         </Alert>
                     </Snackbar>
-                    <AlertModal message="Test" alertStatus={ALERT_STATUS.success} action="" open={openAlertModal} setOpen={setOpenAlertModal} />
                 </div>
             </div>
         </footer>

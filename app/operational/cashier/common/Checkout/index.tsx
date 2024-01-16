@@ -30,7 +30,7 @@ function getStepContent(step: number, orderItems: OrderItem[]|undefined, total: 
 
 const Checkout = () => {
     const [activeStep, setActiveStep] = React.useState(0);
-    const { selectedOrder, total } = useOrderSummaryContext();
+    const { selectedOrder, total, confirmPayment } = useOrderSummaryContext();
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
@@ -38,10 +38,6 @@ const Checkout = () => {
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
-    };
-
-    const confirmPayment = () => {
-        
     };
 
     return (
@@ -75,7 +71,7 @@ const Checkout = () => {
                         <div className="flex-1">
                             <Link
                             href="#"
-                            onClick={activeStep === steps.length - 1 ? handleNext : confirmPayment}
+                            onClick={activeStep === steps.length - 1 ? confirmPayment : handleNext}
                             className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
                                 {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
                             </Link>

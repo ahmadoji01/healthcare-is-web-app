@@ -8,13 +8,12 @@ interface PaymentProps {
 
 const Payment = () => {
 
-    const { selectedPayment, total } = useOrderSummaryContext();
-
+    const { selectedPayment, total, setCashReceived } = useOrderSummaryContext();
 
     return (
         <>
             <h4 className="text-black dark:text-white font-extrabold text-center text-2xl mb-4">Pay by {selectedPayment?.name}</h4>
-            { selectedPayment && <PaymentProvider name={selectedPayment.name} total={total} /> }
+            { selectedPayment && <PaymentProvider name={selectedPayment.name} total={total} handleCashChange={setCashReceived} /> }
         </>
     )
 

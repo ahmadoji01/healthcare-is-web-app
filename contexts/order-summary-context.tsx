@@ -1,3 +1,5 @@
+import AlertModal from '@/components/Modal/AlertModal';
+import { ALERT_STATUS } from '@/constants/alert';
 import { Order } from '@/modules/orders/domain/order';
 import { ordersFakeData } from '@/modules/orders/infrastructure/order.fakes';
 import { PaymentMethod } from '@/modules/payment-methods/domain/payment-method';
@@ -19,6 +21,7 @@ interface OrderSummaryContextType {
     setOrders: Dispatch<SetStateAction<Order[]>>,
     setSelectedOrder: Dispatch<SetStateAction<Order|undefined>>,
     setCashReceived: Dispatch<SetStateAction<number>>,
+    confirmPayment: () => void,
 }
 
 export const OrderSummaryContext = createContext<OrderSummaryContextType | null>({
@@ -36,6 +39,7 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     setOrders: () => {},
     setSelectedOrder: () => {},
     setCashReceived: () => {},
+    confirmPayment: () => {},
 });
  
 export const OrderSummaryProvider = ({
@@ -49,11 +53,15 @@ export const OrderSummaryProvider = ({
     const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>();
     const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order>();
-    const [total, setTotal] = useState<number>(0);
+    const [total, setTotal] = useState<number>(1);
     const [cashReceived, setCashReceived] = useState<number>(0);
 
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+    const [openAlertModal, setOpenAlertModal] = useState<boolean>(false);
+    const [alertStatus, setAlertStatus] = useState<string>("");
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertAction, setAlertAction] = useState<string>("");
 
     useEffect( () => {
         setOrders(ordersFakeData);
@@ -65,12 +73,15 @@ export const OrderSummaryProvider = ({
             setOpenSnackbar(true);
             return;
         }
-        if (selectedPayment.name === 'cash' && (cashReceived < total)) {
+        if (selectedPayment.name.toLowerCase() === 'cash' && (cashReceived == 0 || cashReceived < total)) {
             setSnackbarMsg("Cash received is less than the total amount needs to be paid!");
             setOpenSnackbar(true);
             return;
         }
-        
+        setAlertStatus(ALERT_STATUS.success);
+        setAlertMessage("Your payment has been received!");
+        setAlertAction("refresh");
+        setOpenAlertModal(true);
     }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -107,13 +118,14 @@ export const OrderSummaryProvider = ({
     }
 
     return (
-        <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedPayment, cashReceived, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder }}>
+        <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedPayment, cashReceived, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, confirmPayment }}>
             {children}
-            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSnackbar} autoHideDuration={6000} onClose={handleClose} style={{ zIndex: 99999999999 }}>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSnackbar} autoHideDuration={6000} onClose={handleClose} style={{ zIndex: 2147483647 }}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                     { snackbarMsg }
                 </Alert>
             </Snackbar>
+            <AlertModal message={alertMessage} alertStatus={alertStatus} action={alertAction} open={openAlertModal} setOpen={setOpenAlertModal} />
         </OrderSummaryContext.Provider>
     );
 };

@@ -1,10 +1,10 @@
 import Currency from "@/components/Currency";
 import CURRENCY_FORMAT from "@/config/currency-format";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface CashPaymentProps {
     total: number,
-    handleChange: () => void,
+    handleChange: Dispatch<SetStateAction<number>>
 }
 
 const CashPayment = ({ total, handleChange }: CashPaymentProps) => {
@@ -17,6 +17,7 @@ const CashPayment = ({ total, handleChange }: CashPaymentProps) => {
             received = event.target.valueAsNumber;
         }
         setCashReceived(received);
+        handleChange(received);
     }
     
     return (
