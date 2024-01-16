@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter } from "react-windowed-select";
 import Medication from "@/modules/medical-records/domain/medication";
-import MedicationFormItem from "./medication.form.item";
 import Medicine from "@/modules/medicines/domain/medicine";
 import { SelectChangeEvent } from "@mui/material";
 import MedicationList from "./medication.list";

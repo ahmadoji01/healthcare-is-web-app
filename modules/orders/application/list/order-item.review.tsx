@@ -61,7 +61,7 @@ const OrderItemReview = ({ orderItems, total = 0 }:OrderItemReviewProps) => {
             </div>
           </div>
         ))}
-        <h4 className="font-extrabold text-2xl text-black dark:text-white">Total: <Currency value={total} /></h4>
+        <h4 className="font-extrabold text-2xl text-black dark:text-white mb-4">Total: <Currency value={total} /></h4>
       </div>
     </div>
   );
