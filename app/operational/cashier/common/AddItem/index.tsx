@@ -55,7 +55,7 @@ const AddItem = () => {
         let newSelectedOrder = {...selectedOrder};
         let items = [...newSelectedOrder.orderItems];
 
-        let orderItem:OrderItem = { id: Math.floor(Math.random()*100000000000), medication: null, treatment: null, name: item.name, price: item.price, description: "", quantity: 1, total: item.price, image: "" } 
+        let orderItem:OrderItem = { id: items.length, medication: null, treatment: null, name: item.name, price: item.price, description: "", quantity: 1, total: item.price, image: "" } 
         if (isAMedicine(item)) {
             let medication:Medication = { medicine: item, doses: "", quantity: quantity };
             orderItem.medication = medication;
