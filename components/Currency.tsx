@@ -1,4 +1,4 @@
-import CURRENCY_FORMAT from "@/config/currency-format";
+import appConfig from "@/config";
 
 interface CurrencyProps {
     value: number;
@@ -6,7 +6,7 @@ interface CurrencyProps {
 
 const Currency = ({ value }:CurrencyProps) => {
 
-    const currFormat = new Intl.NumberFormat('en-US', { style: 'currency', currency: CURRENCY_FORMAT });
+    const currFormat = new Intl.NumberFormat('en-US', { style: 'currency', currency: appConfig.CURRENCY_FORMAT });
 
     return (
         <>

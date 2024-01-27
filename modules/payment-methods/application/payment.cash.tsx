@@ -1,5 +1,5 @@
 import Currency from "@/components/Currency";
-import CURRENCY_FORMAT from "@/config/currency-format";
+import appConfig from "@/config";
 import { Dispatch, SetStateAction, useState } from "react";
 
 interface CashPaymentProps {
@@ -30,7 +30,7 @@ const CashPayment = ({ total, handleChange }: CashPaymentProps) => {
                     <h4 className="font-extrabold text-black dark:text-white mr-2 text-xl text-center"><Currency value={total} /></h4>
                 </div>
                 <div className="flex flex-rows mb-4 h-full items-center justify-center">
-                    <span className="font-extrabold text-black dark:text-white mr-2">{CURRENCY_FORMAT}</span>
+                    <span className="font-extrabold text-black dark:text-white mr-2">{appConfig.CURRENCY_FORMAT}</span>
                     <input
                         type="number"
                         onChange={event => handleCashChange(event)}

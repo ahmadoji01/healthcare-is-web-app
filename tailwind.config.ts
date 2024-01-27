@@ -211,6 +211,7 @@ const config: Config = {
       },
       backgroundImage: {
         video: "url('../images/video/video.png')",
+        welcome: "url('https://api.hub.jhu.edu/factory/sites/default/files/styles/soft_crop_2400/public/hospital-corridor-getty102821.jpg')",
       },
       content: {
         "icon-copy": 'url("../images/icon/icon-copy-alt.svg")',
