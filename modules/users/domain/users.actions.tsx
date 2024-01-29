@@ -1,84 +1,59 @@
-import { defaultResponse } from "@/utils/fetch-response";
+import { defaultResponse } from "@/utils/response-handler";
+import { createDirectus, readMe, rest, withToken } from "@directus/sdk";
+import axios from 'axios';
+
+const client = createDirectus('http://localhost:8055').with(rest({credentials: 'include'}));
 
 export const signIn = async (email = "", password = "") => {
-	const fetchObject = { method: "POST", headers: { 'Content-type': 'application/json' }, body: JSON.stringify({ email, password }) }
 	let resp = defaultResponse;
-	return fetch("http://localhost:8080/auth/login", fetchObject)
-		.then(res => res.json())
+	const axiosInstance = axios.create({
+		withCredentials: true,
+		headers: { "content-type": "application/json" }
+	});
+	return axiosInstance.post("http://localhost:8055/auth/login", { email, password, mode: 'cookie' })
 		.then(res => {
-			resp.loading = false;
-			resp.statusCode = res.status;
-			if (res.error) {
-				resp.error = true;
-				resp.errorMessage = res.errors[0]?.message;
-				return resp;
-			} else {
-				resp.error = false;
-				localStorage.setItem("access_token", res.data.access_token);
-				localStorage.setItem("refresh_token", res.data.refresh_token);
-				resp.data = res.data;
-				return resp;
-			}
+			resp.error = false;
+			resp.errorMessage = "";
+			resp.data = res.data;
+			return resp;
 		})
-		.catch((err) => {
-			resp.loading = false;
+		.catch(function (error) {
 			resp.error = true;
-			resp.statusCode = 500;
-			resp.errorMessage = err.message;
+			resp.errorMessage = error.message;
 			return resp;
 		});
 }
 
 export const refreshToken = () => {
-	const token = localStorage.getItem("refresh_token")? localStorage.getItem("refresh_token") : "";
-	const fetchObject = { method: "POST", headers: {}, body: JSON.stringify({ refresh_token: token, mode: "json" }) };
+	const token = localStorage.getItem('refresh_token');
 	let resp = defaultResponse;
-	return fetch("http://localhost:8080/auth/refresh", fetchObject)
-		.then(res => res.json())
+	return axios.post('http://localhost:8080/auth/refresh', { refresh_token: token, mode: 'json'}, { headers: { withCredentials: true } })
 		.then(res => {
 			resp.statusCode = res.status;
-			if (res.error) {
+			if (res.status === 401) {
 				resp.error = true;
-				resp.errorMessage = res.errors[0]?.message;
-				return resp;
-			} else {
-				resp.error = false;
-				localStorage.setItem("access_token", res.data.access_token);
-				localStorage.setItem("refresh_token", res.data.refresh_token);
-				resp.data = res.data;
+				resp.errorMessage = "Unauthorized";
+				localStorage.removeItem("access_token");
+				localStorage.removeItem("refresh_token");
+				window.location.href = '/';
+			}
+			if (res.status !== 200) {
+				resp.error = true;
+				resp.errorMessage = res.data.errors[0]?.message;
 				return resp;
 			}
-		})
-		.catch((err) => {
-			resp.loading = false;
-			resp.error = true;
-			resp.errorMessage = err.message;
-			resp.statusCode = 500;
+			resp.error = false;
+			localStorage.setItem("access_token", res.data.data.access_token);
+			localStorage.setItem("refresh_token", res.data.data.refresh_token);
+			resp.data = res.data;
 			return resp;
+		})
+		.catch(function (error) {
+			console.log(error);
+			localStorage.removeItem("access_token");
+			localStorage.removeItem("refresh_token");
+			//window.location.href = '/';
 		});
 }
-
-export const getCurrentUser = () => {
-	const token = localStorage.getItem("access_token")? localStorage.getItem("access_token") : "";
-	const fetchObject = { method: "GET", headers: { 'Authorization': 'Bearer ' + token } };
-	let resp = defaultResponse;
-	return fetch("http://localhost:8080/users/me", fetchObject)
-		.then(res => res.json())
-		.then(res => {
-			if (res.error) {
-				resp.error = true;
-				resp.errorMessage = res.errors[0]?.message;
-				return resp;
-			} else {
-				resp.error = false;
-				resp.data = res.data;
-				return resp;
-			}
-		})
-		.catch((err) => {
-			resp.loading = false;
-			resp.error = true;
-			resp.errorMessage = err.message;
-			return resp;
-		});
-}
+export const getCurrentUser = (token:string) => axios.get("http://localhost:8080/users/me?fields=*.*", { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data.data);
+export const getUserMe = (token:string) => client.request( withToken(token, readMe({ fields: ['*.*'] })) );

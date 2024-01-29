@@ -2,11 +2,12 @@
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
+import { useUserContext } from "@/contexts/user-context";
 import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
 import PatientForm from "@/modules/patients/application/form/patient.form";
 import PatientListTable from "@/modules/patients/application/list/patient.list-table";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PatientsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
