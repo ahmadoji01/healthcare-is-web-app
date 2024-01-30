@@ -1,7 +1,5 @@
-import { Organization } from "@/modules/organizations/domain/organization";
-import { Role } from "./role";
 import useSWR from "swr";
-import { getCurrentUser, refreshWithCookie } from "./users.actions";
+import { getCurrentUser } from "./users.actions";
 
 export interface User {
 	id: string,
@@ -19,29 +17,6 @@ export const defaultUser:User = {
 	avatar: null,
 	username: null,
 	role: "",
-}
-
-export interface UserToken {
-    access_token: string
-}
-
-export const defaultToken:UserToken = {
-    access_token: ""
-}
-
-export function useToken() {
-    const { data, error, isLoading } = useSWR(refreshWithCookie);
-
-    let token = defaultToken;
-    if (typeof(data) !== 'undefined') {
-        token = { access_token: data.access_token };
-    }
-    
-    return {
-        token: token,
-        isLoading,
-        isError: error
-    }
 }
 
 export function useUser() {

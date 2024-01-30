@@ -11,8 +11,6 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import { authentication, createDirectus } from "@directus/sdk";
 import { UserProvider, useUserContext } from "@/contexts/user-context";
 
-const client = createDirectus('http://localhost:8055').with(authentication('cookie', { credentials: 'include' }));
-
 export default function RootLayout({
   children,
 }: {
@@ -36,35 +34,33 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <UserProvider>
-        <body suppressHydrationWarning={true}>
-          <div className="dark:bg-boxdark-2 dark:text-bodydark">
-            {loading ? (
-              <Loader />
-            ) : (
-              <div className="flex h-screen overflow-hidden">
-                <Sidebar
+      <body suppressHydrationWarning={true}>
+        <div className="dark:bg-boxdark-2 dark:text-bodydark">
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="flex h-screen overflow-hidden">
+              <Sidebar
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
+              <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                <Header
                   sidebarOpen={sidebarOpen}
                   setSidebarOpen={setSidebarOpen}
                 />
-                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                  <Header
-                    sidebarOpen={sidebarOpen}
-                    setSidebarOpen={setSidebarOpen}
-                  />
-                  <ThemeProvider theme={theme} >
-                    <main>
-                      <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-                        {children}
-                      </div>
-                    </main>
-                  </ThemeProvider>
-                </div>
+                <ThemeProvider theme={theme} >
+                  <main>
+                    <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                      {children}
+                    </div>
+                  </main>
+                </ThemeProvider>
               </div>
-            )}
-          </div>
-        </body>
-      </UserProvider>
+            </div>
+          )}
+        </div>
+      </body>
     </html>
   );
 }

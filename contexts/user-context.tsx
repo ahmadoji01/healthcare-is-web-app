@@ -5,6 +5,7 @@ import { ordersFakeData } from '@/modules/orders/infrastructure/order.fakes';
 import { PaymentMethod } from '@/modules/payment-methods/domain/payment-method';
 import { User, defaultUser } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
+import { directusClient } from '@/utils/response-handler';
 import { authentication, createDirectus } from '@directus/sdk';
 import { Alert, Snackbar } from '@mui/material';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
@@ -22,8 +23,6 @@ export const UserContext = createContext<UserContextType | null>({
     user: defaultUser,
     setAccessToken: () => {},
 });
-
-const client = createDirectus('http://localhost:8055').with(authentication('cookie', { credentials: 'include' }));
  
 export const UserProvider = ({
     children,
@@ -37,12 +36,14 @@ export const UserProvider = ({
 
     useEffect(() => {
         let interval = setInterval(async () => {
-            await client.refresh().then( (res) => { 
+            await directusClient.refresh().then( (res) => { 
                 let token = res.access_token? res.access_token : '';
                 let expiry = res.expires? res.expires : 0;
                 setAccessToken(token);
                 setExpiry(expiry);
-                getUserMe(token).then(res => setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name }));
+                getUserMe(token).then(res => {
+                    setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name });
+                });
                 clearInterval(interval);
             });
         }, expiry);
@@ -52,7 +53,7 @@ export const UserProvider = ({
 
     useEffect(() => {
         let interval = setInterval(async () => {
-            await client.refresh().then( (res) => { 
+            await directusClient.refresh().then( (res) => { 
                 let token = res.access_token? res.access_token : '';
                 let expiry = res.expires? res.expires : 0;
                 setAccessToken(token);

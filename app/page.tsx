@@ -1,17 +1,17 @@
 'use client';
 
 import { authentication, createDirectus, rest } from "@directus/sdk";
-import { refreshToken, refreshWithCookie, signIn } from "@/modules/users/domain/users.actions";
+import { getUserMe, signIn } from "@/modules/users/domain/users.actions";
 import { defaultResponse } from "@/utils/response-handler";
 import { useEffect, useState } from "react";
-
-const client = createDirectus('http://localhost:8055').with(authentication('cookie', { credentials: 'include' }));
+import { useUserContext } from "@/contexts/user-context";
 
 const Home = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [response, setResponse] = useState(defaultResponse);
+    const { accessToken } = useUserContext();
 
     const handleSignIn = () => {
         signIn(email, password).then(res => {

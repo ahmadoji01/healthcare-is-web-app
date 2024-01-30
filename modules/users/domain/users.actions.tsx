@@ -1,8 +1,6 @@
-import { defaultResponse } from "@/utils/response-handler";
+import { defaultResponse, directusClient } from "@/utils/response-handler";
 import { createDirectus, readMe, rest, withToken } from "@directus/sdk";
 import axios from 'axios';
-
-const client = createDirectus('http://localhost:8055').with(rest({credentials: 'include'}));
 
 export const signIn = async (email = "", password = "") => {
 	let resp = defaultResponse;
@@ -56,4 +54,4 @@ export const refreshToken = () => {
 		});
 }
 export const getCurrentUser = (token:string) => axios.get("http://localhost:8080/users/me?fields=*.*", { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data.data);
-export const getUserMe = (token:string) => client.request( withToken(token, readMe({ fields: ['*.*'] })) );
+export const getUserMe = (token:string) => directusClient.request( withToken(token, readMe({ fields: ['*.*'] })) );
