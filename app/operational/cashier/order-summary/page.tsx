@@ -8,6 +8,7 @@ import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import DashboardModal from "@/components/Modal/Modal";
 import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
 import Checkout from "../common/Checkout";
+import AddItem from "../common/AddItem";
 
 const OrderSummary = () => {
 
@@ -39,7 +40,7 @@ const OrderSummary = () => {
             { (orders.length > 0 && typeof(selectedOrder) !== 'undefined') && 
                 <>
                     <DashboardModal open={deleteModalOpen} handleClose={() => handleModal(false, false, false)} children={ <PatientDeleteConfirmation handleClose={() => handleModal(false, false, false)} /> } title="" /> 
-                    <DashboardModal open={itemModalOpen} handleClose={() => handleModal(false, false, false)} children={ <PatientDeleteConfirmation handleClose={() => handleModal(false, false, false)} /> } title="" /> 
+                    <DashboardModal open={itemModalOpen} handleClose={() => handleModal(false, false, false)} children={ <AddItem /> } title="" /> 
                     <DashboardModal open={checkoutModalOpen} handleClose={() => handleModal(false, false, false)} children={ <Checkout /> } title="" /> 
                     <div className="flex flex-row gap-2 mb-2">
                         <div className="w-full">

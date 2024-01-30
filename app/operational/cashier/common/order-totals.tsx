@@ -16,7 +16,6 @@ const OrderTotals = () => {
             let treatFee = 0, medFee = 0;
             selectedOrder.orderItems.map( (item) => 
             {
-                console.log(item); 
                 if (item.medication !== null) {
                     medFee += item.medication.medicine.price * item.quantity;
                     return; 

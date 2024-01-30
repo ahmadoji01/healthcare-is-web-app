@@ -8,18 +8,17 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Pagination } from "@mui/material";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
+import { getAllPatients } from "../../domain/patients.actions";
 
 interface PatientListTableProps {
   handleEditModal: any,
   handleDeleteModal: any,
+  patients: Patient[],
+  totalPages: number,
+  handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
 }
 
-const PatientListTable = ({ handleEditModal, handleDeleteModal }: PatientListTableProps) => {
-  const [patients, setPatients] = useState<Patient[]>();
-
-  useEffect(() => {
-    setPatients(patientsFakeData);
-  })
+const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalPages, handlePageChange }: PatientListTableProps) => {
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -55,7 +54,7 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal }: PatientListTab
         {typeof(patients) !== "undefined" && patients.map((patient, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-5 ${
-              key === patientsFakeData.length - 1
+              key === patients.length - 1
                 ? ""
                 : "border-b border-stroke dark:border-strokedark"
             }`}
@@ -66,7 +65,7 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal }: PatientListTab
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{patient.residentNumber}</p>
+              <p className="text-black dark:text-white">{patient.id_card_number}</p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
@@ -103,7 +102,7 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal }: PatientListTab
           </div>
         ))}
         <div className="py-3">
-          <PageNav count={10} />
+          <Pagination count={totalPages} onChange={handlePageChange} />
         </div>
       </div>
     </div>

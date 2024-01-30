@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion"
 import Link from "next/link";
 import Image from "next/image";
+import { redirect } from "next/navigation";
+import { useUserContext } from "@/contexts/user-context";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+
+  const { user } = useUserContext();
 
   // close on click outside
   useEffect(() => {
@@ -35,6 +39,12 @@ const DropdownUser = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  const handleSignOut = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    redirect('/');
+  }
+
   return (
     <div className="relative">
       <Link
@@ -45,9 +55,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            { user.first_name + " " + user.last_name }
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{user.role}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -160,7 +170,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button onClick={handleSignOut} className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
           <svg
             className="fill-current"
             width="22"

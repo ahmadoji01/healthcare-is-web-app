@@ -2,12 +2,14 @@
 import "@/styles/globals.css";
 import "@/styles/data-tables-css.css";
 import "@/styles/satoshi.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Loader from "@/components/Dashboard/Loader";
 
 import Sidebar from "@/components/Dashboard/Sidebar";
 import Header from "@/components/Dashboard/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
+import { authentication, createDirectus } from "@directus/sdk";
+import { UserProvider, useUserContext } from "@/contexts/user-context";
 
 export default function RootLayout({
   children,
@@ -15,11 +17,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
+  const { accessToken } = useUserContext();
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
+    //setTimeout(() => setLoading(false), 1000);
 
     const onStorageChange = () => {
       const item = localStorage.getItem("color-theme");

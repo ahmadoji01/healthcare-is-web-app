@@ -5,7 +5,7 @@ const CheckboxOne = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   return (
-    <div>
+    <div className="text-black dark:text-white">
       <label
         htmlFor="checkboxLabelOne"
         className="flex cursor-pointer select-none items-center"

@@ -120,7 +120,7 @@ export const OrderSummaryProvider = ({
     return (
         <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedPayment, cashReceived, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, confirmPayment }}>
             {children}
-            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSnackbar} autoHideDuration={6000} onClose={handleClose} style={{ zIndex: 2147483647 }}>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSnackbar} autoHideDuration={6000} onClose={handleClose} sx={{ zIndex: 2147483647 }}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                     { snackbarMsg }
                 </Alert>
