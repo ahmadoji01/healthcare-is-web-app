@@ -1,20 +1,21 @@
+'use client';
+
 import { Patient } from "@/modules/patients/domain/patient";
 import moment from "moment";
+import { patientsFakeData } from "@/modules/patients/infrastructure/patients.fakes";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faStethoscope } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import { Pagination } from "@mui/material";
+import { useEffect, useState } from "react";
+import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 
-interface PatientListTableProps {
-  handleEditModal: any,
-  handleDeleteModal: any,
-  patients: Patient[],
-  totalPages: number,
-  handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
-}
+const PatientDoctorListTable = () => {
+  const [patients, setPatients] = useState<Patient[]>();
 
-const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalPages, handlePageChange }: PatientListTableProps) => {
+  useEffect(() => {
+    setPatients(patientsFakeData);
+  })
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -50,7 +51,7 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalP
         {typeof(patients) !== "undefined" && patients.map((patient, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-5 ${
-              key === patients.length - 1
+              key === patientsFakeData.length - 1
                 ? ""
                 : "border-b border-stroke dark:border-strokedark"
             }`}
@@ -61,7 +62,7 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalP
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{patient.id_card_number}</p>
+              <p className="text-black dark:text-white">{patient.residentNumber}</p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
@@ -76,21 +77,10 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalP
               <ul className="flex items-center gap-2 2xsm:gap-4">
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
-                    href="#"
-                    onClick={handleEditModal}
+                    href="/operational/doctor/medical-record/"
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
-                    <FontAwesomeIcon width={18} height={18} icon={faPencil} />
-                  </Link>
-                </motion.li>
-                <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
-                  <Link
-                    href="#"
-                    onClick={handleDeleteModal}
-                    style={{ background: "red" }}
-                    className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
-                    >
-                    <FontAwesomeIcon width={18} height={18} icon={faTrash} style={{ color: 'white' }} />
+                    <FontAwesomeIcon width={18} height={18} icon={faStethoscope} />
                   </Link>
                 </motion.li>
               </ul>
@@ -98,11 +88,11 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalP
           </div>
         ))}
         <div className="py-3">
-          <Pagination count={totalPages} onChange={handlePageChange} />
+          <PageNav count={10} />
         </div>
       </div>
     </div>
   );
 };
 
-export default PatientListTable;
+export default PatientDoctorListTable;
