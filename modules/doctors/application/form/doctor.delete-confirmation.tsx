@@ -2,7 +2,7 @@ interface DeleteConfirmationProps {
     handleClose: any,
 }
 
-const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => {
+const DoctorDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => {
     return (
         <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
             <span className="mx-auto inline-block">
@@ -29,4 +29,4 @@ const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => 
     )
 }
 
-export default PatientDeleteConfirmation;
+export default DoctorDeleteConfirmation;

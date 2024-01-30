@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useSpring } from 'framer-motion';
 
-const PatientForm = () => {
+const DoctorForm = () => {
 
     return (
         <>
@@ -168,4 +168,4 @@ const PatientForm = () => {
     )
 }
 
-export default PatientForm;
+export default DoctorForm;
