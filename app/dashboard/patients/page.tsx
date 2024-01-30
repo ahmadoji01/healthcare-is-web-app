@@ -2,12 +2,13 @@
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
+import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useUserContext } from "@/contexts/user-context";
 import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
 import PatientForm from "@/modules/patients/application/form/patient.form";
 import PatientListTable from "@/modules/patients/application/list/patient.list-table";
 import { Patient, patientMapper } from "@/modules/patients/domain/patient";
-import { getAllPatients } from "@/modules/patients/domain/patients.actions";
+import { getAllPatients, getTotalPatients } from "@/modules/patients/domain/patients.actions";
 
 import { useEffect, useState } from "react";
 
@@ -15,18 +16,25 @@ const PatientsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const {accessToken} = useUserContext();
 
   useEffect( () => {
     if (!dataLoaded || patients.length == 0) {
-      getAllPatients(accessToken)
+      getAllPatients(accessToken, 1)
         .then( res => {
           let pats:Patient[] = [];
           res?.map( (patient) => { pats.push(patientMapper(patient)); });
           setPatients(pats);
           setDataLoaded(true);
         });
+      getTotalPatients(accessToken)
+        .then( res => { 
+          let total = res[0].count? parseInt(res[0].count) : 0;
+          let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+          setTotalPages(pages);
+        })
     }
   });
 
@@ -46,13 +54,25 @@ const PatientsDashboardPage = () => {
     }
   }
 
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setDataLoaded(false);
+    getAllPatients(accessToken, value)
+      .then( res => {
+        let pats:Patient[] = [];
+        res?.map( (patient) => { pats.push(patientMapper(patient)); });
+        setPatients(pats);
+        setDataLoaded(true);
+      });
+  };
+
   return (
     <>
       <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm /> } title="Patient's Detail" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Patients" />
       <div className="flex flex-col gap-10">
-        <PatientListTable patients={patients} handleEditModal={ () => handleModal(false, true) } handleDeleteModal={ () => handleModal(false,false) } />
+        { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
+        { dataLoaded && <PatientListTable totalPages={totalPages} patients={patients} handlePageChange={handlePageChange} handleEditModal={ () => handleModal(false, true) } handleDeleteModal={ () => handleModal(false,false) } /> }
       </div>
     </>
   );

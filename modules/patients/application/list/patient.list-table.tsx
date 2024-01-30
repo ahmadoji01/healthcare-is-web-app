@@ -14,9 +14,11 @@ interface PatientListTableProps {
   handleEditModal: any,
   handleDeleteModal: any,
   patients: Patient[],
+  totalPages: number,
+  handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
 }
 
-const PatientListTable = ({ handleEditModal, handleDeleteModal, patients }: PatientListTableProps) => {
+const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalPages, handlePageChange }: PatientListTableProps) => {
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -100,7 +102,7 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal, patients }: Pati
           </div>
         ))}
         <div className="py-3">
-          <PageNav count={10} />
+          <Pagination count={totalPages} onChange={handlePageChange} />
         </div>
       </div>
     </div>
