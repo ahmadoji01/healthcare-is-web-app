@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useUserContext } from "@/contexts/user-context";
+import { directusClient } from "@/utils/response-handler";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -40,9 +41,9 @@ const DropdownUser = () => {
   });
 
   const handleSignOut = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    redirect('/');
+    directusClient.logout().then( () => {
+      window.location.href = '/';
+    });
   }
 
   return (

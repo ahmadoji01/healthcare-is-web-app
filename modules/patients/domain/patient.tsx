@@ -1,6 +1,8 @@
 export interface Patient {
     id: number,
     name: string,
+    fathers_name: string,
+    mothers_name: string,
     birthday: Date,
     religion: string,
     job: string,
@@ -16,6 +18,8 @@ export interface Patient {
 export const defaultPatient: Patient = {
     id: 0,
     name: "",
+    fathers_name: "",
+    mothers_name: "",
     birthday: new Date,
     religion: "",
     job: "",
@@ -33,6 +37,8 @@ export function patientMapper(res:Record<string,any>) {
     patient = { 
         id: res.id, 
         name: res.name, 
+        fathers_name: res.fathers_name,
+        mothers_name: res.mothers_name,
         birthday: res.birthday, 
         religion: res.religion, 
         job: res.job, 

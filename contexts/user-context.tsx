@@ -12,8 +12,7 @@ import { Dispatch, SetStateAction, createContext, useContext, useEffect, useStat
  
 interface UserContextType {
     accessToken: string,
-    user: User;
-    setAccessToken: Dispatch<SetStateAction<string>>,
+    user: User,
 }
 
 let EXPIRY_MS = 1000;
@@ -21,7 +20,6 @@ let EXPIRY_MS = 1000;
 export const UserContext = createContext<UserContextType | null>({
     accessToken: "",
     user: defaultUser,
-    setAccessToken: () => {},
 });
  
 export const UserProvider = ({
@@ -65,7 +63,7 @@ export const UserProvider = ({
     }, [expiry]);
 
     return (
-        <UserContext.Provider value={{ accessToken, setAccessToken, user }}>
+        <UserContext.Provider value={{ accessToken, user }}>
             {children}
         </UserContext.Provider>
     );

@@ -14,10 +14,8 @@ const Home = () => {
     const { accessToken } = useUserContext();
 
     const handleSignIn = () => {
-        signIn(email, password).then(res => {
-            if (res.error === false) {
-                window.location.href = '/dashboard';
-            }
+        signIn(email, password).then(() => {
+            window.location.href = '/dashboard';
         });
     }
 

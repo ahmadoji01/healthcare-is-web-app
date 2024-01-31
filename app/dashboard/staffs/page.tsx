@@ -35,7 +35,7 @@ const StaffsDashboardPage = () => {
           setDataLoaded(true);
         });
       getTotalStaffs(accessToken)
-        .then( res => { 
+        .then( res => {
           let total = res[0].count? parseInt(res[0].count) : 0;
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
           setTotalPages(pages);
