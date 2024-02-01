@@ -1,19 +1,11 @@
-import AlertModal from '@/components/Modal/AlertModal';
-import { ALERT_STATUS } from '@/constants/alert';
-import { Order } from '@/modules/orders/domain/order';
-import { ordersFakeData } from '@/modules/orders/infrastructure/order.fakes';
-import { PaymentMethod } from '@/modules/payment-methods/domain/payment-method';
 import { User, defaultUser } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
-import { directusClient } from '@/utils/response-handler';
-import { authentication, createDirectus } from '@directus/sdk';
-import { Alert, Snackbar } from '@mui/material';
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { directusClient } from '@/utils/request-handler';
+import { createContext, useContext, useEffect, useState } from 'react';
  
 interface UserContextType {
     accessToken: string,
-    user: User;
-    setAccessToken: Dispatch<SetStateAction<string>>,
+    user: User,
 }
 
 let EXPIRY_MS = 1000;
@@ -21,7 +13,6 @@ let EXPIRY_MS = 1000;
 export const UserContext = createContext<UserContextType | null>({
     accessToken: "",
     user: defaultUser,
-    setAccessToken: () => {},
 });
  
 export const UserProvider = ({
@@ -35,16 +26,29 @@ export const UserProvider = ({
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        if (location.pathname == '/') {
+            return;
+        }
+
         let interval = setInterval(async () => {
-            await directusClient.refresh().then( (res) => { 
+            await directusClient.refresh().then( (res) => {
+                if (res.access_token === null) {
+                    window.location.href = '/';
+                    return;
+                }
                 let token = res.access_token? res.access_token : '';
                 let expiry = res.expires? res.expires : 0;
                 setAccessToken(token);
                 setExpiry(expiry);
                 getUserMe(token).then(res => {
-                    setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name });
+                    setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
                 });
                 clearInterval(interval);
+            }).catch( () => { 
+                if (location.pathname !== '/') {
+                    window.location.href = '/';
+                }
+                return; 
             });
         }, expiry);
 
@@ -52,12 +56,21 @@ export const UserProvider = ({
     }, [loading]);
 
     useEffect(() => {
+        if (location.pathname == '/') {
+            return;
+        }
+
         let interval = setInterval(async () => {
             await directusClient.refresh().then( (res) => { 
                 let token = res.access_token? res.access_token : '';
                 let expiry = res.expires? res.expires : 0;
                 setAccessToken(token);
                 setExpiry(expiry);
+            }).catch( () => { 
+                if (location.pathname !== '/') {
+                    window.location.href = '/';
+                }
+                return; 
             });
         }, 900000);
 
@@ -65,7 +78,7 @@ export const UserProvider = ({
     }, [expiry]);
 
     return (
-        <UserContext.Provider value={{ accessToken, setAccessToken, user }}>
+        <UserContext.Provider value={{ accessToken, user }}>
             {children}
         </UserContext.Provider>
     );

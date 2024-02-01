@@ -8,19 +8,18 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Pagination } from "@mui/material";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
+import { Doctor } from "../../domain/doctor";
 
-interface PatientListTableProps {
+interface DoctorListTableProps {
   handleEditModal: any,
   handleDeleteModal: any,
+  doctors: Doctor[],
+  totalPages: number,
+  handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
 }
 
-const PatientListTable = ({ handleEditModal, handleDeleteModal }: PatientListTableProps) => {
-  const [patients, setPatients] = useState<Patient[]>();
-
-  useEffect(() => {
-    setPatients(patientsFakeData);
-  })
-
+const DoctorListTable = ({ handleEditModal, handleDeleteModal, doctors, totalPages, handlePageChange }: DoctorListTableProps) => {
+  
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
@@ -32,7 +31,7 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal }: PatientListTab
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              NIK/KK
+              License Number
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
@@ -52,29 +51,29 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal }: PatientListTab
           </div>
         </div>
 
-        {typeof(patients) !== "undefined" && patients.map((patient, key) => (
+        {typeof(doctors) !== "undefined" && doctors.map((doctor, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-5 ${
-              key === patientsFakeData.length - 1
+              key === doctors.length - 1
                 ? ""
                 : "border-b border-stroke dark:border-strokedark"
             }`}
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{patient.name}</p>
+              <p className="text-black dark:text-white">{doctor.name}</p>
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{patient.residentNumber}</p>
+              <p className="text-black dark:text-white">{doctor.license_number}</p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{moment(patient.birthday).format("MMMM Do YYYY")}</p>
+              <p className="text-meta-3">{moment(doctor.birthday).format("MMMM Do YYYY")}</p>
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{patient.address}</p>
+              <p className="text-black dark:text-white">{doctor.address}</p>
             </div>
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
@@ -103,11 +102,11 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal }: PatientListTab
           </div>
         ))}
         <div className="py-3">
-          <PageNav count={10} />
+          <Pagination count={totalPages} onChange={handlePageChange} />
         </div>
       </div>
     </div>
   );
 };
 
-export default PatientListTable;
+export default DoctorListTable;

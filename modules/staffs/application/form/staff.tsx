@@ -1,8 +1,6 @@
 'use client';
 
-import { motion, useScroll, useSpring } from 'framer-motion';
-
-const DoctorForm = () => {
+const StaffForm = () => {
 
     return (
         <>
@@ -168,4 +166,4 @@ const DoctorForm = () => {
     )
 }
 
-export default DoctorForm;
+export default StaffForm;

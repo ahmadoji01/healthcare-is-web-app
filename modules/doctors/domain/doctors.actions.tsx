@@ -1,56 +1,6 @@
-import { Patient } from "@/modules/patients/domain/patient"
-import { PatientsOutput } from "@/modules/patients/domain/patients.output"
+import { LIMIT_PER_PAGE } from "@/constants/request";
+import { directusClient } from "@/utils/request-handler"
+import { aggregate, readItems, withToken } from "@directus/sdk";
 
-export const getPatients = async ({
-	patientsOutput,
-}: {
-	patientsOutput: PatientsOutput
-}): Promise<Patient[]> => {
-	try {
-		return await patientsOutput.getPatients()
-	} catch (error: any) {
-		throw new Error(error)
-	}
-}
-
-export const addPatient = async ({
-	patientsOutput,
-	patientId,
-}: {
-	patientsOutput: PatientsOutput
-	patientId: string
-}): Promise<Patient[]> => {
-	try {
-		return await patientsOutput.addPatient({ patientId })
-	} catch (error: any) {
-		throw new Error(error)
-	}
-}
-
-export const updatePatient = async ({
-	patientsOutput,
-	patientId,
-}: {
-	patientsOutput: PatientsOutput
-	patientId: string
-}): Promise<Patient[]> => {
-	try {
-		return await patientsOutput.updatePatient({ patientId })
-	} catch (error: any) {
-		throw new Error(error)
-	}
-}
-
-export const removePatient = async ({
-	patientsOutput,
-	patientId,
-}: {
-	patientsOutput: PatientsOutput
-	patientId: string
-}): Promise<Patient[]> => {
-	try {
-		return await patientsOutput.removePatient({ patientId })
-	} catch (error: any) {
-		throw new Error(error)
-	}
-}
+export const getAllDoctors = (token:string, page:number) => directusClient.request( withToken(token, readItems('doctors', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
+export const getTotalDoctors = (token:string) => directusClient.request( withToken(token, aggregate('doctors', { aggregate: { count: '*' } })) );
