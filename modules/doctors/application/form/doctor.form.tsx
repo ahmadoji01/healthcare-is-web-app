@@ -150,6 +150,9 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                             </div>
                         </div>
                     </div>
+                    <button className="sticky bottom-0 z-[999999999] mt-2 w-full justify-center rounded bg-primary py-5 px-3  font-medium text-2xl text-gray">
+                        Submit
+                    </button>
                 </form>
             </div>
         </>
