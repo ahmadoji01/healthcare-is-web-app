@@ -21,7 +21,7 @@ const DoctorDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => {
                 </div>
                 <div className="w-full px-3 2xsm:w-1/2">
                     <button className="block w-full rounded border border-meta-1 bg-meta-1 p-3 text-center font-medium text-white transition hover:bg-opacity-90">
-                        Deactivate
+                        Delete
                     </button>
                 </div>
             </div>
