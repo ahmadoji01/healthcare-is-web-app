@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Patient } from "../../domain/patient";
+import moment from "moment";
 
 interface PatientFormProps {
     initPatient: Patient,
@@ -29,6 +30,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                     </label>
                                     <input
                                         type="text"
+                                        defaultValue={patient.name}
                                         required
                                         onChange={ e => setPatient({ ...patient, name: e.target.value })}
                                         placeholder="Input Patient's Full Name"
@@ -42,6 +44,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                     <div className="relative">
                                         <input
                                             type="date"
+                                            defaultValue={moment(patient.birthday).format("l")}
                                             onChange={ e => setPatient({ ...patient, birthday: new Date(e.target.value) })}
                                             required
                                             className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -54,6 +57,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                     </label>
                                     <div className="relative z-20 bg-white dark:bg-form-input">
                                         <select
+                                            defaultValue={patient.gender}
                                             onChange={ e => setPatient({ ...patient, gender: e.target.value })} 
                                             required 
                                             className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
@@ -69,6 +73,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                     </label>
                                     <div className="relative z-20 bg-white dark:bg-form-input">
                                         <select 
+                                            defaultValue={patient.marrital_status}
                                             onChange={ e => setPatient({ ...patient, marrital_status: e.target.value }) }
                                             required 
                                             className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
@@ -96,6 +101,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         KK
                                     </label>
                                     <input
+                                        defaultValue={patient.family_id_number? patient.family_id_number : ''}
                                         onChange={ e => setPatient({ ...patient, family_id_number: e.target.value }) }
                                         type="text"
                                         placeholder="Input Your KK"
@@ -107,6 +113,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         Father's Name
                                     </label>
                                     <input
+                                        defaultValue={patient.fathers_name}
                                         onChange={ e => setPatient({ ...patient, fathers_name: e.target.value }) }
                                         type="text"
                                         placeholder="Input Your Father's Name"
@@ -118,6 +125,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         Mother's Name
                                     </label>
                                     <input
+                                        defaultValue={patient.mothers_name}
                                         onChange={ e => setPatient({ ...patient, mothers_name: e.target.value }) }
                                         type="text"
                                         placeholder="Input Your Mother's Name"
@@ -139,6 +147,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         Occupation
                                     </label>
                                     <input
+                                        defaultValue={patient.job}
                                         onChange={ e => setPatient({ ...patient, job: e.target.value }) }
                                         type="text"
                                         required
@@ -152,6 +161,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                     </label>
                                     <div className="relative z-20 bg-white dark:bg-form-input">
                                         <select 
+                                            defaultValue={patient.education}
                                             onChange={ e => setPatient({ ...patient, education: e.target.value }) }
                                             className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                                             >
@@ -182,6 +192,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         NIK
                                     </label>
                                     <input
+                                        defaultValue={patient.id_card_number}
                                         type="text"
                                         onChange={ e => setPatient({ ...patient, id_card_number: e.target.value }) }
                                         required
@@ -194,6 +205,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         Address
                                     </label>
                                     <input
+                                        defaultValue={patient.address}
                                         type="text"
                                         onChange={ e => setPatient({ ...patient, address: e.target.value }) }
                                         required

@@ -7,7 +7,7 @@ import { useUserContext } from "@/contexts/user-context";
 import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
 import PatientForm from "@/modules/patients/application/form/patient.form";
 import PatientListTable from "@/modules/patients/application/list/patient.list-table";
-import { Patient, patientMapper } from "@/modules/patients/domain/patient";
+import { Patient, defaultPatient, patientMapper } from "@/modules/patients/domain/patient";
 import { getAllPatients, getTotalPatients } from "@/modules/patients/domain/patients.actions";
 
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ const PatientsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [activePatient, setActivePatient] = useState<Patient>(defaultPatient);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const {accessToken} = useUserContext();
@@ -65,14 +66,18 @@ const PatientsDashboardPage = () => {
       });
   };
 
+  const handleSubmit = (patient:Patient) => {
+    console.log(patient);
+  } 
+
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm /> } title="Patient's Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm initPatient={activePatient} handleSubmit={handleSubmit} /> } title="Patient's Detail" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Patients" />
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-        { dataLoaded && <PatientListTable totalPages={totalPages} patients={patients} handlePageChange={handlePageChange} handleEditModal={ () => handleModal(false, true) } handleDeleteModal={ () => handleModal(false,false) } /> }
+        { dataLoaded && <PatientListTable totalPages={totalPages} patients={patients} setActivePatient={setActivePatient} handlePageChange={handlePageChange} handleModal={handleModal} /> }
       </div>
     </>
   );

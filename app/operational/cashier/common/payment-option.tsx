@@ -3,8 +3,6 @@ import { PaymentMethod } from "@/modules/payment-methods/domain/payment-method";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faBank, faCreditCard, faMoneyBill, faQrcode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
 
 interface PaymentOptionProps {
     selected: boolean,

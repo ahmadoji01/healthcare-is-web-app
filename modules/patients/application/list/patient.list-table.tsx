@@ -5,16 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Pagination } from "@mui/material";
+import { Dispatch, SetStateAction } from "react";
 
 interface PatientListTableProps {
-  handleEditModal: any,
-  handleDeleteModal: any,
+  handleModal: (closeModal:boolean, whichModal:boolean) => void,
   patients: Patient[],
   totalPages: number,
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
+  setActivePatient: Dispatch<SetStateAction<Patient>>
 }
 
-const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalPages, handlePageChange }: PatientListTableProps) => {
+const PatientListTable = ({ handleModal, patients, totalPages, handlePageChange, setActivePatient }: PatientListTableProps) => {
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -77,7 +78,7 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalP
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={handleEditModal}
+                    onClick={() => { handleModal(false, true); setActivePatient(patient) }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
                     <FontAwesomeIcon width={18} height={18} icon={faPencil} />
@@ -86,7 +87,7 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal, patients, totalP
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={handleDeleteModal}
+                    onClick={() => { handleModal(false, false); setActivePatient(patient) }}
                     style={{ background: "red" }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
