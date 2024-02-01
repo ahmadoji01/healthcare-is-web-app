@@ -1,4 +1,4 @@
-import { directusClient } from "@/utils/response-handler";
+import { directusClient } from "@/utils/request-handler";
 import { readItems, readMe, withToken } from "@directus/sdk";
 
 export const signIn = (email:string, password:string) => directusClient.login(email, password);

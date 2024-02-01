@@ -4,20 +4,14 @@ import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import PatientForm from "@/modules/patients/application/form/patient.form";
-import { Patient, defaultPatient } from "@/modules/patients/domain/patient";
-import { createAPatient, patientExistChecker } from "@/modules/patients/domain/patients.actions";
+import { Patient, PatientNoID, defaultPatient, patientNoIDMapper } from "@/modules/patients/domain/patient";
+import { createAPatient, createPatientOrganizationRelationship, getAPatientByIDCard, patientExistChecker } from "@/modules/patients/domain/patients.actions";
 
 import { useState } from "react";
 
-//export const metadata: Metadata = {
-//  title: "Form Elements Page | Next.js E-commerce Dashboard Template",
-//  description: "This is Form Elements page for TailAdmin Next.js",
-  // other metadata
-//};
-
 const PatientCreatePage = () => {
   const [patient, setPatient] = useState(defaultPatient);
-  const {accessToken} = useUserContext();
+  const {accessToken, user} = useUserContext();
   const {setOpen, setMessage, setStatus} = useAlertContext();
 
   const handleSubmit = async (patient:Patient) => {
@@ -33,16 +27,23 @@ const PatientCreatePage = () => {
     if (patientExists) { 
       setOpen(true);
       setMessage("Patient already exists. Click here to see this patient's data");
+      setStatus("error");
       return;
     }
 
-    createAPatient(accessToken, patient).then( () => {
+    let patientNoID = patientNoIDMapper(patient, user.organizationID);
+    await createAPatient(accessToken, patientNoID).then( () => {
       setOpen(true);
-      setMessage("A patient has successfully been created!")
+      setMessage("Success! Patient has been created!");
       setStatus("success");
-      window.location.href = '/dashboard/patients';
+      window.location.href = '/dashboard/patients'
+      return;
+    }).catch( err => {
+      setOpen(true);
+      setMessage("Oops! Something went wrong. Try again!");
+      setStatus("error");
+      return;
     })
-    
   }
 
   return (

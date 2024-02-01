@@ -1,16 +1,13 @@
 'use client';
 
-import { authentication, createDirectus, rest } from "@directus/sdk";
-import { getUserMe, signIn } from "@/modules/users/domain/users.actions";
-import { defaultResponse } from "@/utils/response-handler";
-import { useEffect, useState } from "react";
+import { signIn } from "@/modules/users/domain/users.actions";
+import { useState } from "react";
 import { useUserContext } from "@/contexts/user-context";
 
 const Home = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [response, setResponse] = useState(defaultResponse);
     const { accessToken } = useUserContext();
 
     const handleSignIn = () => {
@@ -25,9 +22,6 @@ const Home = () => {
                 <div className="bg-welcome bg-cover"></div>
                 <div className="bg-white">
                         <div className="p-6.5">
-                            <div className="text-black">
-                                { response.error && response.statusCode + ": " + response.errorMessage }
-                            </div>
                             <div className="mb-4.5">
                             <label className="mb-2.5 block text-black dark:text-white">
                                 Email

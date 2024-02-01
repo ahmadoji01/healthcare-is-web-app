@@ -1,14 +1,7 @@
-import AlertModal from '@/components/Modal/AlertModal';
-import { ALERT_STATUS } from '@/constants/alert';
-import { Order } from '@/modules/orders/domain/order';
-import { ordersFakeData } from '@/modules/orders/infrastructure/order.fakes';
-import { PaymentMethod } from '@/modules/payment-methods/domain/payment-method';
 import { User, defaultUser } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
-import { directusClient } from '@/utils/response-handler';
-import { authentication, createDirectus } from '@directus/sdk';
-import { Alert, Snackbar } from '@mui/material';
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { directusClient } from '@/utils/request-handler';
+import { createContext, useContext, useEffect, useState } from 'react';
  
 interface UserContextType {
     accessToken: string,
@@ -40,7 +33,8 @@ export const UserProvider = ({
                 setAccessToken(token);
                 setExpiry(expiry);
                 getUserMe(token).then(res => {
-                    setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name });
+                    console.log(res);
+                    setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
                 });
                 clearInterval(interval);
             });

@@ -1,11 +1,9 @@
 'use client';
 
-import CheckboxOne from "@/components/Dashboard/Checkboxes/CheckboxOne";
-import { getCurrentUser, signIn } from "@/modules/users/domain/users.actions";
-import { defaultResponse } from "@/utils/response-handler";
-import { useEffect, useState } from "react";
+import { signIn } from "@/modules/users/domain/users.actions";
+import { defaultResponse } from "@/utils/request-handler";
+import { useState } from "react";
 import RememberMe from "./common/remember-me";
-import useSWR from 'swr';
 
 const SignInPage = () => {
 

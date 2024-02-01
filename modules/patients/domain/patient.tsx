@@ -1,4 +1,4 @@
-export interface Patient {
+export type Patient = {
     id: number,
     name: string,
     fathers_name: string,
@@ -51,4 +51,35 @@ export function patientMapper(res:Record<string,any>) {
         family_id_number: res.family_id_number,
     }
     return patient;
+}
+
+type PatientOrganization = {
+    patient_organization: object,
+}
+
+export type PatientNoID = Omit<Patient, 'id'> & PatientOrganization;
+export function patientNoIDMapper(patient:Patient, orgID:number) {
+    let patientOrg: PatientOrganization = {
+        patient_organization: {
+            organizations_id: orgID
+        }
+    } 
+
+    let patientNoID: PatientNoID = { 
+        name: patient.name, 
+        fathers_name: patient.fathers_name,
+        mothers_name: patient.mothers_name,
+        birthday: patient.birthday, 
+        religion: patient.religion, 
+        job: patient.job, 
+        education: patient.education, 
+        marrital_status: patient.marrital_status,
+        gender: patient.gender,
+        id_card_number: patient.id_card_number,
+        address: patient.address,
+        slug: patient.slug,
+        family_id_number: patient.family_id_number,
+        patient_organization: patientOrg
+    }
+    return patientNoID;
 }

@@ -1,5 +1,5 @@
 import { aggregate, readItems, withToken } from "@directus/sdk";
-import { directusClient } from "@/utils/response-handler";
+import { directusClient } from "@/utils/request-handler";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 
 export const getAllStaffs = (token:string, page:number) => directusClient.request( withToken(token, readItems('staffs', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );

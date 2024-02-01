@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useUserContext } from "@/contexts/user-context";
-import { directusClient } from "@/utils/response-handler";
+import { directusClient } from "@/utils/request-handler";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
