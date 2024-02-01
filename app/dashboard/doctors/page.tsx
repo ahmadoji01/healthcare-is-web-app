@@ -8,7 +8,7 @@ import { useUserContext } from "@/contexts/user-context";
 import DoctorDeleteConfirmation from "@/modules/doctors/application/form/doctor.delete-confirmation";
 import DoctorForm from "@/modules/doctors/application/form/doctor.form";
 import DoctorListTable from "@/modules/doctors/application/list/doctor.list-table";
-import { Doctor, doctorMapper } from "@/modules/doctors/domain/doctor";
+import { Doctor, defaultDoctor, doctorMapper } from "@/modules/doctors/domain/doctor";
 import { getAllDoctors, getTotalDoctors } from "@/modules/doctors/domain/doctors.actions";
 
 //import { Metadata } from "next";
@@ -23,6 +23,7 @@ const DoctorsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const {accessToken} = useUserContext();
@@ -72,14 +73,18 @@ const DoctorsDashboardPage = () => {
       });
   };
 
+  const handleSubmit = (doctor:Doctor) => {
+    console.log(doctor);
+  }
+
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <DoctorForm /> } title="Doctor's Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <DoctorForm initDoctor={activeDoctor} handleSubmit={handleSubmit} /> } title="Doctor's Detail" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DoctorDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Doctors" />
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-        { dataLoaded && <DoctorListTable totalPages={totalPages} doctors={doctors} handlePageChange={handlePageChange} handleEditModal={ () => handleModal(false, true) } handleDeleteModal={ () => handleModal(false,false) } /> }
+        { dataLoaded && <DoctorListTable totalPages={totalPages} doctors={doctors} handlePageChange={handlePageChange} setActiveDoctor={setActiveDoctor} handleModal={handleModal} /> }
       </div>
     </>
   );

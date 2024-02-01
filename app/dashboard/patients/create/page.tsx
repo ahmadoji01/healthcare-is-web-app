@@ -4,8 +4,8 @@ import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import PatientForm from "@/modules/patients/application/form/patient.form";
-import { Patient, PatientNoID, defaultPatient, patientNoIDMapper } from "@/modules/patients/domain/patient";
-import { createAPatient, createPatientOrganizationRelationship, getAPatientByIDCard, patientExistChecker } from "@/modules/patients/domain/patients.actions";
+import { Patient, defaultPatient, patientNoIDMapper } from "@/modules/patients/domain/patient";
+import { createAPatient, patientExistChecker } from "@/modules/patients/domain/patients.actions";
 
 import { useState } from "react";
 

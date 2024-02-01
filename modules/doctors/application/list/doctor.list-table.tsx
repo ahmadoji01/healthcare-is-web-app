@@ -1,24 +1,21 @@
-import { Patient } from "@/modules/patients/domain/patient";
 import moment from "moment";
-import { patientsFakeData } from "@/modules/patients/infrastructure/patients.fakes";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Pagination } from "@mui/material";
-import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { Doctor } from "../../domain/doctor";
 
 interface DoctorListTableProps {
-  handleEditModal: any,
-  handleDeleteModal: any,
+  handleModal: (closeModal:boolean, whichModal:boolean) => void,
   doctors: Doctor[],
   totalPages: number,
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
+  setActiveDoctor: Dispatch<SetStateAction<Doctor>>,
 }
 
-const DoctorListTable = ({ handleEditModal, handleDeleteModal, doctors, totalPages, handlePageChange }: DoctorListTableProps) => {
+const DoctorListTable = ({ handleModal, doctors, totalPages, handlePageChange, setActiveDoctor }: DoctorListTableProps) => {
   
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -61,7 +58,7 @@ const DoctorListTable = ({ handleEditModal, handleDeleteModal, doctors, totalPag
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{doctor.name}</p>
+              <p className="text-black dark:text-white">{doctor.name + " " + doctor.specialization}</p>
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
@@ -81,7 +78,7 @@ const DoctorListTable = ({ handleEditModal, handleDeleteModal, doctors, totalPag
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={handleEditModal}
+                    onClick={() => { handleModal(false, true); setActiveDoctor(doctor) }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
                     <FontAwesomeIcon width={18} height={18} icon={faPencil} />
@@ -90,7 +87,7 @@ const DoctorListTable = ({ handleEditModal, handleDeleteModal, doctors, totalPag
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={handleDeleteModal}
+                    onClick={() => { handleModal(false, false); setActiveDoctor(doctor) }}
                     style={{ background: "red" }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >

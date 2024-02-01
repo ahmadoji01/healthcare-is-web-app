@@ -80,7 +80,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                             >
                                             <option value="single">Single</option>
                                             <option value="married">Married</option>
-                                            <option value="divorce">Divorce</option>
+                                            <option value="divorced">Divorced</option>
                                             <option value="widow">Widow</option>
                                         </select>
                                     </div>
