@@ -33,7 +33,6 @@ export const UserProvider = ({
                 setAccessToken(token);
                 setExpiry(expiry);
                 getUserMe(token).then(res => {
-                    console.log(res);
                     setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
                 });
                 clearInterval(interval);
