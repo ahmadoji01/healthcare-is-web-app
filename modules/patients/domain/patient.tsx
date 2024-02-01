@@ -54,16 +54,11 @@ export function patientMapper(res:Record<string,any>) {
 }
 
 type PatientOrganization = {
-    patient_organization: object,
+    patient_organizations: object,
 }
 
 export type PatientNoID = Omit<Patient, 'id'> & PatientOrganization;
 export function patientNoIDMapper(patient:Patient, orgID:number) {
-    let patientOrg: PatientOrganization = {
-        patient_organization: {
-            organizations_id: orgID
-        }
-    } 
 
     let patientNoID: PatientNoID = { 
         name: patient.name, 
@@ -79,7 +74,7 @@ export function patientNoIDMapper(patient:Patient, orgID:number) {
         address: patient.address,
         slug: patient.slug,
         family_id_number: patient.family_id_number,
-        patient_organization: patientOrg
+        patient_organizations: [{ organizations_id: orgID }]
     }
     return patientNoID;
 }

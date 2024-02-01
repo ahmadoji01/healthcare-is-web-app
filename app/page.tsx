@@ -8,7 +8,6 @@ const Home = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { accessToken } = useUserContext();
 
     const handleSignIn = () => {
         signIn(email, password).then(() => {

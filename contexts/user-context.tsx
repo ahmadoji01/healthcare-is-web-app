@@ -26,8 +26,16 @@ export const UserProvider = ({
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        if (location.pathname == '/') {
+            return;
+        }
+
         let interval = setInterval(async () => {
-            await directusClient.refresh().then( (res) => { 
+            await directusClient.refresh().then( (res) => {
+                if (res.access_token === null) {
+                    window.location.href = '/';
+                    return;
+                }
                 let token = res.access_token? res.access_token : '';
                 let expiry = res.expires? res.expires : 0;
                 setAccessToken(token);
@@ -36,6 +44,11 @@ export const UserProvider = ({
                     setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
                 });
                 clearInterval(interval);
+            }).catch( () => { 
+                if (location.pathname !== '/') {
+                    window.location.href = '/';
+                }
+                return; 
             });
         }, expiry);
 
@@ -43,12 +56,21 @@ export const UserProvider = ({
     }, [loading]);
 
     useEffect(() => {
+        if (location.pathname == '/') {
+            return;
+        }
+
         let interval = setInterval(async () => {
             await directusClient.refresh().then( (res) => { 
                 let token = res.access_token? res.access_token : '';
                 let expiry = res.expires? res.expires : 0;
                 setAccessToken(token);
                 setExpiry(expiry);
+            }).catch( () => { 
+                if (location.pathname !== '/') {
+                    window.location.href = '/';
+                }
+                return; 
             });
         }, 900000);
 
