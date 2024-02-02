@@ -1,11 +1,16 @@
+interface Avatar {
+	id: string,
+	filename_download: string,
+}
+
 export interface User {
 	id: string,
 	first_name: string,
 	last_name: string,
-	avatar: string|null,
+	avatar: Avatar|null,
 	username: string|null,
 	role: string,
-	organizationID: number
+	organizationID: number,
 }
 
 export const defaultUser:User = {
@@ -15,5 +20,5 @@ export const defaultUser:User = {
 	avatar: null,
 	username: null,
 	role: "",
-	organizationID: 0
+	organizationID: 0,
 }

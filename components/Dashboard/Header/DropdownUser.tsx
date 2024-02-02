@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion"
 import Link from "next/link";
 import { useUserContext } from "@/contexts/user-context";
-import { directusClient } from "@/utils/request-handler";
-import avatar from "@/public/images/avatar-256.jpg";
+import { directusClient, imageHandler } from "@/utils/request-handler";
+import defaultAvatar from "@/public/images/avatar-256.jpg";
+import appConfig from "@/config";
 
 const DropdownUser = () => {
+  const [avatar, setAvatar] = useState(defaultAvatar.src);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -13,7 +15,6 @@ const DropdownUser = () => {
 
   const { user } = useUserContext();
 
-  // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!dropdown.current) return;
@@ -29,7 +30,6 @@ const DropdownUser = () => {
     return () => document.removeEventListener("click", clickHandler);
   });
 
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -37,6 +37,13 @@ const DropdownUser = () => {
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
+  });
+
+  useEffect(() => {
+    if (user.avatar !== null) {
+      console.log(imageHandler(user.avatar.id, user.avatar.filename_download));
+      setAvatar(imageHandler(user.avatar.id, user.avatar.filename_download));
+    }
   });
 
   const handleSignOut = () => {
@@ -63,7 +70,7 @@ const DropdownUser = () => {
         <span className="h-12 w-12 rounded-full">
           <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >
             <div style={{borderRadius: '5px', overflow: 'hidden'}}>
-              <img src={avatar.src} width={112} height={112} className="shadow-lg rounded-full max-w-full h-auto align-middle border-none" />
+              <img src={avatar} width={112} height={112} className="shadow-lg rounded-full max-w-full h-auto align-middle border-none" />
             </div>
           </motion.div>
         </span>
