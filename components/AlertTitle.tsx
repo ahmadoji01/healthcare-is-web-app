@@ -1,4 +1,4 @@
-import { ALERT_STATUS } from '@/constants/alert';
+import { ALERT_MESSAGE, ALERT_STATUS } from '@/constants/alert';
 import { motion } from 'framer-motion';
 import CheckmarkIcon from './Icons/CheckmarkIcon';
 import CrossmarkIcon from './Icons/CrossmarkIcon';
@@ -74,8 +74,8 @@ const AlertTitle = ({ alertStatus }:AlertTitleProps) => {
             setTitle("Success!");
             return;
         }
-        if (alertStatus === ALERT_STATUS.failed) {
-            setTitle("Oops, something went wrong!");
+        if (alertStatus === ALERT_STATUS.error) {
+            setTitle(ALERT_MESSAGE.server_error);
             return;
         }
     })

@@ -1,11 +1,12 @@
 import { User, defaultUser } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
 import { directusClient } from '@/utils/request-handler';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
  
 interface UserContextType {
     accessToken: string,
     user: User,
+    setUser: Dispatch<SetStateAction<User>>
 }
 
 let EXPIRY_MS = 1000;
@@ -13,6 +14,7 @@ let EXPIRY_MS = 1000;
 export const UserContext = createContext<UserContextType | null>({
     accessToken: "",
     user: defaultUser,
+    setUser: () => {},
 });
  
 export const UserProvider = ({
@@ -78,7 +80,7 @@ export const UserProvider = ({
     }, [expiry]);
 
     return (
-        <UserContext.Provider value={{ accessToken, user }}>
+        <UserContext.Provider value={{ accessToken, user, setUser }}>
             {children}
         </UserContext.Provider>
     );

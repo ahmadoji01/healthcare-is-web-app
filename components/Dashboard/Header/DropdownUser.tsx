@@ -41,7 +41,6 @@ const DropdownUser = () => {
 
   useEffect(() => {
     if (user.avatar !== null) {
-      console.log(imageHandler(user.avatar.id, user.avatar.filename_download));
       setAvatar(imageHandler(user.avatar.id, user.avatar.filename_download));
     }
   });

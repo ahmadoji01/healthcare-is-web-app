@@ -1,14 +1,58 @@
+'use client';
+
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
-
-import { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Profile Page | Next.js E-commerce Dashboard Template",
-  description: "This is Profile page for TailAdmin Next.js",
-  // other metadata
-};
+import defaultAvatar from "@/public/images/avatar-256.jpg";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useUserContext } from "@/contexts/user-context";
+import { imageHandler } from "@/utils/request-handler";
+import { updateUserMe, uploadAvatar } from "@/modules/users/domain/users.actions";
+import { openSnackbarNotification } from "@/utils/notification";
+import { ALERT_MESSAGE } from "@/constants/alert";
+import { useAlertContext } from "@/contexts/alert-context";
 
 const Profile = () => {
+
+  const [avatar, setAvatar] = useState(defaultAvatar.src);
+  const {accessToken, user, setUser} = useUserContext();
+  const {setOpen, setMessage, setStatus} = useAlertContext();
+
+  useEffect(() => {
+    if (user.avatar !== null) {
+      setAvatar(imageHandler(user.avatar.id, user.avatar.filename_download));
+    }
+  });
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+
+    let file = e.target.files[0];
+    let data = new FormData();
+    data.append('file-1', file, file.name);
+    let avatar = {};
+    await uploadAvatar(accessToken, data)
+      .then( res => avatar = res)
+      .catch( err => {
+        setOpen(true);
+        setMessage(ALERT_MESSAGE.server_error);
+        setStatus("error");
+      });
+    await updateUserMe(accessToken, { avatar: avatar })
+      .then( res => { 
+        setOpen(true);
+        setMessage(ALERT_MESSAGE.success);
+        setStatus("success"); 
+        setUser({ ...user, avatar: { id: avatar.id, filename_download: avatar.filename_download } })
+      })
+      .catch( err => {
+        setOpen(true);
+        setMessage(ALERT_MESSAGE.server_error);
+        setStatus("error"); 
+      });
+  };
+
   return (
     <>
       <Breadcrumb pageName="Profile" />
@@ -58,12 +102,7 @@ const Profile = () => {
         <div className="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
           <div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
             <div className="relative drop-shadow-2">
-              <Image
-                src={"/images/user/user-06.png"}
-                width={160}
-                height={160}
-                alt="profile"
-              />
+              <img src={avatar} width={160} height={160} className="shadow-lg rounded-full max-w-full h-auto align-middle border-none" />
               <label
                 htmlFor="profile"
                 className="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
@@ -94,15 +133,16 @@ const Profile = () => {
                   name="profile"
                   id="profile"
                   className="sr-only"
+                  onChange={handleFileChange}
                 />
               </label>
             </div>
           </div>
           <div className="mt-4">
             <h3 className="mb-1.5 text-2xl font-semibold text-black dark:text-white">
-              Danish Heilium
+              {user.first_name + " " + user.last_name}
             </h3>
-            <p className="font-medium">Ui/Ux Designer</p>
+            <p className="font-medium">{user.role}</p>
             <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
               <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
                 <span className="font-semibold text-black dark:text-white">
