@@ -22,8 +22,6 @@ export default function RootLayout({
   const { accessToken } = useUserContext();
 
   useEffect(() => {
-    //setTimeout(() => setLoading(false), 1000);
-
     const onStorageChange = () => {
       const item = localStorage.getItem("color-theme");
       const colorTheme = item ? JSON.parse(item) : "light";

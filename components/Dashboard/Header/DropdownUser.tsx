@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion"
 import Link from "next/link";
-import Image from "next/image";
-import { redirect } from "next/navigation";
 import { useUserContext } from "@/contexts/user-context";
 import { directusClient } from "@/utils/request-handler";
+import avatar from "@/public/images/avatar-256.jpg";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -63,12 +62,9 @@ const DropdownUser = () => {
 
         <span className="h-12 w-12 rounded-full">
           <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >
-            <Image
-              width={112}
-              height={112}
-              src={"/images/user/user-01.png"}
-              alt="User"
-              />
+            <div style={{borderRadius: '5px', overflow: 'hidden'}}>
+              <img src={avatar.src} width={112} height={112} className="shadow-lg rounded-full max-w-full h-auto align-middle border-none" />
+            </div>
           </motion.div>
         </span>
 
