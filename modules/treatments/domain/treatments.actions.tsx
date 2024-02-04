@@ -7,3 +7,12 @@ export const getAllTreatments = (token:string, page:number) => directusClient.re
 export const getTotalTreatments = (token:string) => directusClient.request( withToken(token, aggregate('treatments', { aggregate: { count: '*' } })) );
 export const createATreatment = (token:string, treatment:TreatmentNoID) => 
 	directusClient.request( withToken(token, createItem('treatments', treatment)) )
+
+export const treatmentExistChecker = (token:string, code = '') => 
+	directusClient.request( 
+		withToken(token, readItems('treatments', { 
+			filter: {
+				code: { _eq: code }
+			} 
+		})) 
+	)
