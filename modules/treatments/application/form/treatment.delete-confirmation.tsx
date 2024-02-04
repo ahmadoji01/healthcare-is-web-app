@@ -2,7 +2,7 @@ interface DeleteConfirmationProps {
     handleClose: any,
 }
 
-const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => {
+const TreatmentDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => {
     return (
         <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
             <span className="mx-auto inline-block">
@@ -11,7 +11,7 @@ const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => 
                 <path d="M30 27.2498V29.9998V27.2498ZM30 35.4999H30.0134H30ZM20.6914 41H39.3086C41.3778 41 42.6704 38.7078 41.6358 36.8749L32.3272 20.3747C31.2926 18.5418 28.7074 18.5418 27.6728 20.3747L18.3642 36.8749C17.3296 38.7078 18.6222 41 20.6914 41Z" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
             </span>
-            <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">Are you sure you want to delete this patient's data?</h3>
+            <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">Are you sure you want to delete this treatment's data?</h3>
             <p className="mb-10">Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem Ipsum been.</p>
             <div className="-mx-3 flex flex-wrap gap-y-10">
                 <div className="w-full px-3 2xsm:w-1/2">
@@ -21,7 +21,7 @@ const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => 
                 </div>
                 <div className="w-full px-3 2xsm:w-1/2">
                     <button className="block w-full rounded border border-meta-1 bg-meta-1 p-3 text-center font-medium text-white transition hover:bg-opacity-90">
-                        Deactivate
+                        Delete
                     </button>
                 </div>
             </div>
@@ -29,4 +29,4 @@ const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => 
     )
 }
 
-export default PatientDeleteConfirmation;
+export default TreatmentDeleteConfirmation;

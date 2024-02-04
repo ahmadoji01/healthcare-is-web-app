@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Patient } from "../../domain/patient";
 import moment from "moment";
+import SubmitButton from "@/components/Dashboard/Submit";
 
 interface PatientFormProps {
     initPatient: Patient,
@@ -216,9 +217,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                             </div>
                         </div>
                     </div>
-                    <button className="sticky bottom-0 z-[999999999] mt-2 w-full justify-center rounded bg-primary py-5 px-3  font-medium text-2xl text-gray">
-                        Submit
-                    </button>
+                    <SubmitButton />
                 </form>
             </div>
         </>
