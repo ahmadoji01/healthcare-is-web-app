@@ -1,6 +1,7 @@
-import { Doctor } from '@/modules/doctors/domain/doctor';
-import { doctorsFakeData } from '@/modules/doctors/infrastructure/doctors.fakes';
+import { Doctor, defaultDoctor, doctorMapper } from '@/modules/doctors/domain/doctor';
+import { getAllDoctors } from '@/modules/doctors/domain/doctors.actions';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { useUserContext } from './user-context';
  
 interface DoctorContextType {
     doctors: Doctor[],
@@ -10,8 +11,8 @@ interface DoctorContextType {
 }
 
 export const DoctorContext = createContext<DoctorContextType | null>({
-    doctors: doctorsFakeData,
-    activeDoctor: doctorsFakeData[0],
+    doctors: [defaultDoctor],
+    activeDoctor: defaultDoctor,
     setDoctors: () => {},
     setActiveDoctor: () => {},
 });
@@ -21,8 +22,17 @@ export const DoctorProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const [doctors, setDoctors] = useState<Doctor[]>(doctorsFakeData);
-    const [activeDoctor, setActiveDoctor] = useState<Doctor>(doctorsFakeData[0]);
+    const [doctors, setDoctors] = useState<Doctor[]>([]);
+    const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
+    const {accessToken} = useUserContext();
+
+    useEffect( () => {
+        getAllDoctors(accessToken, 1).then( res => { 
+            let docs:Doctor[] = [];
+            res?.map( (doctor) => { docs.push(doctorMapper(doctor)); });
+            setDoctors(docs);
+        })
+    })
 
     return (
         <DoctorContext.Provider value={{ doctors, activeDoctor, setDoctors, setActiveDoctor }}>

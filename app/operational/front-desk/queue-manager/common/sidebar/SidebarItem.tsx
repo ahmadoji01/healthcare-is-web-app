@@ -1,12 +1,7 @@
 import React, { useState } from "react";
-import SidebarLinkGroup from "./SidebarLinkGroup";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { sidebarMenuItems } from "@/config/dashboard/menu";
 import { faUserDoctor } from "@fortawesome/free-solid-svg-icons";
-import { Doctor } from "@/modules/doctors/domain/doctor";
-import { doctorsFakeData } from "@/modules/doctors/infrastructure/doctors.fakes";
 import { useDoctorContext } from "@/contexts/doctor-context";
 
 interface SidebarItemProps {

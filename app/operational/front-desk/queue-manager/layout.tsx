@@ -8,9 +8,10 @@ import Loader from "@/components/Dashboard/Loader";
 import Sidebar from "./common/sidebar";
 import Header from "@/components/Dashboard/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { doctorsFakeData } from "@/modules/doctors/infrastructure/doctors.fakes";
-import { Doctor } from "@/modules/doctors/domain/doctor";
-import { DoctorContext, DoctorProvider } from "@/contexts/doctor-context";
+import { Doctor, doctorMapper } from "@/modules/doctors/domain/doctor";
+import { getAllDoctors } from "@/modules/doctors/domain/doctors.actions";
+import { useUserContext } from "@/contexts/user-context";
+import { DoctorProvider } from "@/contexts/doctor-context";
 
 export default function RootLayout({
   children,
@@ -18,29 +19,36 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
-  const [doctors, setDoctors] = useState<Doctor[]>(doctorsFakeData);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const {accessToken} = useUserContext();
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-
     const onStorageChange = () => {
       const item = localStorage.getItem("color-theme");
       const colorTheme = item ? JSON.parse(item) : "light";
       setTheme(createTheme({ palette: { mode: colorTheme } }));
     }
     window.addEventListener('storage', onStorageChange);
+
+    getAllDoctors(accessToken, 1).then( res => { 
+      let docs:Doctor[] = [];
+      res?.map( (doctor) => { docs.push(doctorMapper(doctor)); });
+      setDoctors(docs);
+      setDataLoaded(true);
+    })
   }, []);
 
   return (
     <html lang="en">
-      <body suppressHydrationWarning={true}>
-        <div className="dark:bg-boxdark-2 dark:text-bodydark">
-          {loading ? (
-            <Loader />
-          ) : (
-            <DoctorProvider>
+      <DoctorProvider>
+        <body suppressHydrationWarning={true}>
+          <div className="dark:bg-boxdark-2 dark:text-bodydark">
+            {loading ? (
+              <Loader />
+            ) : (
               <div className="flex h-screen overflow-hidden">
                 <Sidebar
                   sidebarOpen={sidebarOpen}
@@ -59,10 +67,10 @@ export default function RootLayout({
                   </ThemeProvider>
                 </div>
               </div>
-            </DoctorProvider>
-          )}
-        </div>
-      </body>
+            )}
+          </div>
+        </body>
+      </DoctorProvider>
     </html>
   );
 }
