@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDataModalContext } from "@/contexts/data-modal-context";
+import { Visit } from "@/modules/visits/domain/visit";
 
 type TaskItemProps = {
   task: Task,

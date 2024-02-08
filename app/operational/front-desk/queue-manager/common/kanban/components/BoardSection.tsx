@@ -1,14 +1,13 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 import { useDroppable } from '@dnd-kit/core';
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import Typography from '@mui/material/Typography';
 import { Task } from '../types';
 import TaskItem from './TaskItem';
 import SortableTaskItem from './SortableTaskItem';
+import { useVisitContext } from '@/contexts/visit-context';
 
 type BoardSectionProps = {
   id: string;
@@ -20,6 +19,8 @@ const BoardSection = ({ id, title, tasks }: BoardSectionProps) => {
   const { setNodeRef } = useDroppable({
     id,
   });
+
+  const {doctorVisits} = useVisitContext();
 
   return (
     <div className="swim-lane flex flex-col gap-5.5">

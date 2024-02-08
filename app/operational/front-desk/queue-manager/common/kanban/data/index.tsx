@@ -18,6 +18,6 @@ export const INITIAL_TASKS: Task[] = [
     id: uuidv4(),
     title: 'Title 4',
     description: 'Desc 4',
-    status: 'not_in_line',
+    status: 'temporary_leave',
   },
 ];

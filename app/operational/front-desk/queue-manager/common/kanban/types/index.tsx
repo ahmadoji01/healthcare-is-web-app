@@ -1,4 +1,4 @@
-export type Status = 'waiting' | 'not_in_line' | 'done';
+export type Status = 'waiting' | 'temporary_leave' | 'done';
 
 export type Task = {
   id: string;
