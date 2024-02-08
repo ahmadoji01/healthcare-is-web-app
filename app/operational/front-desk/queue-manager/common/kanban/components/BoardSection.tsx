@@ -1,22 +1,22 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 import { useDroppable } from '@dnd-kit/core';
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import Typography from '@mui/material/Typography';
 import { Task } from '../types';
 import TaskItem from './TaskItem';
 import SortableTaskItem from './SortableTaskItem';
+import { useVisitContext } from '@/contexts/visit-context';
+import { Visit } from '@/modules/visits/domain/visit';
 
 type BoardSectionProps = {
   id: string;
   title: string;
-  tasks: Task[];
+  visits: Visit[];
 };
 
-const BoardSection = ({ id, title, tasks }: BoardSectionProps) => {
+const BoardSection = ({ id, title, visits }: BoardSectionProps) => {
   const { setNodeRef } = useDroppable({
     id,
   });
@@ -26,12 +26,12 @@ const BoardSection = ({ id, title, tasks }: BoardSectionProps) => {
       <h4 className="text-xl font-semibold text-black dark:text-white">{title}</h4>
       <SortableContext
         id={id}
-        items={tasks}
+        items={visits}
         strategy={verticalListSortingStrategy}>
         <div ref={setNodeRef}>
-          {tasks.map((task) => (
-            <SortableTaskItem id={task.id}>
-              <TaskItem task={task} />
+          { typeof(visits) !== 'undefined' && visits.map((visit) => (
+            <SortableTaskItem id={visit.id}>
+              <TaskItem visit={visit} />
             </SortableTaskItem>
           ))}
         </div>

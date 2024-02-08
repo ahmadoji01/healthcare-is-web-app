@@ -2,14 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion"
 import Link from "next/link";
 import Image from "next/image";
+import defaultAvatar from "@/public/images/avatar-256.jpg";
+import { useUserContext } from "@/contexts/user-context";
 
 const DropdownUser = () => {
+  const [avatar, setAvatar] = useState(defaultAvatar.src);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const {user} = useUserContext();
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
-  // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!dropdown.current) return;
@@ -25,7 +28,6 @@ const DropdownUser = () => {
     return () => document.removeEventListener("click", clickHandler);
   });
 
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -33,6 +35,12 @@ const DropdownUser = () => {
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
+  });
+
+  useEffect(() => {
+    if (user.avatar !== null) {
+      setAvatar(user.avatar);
+    }
   });
 
   return (
@@ -52,12 +60,9 @@ const DropdownUser = () => {
 
         <span className="h-12 w-12 rounded-full">
           <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >
-            <Image
-              width={112}
-              height={112}
-              src={"/images/user/user-01.png"}
-              alt="User"
-              />
+            <div style={{borderRadius: '5px', overflow: 'hidden'}}>
+              <img src={avatar} width={112} height={112} className="shadow-lg rounded-full max-w-full h-auto align-middle border-none" />
+            </div>
           </motion.div>
         </span>
 

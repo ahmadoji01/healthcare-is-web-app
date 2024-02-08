@@ -5,12 +5,14 @@ interface AlertContextType {
     setOpen: (open:boolean) => void,
     setMessage: Dispatch<SetStateAction<string>>,
     setStatus: Dispatch<SetStateAction<AlertColor>>,
+    openSnackbarNotification: (message:string, status:AlertColor) => void,
 }
 
 export const AlertContext = createContext<AlertContextType | null>({
     setOpen: () => {},
     setMessage: () => {},
     setStatus: () => {},
+    openSnackbarNotification: () => {},
 });
  
 export const AlertProvider = ({
@@ -30,8 +32,14 @@ export const AlertProvider = ({
         setOpen(false);
     };
 
+    const openSnackbarNotification = (message:string, status:AlertColor) => {
+        setOpen(true);
+        setMessage(message);
+        setStatus(status);
+    }
+
     return (
-        <AlertContext.Provider value={{ setMessage, setOpen, setStatus }}>
+        <AlertContext.Provider value={{ setMessage, setOpen, setStatus, openSnackbarNotification }}>
             {children}
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onClose={handleClose} sx={{ zIndex: 2147483647 }}>
                 <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>

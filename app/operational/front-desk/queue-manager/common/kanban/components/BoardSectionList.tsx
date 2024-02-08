@@ -18,7 +18,7 @@ import {
 import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
 import { INITIAL_TASKS } from '../data';
 import { BoardSections as BoardSectionsType } from '../types';
-import { getTaskById } from '../utils/tasks';
+import { getTaskById, getVisitById } from '../utils/tasks';
 import { findBoardSectionContainer, initializeBoard } from '../utils/board';
 import BoardSection from './BoardSection';
 import TaskItem from './TaskItem';
@@ -31,14 +31,15 @@ import { useDoctorContext } from '@/contexts/doctor-context';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useVisitContext } from '@/contexts/visit-context';
 
 const BoardSectionList = () => {
-  const tasks = INITIAL_TASKS;
-  const initialBoardSections = initializeBoard(INITIAL_TASKS);
+  const {doctorVisits} = useVisitContext();
+  const initialBoardSections = initializeBoard(doctorVisits);
   const [boardSections, setBoardSections] =
     useState<BoardSectionsType>(initialBoardSections);
 
-  const [activeTaskId, setActiveTaskId] = useState<null | string>(null);
+  const [activeTaskId, setActiveTaskId] = useState<null | number>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -47,19 +48,23 @@ const BoardSectionList = () => {
     })
   );
 
+  useEffect( () => {
+    setBoardSections(initializeBoard(doctorVisits));
+  }, [doctorVisits])
+
   const handleDragStart = ({ active }: DragStartEvent) => {
-    setActiveTaskId(active.id as string);
+    setActiveTaskId(active.id as number);
   };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
     const activeContainer = findBoardSectionContainer(
       boardSections,
-      active.id as string
+      active.id as number
     );
     const overContainer = findBoardSectionContainer(
       boardSections,
-      over?.id as string
+      over?.id as number
     );
 
     if (
@@ -102,11 +107,11 @@ const BoardSectionList = () => {
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     const activeContainer = findBoardSectionContainer(
       boardSections,
-      active.id as string
+      active.id as number
     );
     const overContainer = findBoardSectionContainer(
       boardSections,
-      over?.id as string
+      over?.id as number
     );
 
     if (
@@ -142,7 +147,7 @@ const BoardSectionList = () => {
     ...defaultDropAnimation,
   };
 
-  const task = activeTaskId ? getTaskById(tasks, activeTaskId) : null;
+  const task = activeTaskId ? getVisitById(doctorVisits, activeTaskId) : null;
 
   const boardTitle = BOARD_SECTIONS;
 
@@ -180,11 +185,11 @@ const BoardSectionList = () => {
             <BoardSection
               id={boardSectionKey}
               title={boardTitle[boardSectionKey]}
-              tasks={boardSections[boardSectionKey]}
+              visits={boardSections[boardSectionKey]}
               />
           ))}
           <DragOverlay dropAnimation={dropAnimation}>
-            {task ? <TaskItem task={task} /> : null}
+            {task ? <TaskItem visit={task} /> : null}
           </DragOverlay>
         </DndContext>
       </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
+import { ALERT_MESSAGE, ALERT_STATUS } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import DoctorForm from "@/modules/doctors/application/form/doctor.form";
@@ -30,7 +31,7 @@ const DoctorCreatePage = () => {
     
     if (doctorExists) { 
       setOpen(true);
-      setMessage("Doctor already exists. Click here to see this doctor's data");
+      setMessage(ALERT_MESSAGE.dataExists("doctor"));
       setStatus("error");
       return;
     }
@@ -44,7 +45,7 @@ const DoctorCreatePage = () => {
       return;
     }).catch( err => {
       setOpen(true);
-      setMessage("Oops! Something went wrong. Try again!");
+      setMessage(ALERT_MESSAGE.server_error);
       setStatus("error");
       return;
     })

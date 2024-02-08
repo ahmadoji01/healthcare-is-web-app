@@ -1,56 +1,18 @@
-import { Patient } from "@/modules/patients/domain/patient"
-import { PatientsOutput } from "@/modules/patients/domain/patients.output"
+import { aggregate, createItem, readItems, withToken } from "@directus/sdk";
+import { directusClient } from "@/utils/request-handler";
+import { LIMIT_PER_PAGE } from "@/constants/request";
+import { TreatmentNoID } from "./treatment";
 
-export const getPatients = async ({
-	patientsOutput,
-}: {
-	patientsOutput: PatientsOutput
-}): Promise<Patient[]> => {
-	try {
-		return await patientsOutput.getPatients()
-	} catch (error: any) {
-		throw new Error(error)
-	}
-}
+export const getAllTreatments = (token:string, page:number) => directusClient.request( withToken(token, readItems('treatments', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
+export const getTotalTreatments = (token:string) => directusClient.request( withToken(token, aggregate('treatments', { aggregate: { count: '*' } })) );
+export const createATreatment = (token:string, treatment:TreatmentNoID) => 
+	directusClient.request( withToken(token, createItem('treatments', treatment)) )
 
-export const addPatient = async ({
-	patientsOutput,
-	patientId,
-}: {
-	patientsOutput: PatientsOutput
-	patientId: string
-}): Promise<Patient[]> => {
-	try {
-		return await patientsOutput.addPatient({ patientId })
-	} catch (error: any) {
-		throw new Error(error)
-	}
-}
-
-export const updatePatient = async ({
-	patientsOutput,
-	patientId,
-}: {
-	patientsOutput: PatientsOutput
-	patientId: string
-}): Promise<Patient[]> => {
-	try {
-		return await patientsOutput.updatePatient({ patientId })
-	} catch (error: any) {
-		throw new Error(error)
-	}
-}
-
-export const removePatient = async ({
-	patientsOutput,
-	patientId,
-}: {
-	patientsOutput: PatientsOutput
-	patientId: string
-}): Promise<Patient[]> => {
-	try {
-		return await patientsOutput.removePatient({ patientId })
-	} catch (error: any) {
-		throw new Error(error)
-	}
-}
+export const treatmentExistChecker = (token:string, code = '') => 
+	directusClient.request( 
+		withToken(token, readItems('treatments', { 
+			filter: {
+				code: { _eq: code }
+			} 
+		})) 
+	)

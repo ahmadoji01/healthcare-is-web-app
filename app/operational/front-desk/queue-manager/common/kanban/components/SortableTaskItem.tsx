@@ -4,7 +4,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 type SortableTaskItemProps = {
   children: React.ReactNode;
-  id: string;
+  id: string|number;
 };
 
 const SortableTaskItem = ({ children, id }: SortableTaskItemProps) => {

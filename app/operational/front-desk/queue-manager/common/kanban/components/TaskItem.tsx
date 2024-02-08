@@ -4,21 +4,22 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDataModalContext } from "@/contexts/data-modal-context";
+import { Visit } from "@/modules/visits/domain/visit";
 
 type TaskItemProps = {
-  task: Task,
+  visit: Visit,
 };
 
-const TaskItem = ({ task }: TaskItemProps) => {
+const TaskItem = ({ visit }: TaskItemProps) => {
   const { handleModal } = useDataModalContext();
 
   return (
     <div className="mb-1 task rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="relative flex cursor-move justify-between">
         <div>
-          <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{task.title}</h5>
+          <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{visit?.patient.name}</h5>
           <p>Queue Number</p>
-          <h4 className="text-xl font-medium text-black dark:text-white">A01</h4>
+          <h4 className="text-xl font-medium text-black dark:text-white">{visit.queue_number}</h4>
         </div>
         <div className="items-center justify-center p-1 sm:flex xl:p-2">
           <ul className="flex items-center gap-1 2xsm:gap-2">

@@ -7,9 +7,8 @@ import Loader from "@/components/Dashboard/Loader";
 
 import Header from "./common/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { doctorsFakeData } from "@/modules/doctors/infrastructure/doctors.fakes";
 import { Doctor } from "@/modules/doctors/domain/doctor";
-import { DoctorContext, DoctorProvider } from "@/contexts/doctor-context";
+import { DoctorProvider } from "@/contexts/doctor-context";
 import Footer from "./common/Footer";
 
 export default function RootLayout({
@@ -20,7 +19,7 @@ export default function RootLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
-  const [doctors, setDoctors] = useState<Doctor[]>(doctorsFakeData);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);

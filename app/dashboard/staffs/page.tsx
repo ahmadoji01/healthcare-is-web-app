@@ -4,15 +4,10 @@ import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useUserContext } from "@/contexts/user-context";
-import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
-import PatientForm from "@/modules/patients/application/form/patient.form";
-import PatientListTable from "@/modules/patients/application/list/patient.list-table";
-import { Patient, patientMapper } from "@/modules/patients/domain/patient";
-import { getAllPatients, getTotalPatients } from "@/modules/patients/domain/patients.actions";
-import StaffForm from "@/modules/staffs/application/form/staff";
+import { Staff, staffMapper, defaultStaff } from "@/modules/staffs/domain/staff";
+import StaffForm from "@/modules/staffs/application/form/staff.form";
 import StaffDeleteConfirmation from "@/modules/staffs/application/form/staff.delete-confirmation";
 import StaffListTable from "@/modules/staffs/application/list/staff.list-table";
-import { Staff } from "@/modules/staffs/domain/staff";
 import { getAllStaffs, getTotalStaffs } from "@/modules/staffs/domain/staffs.actions";
 
 import { useEffect, useState } from "react";
@@ -21,6 +16,7 @@ const StaffsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [staffs, setStaffs] = useState<Staff[]>([]);
+  const [activeStaff, setActiveStaff] = useState<Staff>(defaultStaff);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const {accessToken} = useUserContext();
@@ -30,7 +26,7 @@ const StaffsDashboardPage = () => {
       getAllStaffs(accessToken, 1)
         .then( res => {
           let stfs:Staff[] = [];
-          res?.map( (staff) => { stfs.push(patientMapper(staff)); });
+          res?.map( (staff) => { stfs.push(staffMapper(staff)); });
           setStaffs(stfs);
           setDataLoaded(true);
         });
@@ -64,20 +60,24 @@ const StaffsDashboardPage = () => {
     getAllStaffs(accessToken, 1)
       .then( res => {
         let stfs:Staff[] = [];
-        res?.map( (staff) => { stfs.push(patientMapper(staff)); });
+        res?.map( (staff) => { stfs.push(staffMapper(staff)); });
         setStaffs(stfs);
         setDataLoaded(true);
       });
   };
 
+  const handleSubmit = (staff:Staff) => {
+    console.log(staff);
+  } 
+
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <StaffForm /> } title="Patient's Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <StaffForm initStaff={activeStaff} handleSubmit={handleSubmit} /> } title="Staff's Detail" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <StaffDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Staffs" />
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-        { dataLoaded && <StaffListTable totalPages={totalPages} staffs={staffs} handlePageChange={handlePageChange} handleEditModal={ () => handleModal(false, true) } handleDeleteModal={ () => handleModal(false,false) } /> }
+        { dataLoaded && <StaffListTable setActiveStaff={setActiveStaff} totalPages={totalPages} staffs={staffs} handlePageChange={handlePageChange} handleModal={handleModal} /> }
       </div>
     </>
   );
