@@ -32,6 +32,8 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useVisitContext } from '@/contexts/visit-context';
+import VisitDeleteConfirmation from '@/modules/visits/application/form/visit.delete-confirmation';
+import { Patient } from '@/modules/patients/domain/patient';
 
 const BoardSectionList = () => {
   const {doctorVisits} = useVisitContext();
@@ -57,7 +59,6 @@ const BoardSectionList = () => {
   };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
-    // Find the containers
     const activeContainer = findBoardSectionContainer(
       boardSections,
       active.id as number
@@ -79,7 +80,6 @@ const BoardSectionList = () => {
       const activeItems = boardSection[activeContainer];
       const overItems = boardSection[overContainer];
 
-      // Find the indexes for the items
       const activeIndex = activeItems.findIndex(
         (item) => item.id === active.id
       );
@@ -143,6 +143,10 @@ const BoardSectionList = () => {
     setActiveTaskId(null);
   };
 
+  const handleSubmit = (patient:Patient) => {
+    console.log(patient);
+  }
+
   const dropAnimation: DropAnimation = {
     ...defaultDropAnimation,
   };
@@ -153,6 +157,7 @@ const BoardSectionList = () => {
 
   const { editModalOpen, deleteModalOpen, handleModal } = useDataModalContext();
   const { activeDoctor } = useDoctorContext();
+  const { activePatient } = useVisitContext();
 
   return (
     <>
@@ -173,8 +178,8 @@ const BoardSectionList = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-7.5 grid-cols-2">
-        <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm /> } title="Patient's Detail" />
-        <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
+        <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm initPatient={activePatient} handleSubmit={handleSubmit} /> } title="Patient's Detail" />
+        <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}

@@ -1,21 +1,26 @@
-import { Visit, defaultVisit, visitMapper } from '@/modules/visits/domain/visit';
+import { Visit, visitMapper } from '@/modules/visits/domain/visit';
 import { getAllVisits, getVisitByDoctorID } from '@/modules/visits/domain/visits.actions';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import { useUserContext } from './user-context';
 import { useAlertContext } from './alert-context';
 import { ALERT_MESSAGE } from '@/constants/alert';
+import { Patient, defaultPatient } from '@/modules/patients/domain/patient';
  
 interface VisitContextType {
     visits: Visit[],
     doctorVisits: Visit[],
+    activePatient: Patient,
     loading: boolean,
+    setActivePatient: Dispatch<SetStateAction<Patient>>,
     handleDoctorVisits: (doctorID:number) => void,
 }
 
 export const VisitContext = createContext<VisitContextType | null>({
     visits: [],
     doctorVisits: [],
+    activePatient: defaultPatient,
     loading: false,
+    setActivePatient: () => {},
     handleDoctorVisits: () => {},
 });
  
@@ -26,6 +31,7 @@ export const VisitProvider = ({
 }) => {
     const [visits, setVisits] = useState<Visit[]>([]);
     const [doctorVisits, setDoctorVisits] = useState<Visit[]>([]);
+    const [activePatient, setActivePatient] = useState<Patient>(defaultPatient);
     const [loading, setLoading] = useState(false);
     const {accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
@@ -62,7 +68,7 @@ export const VisitProvider = ({
     }, [])
 
     return (
-        <VisitContext.Provider value={{ visits, loading, doctorVisits, handleDoctorVisits }}>
+        <VisitContext.Provider value={{ visits, loading, doctorVisits, activePatient, setActivePatient, handleDoctorVisits }}>
             {children}
         </VisitContext.Provider>
     );
