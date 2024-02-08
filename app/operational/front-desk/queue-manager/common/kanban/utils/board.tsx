@@ -1,13 +1,14 @@
 import { BoardSections, Status, Task } from '../types';
 import { BOARD_SECTIONS } from '../constants';
-import { getTasksByStatus } from './tasks';
+import { getTasksByStatus, getVisitsByStatus } from './tasks';
+import { Visit } from '@/modules/visits/domain/visit';
 
-export const initializeBoard = (tasks: Task[]) => {
+export const initializeBoard = (visits: Visit[]) => {
   const boardSections: BoardSections = {};
 
   Object.keys(BOARD_SECTIONS).forEach((boardSectionKey) => {
-    boardSections[boardSectionKey] = getTasksByStatus(
-      tasks,
+    boardSections[boardSectionKey] = getVisitsByStatus(
+      visits,
       boardSectionKey as Status
     );
   });
@@ -17,7 +18,7 @@ export const initializeBoard = (tasks: Task[]) => {
 
 export const findBoardSectionContainer = (
   boardSections: BoardSections,
-  id: string
+  id: number
 ) => {
   if (id in boardSections) {
     return id;
