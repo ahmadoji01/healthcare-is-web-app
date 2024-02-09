@@ -97,7 +97,7 @@ export interface HeadToToeCheckup {
     }
 }
 
-export const emptyHeadToToeCheckup:HeadToToeCheckup = {
+export const defaultHeadToToeCheckup:HeadToToeCheckup = {
     head: {
         hairDistribution: "",
         scalp: "",

@@ -1,4 +1,4 @@
-import { emptyHeadToToeCheckup } from "../domain/head-to-toe-checkup"
+import { defaultHeadToToeCheckup } from "../domain/head-to-toe-checkup"
 import { PhysicalCheckup } from "../domain/physical-checkup"
 
 export const physicalCheckupsFakeData:PhysicalCheckup[] = [
@@ -37,6 +37,6 @@ export const physicalCheckupsFakeData:PhysicalCheckup[] = [
                 occurence: "Often",
             } ],
         },
-        headToToeCheckup: emptyHeadToToeCheckup,
+        headToToeCheckup: defaultHeadToToeCheckup,
     }
 ]

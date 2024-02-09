@@ -22,3 +22,28 @@ export interface PastMedicalConcern {
         occurence: string,
     } ],
 }
+
+export const defaultPastMedicalConcern: PastMedicalConcern = {
+    pastIllnesses: "",
+    hospitalizations: [ {
+        date: new Date,
+        reason: "",
+    } ],
+    surgeries: [ {
+        date: new Date,
+        surgeryType: "",
+    } ],
+    allergies: [ {
+        type: "",
+        reaction: "",
+    } ],
+    medications: [ {
+        medicine: "",
+        dose: "",
+        occurence: "",
+    } ],
+    lifestyle: [ {
+        name: "",
+        occurence: "",
+    } ],
+}
