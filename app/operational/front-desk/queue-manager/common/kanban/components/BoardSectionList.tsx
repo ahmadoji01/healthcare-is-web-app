@@ -34,6 +34,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useVisitContext } from '@/contexts/visit-context';
 import VisitDeleteConfirmation from '@/modules/visits/application/form/visit.delete-confirmation';
 import { Patient } from '@/modules/patients/domain/patient';
+import QueueModal from '../../Modal';
 
 const BoardSectionList = () => {
   const {doctorVisits} = useVisitContext();
@@ -178,7 +179,7 @@ const BoardSectionList = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-7.5 grid-cols-2">
-        <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm initPatient={activePatient} handleSubmit={handleSubmit} /> } title="Patient's Detail" />
+        <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm initPatient={activePatient} handleSubmit={handleSubmit} /> } title="Patient's Detail" />
         <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
         <DndContext
           sensors={sensors}
