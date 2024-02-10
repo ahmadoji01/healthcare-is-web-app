@@ -26,3 +26,42 @@ export const defaultPhysicalCheckup: PhysicalCheckup = {
     heart_rate: 0,
     complaint: "",
 }
+
+export function physicalCheckupMapper(res:Record<string,any>) {
+    let physicalCheckup = defaultPhysicalCheckup;
+    physicalCheckup = { 
+        id: res.id, 
+        past_medical_concern: res.past_medical_concern,
+        head_to_toe_checkup: res.head_to_toe_checkup,
+        height: res.height,
+        weight: res.weight,
+        tension: res.tension,
+        temperature: res.temperature,
+        breath_rate: res.breath_rate,
+        heart_rate: res.heart_rate,
+        complaint: res.complaint,
+    }
+    return physicalCheckup;
+}
+
+type Organization = {
+    organization: number,
+}
+
+export type PhysicalCheckupNoID = Omit<PhysicalCheckup, 'id'> & Organization;
+export function physicalCheckupNoIDMapper(checkup:PhysicalCheckup, orgID:number) {
+
+    let physicalCheckupNoID: PhysicalCheckupNoID = { 
+        past_medical_concern: checkup.past_medical_concern,
+        head_to_toe_checkup: checkup.head_to_toe_checkup,
+        height: checkup.height,
+        weight: checkup.weight,
+        tension: checkup.tension,
+        temperature: checkup.temperature,
+        breath_rate: checkup.breath_rate,
+        heart_rate: checkup.heart_rate,
+        complaint: checkup.complaint,
+        organization: orgID,
+    }
+    return physicalCheckupNoID;
+}

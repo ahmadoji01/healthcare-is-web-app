@@ -5,6 +5,7 @@ import { useUserContext } from './user-context';
 import { useAlertContext } from './alert-context';
 import { ALERT_MESSAGE } from '@/constants/alert';
 import { Patient, defaultPatient } from '@/modules/patients/domain/patient';
+import { PhysicalCheckup } from '@/modules/physical-checkups/domain/physical-checkup';
  
 interface VisitContextType {
     visits: Visit[],

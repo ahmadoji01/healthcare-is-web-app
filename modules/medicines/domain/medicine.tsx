@@ -1,6 +1,6 @@
-import MedicineCategory from "./medicine-category";
+import MedicineCategory, { defaultMedicineCategory } from "./medicine-category";
 
-interface Medicine {
+export interface Medicine {
     id: number,
     code: string,
     name: string,
@@ -9,4 +9,11 @@ interface Medicine {
     price: number,
 }
 
-export default Medicine;
+export const defaultMedicine: Medicine = {
+    id: 0,
+    code: "",
+    name: "",
+    stock: 0,
+    category: defaultMedicineCategory,
+    price: 0,
+}

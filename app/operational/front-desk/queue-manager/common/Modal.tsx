@@ -50,7 +50,7 @@ const QueueModal = ({ open, handleClose, children, title }: DashboardModalProps)
                         </Link>
                     </motion.div>
                     <div 
-                        className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-11/12 sm:w-11/12 md:w-5/6 lg:w-4/6 p-8 md:p-10 lg:p-12"
+                        className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-11/12 sm:w-11/12 md:w-5/6 lg:w-4/6 p-4 md:p-6 lg:p-8"
                         style={style}>
                         <h2 className="text-title-md2 font-semibold text-black dark:text-white mb-4">
                             { title }
