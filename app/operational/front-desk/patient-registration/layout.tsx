@@ -6,10 +6,8 @@ import "@/styles/satoshi.css";
 
 import * as React from 'react';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Header from '@/components/Operational/Header';
 import { CssBaseline } from "@mui/material";
 import DarkModeSwitcher from "@/components/Operational/Header/DarkModeSwitcher";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { PatientProvider } from "@/contexts/patient-context";
 
 const fontFamily = {

@@ -20,7 +20,7 @@ const steps = ['Personal Data', 'Doctor to Visit', 'Examination Time', 'Review Y
 function getStepContent(step: number, handleNext: () => void) {
   switch (step) {
     case 0:
-      return <PatientInputForm />;
+      return <PatientInputForm handleNext={handleNext} />;
     case 1:
       return <DoctorToVisit handleNext={handleNext} />
     case 2:
@@ -72,12 +72,14 @@ const NewPatient = () => {
                             )}
                         </div>
                         <div className="flex-1">
-                            <Link
-                            href="#"
-                            onClick={handleNext}
-                            className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                            </Link>
+                            { activeStep === steps.length - 1 &&
+                                <Link
+                                href="#"
+                                onClick={handleNext}
+                                className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
+                                    Submit Registration
+                                </Link>
+                            }
                         </div>
                     </div>
                 </>
