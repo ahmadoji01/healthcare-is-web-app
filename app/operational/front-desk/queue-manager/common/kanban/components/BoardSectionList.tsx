@@ -16,24 +16,31 @@ import {
   defaultDropAnimation,
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
-import { INITIAL_TASKS } from '../data';
 import { BoardSections as BoardSectionsType } from '../types';
-import { getTaskById, getVisitById } from '../utils/tasks';
+import { getVisitById } from '../utils/tasks';
 import { findBoardSectionContainer, initializeBoard } from '../utils/board';
 import BoardSection from './BoardSection';
 import TaskItem from './TaskItem';
 import { BOARD_SECTIONS } from '../constants';
 import { useDataModalContext } from '@/contexts/data-modal-context';
-import PatientForm from '@/modules/patients/application/form/patient.form';
-import PatientDeleteConfirmation from '@/modules/patients/application/form/patient.delete-confirmation';
 import DashboardModal from '@/components/Modal/Modal';
 import { useDoctorContext } from '@/contexts/doctor-context';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useVisitContext } from '@/contexts/visit-context';
+import VisitDeleteConfirmation from '@/modules/visits/application/form/visit.delete-confirmation';
+import { Patient } from '@/modules/patients/domain/patient';
+import QueueModal from '../../Modal';
+import PhysicalCheckupForm from '@/modules/physical-checkups/application/form/physical-checkup.form';
+import PatientInfo from '../../patient-info';
+import { PhysicalCheckup, defaultPhysicalCheckup } from '@/modules/physical-checkups/domain/physical-checkup';
 
-const BoardSectionList = () => {
+interface BoardSectionListProps {
+  handleSubmit: (checkup:PhysicalCheckup) => void,
+}
+
+const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
   const {doctorVisits} = useVisitContext();
   const initialBoardSections = initializeBoard(doctorVisits);
   const [boardSections, setBoardSections] =
@@ -57,7 +64,6 @@ const BoardSectionList = () => {
   };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
-    // Find the containers
     const activeContainer = findBoardSectionContainer(
       boardSections,
       active.id as number
@@ -79,7 +85,6 @@ const BoardSectionList = () => {
       const activeItems = boardSection[activeContainer];
       const overItems = boardSection[overContainer];
 
-      // Find the indexes for the items
       const activeIndex = activeItems.findIndex(
         (item) => item.id === active.id
       );
@@ -142,7 +147,7 @@ const BoardSectionList = () => {
 
     setActiveTaskId(null);
   };
-
+  
   const dropAnimation: DropAnimation = {
     ...defaultDropAnimation,
   };
@@ -153,6 +158,7 @@ const BoardSectionList = () => {
 
   const { editModalOpen, deleteModalOpen, handleModal } = useDataModalContext();
   const { activeDoctor } = useDoctorContext();
+  const { activePatient } = useVisitContext();
 
   return (
     <>
@@ -173,8 +179,13 @@ const BoardSectionList = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-7.5 grid-cols-2">
-        <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm /> } title="Patient's Detail" />
-        <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
+        <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } title="Initial Checkup">
+          <>
+            <PatientInfo patient={activePatient} />
+            <PhysicalCheckupForm patient={activePatient} initCheckup={defaultPhysicalCheckup} handleSubmit={handleSubmit} />
+          </>
+        </QueueModal>
+        <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}

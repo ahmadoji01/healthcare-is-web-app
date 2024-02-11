@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDataModalContext } from "@/contexts/data-modal-context";
 import { Visit } from "@/modules/visits/domain/visit";
+import { useVisitContext } from "@/contexts/visit-context";
 
 type TaskItemProps = {
   visit: Visit,
@@ -12,6 +13,7 @@ type TaskItemProps = {
 
 const TaskItem = ({ visit }: TaskItemProps) => {
   const { handleModal } = useDataModalContext();
+  const { setActivePatient, setActiveVisit } = useVisitContext();
 
   return (
     <div className="mb-1 task rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -26,19 +28,10 @@ const TaskItem = ({ visit }: TaskItemProps) => {
             <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
               <Link
                 href="#"
-                onMouseDown={ () => handleModal(false, true) }
+                onMouseDown={ () => { setActiveVisit(visit); setActivePatient(visit?.patient); handleModal(false, true) } }
                 className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                 >
                 <FontAwesomeIcon width={18} height={18} icon={faBullhorn} />
-              </Link>
-            </motion.li>
-            <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
-              <Link
-                href="#"
-                onMouseDown={ () => handleModal(false, true) }
-                className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
-                >
-                <FontAwesomeIcon width={18} height={18} icon={faPencil} />
               </Link>
             </motion.li>
             <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  

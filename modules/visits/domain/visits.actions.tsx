@@ -1,4 +1,4 @@
-import { aggregate, createItem, readItems, withToken } from "@directus/sdk";
+import { aggregate, createItem, readItems, updateItem, withToken } from "@directus/sdk";
 import { directusClient } from "@/utils/request-handler";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 
@@ -13,3 +13,5 @@ export const getVisitByDoctorID = (token:string, doctorID = 0) =>
 			} 
 		})) 
 	)
+
+export const updateVisit = (token:string, id:number, data:object) => directusClient.request( withToken(token, updateItem('visits', id, data)));
