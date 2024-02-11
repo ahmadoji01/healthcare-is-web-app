@@ -7,10 +7,11 @@ import SubmitButton from "@/components/Dashboard/Submit";
 
 interface PatientFormProps {
     initPatient: Patient,
+    hideSubmitBtn: boolean,
     handleSubmit: (patient:Patient) => void,
 }
 
-const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
+const PatientForm = ({ initPatient, hideSubmitBtn, handleSubmit }:PatientFormProps) => {
     const [patient, setPatient] = useState(initPatient);
 
     return (
@@ -217,7 +218,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                             </div>
                         </div>
                     </div>
-                    <SubmitButton />
+                    { !hideSubmitBtn && <SubmitButton /> }
                 </form>
             </div>
         </>

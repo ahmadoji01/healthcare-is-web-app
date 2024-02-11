@@ -5,16 +5,10 @@ import "@/styles/data-tables-css.css";
 import "@/styles/satoshi.css";
 
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
 import Review from './common/review';
 import Link from "next/link";
 import PatientInputForm from "./new-patient/patient-input-form";
 import ExaminationTime from "./common/examination-time";
-import RegisterFinished from "./common/register-finished";
 
 const steps = ['Personal Data', 'Examination Time', 'Review Your Input'];
 
