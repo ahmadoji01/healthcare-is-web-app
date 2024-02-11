@@ -1,4 +1,4 @@
-import { Visit, visitMapper } from '@/modules/visits/domain/visit';
+import { Visit, defaultVisit, visitMapper } from '@/modules/visits/domain/visit';
 import { getAllVisits, getVisitByDoctorID } from '@/modules/visits/domain/visits.actions';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import { useUserContext } from './user-context';
@@ -11,8 +11,10 @@ interface VisitContextType {
     visits: Visit[],
     doctorVisits: Visit[],
     activePatient: Patient,
+    activeVisit: Visit,
     loading: boolean,
     setActivePatient: Dispatch<SetStateAction<Patient>>,
+    setActiveVisit: Dispatch<SetStateAction<Visit>>,
     handleDoctorVisits: (doctorID:number) => void,
 }
 
@@ -20,8 +22,10 @@ export const VisitContext = createContext<VisitContextType | null>({
     visits: [],
     doctorVisits: [],
     activePatient: defaultPatient,
+    activeVisit: defaultVisit,
     loading: false,
     setActivePatient: () => {},
+    setActiveVisit: () => {},
     handleDoctorVisits: () => {},
 });
  
@@ -33,6 +37,7 @@ export const VisitProvider = ({
     const [visits, setVisits] = useState<Visit[]>([]);
     const [doctorVisits, setDoctorVisits] = useState<Visit[]>([]);
     const [activePatient, setActivePatient] = useState<Patient>(defaultPatient);
+    const [activeVisit, setActiveVisit] = useState<Visit>(defaultVisit);
     const [loading, setLoading] = useState(false);
     const {accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
@@ -69,7 +74,7 @@ export const VisitProvider = ({
     }, [])
 
     return (
-        <VisitContext.Provider value={{ visits, loading, doctorVisits, activePatient, setActivePatient, handleDoctorVisits }}>
+        <VisitContext.Provider value={{ visits, activeVisit, loading, doctorVisits, activePatient, setActivePatient, setActiveVisit, handleDoctorVisits }}>
             {children}
         </VisitContext.Provider>
     );

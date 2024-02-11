@@ -1,14 +1,20 @@
 import SubmitButton from "@/components/Dashboard/Submit";
 import { PhysicalCheckup } from "../../domain/physical-checkup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Patient } from "@/modules/patients/domain/patient";
 
 interface PhysicalCheckupFormProps {
+    patient: Patient,
     initCheckup: PhysicalCheckup,
     handleSubmit: (checkup:PhysicalCheckup) => void,
 }
 
-const PhysicalCheckupForm = ({ initCheckup, handleSubmit }:PhysicalCheckupFormProps) => {
+const PhysicalCheckupForm = ({ patient, initCheckup, handleSubmit }:PhysicalCheckupFormProps) => {
     const [checkup, setCheckup] = useState(initCheckup);
+
+    useEffect( () => {
+        setCheckup({ ...checkup, patient })
+    }, [patient])
 
     return (
         <div className="flex flex-col gap-9">

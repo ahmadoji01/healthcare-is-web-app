@@ -182,7 +182,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
         <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } title="Initial Checkup">
           <>
             <PatientInfo patient={activePatient} />
-            <PhysicalCheckupForm initCheckup={defaultPhysicalCheckup} handleSubmit={handleSubmit} />
+            <PhysicalCheckupForm patient={activePatient} initCheckup={defaultPhysicalCheckup} handleSubmit={handleSubmit} />
           </>
         </QueueModal>
         <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />

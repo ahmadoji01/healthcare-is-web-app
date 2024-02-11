@@ -1,3 +1,4 @@
+import { Patient, defaultPatient, patientMapper } from "@/modules/patients/domain/patient";
 import { HeadToToeCheckup, defaultHeadToToeCheckup } from "./head-to-toe-checkup";
 import { PastMedicalConcern, defaultPastMedicalConcern } from "./past-medical-concern";
 
@@ -11,6 +12,7 @@ export interface PhysicalCheckup {
     temperature: number,
     breath_rate: number,
     heart_rate: number,
+    patient: Patient,
     complaint: string,
 }
 
@@ -24,6 +26,7 @@ export const defaultPhysicalCheckup: PhysicalCheckup = {
     temperature: 0,
     breath_rate: 0,
     heart_rate: 0,
+    patient: defaultPatient,
     complaint: "",
 }
 
@@ -39,17 +42,19 @@ export function physicalCheckupMapper(res:Record<string,any>) {
         temperature: res.temperature,
         breath_rate: res.breath_rate,
         heart_rate: res.heart_rate,
+        patient: patientMapper(res.patient),
         complaint: res.complaint,
     }
     return physicalCheckup;
 }
 
-type Organization = {
+type ForeignKeys = {
     organization: number,
+    patient: number,
 }
 
-export type PhysicalCheckupNoID = Omit<PhysicalCheckup, 'id'> & Organization;
-export function physicalCheckupNoIDMapper(checkup:PhysicalCheckup, orgID:number) {
+export type PhysicalCheckupNoID = Omit<PhysicalCheckup, 'id' | 'patient'> & ForeignKeys;
+export function physicalCheckupNoIDMapper(checkup:PhysicalCheckup, orgID:number, patientID:number) {
 
     let physicalCheckupNoID: PhysicalCheckupNoID = { 
         past_medical_concern: checkup.past_medical_concern,
@@ -62,6 +67,7 @@ export function physicalCheckupNoIDMapper(checkup:PhysicalCheckup, orgID:number)
         heart_rate: checkup.heart_rate,
         complaint: checkup.complaint,
         organization: orgID,
+        patient: patientID,
     }
     return physicalCheckupNoID;
 }
