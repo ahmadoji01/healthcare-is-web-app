@@ -56,7 +56,12 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
   const [activeTaskId, setActiveTaskId] = useState<null | number>(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        delay: 100,
+        tolerance: 5,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -134,10 +139,11 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
       return;
     }
 
-
-    updateVisit(accessToken, active.id as number, { status: activeContainer })
-    .then( () => openSnackbarNotification(ALERT_MESSAGE.success, 'success'))
-    .catch( () => {openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); return;} );
+    if (activeContainer === overContainer) {
+      updateVisit(accessToken, active.id as number, { status: activeContainer })
+      .then( () => openSnackbarNotification(ALERT_MESSAGE.success, 'success'))
+      .catch( () => {openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); return; } );
+    }
 
     const activeIndex = boardSections[activeContainer].findIndex(
       (task) => task.id === active.id
