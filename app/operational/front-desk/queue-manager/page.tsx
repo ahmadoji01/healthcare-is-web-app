@@ -6,7 +6,7 @@ import { DataModalProvider, useDataModalContext } from "@/contexts/data-modal-co
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
-import { ALERT_MESSAGE, ALERT_STATUS } from "@/constants/alert";
+import { ALERT_MESSAGE } from "@/constants/alert";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultMedicalRecord, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { updateVisit } from "@/modules/visits/domain/visits.actions";
