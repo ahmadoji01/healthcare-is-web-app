@@ -1,4 +1,4 @@
-export const STATUS = {
+export const VISIT_STATUS = {
     waiting: 'waiting',
     temporary_leave: 'temporary_leave',
     examining: 'examining',

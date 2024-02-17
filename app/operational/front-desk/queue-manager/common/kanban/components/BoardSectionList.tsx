@@ -54,14 +54,10 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
     useState<BoardSectionsType>(initialBoardSections);
 
   const [activeTaskId, setActiveTaskId] = useState<null | number>(null);
+  const [prevContainer, setPrevContainer] = useState("");
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        delay: 100,
-        tolerance: 5,
-      },
-    }),
+    useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -73,6 +69,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
 
   const handleDragStart = ({ active }: DragStartEvent) => {
     setActiveTaskId(active.id as number);
+    setPrevContainer(active.data.current?.sortable.containerId);
   };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -139,7 +136,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
       return;
     }
 
-    if (activeContainer === overContainer) {
+    if (prevContainer !== activeContainer) {
       updateVisit(accessToken, active.id as number, { status: activeContainer })
       .then( () => openSnackbarNotification(ALERT_MESSAGE.success, 'success'))
       .catch( () => {openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); return; } );
