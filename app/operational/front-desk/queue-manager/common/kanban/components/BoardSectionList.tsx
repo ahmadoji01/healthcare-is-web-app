@@ -35,18 +35,26 @@ import QueueModal from '../../Modal';
 import PhysicalCheckupForm from '@/modules/physical-checkups/application/form/physical-checkup.form';
 import PatientInfo from '../../patient-info';
 import { PhysicalCheckup, defaultPhysicalCheckup } from '@/modules/physical-checkups/domain/physical-checkup';
+import { updateVisit } from '@/modules/visits/domain/visits.actions';
+import { useUserContext } from '@/contexts/user-context';
+import { useAlertContext } from '@/contexts/alert-context';
+import { ALERT_MESSAGE } from '@/constants/alert';
 
 interface BoardSectionListProps {
   handleSubmit: (checkup:PhysicalCheckup) => void,
 }
 
 const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
-  const {doctorVisits} = useVisitContext();
+  const {doctorVisits, activePatient} = useVisitContext();
+  const {accessToken} = useUserContext();
+  const {openSnackbarNotification} = useAlertContext();
+
   const initialBoardSections = initializeBoard(doctorVisits);
   const [boardSections, setBoardSections] =
     useState<BoardSectionsType>(initialBoardSections);
 
   const [activeTaskId, setActiveTaskId] = useState<null | number>(null);
+  const [prevContainer, setPrevContainer] = useState("");
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -61,6 +69,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
 
   const handleDragStart = ({ active }: DragStartEvent) => {
     setActiveTaskId(active.id as number);
+    setPrevContainer(active.data.current?.sortable.containerId);
   };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -127,6 +136,12 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
       return;
     }
 
+    if (prevContainer !== activeContainer) {
+      updateVisit(accessToken, active.id as number, { status: activeContainer })
+      .then( () => openSnackbarNotification(ALERT_MESSAGE.success, 'success'))
+      .catch( () => {openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); return; } );
+    }
+
     const activeIndex = boardSections[activeContainer].findIndex(
       (task) => task.id === active.id
     );
@@ -158,7 +173,6 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
 
   const { editModalOpen, deleteModalOpen, handleModal } = useDataModalContext();
   const { activeDoctor } = useDoctorContext();
-  const { activePatient } = useVisitContext();
 
   return (
     <>

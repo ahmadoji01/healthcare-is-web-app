@@ -1,3 +1,5 @@
+import { Doctor, defaultDoctor, doctorMapper } from "@/modules/doctors/domain/doctor";
+import { MedicalRecord, defaultMedicalRecord } from "@/modules/medical-records/domain/medical-record";
 import { Patient, defaultPatient, patientMapper } from "@/modules/patients/domain/patient";
 
 export type Visit = {
@@ -7,7 +9,9 @@ export type Visit = {
     queue_number: string,
     status: string,
     patient: Patient,
-    order: number,
+    doctor: Doctor,
+    medical_record: MedicalRecord,
+    
 }
 
 export const defaultVisit: Visit = {
@@ -17,7 +21,8 @@ export const defaultVisit: Visit = {
     queue_number: "",
     status: "",
     patient: defaultPatient,
-    order: 0,
+    doctor: defaultDoctor,
+    medical_record: defaultMedicalRecord,
 }
 
 export function visitMapper(res:Record<string,any>) {
@@ -29,7 +34,8 @@ export function visitMapper(res:Record<string,any>) {
         queue_number: res.queue_number,
         status: res.status,
         patient: patientMapper(res.patient), 
-        order: res.order,
+        doctor: doctorMapper(res.doctor),
+        medical_record: res.medical_record,
     }
     return visit;
 }
@@ -46,8 +52,9 @@ export function visitNoIDMapper(visit:Visit, orgID:number) {
         date_updated: visit.date_updated, 
         queue_number: visit.queue_number,
         patient: visit.patient,
+        doctor: visit.doctor,
         status: visit.status,
-        order: visit.order,
+        medical_record: visit.medical_record,
         organization: orgID,
     }
     return visitNoID;

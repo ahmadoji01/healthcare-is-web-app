@@ -6,7 +6,7 @@ import { DataModalProvider, useDataModalContext } from "@/contexts/data-modal-co
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
-import { ALERT_MESSAGE, ALERT_STATUS } from "@/constants/alert";
+import { ALERT_MESSAGE } from "@/constants/alert";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultMedicalRecord, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { updateVisit } from "@/modules/visits/domain/visits.actions";
@@ -28,6 +28,8 @@ const QueueManager = () => {
 
         let medicalRecordNoID = medicalRecordNoIDMapper(defaultMedicalRecord, user.organizationID);
         let medicalRecordRes = defaultMedicalRecord;
+        medicalRecordNoID.doctor = activeVisit.doctor;
+        medicalRecordNoID.patient = checkup.patient;
         createAMedicalRecord(accessToken, medicalRecordNoID).then( res => {
             medicalRecordRes = medicalRecordMapper(res);
         }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
@@ -36,6 +38,7 @@ const QueueManager = () => {
         updateVisit(accessToken, activeVisit.id, visit).then( () => {
             openSnackbarNotification(ALERT_MESSAGE.success, 'success');
             handleModal(true, true);
+            location.reload();
             return;
         }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
     }

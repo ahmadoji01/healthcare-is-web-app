@@ -40,7 +40,6 @@ export const VisitProvider = ({
     const [activeVisit, setActiveVisit] = useState<Visit>(defaultVisit);
     const [loading, setLoading] = useState(false);
     const {accessToken} = useUserContext();
-    const {openSnackbarNotification} = useAlertContext();
 
     const handleDoctorVisits = (doctorID:number) => {
         setLoading(true);
@@ -51,7 +50,6 @@ export const VisitProvider = ({
             setLoading(false);
         }).catch( err => {
             setLoading(false);
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
         })
     }
 
@@ -66,7 +64,7 @@ export const VisitProvider = ({
                 clearInterval(interval);
             }).catch( err => {
                 setLoading(false);
-                openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+                clearInterval(interval);
             })
         }, 100)
 
