@@ -47,7 +47,7 @@ export const DoctorProvider = ({
                 clearInterval(interval);
             }).catch( err => {
                 setLoading(false);
-                openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+                //openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
             })
         }, 100)
 

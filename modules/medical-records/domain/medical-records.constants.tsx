@@ -28,3 +28,8 @@ export const GENDER = {
     male: true,
     female: false,
 }
+
+export const CARE_TYPE = {
+    inpatient: 'inpatient',
+    outpatient: 'outpatient',
+}

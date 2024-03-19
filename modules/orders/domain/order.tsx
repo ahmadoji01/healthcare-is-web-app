@@ -1,16 +1,53 @@
-import { MedicalRecord } from "@/modules/medical-records/domain/medical-record";
-import Medicine from "@/modules/medicines/domain/medicine";
-import { Patient } from "@/modules/patients/domain/patient";
-import { Treatment } from "@/modules/treatments/domain/treatment";
-import OrderItem from "./order-item";
+import { Patient, defaultPatient } from "@/modules/patients/domain/patient";
+import OrderItem, { orderItemsMapper } from "./order-item";
+import { Visit, defaultVisit } from "@/modules/visits/domain/visit";
+import { ORDER_STATUS } from "./order.constants";
 
 export interface Order {
     id: number,
-    patient: Patient,
-    queueNumber: string,
-    medicalRecord: MedicalRecord,
-    examinationFee: number,
-    orderItems: OrderItem[],
+    patient: Patient|null,
+    order_items: OrderItem[],
     total: number,
     status: string,
+    visit: Visit,
+}
+
+export const defaultOrder: Order = {
+    id: 0,
+    patient: defaultPatient,
+    order_items: [],
+    total: 0,
+    status: ORDER_STATUS.inactive,
+    visit: defaultVisit,
+}
+
+export function orderMapper(res:Record<string,any>) {
+    let order = defaultOrder;
+    order = { 
+        id: res.id, 
+        patient: res.patient,
+        order_items: orderItemsMapper(res.order_items),
+        total: res.total,
+        status: res.status,
+        visit: res.visit,
+    }
+    return order;
+}
+
+type Organization = {
+    organization: number,
+}
+
+export type OrderNoID = Omit<Order, 'id'> & Organization;
+export function orderNoIDMapper(order:Order, orgID:number) {
+
+    let orderNoID: OrderNoID = { 
+        patient: order.patient,
+        order_items: order.order_items,
+        total: order.total,
+        status: order.status,
+        visit: order.visit,
+        organization: orgID,
+    }
+    return orderNoID;
 }

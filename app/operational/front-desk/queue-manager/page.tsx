@@ -28,6 +28,8 @@ const QueueManager = () => {
 
         let medicalRecordNoID = medicalRecordNoIDMapper(defaultMedicalRecord, user.organizationID);
         let medicalRecordRes = defaultMedicalRecord;
+        medicalRecordNoID.doctor = activeVisit.doctor;
+        medicalRecordNoID.patient = checkup.patient;
         createAMedicalRecord(accessToken, medicalRecordNoID).then( res => {
             medicalRecordRes = medicalRecordMapper(res);
         }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
@@ -36,6 +38,7 @@ const QueueManager = () => {
         updateVisit(accessToken, activeVisit.id, visit).then( () => {
             openSnackbarNotification(ALERT_MESSAGE.success, 'success');
             handleModal(true, true);
+            location.reload();
             return;
         }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
     }

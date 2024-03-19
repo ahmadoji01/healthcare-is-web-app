@@ -2,7 +2,6 @@ import Typography from '@mui/material/Typography';
 import PatientReview from '@/modules/patients/application/patient.review';
 import { usePatientContext } from '@/contexts/patient-context';
 import VisitReview from '@/modules/visits/application/visit.review';
-import { useVisitContext } from '@/contexts/visit-context';
 import { useDoctorContext } from '@/contexts/doctor-context';
 import { defaultVisit } from '@/modules/visits/domain/visit';
 import { useEffect, useState } from 'react';

@@ -1,6 +1,10 @@
-import Link from "next/link"
+import Link from "next/link";
 
-const RegisterFinished = () => {
+interface RegisterFinishedProps {
+    queueNumber: string,
+}
+
+const RegisterFinished = ({ queueNumber }:RegisterFinishedProps) => {
     return (
         <>
             <h5 className="gutter-bottom text-title-md font-bold text-black dark:text-white text-center mb-2">
@@ -10,7 +14,7 @@ const RegisterFinished = () => {
                 Your queue number is
             </p>
             <h1 className="gutter-bottom text-title-lg font-bold text-black dark:text-white text-center">
-                #2001539
+                {queueNumber}
             </h1>
             <p className="text-black dark:text-white text-center">
                 We look forward to serving you soon

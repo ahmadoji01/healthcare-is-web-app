@@ -9,8 +9,20 @@ interface Signature {
 	filename_download: string,
 }
 
+interface Illness {
+    id: number,
+    name: string,
+    code: string,
+}
+
+interface MedicineDoses {
+    medicine: Medicine,
+    doses: string,
+    quantity: number,
+}
+
 export interface MedicalRecord {
-    id: Number,
+    id: number,
     code: string,
     patient: Patient,
     doctor: Doctor,
@@ -18,16 +30,8 @@ export interface MedicalRecord {
     care_type: string,
     signature: Signature|null,
     death: boolean,
-    illnesses: [ {
-        id: number,
-        name: string,
-        code: string,
-    } ],
-    medication: [ {
-        medicines_id: Medicine,
-        doses: string,
-        quantity: number,
-    } ],
+    illnesses: Illness[],
+    medicines: MedicineDoses[],
     treatments: Treatment[],
     physical_checkup: PhysicalCheckup,
     date_created: Date,
@@ -43,9 +47,9 @@ export const defaultMedicalRecord: MedicalRecord = {
     care_type: "",
     signature: null,
     death: false,
-    illnesses: [{ id: 0, name: "", code: "" }],
-    medication: [{ medicines_id: defaultMedicine, doses: "", quantity: 0 }],
-    treatments: [defaultTreatment],
+    illnesses: [],
+    medicines: [],
+    treatments: [],
     physical_checkup: defaultPhysicalCheckup,
     date_created: new Date,
     date_updated: new Date,
@@ -63,7 +67,7 @@ export function medicalRecordMapper(res:Record<string,any>) {
         signature: res.signature,
         death: res.death,
         illnesses: res.illnesses,
-        medication: res.medication,
+        medicines: res.medication,
         treatments: res.treatments,
         physical_checkup: res.physical_checkup,
         date_created: res.date_created,
@@ -88,7 +92,7 @@ export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, orgID:numbe
         signature: medicalRecord.signature,
         death: medicalRecord.death,
         illnesses: medicalRecord.illnesses,
-        medication: medicalRecord.medication,
+        medicines: medicalRecord.medicines,
         treatments: medicalRecord.treatments,
         physical_checkup: medicalRecord.physical_checkup,
         date_created: medicalRecord.date_created,
