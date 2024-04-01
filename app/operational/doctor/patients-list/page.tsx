@@ -2,7 +2,7 @@ import PatientDoctorListTable from "@/modules/patients/application/list/patient.
 
 const PatientsList = () => {
     return (
-        <PatientDoctorListTable />
+        <></>
     )
 }
 
