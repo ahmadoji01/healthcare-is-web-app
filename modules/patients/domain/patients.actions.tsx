@@ -5,6 +5,7 @@ import { Patient, PatientNoID } from "./patient";
 
 export const getAllPatients = (token:string, page:number) => directusClient.request( withToken(token, readItems('patients', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
 export const getTotalPatients = (token:string) => directusClient.request( withToken(token, aggregate('patients', { aggregate: { count: '*' } })) );
+export const getPatientsToBeExamined = (token:string, page:number) => directusClient.request( withToken(token, readItems('patients', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
 
 export const patientExistChecker = (token:string, idCardNumber = '', familyIDNumber = '') => 
 	directusClient.request( 

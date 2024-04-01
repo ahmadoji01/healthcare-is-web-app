@@ -7,13 +7,22 @@ export const createAVisit = (token:string, visit:VisitNoID) =>
 	directusClient.request( withToken(token, createItem('visits', visit)) )
 
 export const getAllVisits = (token:string, page:number) => directusClient.request( withToken(token, readItems('visits', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
-export const getTotalPatients = (token:string) => directusClient.request( withToken(token, aggregate('patients', { aggregate: { count: '*' } })) );
+export const getTotalVisits = (token:string) => directusClient.request( withToken(token, aggregate('visits', { aggregate: { count: '*' } })) );
 
 export const getVisitByDoctorID = (token:string, doctorID = 0) => 
 	directusClient.request( 
 		withToken(token, readItems('visits', { fields: ['*.*'],
 			filter: {
 				doctor: { _eq: doctorID }
+			} 
+		})) 
+	)
+
+export const getVisitByStatus = (token:string, status = "") => 
+	directusClient.request( 
+		withToken(token, readItems('visits', { fields: ['*.*'],
+			filter: {
+				status: { _eq: status }
 			} 
 		})) 
 	)

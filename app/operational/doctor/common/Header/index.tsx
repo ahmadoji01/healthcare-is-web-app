@@ -18,7 +18,7 @@ const Header = (props: {
       <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
         <div className="flex items-center gap-2 sm:gap-4">
 
-          { pathname !== "/operational/doctor/patients-list" || !pathname.includes("doctor/patients-list") 
+          { pathname !== "/operational/doctor/patients-list" || !pathname.includes("patients-list") 
             && 
             <Link href="/operational/doctor/patients-list">
               <FontAwesomeIcon width={20} icon={faArrowLeft} /> Back to Patients List
