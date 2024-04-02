@@ -78,7 +78,7 @@ const PatientToExamineListTable = ({ visits, totalPages, handlePageChange, setAc
                     <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                         <Link
                             href="/operational/doctor/medical-record"
-                            onClick={() => { setActiveMedicalRecord(visit.medical_record) } }
+                            onClick={() => { console.log(visit); setActiveMedicalRecord(visit.medical_record) } }
                             className="inline-flex gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
                             >
                             <span>

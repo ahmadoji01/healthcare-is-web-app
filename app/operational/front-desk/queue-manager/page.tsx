@@ -34,11 +34,11 @@ const QueueManager = () => {
             medicalRecordRes = medicalRecordMapper(res);
         }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
 
-        let visit = { status: 'to_be_examined' };
+        let visit = { status: 'to_be_examined', medical_record: medicalRecordRes, doctor: activeVisit.doctor };
         updateVisit(accessToken, activeVisit.id, visit).then( () => {
-            openSnackbarNotification(ALERT_MESSAGE.success, 'success');
             handleModal(true, true);
             location.reload();
+            openSnackbarNotification(ALERT_MESSAGE.success, 'success');
             return;
         }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
     }

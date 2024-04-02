@@ -11,6 +11,7 @@ import MedicalRecordForm from '@/modules/medical-records/application/form/medica
 import MedicationForm from '@/modules/medical-records/application/form/medication.form';
 import Medication from '@/modules/medical-records/domain/medication';
 import MedicationFormItem from '@/modules/medical-records/application/form/medication.form.item';
+import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -46,6 +47,7 @@ interface TabPanelProps {
 const MedicalRecord = () => {
     const [value, setValue] = React.useState(0);
     const [medications, setMedications] = React.useState<Medication[]>([]);
+    const {activeMedicalRecord, setActiveMedicalRecord} = useMedicalRecordContext();
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
@@ -61,7 +63,7 @@ const MedicalRecord = () => {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-              <PatientOverview />
+              <PatientOverview medicalRecord={activeMedicalRecord} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
               <div className="flex flex-col md:flex-row">

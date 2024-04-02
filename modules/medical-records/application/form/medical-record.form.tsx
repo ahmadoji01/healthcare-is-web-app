@@ -7,7 +7,7 @@ import Treatments from "@/constants/treatments";
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
 
 const MedicalRecordForm = () => {
-
+    
     return (
         <>
             <div className="grid gap-9">
