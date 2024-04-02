@@ -1,4 +1,4 @@
-import { aggregate, createItem, readItems, updateItem, withToken } from "@directus/sdk";
+import { aggregate, createItem, readItems, withToken } from "@directus/sdk";
 import { directusClient } from "@/utils/request-handler";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { Patient, PatientNoID } from "./patient";

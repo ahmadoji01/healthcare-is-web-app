@@ -54,7 +54,7 @@ const PatientsList = () => {
             setDataLoaded(true);
           });
       };
-
+      
     return (
         <>
             <h2 className="text-3xl font-extrabold text-black dark:text-white mb-2">Patients to be Examined</h2>
