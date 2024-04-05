@@ -5,8 +5,8 @@ import { medicinesFakeData } from "@/modules/medicines/infrastructure/medicines.
 import { useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter } from "react-windowed-select";
-import MedicineDoses from "@/modules/medical-records/domain/medical-record";
-import Medicine from "@/modules/medicines/domain/medicine";
+import { MedicineDoses } from "@/modules/medical-records/domain/medical-record";
+import { Medicine } from "@/modules/medicines/domain/medicine";
 import { SelectChangeEvent } from "@mui/material";
 import MedicationList from "./medication.list";
 
@@ -25,8 +25,9 @@ const MedicationForm = ({ medications, setMedications }:MedicationFormProps) => 
         setMedicines(medicinesFakeData);
         let options:SelectOption[] = [];
         medicines?.map( (medicine) => { options.push({ value: medicine.id.toString(), label: medicine.name }); });
+        console.log(options);
         setMedOptions(options);
-    }, []);
+    }, [medicines]);
 
     const handleChange = (choice: SelectOption) => {
         if(typeof(medications.find(o => o.medicine.id.toString() === choice.value)) !== 'undefined') {

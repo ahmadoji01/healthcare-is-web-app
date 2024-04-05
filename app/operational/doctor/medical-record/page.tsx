@@ -8,10 +8,9 @@ import { BodyComponent } from 'reactjs-human-body';
 import PatientOverview from './patient-overview';
 import MedicalRecordForm from '@/modules/medical-records/application/form/medical-record.form';
 import MedicationForm from '@/modules/medical-records/application/form/medication.form';
-import Medication from '@/modules/medical-records/domain/medication';
-import MedicationFormItem from '@/modules/medical-records/application/form/medication.form.item';
 import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
+import { MedicineDoses } from '@/modules/medical-records/domain/medical-record';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -46,7 +45,7 @@ interface TabPanelProps {
 
 const MedicalRecord = () => {
     const [value, setValue] = useState(0);
-    const [medications, setMedications] = useState<Medication[]>([]);
+    const [medications, setMedications] = useState<MedicineDoses[]>([]);
     const {activeMedicalRecord, setActiveMedicalRecord} = useMedicalRecordContext();
 
     if (activeMedicalRecord.id === 0) {
