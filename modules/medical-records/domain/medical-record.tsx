@@ -15,7 +15,7 @@ interface Illness {
     code: string,
 }
 
-interface MedicineDoses {
+export interface MedicineDoses {
     medicine: Medicine,
     doses: string,
     quantity: number,

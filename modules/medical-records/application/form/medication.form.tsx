@@ -5,28 +5,28 @@ import { medicinesFakeData } from "@/modules/medicines/infrastructure/medicines.
 import { useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter } from "react-windowed-select";
-import Medication from "@/modules/medical-records/domain/medication";
+import MedicineDoses from "@/modules/medical-records/domain/medical-record";
 import Medicine from "@/modules/medicines/domain/medicine";
 import { SelectChangeEvent } from "@mui/material";
 import MedicationList from "./medication.list";
 
 interface MedicationFormProps {
-    medications: Medication[],
-    setMedications: React.Dispatch<React.SetStateAction<Medication[]>>,
+    medications: MedicineDoses[],
+    setMedications: React.Dispatch<React.SetStateAction<MedicineDoses[]>>,
 }
 
 const MedicationForm = ({ medications, setMedications }:MedicationFormProps) => {
 
     const [medOptions, setMedOptions] = useState<SelectOption[]>([]);
     const [medicines, setMedicines] = useState<Medicine[]>([]);
-    const [medsList, setMedsList] = useState<Medication[]>([]);
+    const [medsList, setMedsList] = useState<MedicineDoses[]>([]);
 
     useEffect(() => {
         setMedicines(medicinesFakeData);
         let options:SelectOption[] = [];
         medicines?.map( (medicine) => { options.push({ value: medicine.id.toString(), label: medicine.name }); });
         setMedOptions(options);
-    }, [medOptions]);
+    }, []);
 
     const handleChange = (choice: SelectOption) => {
         if(typeof(medications.find(o => o.medicine.id.toString() === choice.value)) !== 'undefined') {
@@ -34,8 +34,8 @@ const MedicationForm = ({ medications, setMedications }:MedicationFormProps) => 
         }
         
         let medicine:Medicine[] = medicines.filter( (medicine) => { return medicine.id.toString().match(choice.value) });
-        let medication:Medication = { medicine: medicine[0], quantity: 1, doses: "" };
-        let results:Medication[] = medications;
+        let medication:MedicineDoses = { medicine: medicine[0], quantity: 1, doses: "" };
+        let results:MedicineDoses[] = medications;
         results.push(medication);
         setMedications(results);
         setMedsList(results);
