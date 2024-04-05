@@ -1,13 +1,15 @@
 'use client';
 
-import CustomOption from "@/components/CustomOption";
 import Illnesses from "@/constants/illnesses";
 import Treatments from "@/constants/treatments";
+import { useState } from "react";
 
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
+import { defaultMedicalRecord } from "../../domain/medical-record";
 
 const MedicalRecordForm = () => {
-    
+    const [medicalRecord, setMedicalRecord] = useState(defaultMedicalRecord);
+
     return (
         <>
             <div className="grid gap-9">
@@ -25,6 +27,7 @@ const MedicalRecordForm = () => {
                                 </label>
                                 <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
                                 <textarea
+                                    onChange={e => setMedicalRecord({ ...medicalRecord, anamnesis: e.target.value })}
                                     rows={4}
                                     placeholder="Anamnesis"
                                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-2 px-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -38,6 +41,7 @@ const MedicalRecordForm = () => {
                                 <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
                                     <WindowedSelect
                                         isMulti
+                                        onChange={value => setMedicalRecord({ ...medicalRecord, illnesses: value })}
                                         name="illnesses"
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         components={{ Input: (props) => (<components.Input {...props} maxLength={50} />) }}
@@ -54,6 +58,7 @@ const MedicalRecordForm = () => {
                                 <div className="relative z-20 bg-white dark:bg-form-input">
                                     <WindowedSelect
                                         isMulti
+                                        onChange={value => setMedicalRecord({ ...medicalRecord, treatments: value })}
                                         name="treatments"
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         components={{ Input: (props) => (<components.Input {...props} maxLength={50} />) }}

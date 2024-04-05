@@ -12,7 +12,7 @@ const PatientOverview = ({ medicalRecord }:PatientOverviewProps) => {
         <div className="flex flex-col md:flex-row">
             <div className="w-full p-2 h-[calc(100vh-12rem)] overflow-y-scroll overscroll-contain">
                 <div className="w-full flex align-center justify-center mb-4">
-                    <PatientAvatar name={medicalRecord.patient.name} />
+                    <PatientAvatar name={medicalRecord.patient.name !== "" ? medicalRecord.patient.name : "Jedi Force"} />
                 </div>
                 <h2 className="text-3xl text-center font-extrabold text-black dark:text-white mb-2">{medicalRecord.patient.name}</h2>
                 <div className="grid px-2 md:px-12 lg:px-20 grid-cols-2">
