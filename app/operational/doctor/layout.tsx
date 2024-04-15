@@ -60,7 +60,6 @@ export default function RootLayout({
                             </div>
                           </main>
                         </ThemeProvider>
-                        <Footer />
                       </div>
                     </div>
                   </DoctorProvider>

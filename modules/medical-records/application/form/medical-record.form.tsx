@@ -2,13 +2,17 @@
 
 import Illnesses from "@/constants/illnesses";
 import Treatments from "@/constants/treatments";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
-import { defaultMedicalRecord } from "../../domain/medical-record";
+import { MedicalRecord, defaultMedicalRecord } from "../../domain/medical-record";
 
-const MedicalRecordForm = () => {
-    const [medicalRecord, setMedicalRecord] = useState(defaultMedicalRecord);
+interface MedicalRecordFormProps {
+    medicalRecord: MedicalRecord,
+    setMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>,
+}
+
+const MedicalRecordForm = ({ medicalRecord, setMedicalRecord }:MedicalRecordFormProps) => {
 
     return (
         <>

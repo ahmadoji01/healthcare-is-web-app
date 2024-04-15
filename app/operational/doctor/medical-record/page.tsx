@@ -11,6 +11,7 @@ import MedicationForm from '@/modules/medical-records/application/form/medicatio
 import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
 import { MedicineDoses } from '@/modules/medical-records/domain/medical-record';
+import Footer from '../common/Footer';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -55,7 +56,13 @@ const MedicalRecord = () => {
       setValue(newValue);
     };
 
+    const handleSubmit = () => {
+      console.log(activeMedicalRecord);
+      console.log(medicineDoses);
+    }
+
     return (
+      <form onSubmit={e => { e.preventDefault(); handleSubmit() } }>
         <div className="w-full">
           { activeMedicalRecord.id !== 0 &&
             <>
@@ -72,7 +79,7 @@ const MedicalRecord = () => {
               <CustomTabPanel value={value} index={1}>
                 <div className="flex flex-col md:flex-row">
                   <div className="w-full p-2 h-[calc(100vh-12rem)] overflow-y-scroll overscroll-contain">
-                    <MedicalRecordForm />
+                    <MedicalRecordForm medicalRecord={activeMedicalRecord} setMedicalRecord={setActiveMedicalRecord} />
                   </div>
                   <div className="w-full p-2">
                     <MedicationForm medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />    
@@ -89,6 +96,8 @@ const MedicalRecord = () => {
             </>
           }
         </div>
+        <Footer />
+      </form>
     );
 }
 
