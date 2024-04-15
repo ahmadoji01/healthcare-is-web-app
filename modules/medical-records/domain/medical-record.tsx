@@ -38,6 +38,12 @@ export interface MedicalRecord {
     date_updated: Date,
 }
 
+export const defaultMedicineDoses: MedicineDoses = {
+    medicine: defaultMedicine,
+    doses: "",
+    quantity: 0,
+}
+
 export const defaultMedicalRecord: MedicalRecord = {
     id: 0,
     code: "",

@@ -5,41 +5,32 @@ import { medicinesFakeData } from "@/modules/medicines/infrastructure/medicines.
 import { useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter } from "react-windowed-select";
-import { MedicineDoses } from "@/modules/medical-records/domain/medical-record";
-import { Medicine } from "@/modules/medicines/domain/medicine";
+import { MedicineDoses, defaultMedicineDoses } from "@/modules/medical-records/domain/medical-record";
+import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine";
 import { SelectChangeEvent } from "@mui/material";
 import MedicationList from "./medication.list";
+import { useMedicalRecordContext } from "@/contexts/medical-record-context";
+import { defaultMedicineCategory } from "@/modules/medicines/domain/medicine-category";
 
-interface MedicationFormProps {
-    medications: MedicineDoses[],
-    setMedications: React.Dispatch<React.SetStateAction<MedicineDoses[]>>,
-}
-
-const MedicationForm = ({ medications, setMedications }:MedicationFormProps) => {
+const MedicationForm = () => {
 
     const [medOptions, setMedOptions] = useState<SelectOption[]>([]);
     const [medicines, setMedicines] = useState<Medicine[]>([]);
-    const [medsList, setMedsList] = useState<MedicineDoses[]>([]);
+    const {medicineDoses, setMedicineDoses} = useMedicalRecordContext();
 
     useEffect(() => {
         setMedicines(medicinesFakeData);
         let options:SelectOption[] = [];
         medicines?.map( (medicine) => { options.push({ value: medicine.id.toString(), label: medicine.name }); });
-        console.log(options);
         setMedOptions(options);
     }, [medicines]);
 
-    const handleChange = (choice: SelectOption) => {
-        if(typeof(medications.find(o => o.medicine.id.toString() === choice.value)) !== 'undefined') {
-            return;
-        }
-        
-        let medicine:Medicine[] = medicines.filter( (medicine) => { return medicine.id.toString().match(choice.value) });
-        let medication:MedicineDoses = { medicine: medicine[0], quantity: 1, doses: "" };
-        let results:MedicineDoses[] = medications;
-        results.push(medication);
-        setMedications(results);
-        setMedsList(results);
+    const handleChange = async (choices: SelectOption[]) => {
+        let medDoses:MedicineDoses[] = [];
+        choices?.map( (choice) => { 
+            medDoses.push({ medicine: { id: parseInt(choice.value), name: choice.label, code: "", stock: 0, category: defaultMedicineCategory, price: 0 }, doses: "", quantity: 0 }); 
+        });
+        setMedicineDoses(medDoses);
     }
 
     return (
@@ -56,18 +47,19 @@ const MedicationForm = ({ medications, setMedications }:MedicationFormProps) => 
                             <div>
                                 <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
                                     <WindowedSelect
-                                        defaultValue={medications}
+                                        defaultValue={medicineDoses}
+                                        isMulti
                                         name="medications"
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         windowThreshold={5}
                                         isSearchable={true}
                                         options={medOptions}
-                                        onChange={choice => handleChange(choice)}
+                                        onChange={choices => handleChange(choices)}
                                         className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />
                                 </div>
                             </div>
-                            <MedicationList medications={medsList} />  
+                            <MedicationList />  
                         </div>
                     </div>
                 </div>

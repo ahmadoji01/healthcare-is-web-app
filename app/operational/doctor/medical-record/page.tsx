@@ -76,7 +76,7 @@ const MedicalRecord = () => {
                     <MedicalRecordForm />
                   </div>
                   <div className="w-full p-2">
-                    <MedicationForm medications={medications} setMedications={setMedications} />    
+                    <MedicationForm />    
                   </div>
                 </div>
               </CustomTabPanel>

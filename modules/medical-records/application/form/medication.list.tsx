@@ -1,19 +1,16 @@
-import Medication from "@/modules/medical-records/domain/medication";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WindowedSelect, { createFilter } from "react-windowed-select";
+import { useMedicalRecordContext } from "@/contexts/medical-record-context";
 
-interface MedicationListProps {
-    medications: Medication[],
-}
-
-const MedicationList = ({ medications }:MedicationListProps) => {
+const MedicationList = () => {
 
     const [times, setTimes] = useState<number>(0);
-    const [period, setPeriod] = useState<string>("")
+    const [period, setPeriod] = useState<string>("");
+    const {medicineDoses} = useMedicalRecordContext();
 
     return (
         <>
-            { medications?.map( (medication) => 
+            { medicineDoses?.map( (medication) => 
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                         <h3 className="text-black font-extrabold dark:text-white text-xl">
