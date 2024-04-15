@@ -45,8 +45,7 @@ interface TabPanelProps {
 
 const MedicalRecord = () => {
     const [value, setValue] = useState(0);
-    const [medications, setMedications] = useState<MedicineDoses[]>([]);
-    const {activeMedicalRecord, setActiveMedicalRecord} = useMedicalRecordContext();
+    const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
 
     if (activeMedicalRecord.id === 0) {
       window.location.href = '/operational/doctor/patients-list';
@@ -76,7 +75,7 @@ const MedicalRecord = () => {
                     <MedicalRecordForm />
                   </div>
                   <div className="w-full p-2">
-                    <MedicationForm />    
+                    <MedicationForm medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />    
                   </div>
                 </div>
               </CustomTabPanel>

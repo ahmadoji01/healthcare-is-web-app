@@ -2,7 +2,7 @@
 
 import SelectOption from "@/interfaces/select-option";
 import { medicinesFakeData } from "@/modules/medicines/infrastructure/medicines.fakes";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter } from "react-windowed-select";
 import { MedicineDoses, defaultMedicineDoses } from "@/modules/medical-records/domain/medical-record";
@@ -12,11 +12,15 @@ import MedicationList from "./medication.list";
 import { useMedicalRecordContext } from "@/contexts/medical-record-context";
 import { defaultMedicineCategory } from "@/modules/medicines/domain/medicine-category";
 
-const MedicationForm = () => {
+interface MedicationFormProps {
+    medicineDoses: MedicineDoses[],
+    setMedicineDoses: Dispatch<SetStateAction<MedicineDoses[]>> 
+}
+
+const MedicationForm = ({ medicineDoses, setMedicineDoses }:MedicationFormProps) => {
 
     const [medOptions, setMedOptions] = useState<SelectOption[]>([]);
     const [medicines, setMedicines] = useState<Medicine[]>([]);
-    const {medicineDoses, setMedicineDoses} = useMedicalRecordContext();
 
     useEffect(() => {
         setMedicines(medicinesFakeData);
@@ -59,7 +63,7 @@ const MedicationForm = () => {
                                         classNamePrefix="select" />
                                 </div>
                             </div>
-                            <MedicationList />  
+                            <MedicationList medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />  
                         </div>
                     </div>
                 </div>
