@@ -12,12 +12,16 @@ import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
 import { MedicineDoses } from '@/modules/medical-records/domain/medical-record';
 import Footer from '../common/Footer';
+import { updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
+import { useUserContext } from '@/contexts/user-context';
+import { useAlertContext } from '@/contexts/alert-context';
+import { ALERT_MESSAGE } from '@/constants/alert';
 
 interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-  }
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
   
   function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
@@ -47,6 +51,8 @@ interface TabPanelProps {
 const MedicalRecord = () => {
     const [value, setValue] = useState(0);
     const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
+    const {accessToken} = useUserContext();
+    const {openSnackbarNotification} = useAlertContext();
 
     if (activeMedicalRecord.id === 0) {
       window.location.href = '/operational/doctor/patients-list';
@@ -57,8 +63,12 @@ const MedicalRecord = () => {
     };
 
     const handleSubmit = () => {
-      console.log(activeMedicalRecord);
-      console.log(medicineDoses);
+      setActiveMedicalRecord({ ...activeMedicalRecord, medicines: medicineDoses });
+      updateAMedicalRecord(accessToken, activeMedicalRecord.id, activeMedicalRecord).then( () => {
+        openSnackbarNotification(ALERT_MESSAGE.success, 'success');
+        window.location.href = "/operational/doctor/patients-list";
+        return;
+      }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
     }
 
     return (

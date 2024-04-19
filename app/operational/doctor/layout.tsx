@@ -14,6 +14,7 @@ import { PatientProvider } from "@/contexts/patient-context";
 import { UserProvider } from "@/contexts/user-context";
 import { MedicalRecordProvider } from "@/contexts/medical-record-context";
 import { VisitProvider } from "@/contexts/visit-context";
+import { AlertProvider } from "@/contexts/alert-context";
 
 export default function RootLayout({
   children,
@@ -43,29 +44,31 @@ export default function RootLayout({
           {loading ? (
             <Loader />
           ) : (
-            <UserProvider>
-              <VisitProvider>
-                <MedicalRecordProvider>
-                  <DoctorProvider>
-                    <div className="flex h-screen overflow-hidden">
-                      <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                        <Header
-                          sidebarOpen={sidebarOpen}
-                          setSidebarOpen={setSidebarOpen}
-                        />
-                        <ThemeProvider theme={theme} >
-                          <main>
-                            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
-                              {children}
-                            </div>
-                          </main>
-                        </ThemeProvider>
+            <AlertProvider>
+              <UserProvider>
+                <VisitProvider>
+                  <MedicalRecordProvider>
+                    <DoctorProvider>
+                      <div className="flex h-screen overflow-hidden">
+                        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                          <Header
+                            sidebarOpen={sidebarOpen}
+                            setSidebarOpen={setSidebarOpen}
+                          />
+                          <ThemeProvider theme={theme} >
+                            <main>
+                              <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
+                                {children}
+                              </div>
+                            </main>
+                          </ThemeProvider>
+                        </div>
                       </div>
-                    </div>
-                  </DoctorProvider>
-                </MedicalRecordProvider>
-              </VisitProvider>
-            </UserProvider>
+                    </DoctorProvider>
+                  </MedicalRecordProvider>
+                </VisitProvider>
+              </UserProvider>
+            </AlertProvider>
           )}
         </div>
       </body>

@@ -29,7 +29,7 @@ const MedicationForm = ({ medicineDoses, setMedicineDoses }:MedicationFormProps)
         setMedOptions(options);
     }, [medicines]);
 
-    const handleChange = async (choices: SelectOption[]) => {
+    const handleChange = (choices: SelectOption[]) => {
         let medDoses:MedicineDoses[] = [];
         choices?.map( (choice) => { 
             medDoses.push({ medicine: { id: parseInt(choice.value), name: choice.label, code: "", stock: 0, category: defaultMedicineCategory, price: 0 }, doses: "", quantity: 0 }); 

@@ -9,7 +9,7 @@ interface Signature {
 	filename_download: string,
 }
 
-interface Illness {
+export interface Illness {
     id: number,
     name: string,
     code: string,

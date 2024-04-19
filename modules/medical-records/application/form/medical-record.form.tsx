@@ -1,11 +1,13 @@
 'use client';
 
-import Illnesses from "@/constants/illnesses";
 import Treatments from "@/constants/treatments";
 import { Dispatch, SetStateAction, useState } from "react";
 
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
-import { MedicalRecord, defaultMedicalRecord } from "../../domain/medical-record";
+import { Illness, MedicalRecord, defaultMedicalRecord } from "../../domain/medical-record";
+import SelectOption from "@/interfaces/select-option";
+import { Treatment } from "@/modules/treatments/domain/treatment";
+import Illnesses from "@/constants/illnesses";
 
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
@@ -13,6 +15,22 @@ interface MedicalRecordFormProps {
 }
 
 const MedicalRecordForm = ({ medicalRecord, setMedicalRecord }:MedicalRecordFormProps) => {
+    
+    const illnessesMapper = (choices: SelectOption[]) => {
+        let illnesses:Illness[] = [];
+        choices?.map( (choice) => { 
+            illnesses.push({ id: 0, name: choice.label, code: choice.value }); 
+        });
+        setMedicalRecord({ ...medicalRecord, illnesses: illnesses });
+    }
+
+    const treatmentsMapper = (choices: SelectOption[]) => {
+        let treatments:Treatment[] = [];
+        choices?.map( (choice) => { 
+            treatments.push({ id: 0, name: choice.label, code: choice.value, price: 0 }); 
+        });
+        setMedicalRecord({ ...medicalRecord, treatments: treatments });
+    }
 
     return (
         <>
@@ -45,7 +63,7 @@ const MedicalRecordForm = ({ medicalRecord, setMedicalRecord }:MedicalRecordForm
                                 <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
                                     <WindowedSelect
                                         isMulti
-                                        onChange={value => setMedicalRecord({ ...medicalRecord, illnesses: value })}
+                                        onChange={choices => illnessesMapper(choices)}
                                         name="illnesses"
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         components={{ Input: (props) => (<components.Input {...props} maxLength={50} />) }}
@@ -62,7 +80,7 @@ const MedicalRecordForm = ({ medicalRecord, setMedicalRecord }:MedicalRecordForm
                                 <div className="relative z-20 bg-white dark:bg-form-input">
                                     <WindowedSelect
                                         isMulti
-                                        onChange={value => setMedicalRecord({ ...medicalRecord, treatments: value })}
+                                        onChange={choices => treatmentsMapper(choices)}
                                         name="treatments"
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         components={{ Input: (props) => (<components.Input {...props} maxLength={50} />) }}
