@@ -101,7 +101,7 @@ export const UserProvider = ({
                     window.location.href = '/dashboard';
                 }
             }).catch( err => { 
-                if (location.pathname !== '/' && (err.response.status !== 401 || err.response.status === 403)) {
+                if (location.pathname !== '/' && (err.response.status === 401 || err.response.status === 403)) {
                     window.location.href = '/';
                 }
                 return; 
