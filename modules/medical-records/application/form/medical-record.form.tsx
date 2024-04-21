@@ -31,7 +31,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
         let options:SelectOption[] = [];
         treatments?.map( (treatment) => { options.push({ value: treatment.id.toString(), label: treatment.name }); });
         setTreatOptions(options);
-    });
+    }, [treatments]);
 
     const treatmentsMapper = (choices: SelectOption[]) => {
         let treatments:Treatment[] = [];

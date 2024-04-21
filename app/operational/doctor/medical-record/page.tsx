@@ -10,7 +10,7 @@ import MedicalRecordForm from '@/modules/medical-records/application/form/medica
 import MedicationForm from '@/modules/medical-records/application/form/medication.form';
 import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
-import { MedicineDoses } from '@/modules/medical-records/domain/medical-record';
+import { MedicineDoses, medicalRecordPatcherMapper } from '@/modules/medical-records/domain/medical-record';
 import Footer from '../common/Footer';
 import { updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
 import { useUserContext } from '@/contexts/user-context';
@@ -82,8 +82,11 @@ const MedicalRecord = () => {
     };
 
     const handleSubmit = () => {
-      setActiveMedicalRecord({ ...activeMedicalRecord, medicines: medicineDoses });
-      updateAMedicalRecord(accessToken, activeMedicalRecord.id, activeMedicalRecord).then( () => {
+      //setActiveMedicalRecord({ ...activeMedicalRecord, medicines: medicineDoses });
+      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord);
+      medicalRecordPatcher.medicines = medicineDoses;
+      console.log(medicalRecordPatcher);
+      updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {
         openSnackbarNotification(ALERT_MESSAGE.success, 'success');
         window.location.href = "/operational/doctor/patients-list";
         return;

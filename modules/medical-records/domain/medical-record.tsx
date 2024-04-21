@@ -107,3 +107,22 @@ export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, orgID:numbe
     }
     return medicalRecordNoID;
 }
+
+export type MedicalRecordPatcher = Omit<MedicalRecord, 'patient'|'doctor'|'organization'|'date_created'>;
+export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord) {
+
+    let medicalRecordPatcher: MedicalRecordPatcher = { 
+        id: medicalRecord.id,
+        code: medicalRecord.code,
+        anamnesis: medicalRecord.anamnesis,
+        care_type: medicalRecord.care_type,
+        signature: medicalRecord.signature,
+        death: medicalRecord.death,
+        illnesses: medicalRecord.illnesses,
+        medicines: medicalRecord.medicines,
+        treatments: medicalRecord.treatments,
+        physical_checkup: medicalRecord.physical_checkup,
+        date_updated: medicalRecord.date_updated,
+    }
+    return medicalRecordPatcher;
+}
