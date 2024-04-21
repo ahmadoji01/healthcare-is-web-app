@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
 import { Illness, MedicalRecord, defaultMedicalRecord } from "../../domain/medical-record";
 import SelectOption from "@/interfaces/select-option";
-import { Treatment } from "@/modules/treatments/domain/treatment";
+import { Treatment, TreatmentPatcher } from "@/modules/treatments/domain/treatment";
 import Illnesses from "@/constants/illnesses";
 
 interface MedicalRecordFormProps {
@@ -36,7 +36,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
     const treatmentsMapper = (choices: SelectOption[]) => {
         let treatments:Treatment[] = [];
         choices?.map( (choice) => { 
-            treatments.push({ id: 0, name: choice.label, code: choice.value, price: 0 }); 
+            treatments.push({ id: parseInt(choice.value), name: choice.label, code: '', price: 0 }); 
         });
         setMedicalRecord({ ...medicalRecord, treatments: treatments });
     }

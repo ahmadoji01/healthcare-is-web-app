@@ -10,7 +10,7 @@ import MedicalRecordForm from '@/modules/medical-records/application/form/medica
 import MedicationForm from '@/modules/medical-records/application/form/medication.form';
 import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
-import { MedicineDoses, medicalRecordPatcherMapper } from '@/modules/medical-records/domain/medical-record';
+import { MedicineDoses, MedicineDosesPatcher, medicalRecordPatcherMapper, medicineDosesPatcherMapper } from '@/modules/medical-records/domain/medical-record';
 import Footer from '../common/Footer';
 import { updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
 import { useUserContext } from '@/contexts/user-context';
@@ -19,7 +19,7 @@ import { ALERT_MESSAGE } from '@/constants/alert';
 import { Medicine, medicineMapper } from '@/modules/medicines/domain/medicine';
 import { getAllMedicines } from '@/modules/medicines/domain/medicines.actions';
 import { getAllTreatments } from '@/modules/treatments/domain/treatments.actions';
-import { Treatment, treatmentMapper } from '@/modules/treatments/domain/treatment';
+import { Treatment, TreatmentPatcher, treatmentMapper, treatmentPatcherMapper } from '@/modules/treatments/domain/treatment';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,7 +55,7 @@ interface TabPanelProps {
 const MedicalRecord = () => {
     const [value, setValue] = useState(0);
     const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
-    const {accessToken} = useUserContext();
+    const {user, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [treatments, setTreatments] = useState<Treatment[]>([]);
@@ -82,10 +82,11 @@ const MedicalRecord = () => {
     };
 
     const handleSubmit = () => {
-      //setActiveMedicalRecord({ ...activeMedicalRecord, medicines: medicineDoses });
-      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord);
-      medicalRecordPatcher.medicines = medicineDoses;
-      console.log(medicalRecordPatcher);
+      let treatmentPatchers:TreatmentPatcher[] = [];
+      let medicineDosesPatchers:MedicineDosesPatcher[] = [];
+      activeMedicalRecord.treatments?.map( (treatment) => { treatmentPatchers.push(treatmentPatcherMapper(treatment, user.organizationID)) })
+      medicineDoses.map( (med) => { medicineDosesPatchers.push(medicineDosesPatcherMapper(med, user.organizationID)) } )
+      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, medicineDosesPatchers, treatmentPatchers);
       updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {
         openSnackbarNotification(ALERT_MESSAGE.success, 'success');
         window.location.href = "/operational/doctor/patients-list";

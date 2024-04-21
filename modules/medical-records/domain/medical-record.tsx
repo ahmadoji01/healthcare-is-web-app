@@ -1,7 +1,7 @@
 import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine"
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient"
 import { PhysicalCheckup, defaultPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup"
-import { Treatment, defaultTreatment } from "@/modules/treatments/domain/treatment"
+import { Treatment, TreatmentPatcher, defaultTreatment } from "@/modules/treatments/domain/treatment"
 import { Doctor, defaultDoctor } from "@/modules/doctors/domain/doctor"
 
 interface Signature {
@@ -108,8 +108,27 @@ export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, orgID:numbe
     return medicalRecordNoID;
 }
 
-export type MedicalRecordPatcher = Omit<MedicalRecord, 'patient'|'doctor'|'organization'|'date_created'>;
-export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord) {
+type TreatmentPatchers = {
+    treatments: TreatmentPatcher[],
+}
+
+export type MedicineDosesPatcher = Omit<MedicineDoses, 'medicine'> & Organization & { id: number };
+export function medicineDosesPatcherMapper(medicineDoses:MedicineDoses, orgID:number) {
+    let medicineDosesPatcher: MedicineDosesPatcher = {
+        id: medicineDoses.medicine.id,
+        doses: medicineDoses.doses,
+        quantity: medicineDoses.quantity,
+        organization: orgID,
+    }
+    return medicineDosesPatcher;
+}
+
+type MedicineDosesPatchers = {
+    medicines: MedicineDosesPatcher[],
+}
+
+export type MedicalRecordPatcher = Omit<MedicalRecord, 'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'> & TreatmentPatchers & MedicineDosesPatchers;
+export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, meds: MedicineDosesPatcher[], treatments:TreatmentPatcher[]) {
 
     let medicalRecordPatcher: MedicalRecordPatcher = { 
         id: medicalRecord.id,
@@ -119,8 +138,8 @@ export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord) {
         signature: medicalRecord.signature,
         death: medicalRecord.death,
         illnesses: medicalRecord.illnesses,
-        medicines: medicalRecord.medicines,
-        treatments: medicalRecord.treatments,
+        medicines: meds,
+        treatments: treatments,
         physical_checkup: medicalRecord.physical_checkup,
         date_updated: medicalRecord.date_updated,
     }
