@@ -16,6 +16,10 @@ import { updateAMedicalRecord } from '@/modules/medical-records/domain/medical-r
 import { useUserContext } from '@/contexts/user-context';
 import { useAlertContext } from '@/contexts/alert-context';
 import { ALERT_MESSAGE } from '@/constants/alert';
+import { Medicine, medicineMapper } from '@/modules/medicines/domain/medicine';
+import { getAllMedicines } from '@/modules/medicines/domain/medicines.actions';
+import { getAllTreatments } from '@/modules/treatments/domain/treatments.actions';
+import { Treatment, treatmentMapper } from '@/modules/treatments/domain/treatment';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -53,6 +57,21 @@ const MedicalRecord = () => {
     const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
     const {accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
+    const [medicines, setMedicines] = useState<Medicine[]>([]);
+    const [treatments, setTreatments] = useState<Treatment[]>([]);
+
+    useEffect( () => {
+      getAllMedicines(accessToken, 1).then( res => {
+        let meds:Medicine[] = [];
+        res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
+        setMedicines(meds);
+      });
+      getAllTreatments(accessToken, 1).then( res => {
+        let treats:Treatment[] = [];
+        res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
+        setTreatments(treats);
+      });
+    }, medicines)
 
     if (activeMedicalRecord.id === 0) {
       window.location.href = '/operational/doctor/patients-list';
@@ -89,10 +108,10 @@ const MedicalRecord = () => {
               <CustomTabPanel value={value} index={1}>
                 <div className="flex flex-col md:flex-row">
                   <div className="w-full p-2 h-[calc(100vh-12rem)] overflow-y-scroll overscroll-contain">
-                    <MedicalRecordForm medicalRecord={activeMedicalRecord} setMedicalRecord={setActiveMedicalRecord} />
+                    <MedicalRecordForm treatments={treatments} medicalRecord={activeMedicalRecord} setMedicalRecord={setActiveMedicalRecord} />
                   </div>
                   <div className="w-full p-2">
-                    <MedicationForm medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />    
+                    <MedicationForm medicines={medicines} medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />    
                   </div>
                 </div>
               </CustomTabPanel>

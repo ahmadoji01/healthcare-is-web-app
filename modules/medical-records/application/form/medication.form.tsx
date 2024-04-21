@@ -11,19 +11,19 @@ import { SelectChangeEvent } from "@mui/material";
 import MedicationList from "./medication.list";
 import { useMedicalRecordContext } from "@/contexts/medical-record-context";
 import { defaultMedicineCategory } from "@/modules/medicines/domain/medicine-category";
+import { Treatment } from "@/modules/treatments/domain/treatment";
 
 interface MedicationFormProps {
+    medicines: Medicine[],
     medicineDoses: MedicineDoses[],
     setMedicineDoses: Dispatch<SetStateAction<MedicineDoses[]>> 
 }
 
-const MedicationForm = ({ medicineDoses, setMedicineDoses }:MedicationFormProps) => {
+const MedicationForm = ({ medicines, medicineDoses, setMedicineDoses }:MedicationFormProps) => {
 
     const [medOptions, setMedOptions] = useState<SelectOption[]>([]);
-    const [medicines, setMedicines] = useState<Medicine[]>([]);
 
     useEffect(() => {
-        setMedicines(medicinesFakeData);
         let options:SelectOption[] = [];
         medicines?.map( (medicine) => { options.push({ value: medicine.id.toString(), label: medicine.name }); });
         setMedOptions(options);

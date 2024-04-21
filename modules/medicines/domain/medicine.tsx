@@ -17,3 +17,34 @@ export const defaultMedicine: Medicine = {
     category: defaultMedicineCategory,
     price: 0,
 }
+
+export function medicineMapper(res:Record<string,any>) {
+    let medicine = defaultMedicine;
+    medicine = { 
+        id: res.id, 
+        name: res.name, 
+        code: res.code,
+        price: res.price,
+        stock: res.stock,
+        category: res.category,
+    }
+    return medicine;
+}
+
+type Organization = {
+    organization: number,
+}
+
+export type MedicineNoID = Omit<Medicine, 'id'> & Organization;
+export function medicineNoIDMapper(medicine:Medicine, orgID:number) {
+
+    let medicineNoID: MedicineNoID = { 
+        name: medicine.name, 
+        code: medicine.code,
+        price: medicine.price,
+        stock: medicine.stock,
+        category: medicine.category,
+        organization: orgID,
+    }
+    return medicineNoID;
+}

@@ -75,7 +75,7 @@ export const UserProvider = ({
                 setLoading(false);
                 clearInterval(interval);
             }).catch( err => { 
-                if (location.pathname !== '/' && (err.response.status !== 401 || err.response.status === 403)) {
+                if (location.pathname !== '/' && (err.response.status === 401 || err.response.status === 403)) {
                     window.location.href = '/';
                 }
                 setLoading(false);

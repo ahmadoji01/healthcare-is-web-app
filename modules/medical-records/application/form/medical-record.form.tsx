@@ -1,7 +1,7 @@
 'use client';
 
 import Treatments from "@/constants/treatments";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
 import { Illness, MedicalRecord, defaultMedicalRecord } from "../../domain/medical-record";
@@ -11,11 +11,14 @@ import Illnesses from "@/constants/illnesses";
 
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
+    treatments: Treatment[],
     setMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>,
 }
 
-const MedicalRecordForm = ({ medicalRecord, setMedicalRecord }:MedicalRecordFormProps) => {
+const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:MedicalRecordFormProps) => {
     
+    const [treatOptions, setTreatOptions] = useState<SelectOption[]>([]);
+
     const illnessesMapper = (choices: SelectOption[]) => {
         let illnesses:Illness[] = [];
         choices?.map( (choice) => { 
@@ -23,6 +26,12 @@ const MedicalRecordForm = ({ medicalRecord, setMedicalRecord }:MedicalRecordForm
         });
         setMedicalRecord({ ...medicalRecord, illnesses: illnesses });
     }
+
+    useEffect(() => {
+        let options:SelectOption[] = [];
+        treatments?.map( (treatment) => { options.push({ value: treatment.id.toString(), label: treatment.name }); });
+        setTreatOptions(options);
+    });
 
     const treatmentsMapper = (choices: SelectOption[]) => {
         let treatments:Treatment[] = [];
@@ -85,7 +94,7 @@ const MedicalRecordForm = ({ medicalRecord, setMedicalRecord }:MedicalRecordForm
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         components={{ Input: (props) => (<components.Input {...props} maxLength={50} />) }}
                                         windowThreshold={50}
-                                        options={Treatments}
+                                        options={treatOptions}
                                         className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-1 px-2 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />
                                 </div>
