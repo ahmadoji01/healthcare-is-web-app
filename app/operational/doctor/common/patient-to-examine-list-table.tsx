@@ -13,10 +13,11 @@ interface PatientToExamineListTableProps {
     visits: Visit[],
     totalPages: number,
     handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
-    setActiveMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>
+    setActiveMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>,
+    setActiveVisit: Dispatch<SetStateAction<Visit>>
   }
 
-const PatientToExamineListTable = ({ visits, totalPages, handlePageChange, setActiveMedicalRecord }: PatientToExamineListTableProps) => {
+const PatientToExamineListTable = ({ visits, totalPages, handlePageChange, setActiveMedicalRecord, setActiveVisit }: PatientToExamineListTableProps) => {
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex flex-col">
@@ -78,7 +79,7 @@ const PatientToExamineListTable = ({ visits, totalPages, handlePageChange, setAc
                     <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                         <Link
                             href="/operational/doctor/medical-record"
-                            onClick={() => { setActiveMedicalRecord(visit.medical_record) } }
+                            onClick={() => { setActiveVisit(visit); setActiveMedicalRecord(visit.medical_record) } }
                             className="inline-flex gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
                             >
                             <span>

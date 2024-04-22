@@ -10,6 +10,7 @@ import { useMedicalRecordContext } from "@/contexts/medical-record-context";
 import { getTotalVisits, getVisitByStatus } from "@/modules/visits/domain/visits.actions";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { Visit, visitMapper } from "@/modules/visits/domain/visit";
+import { useVisitContext } from "@/contexts/visit-context";
 
 const PatientsList = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
@@ -17,7 +18,8 @@ const PatientsList = () => {
     const [visits, setVisits] = useState<Visit[]>([]);
     const [totalPages, setTotalPages] = useState(0);
     const {accessToken} = useUserContext();
-    const {activeMedicalRecord, setActiveMedicalRecord} = useMedicalRecordContext();
+    const {setActiveMedicalRecord} = useMedicalRecordContext();
+    const {setActiveVisit} = useVisitContext();
 
     useEffect( () => {
         if (!dataLoaded || patients.length == 0) {
@@ -58,7 +60,7 @@ const PatientsList = () => {
     return (
         <>
             <h2 className="text-3xl font-extrabold text-black dark:text-white mb-2">Patients to be Examined</h2>
-            <PatientToExamineListTable visits={visits} totalPages={totalPages} handlePageChange={handlePageChange} setActiveMedicalRecord={setActiveMedicalRecord} />
+            <PatientToExamineListTable visits={visits} totalPages={totalPages} handlePageChange={handlePageChange} setActiveMedicalRecord={setActiveMedicalRecord} setActiveVisit={setActiveVisit} />
         </>
     )
 }

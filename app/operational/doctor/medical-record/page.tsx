@@ -19,6 +19,9 @@ import { Medicine, medicineMapper } from '@/modules/medicines/domain/medicine';
 import { getAllMedicines } from '@/modules/medicines/domain/medicines.actions';
 import { getAllTreatments } from '@/modules/treatments/domain/treatments.actions';
 import { Treatment, TreatmentPatcher, treatmentMapper, treatmentPatcherMapper } from '@/modules/treatments/domain/treatment';
+import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
+import { useVisitContext } from '@/contexts/visit-context';
+import { updateVisit } from '@/modules/visits/domain/visits.actions';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,6 +57,7 @@ interface TabPanelProps {
 const MedicalRecord = () => {
     const [value, setValue] = useState(0);
     const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
+    const {activeVisit} = useVisitContext();
     const {user, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -70,7 +74,7 @@ const MedicalRecord = () => {
         res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
         setTreatments(treats);
       });
-    }, medicines)
+    }, [medicines])
 
     if (activeMedicalRecord.id === 0) {
       window.location.href = '/operational/doctor/patients-list';
@@ -80,7 +84,7 @@ const MedicalRecord = () => {
       setValue(newValue);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
       let treatmentPatchers:TreatmentPatcher[] = [];
       let medicineDosesPatchers:MedicineDosesPatcher[] = [];
       let illnessPatchers:IllnessPatcher[] = [];
@@ -88,10 +92,15 @@ const MedicalRecord = () => {
       medicineDoses.map( (med) => { medicineDosesPatchers.push(medicineDosesPatcherMapper(med, user.organizationID)) } );
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
       let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, illnessPatchers, medicineDosesPatchers, treatmentPatchers);
-      updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, 'success');
-        window.location.href = "/operational/doctor/patients-list";
-        return;
+      await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
+        .catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
+
+      let visit = { status: VISIT_STATUS.examined };
+      updateVisit(accessToken, activeVisit.id, visit).then( () => {
+          location.reload();
+          openSnackbarNotification(ALERT_MESSAGE.success, 'success');
+          window.location.href = "/operational/doctor/patients-list";
+          return;
       }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
     }
 

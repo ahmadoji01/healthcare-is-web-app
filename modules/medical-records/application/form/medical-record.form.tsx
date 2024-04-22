@@ -73,7 +73,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
                                     <WindowedSelect
                                         isMulti
                                         isSearchable={true}
-                                        defaultValue={medicalRecord.illnesses}
+                                        defaultValue={[]}
                                         onChange={choices => illnessesMapper(choices)}
                                         name="illnesses"
                                         filterOption={createFilter({ ignoreAccents: false })}
@@ -91,7 +91,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
                                     <WindowedSelect
                                         isMulti
                                         isSearchable={true}
-                                        defaultValue={medicalRecord.treatments}
+                                        defaultValue={[]}
                                         onChange={choices => treatmentsMapper(choices)}
                                         name="treatments"
                                         filterOption={createFilter({ ignoreAccents: false })}
