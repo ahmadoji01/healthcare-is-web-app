@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import WindowedSelect, { createFilter } from "react-windowed-select";
-import { useMedicalRecordContext } from "@/contexts/medical-record-context";
 import { MedicineDoses } from "../../domain/medical-record";
 
 interface MedicationListProps {
@@ -17,11 +16,11 @@ const MedicationList = ({ medicineDoses, setMedicineDoses }:MedicationListProps)
         let doses = "";
         if (newTimes !== "") {
             setTimes(newTimes);
-            doses = newTimes + " " + period;
+            doses = newTimes + " per " + period;
         }
         if (newPeriod !== "") {
             setPeriod(newPeriod);
-            doses = times + " " + newPeriod;
+            doses = times + " per " + newPeriod;
         }
         
         let newDoses = [...medicineDoses];

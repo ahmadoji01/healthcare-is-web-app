@@ -112,6 +112,18 @@ type TreatmentPatchers = {
     treatments: TreatmentPatcher[],
 }
 
+export type IllnessPatcher = Omit<Illness, 'id'>;
+export function illnessPatcherMapper(illness:Illness) {
+    let illnessPatcher: IllnessPatcher = {
+        name: illness.name,
+        code: illness.code,
+    }
+    return illnessPatcher;
+}
+export type IllnessPatchers = {
+    illnesses: IllnessPatcher[],
+}
+
 export type MedicineDosesPatcher = Omit<MedicineDoses, 'medicine'> & Organization & { id: number };
 export function medicineDosesPatcherMapper(medicineDoses:MedicineDoses, orgID:number) {
     let medicineDosesPatcher: MedicineDosesPatcher = {
@@ -127,8 +139,8 @@ type MedicineDosesPatchers = {
     medicines: MedicineDosesPatcher[],
 }
 
-export type MedicalRecordPatcher = Omit<MedicalRecord, 'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'> & TreatmentPatchers & MedicineDosesPatchers;
-export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, meds: MedicineDosesPatcher[], treatments:TreatmentPatcher[]) {
+export type MedicalRecordPatcher = Omit<MedicalRecord, 'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'> & IllnessPatchers & TreatmentPatchers & MedicineDosesPatchers;
+export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, illnesses: IllnessPatcher[], meds: MedicineDosesPatcher[], treatments:TreatmentPatcher[]) {
 
     let medicalRecordPatcher: MedicalRecordPatcher = { 
         id: medicalRecord.id,
@@ -137,7 +149,7 @@ export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, meds: Me
         care_type: medicalRecord.care_type,
         signature: medicalRecord.signature,
         death: medicalRecord.death,
-        illnesses: medicalRecord.illnesses,
+        illnesses: illnesses,
         medicines: meds,
         treatments: treatments,
         physical_checkup: medicalRecord.physical_checkup,

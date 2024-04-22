@@ -4,13 +4,12 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { BodyComponent } from 'reactjs-human-body';
 import PatientOverview from './patient-overview';
 import MedicalRecordForm from '@/modules/medical-records/application/form/medical-record.form';
 import MedicationForm from '@/modules/medical-records/application/form/medication.form';
 import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
-import { MedicineDoses, MedicineDosesPatcher, medicalRecordPatcherMapper, medicineDosesPatcherMapper } from '@/modules/medical-records/domain/medical-record';
+import { Illness, IllnessPatcher, MedicineDosesPatcher, illnessPatcherMapper, medicalRecordPatcherMapper, medicineDosesPatcherMapper } from '@/modules/medical-records/domain/medical-record';
 import Footer from '../common/Footer';
 import { updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
 import { useUserContext } from '@/contexts/user-context';
@@ -84,9 +83,11 @@ const MedicalRecord = () => {
     const handleSubmit = () => {
       let treatmentPatchers:TreatmentPatcher[] = [];
       let medicineDosesPatchers:MedicineDosesPatcher[] = [];
+      let illnessPatchers:IllnessPatcher[] = [];
       activeMedicalRecord.treatments?.map( (treatment) => { treatmentPatchers.push(treatmentPatcherMapper(treatment, user.organizationID)) })
-      medicineDoses.map( (med) => { medicineDosesPatchers.push(medicineDosesPatcherMapper(med, user.organizationID)) } )
-      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, medicineDosesPatchers, treatmentPatchers);
+      medicineDoses.map( (med) => { medicineDosesPatchers.push(medicineDosesPatcherMapper(med, user.organizationID)) } );
+      activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
+      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, illnessPatchers, medicineDosesPatchers, treatmentPatchers);
       updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {
         openSnackbarNotification(ALERT_MESSAGE.success, 'success');
         window.location.href = "/operational/doctor/patients-list";
