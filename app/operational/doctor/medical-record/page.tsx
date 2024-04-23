@@ -22,6 +22,11 @@ import { Treatment, TreatmentPatcher, treatmentMapper, treatmentPatcherMapper } 
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
 import { useVisitContext } from '@/contexts/visit-context';
 import { updateVisit } from '@/modules/visits/domain/visits.actions';
+import { defaultOrder, orderMapper } from '@/modules/orders/domain/order';
+import { getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.actions';
+import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
+import OrderItem, { OrderItemCreator, orderItemCreatorMapper } from '@/modules/orders/domain/order-item';
+import { visitFilter } from '@/modules/orders/domain/order.specifications';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -58,6 +63,7 @@ const MedicalRecord = () => {
     const [value, setValue] = useState(0);
     const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
     const {activeVisit} = useVisitContext();
+    const [order, setOrder] = useState(defaultOrder);
     const {user, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -74,6 +80,12 @@ const MedicalRecord = () => {
         res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
         setTreatments(treats);
       });
+      getOrdersWithFilter(accessToken, visitFilter(activeVisit.id)).then( res => {
+        if (res.length > 0) {
+          let order = orderMapper(res[0]);
+          setOrder(order);
+        }
+      });
     }, [medicines])
 
     if (activeMedicalRecord.id === 0) {
@@ -88,19 +100,32 @@ const MedicalRecord = () => {
       let treatmentPatchers:TreatmentPatcher[] = [];
       let medicineDosesPatchers:MedicineDosesPatcher[] = [];
       let illnessPatchers:IllnessPatcher[] = [];
-      activeMedicalRecord.treatments?.map( (treatment) => { treatmentPatchers.push(treatmentPatcherMapper(treatment, user.organizationID)) })
-      medicineDoses.map( (med) => { medicineDosesPatchers.push(medicineDosesPatcherMapper(med, user.organizationID)) } );
+      let orderItems:OrderItemCreator[] = [];
+
+      activeMedicalRecord.treatments?.map( (treatment) => { 
+        treatmentPatchers.push(treatmentPatcherMapper(treatment, user.organizationID));
+        orderItems.push(orderItemCreatorMapper(null, treatment, user.organizationID));
+      })
+      medicineDoses.map( (med) => { 
+        medicineDosesPatchers.push(medicineDosesPatcherMapper(med, user.organizationID));
+        orderItems.push(orderItemCreatorMapper(med, null, user.organizationID));
+      });
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
+      
       let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, illnessPatchers, medicineDosesPatchers, treatmentPatchers);
       await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
         .catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
 
       let visit = { status: VISIT_STATUS.examined };
       updateVisit(accessToken, activeVisit.id, visit).then( () => {
-          location.reload();
-          openSnackbarNotification(ALERT_MESSAGE.success, 'success');
-          window.location.href = "/operational/doctor/patients-list";
-          return;
+      }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
+
+      let orderUpdate = { order_items: orderItems, status: ORDER_STATUS.waiting_to_pay };
+      updateOrder(accessToken, order.id, orderUpdate).then( () => {
+        location.reload();
+        openSnackbarNotification(ALERT_MESSAGE.success, 'success');
+        window.location.href = "/operational/doctor/patients-list";
+        return;
       }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
     }
 
