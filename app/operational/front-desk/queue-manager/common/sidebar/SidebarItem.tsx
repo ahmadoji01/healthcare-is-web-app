@@ -28,7 +28,7 @@ const SidebarItem = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
             setSidebarExpanded(true);
         }
     }
-
+    
     return (
         <>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
@@ -37,19 +37,20 @@ const SidebarItem = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
 
             <ul className="mb-6 flex flex-col gap-1.5">
                 { loading && <Spinner /> }
-                { !loading && doctors?.map((doctor) => (
-                    <Link
-                        href={"/operational/front-desk/queue-manager"}
-                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                            (doctor === activeDoctor) &&
-                            "bg-graydark dark:bg-meta-4"
-                        }`}
-                        onClick={(e) => { handleClick(e, doctor) }}
-                        >
-                        <FontAwesomeIcon icon={faUserDoctor} width={18} height={18} />
-                        { doctor.name }
-                    </Link>
-                ))}
+                { !loading && doctors?.map((doctor) => 
+                    (doctor.id !== 0) &&
+                        <Link
+                            href={"/operational/front-desk/queue-manager"}
+                            className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                                (doctor === activeDoctor) &&
+                                "bg-graydark dark:bg-meta-4"
+                            }`}
+                            onClick={(e) => { handleClick(e, doctor) }}
+                            >
+                            <FontAwesomeIcon icon={faUserDoctor} width={18} height={18} />
+                            { doctor.name }
+                        </Link>
+                )}
             </ul>
         </>
     )

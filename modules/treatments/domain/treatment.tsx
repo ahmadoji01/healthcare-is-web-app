@@ -38,3 +38,13 @@ export function treatmentNoIDMapper(treatment:Treatment, orgID:number) {
     }
     return treatmentNoID;
 }
+
+export type TreatmentPatcher = Omit<Treatment, 'name'|'code'|'price'> & Organization;
+export function treatmentPatcherMapper(treatment:Treatment, orgID:number) {
+
+    let treatmentPatcher: TreatmentPatcher = {
+        id: treatment.id,
+        organization: orgID,
+    }
+    return treatmentPatcher;
+}

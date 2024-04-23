@@ -7,7 +7,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useUserContext } from "@/contexts/user-context";
 import { imageHandler } from "@/utils/request-handler";
 import { updateUserMe, uploadAvatar } from "@/modules/users/domain/users.actions";
-import { openSnackbarNotification } from "@/utils/notification";
 import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 

@@ -1,7 +1,7 @@
 import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine"
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient"
 import { PhysicalCheckup, defaultPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup"
-import { Treatment, defaultTreatment } from "@/modules/treatments/domain/treatment"
+import { Treatment, TreatmentPatcher, defaultTreatment } from "@/modules/treatments/domain/treatment"
 import { Doctor, defaultDoctor } from "@/modules/doctors/domain/doctor"
 
 interface Signature {
@@ -9,13 +9,13 @@ interface Signature {
 	filename_download: string,
 }
 
-interface Illness {
+export interface Illness {
     id: number,
     name: string,
     code: string,
 }
 
-interface MedicineDoses {
+export interface MedicineDoses {
     medicine: Medicine,
     doses: string,
     quantity: number,
@@ -36,6 +36,12 @@ export interface MedicalRecord {
     physical_checkup: PhysicalCheckup,
     date_created: Date,
     date_updated: Date,
+}
+
+export const defaultMedicineDoses: MedicineDoses = {
+    medicine: defaultMedicine,
+    doses: "",
+    quantity: 0,
 }
 
 export const defaultMedicalRecord: MedicalRecord = {
@@ -100,4 +106,54 @@ export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, orgID:numbe
         organization: orgID,
     }
     return medicalRecordNoID;
+}
+
+type TreatmentPatchers = {
+    treatments: TreatmentPatcher[],
+}
+
+export type IllnessPatcher = Omit<Illness, 'id'>;
+export function illnessPatcherMapper(illness:Illness) {
+    let illnessPatcher: IllnessPatcher = {
+        name: illness.name,
+        code: illness.code,
+    }
+    return illnessPatcher;
+}
+export type IllnessPatchers = {
+    illnesses: IllnessPatcher[],
+}
+
+export type MedicineDosesPatcher = Omit<MedicineDoses, 'medicine'> & Organization & { id: number };
+export function medicineDosesPatcherMapper(medicineDoses:MedicineDoses, orgID:number) {
+    let medicineDosesPatcher: MedicineDosesPatcher = {
+        id: medicineDoses.medicine.id,
+        doses: medicineDoses.doses,
+        quantity: medicineDoses.quantity,
+        organization: orgID,
+    }
+    return medicineDosesPatcher;
+}
+
+type MedicineDosesPatchers = {
+    medicines: MedicineDosesPatcher[],
+}
+
+export type MedicalRecordPatcher = Omit<MedicalRecord, 'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'> & IllnessPatchers & TreatmentPatchers & MedicineDosesPatchers;
+export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, illnesses: IllnessPatcher[], meds: MedicineDosesPatcher[], treatments:TreatmentPatcher[]) {
+
+    let medicalRecordPatcher: MedicalRecordPatcher = { 
+        id: medicalRecord.id,
+        code: medicalRecord.code,
+        anamnesis: medicalRecord.anamnesis,
+        care_type: medicalRecord.care_type,
+        signature: medicalRecord.signature,
+        death: medicalRecord.death,
+        illnesses: illnesses,
+        medicines: meds,
+        treatments: treatments,
+        physical_checkup: medicalRecord.physical_checkup,
+        date_updated: medicalRecord.date_updated,
+    }
+    return medicalRecordPatcher;
 }

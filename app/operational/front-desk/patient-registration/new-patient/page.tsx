@@ -23,10 +23,10 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { ALERT_MESSAGE } from "@/constants/alert";
 import { defaultMedicalRecord, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
-import { defaultVisit, visitMapper, visitNoIDMapper } from "@/modules/visits/domain/visit";
+import { defaultVisit, visitMapper, visitCreatorMapper } from "@/modules/visits/domain/visit";
 import { createAVisit } from "@/modules/visits/domain/visits.actions";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
-import { defaultOrder, orderMapper, orderNoIDMapper } from "@/modules/orders/domain/order";
+import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
@@ -108,8 +108,8 @@ const NewPatient = () => {
         setQueueNumber("A01");
         visit.status = visitStatus;
         visit.medical_record = medicalRecord;
-        let visitNoID = visitNoIDMapper(visit, user.organizationID);
-        await createAVisit(accessToken, visitNoID).then( res => {
+        let visitCreator = visitCreatorMapper(visit, medicalRecord.id, user.organizationID);
+        await createAVisit(accessToken, visitCreator).then( res => {
             visit = visitMapper(res);
         }).catch( err => {
             isError = true;
@@ -120,8 +120,8 @@ const NewPatient = () => {
         order.visit = visit;
         order.patient = patient;
         order.status = ORDER_STATUS.active;
-        let orderNoID = orderNoIDMapper(order, user.organizationID);
-        await createAnOrder(accessToken, orderNoID).then( res => {
+        let orderCreator = orderCreatorMapper(order, visit.id, user.organizationID);
+        await createAnOrder(accessToken, orderCreator).then( res => {
             order = orderMapper(res);
         }).catch( err => {
             isError = true;

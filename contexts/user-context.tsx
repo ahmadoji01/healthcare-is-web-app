@@ -47,7 +47,7 @@ export const UserProvider = ({
             }
             setLoading(false);
         }).catch( err => { 
-            if (location.pathname !== '/' && err.response.status !== 401) {
+            if (location.pathname !== '/' && (err.response.status !== 401 || err.response.status === 403)) {
                 window.location.href = '/';
             }
             setLoading(false);
@@ -75,7 +75,7 @@ export const UserProvider = ({
                 setLoading(false);
                 clearInterval(interval);
             }).catch( err => { 
-                if (location.pathname !== '/' && err.response.status !== 401) {
+                if (location.pathname !== '/' && (err.response.status === 401 || err.response.status === 403)) {
                     window.location.href = '/';
                 }
                 setLoading(false);
@@ -100,8 +100,8 @@ export const UserProvider = ({
                 if (location.pathname === '/') {
                     window.location.href = '/dashboard';
                 }
-            }).catch( () => { 
-                if (location.pathname !== '/') {
+            }).catch( err => { 
+                if (location.pathname !== '/' && (err.response.status === 401 || err.response.status === 403)) {
                     window.location.href = '/';
                 }
                 return; 

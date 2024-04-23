@@ -1,6 +1,7 @@
 import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine";
 import { Treatment, defaultTreatment } from "@/modules/treatments/domain/treatment";
 import { Order, defaultOrder } from "./order";
+import { MedicineDoses } from "@/modules/medical-records/domain/medical-record";
 
 interface OrderItem {
     id: number,
@@ -57,6 +58,41 @@ export const orderItemsMapper = (order_items:Record<string, any>) => {
     results.push(orderItemMapper(item));
   });
   return results;
+}
+
+export type OrderItemCreator = Omit<OrderItem, 'id'|'medicine'|'treatment'> & { medicine:number|null, treatment:number|null, organization: number };
+export const orderItemCreatorMapper = (medicineDoses:MedicineDoses|null, treatment:Treatment|null, orgID:number) => {
+  
+  let price = 0;
+  let total = 0;
+  let quantity = 1;
+  let medicineID:number|null = null;
+  let treatmentID:number|null = null;
+  if (medicineDoses !== null) {
+    medicineID = medicineDoses.medicine.id;
+    price = medicineDoses.medicine.price;
+    quantity = medicineDoses.quantity;
+    total = price * quantity;
+  }
+
+  if (treatment !== null) {
+    treatmentID = treatment.id;
+    price = treatment.price;
+    total = treatment.price;
+  }
+
+  let orderItemCreator:OrderItemCreator = {
+    medicine: medicineID,
+    treatment: treatmentID,
+    name: "",
+    description: "",
+    price: price,
+    quantity: quantity,
+    total: total,
+    organization: orgID,
+  }
+  return orderItemCreator;
+
 }
 
 export default OrderItem;

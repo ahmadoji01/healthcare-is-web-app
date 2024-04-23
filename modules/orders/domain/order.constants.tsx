@@ -3,4 +3,5 @@ export const ORDER_STATUS = {
     inactive: 'inactive',
     cancelled: 'cancelled',
     paid: 'paid',
+    waiting_to_pay: 'waiting_to_pay',
 }

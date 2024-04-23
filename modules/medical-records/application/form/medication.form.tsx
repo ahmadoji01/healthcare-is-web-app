@@ -2,43 +2,39 @@
 
 import SelectOption from "@/interfaces/select-option";
 import { medicinesFakeData } from "@/modules/medicines/infrastructure/medicines.fakes";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter } from "react-windowed-select";
-import Medication from "@/modules/medical-records/domain/medication";
-import Medicine from "@/modules/medicines/domain/medicine";
+import { MedicineDoses, defaultMedicineDoses } from "@/modules/medical-records/domain/medical-record";
+import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine";
 import { SelectChangeEvent } from "@mui/material";
 import MedicationList from "./medication.list";
+import { useMedicalRecordContext } from "@/contexts/medical-record-context";
+import { defaultMedicineCategory } from "@/modules/medicines/domain/medicine-category";
+import { Treatment } from "@/modules/treatments/domain/treatment";
 
 interface MedicationFormProps {
-    medications: Medication[],
-    setMedications: React.Dispatch<React.SetStateAction<Medication[]>>,
+    medicines: Medicine[],
+    medicineDoses: MedicineDoses[],
+    setMedicineDoses: Dispatch<SetStateAction<MedicineDoses[]>> 
 }
 
-const MedicationForm = ({ medications, setMedications }:MedicationFormProps) => {
+const MedicationForm = ({ medicines, medicineDoses, setMedicineDoses }:MedicationFormProps) => {
 
     const [medOptions, setMedOptions] = useState<SelectOption[]>([]);
-    const [medicines, setMedicines] = useState<Medicine[]>([]);
-    const [medsList, setMedsList] = useState<Medication[]>([]);
 
     useEffect(() => {
-        setMedicines(medicinesFakeData);
         let options:SelectOption[] = [];
         medicines?.map( (medicine) => { options.push({ value: medicine.id.toString(), label: medicine.name }); });
         setMedOptions(options);
-    }, [medOptions]);
+    }, [medicines]);
 
-    const handleChange = (choice: SelectOption) => {
-        if(typeof(medications.find(o => o.medicine.id.toString() === choice.value)) !== 'undefined') {
-            return;
-        }
-        
-        let medicine:Medicine[] = medicines.filter( (medicine) => { return medicine.id.toString().match(choice.value) });
-        let medication:Medication = { medicine: medicine[0], quantity: 1, doses: "" };
-        let results:Medication[] = medications;
-        results.push(medication);
-        setMedications(results);
-        setMedsList(results);
+    const handleChange = (choices: SelectOption[]) => {
+        let medDoses:MedicineDoses[] = [];
+        choices?.map( (choice) => { 
+            medDoses.push({ medicine: { id: parseInt(choice.value), name: choice.label, code: "", stock: 0, category: defaultMedicineCategory, price: 0 }, doses: "", quantity: 0 }); 
+        });
+        setMedicineDoses(medDoses);
     }
 
     return (
@@ -55,18 +51,19 @@ const MedicationForm = ({ medications, setMedications }:MedicationFormProps) => 
                             <div>
                                 <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
                                     <WindowedSelect
-                                        defaultValue={medications}
+                                        defaultValue={medicineDoses}
+                                        isMulti
                                         name="medications"
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         windowThreshold={5}
                                         isSearchable={true}
                                         options={medOptions}
-                                        onChange={choice => handleChange(choice)}
+                                        onChange={choices => handleChange(choices)}
                                         className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />
                                 </div>
                             </div>
-                            <MedicationList medications={medsList} />  
+                            <MedicationList medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />  
                         </div>
                     </div>
                 </div>
