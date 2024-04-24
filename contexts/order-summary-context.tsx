@@ -75,7 +75,7 @@ export const OrderSummaryProvider = ({
             res?.map( (order) => { ords.push(orderMapper(order)) });
             setOrders(ords);
         })
-    })
+    }, [orders]);
 
     const confirmPayment = () => {
         if (typeof(selectedPayment) === 'undefined') {

@@ -10,12 +10,6 @@ interface SidebarItemProps {
 const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
     const { orders, selectedOrder, setSelectedOrder } = useOrderSummaryContext();
 
-    useEffect( () => {
-        if (typeof(orders) !== 'undefined') {
-            setSelectedOrder(orders[0]);
-        }
-    })
-
     return (
         <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">

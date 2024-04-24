@@ -18,6 +18,7 @@ const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemLis
 
   useEffect( () => {
     setItems(orderItems);
+    console.log(orderItems);
   }, [items]);
 
   const handleChange = (action:string, itemIndex:number, qty:number) => {
