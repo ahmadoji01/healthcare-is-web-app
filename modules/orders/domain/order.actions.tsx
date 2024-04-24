@@ -7,7 +7,7 @@ export const createAnOrder = (token:string, order:OrderCreator) =>
 
 export const getOrdersWithFilter = (token:string, filter:object) => 
 	directusClient.request( 
-		withToken(token, readItems('orders', { fields: ['*.*'],
+		withToken(token, readItems('orders', { fields: ['*.*.*'],
 			filter: filter
 		})) 
 	)

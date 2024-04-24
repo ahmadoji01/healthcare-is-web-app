@@ -1,6 +1,6 @@
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient";
 import OrderItem, { orderItemsMapper } from "./order-item";
-import { Visit, defaultVisit } from "@/modules/visits/domain/visit";
+import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
 import { ORDER_STATUS } from "./order.constants";
 
 export interface Order {
@@ -29,7 +29,7 @@ export function orderMapper(res:Record<string,any>) {
         order_items: orderItemsMapper(res.order_items),
         total: res.total,
         status: res.status,
-        visit: res.visit,
+        visit: visitMapper(res.visit),
     }
     return order;
 }

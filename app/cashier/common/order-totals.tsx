@@ -14,10 +14,10 @@ const OrderTotals = () => {
     useEffect( () => {
         if (typeof(selectedOrder) !== 'undefined') {
             let treatFee = 0, medFee = 0;
-            selectedOrder.orderItems.map( (item) => 
+            selectedOrder.order_items.map( (item) => 
             {
-                if (item.medication !== null) {
-                    medFee += item.medication.medicine.price * item.quantity;
+                if (item.medicine !== null) {
+                    medFee += item.medicine.price * item.quantity;
                     return; 
                 }
                 if (item.treatment !== null) {

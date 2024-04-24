@@ -40,7 +40,7 @@ const PatientOverview = () => {
                     </div>
                     <div className="grid grid-cols-2 text-black dark:text-white">
                         <div>Treated by</div>
-                        <div className="text-left font-extrabold">{ order ? DoctorName(order.medicalRecord.doctor.name, order.medicalRecord.doctor.specialization) : "" }</div>
+                        <div className="text-left font-extrabold">{ order ? DoctorName(order.visit.doctor.name, order.visit.doctor.specialization) : "" }</div>
                     </div>
                     <div className="grid grid-cols-2 text-black dark:text-white">
                         <div>Visit</div>
