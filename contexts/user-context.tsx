@@ -41,15 +41,17 @@ export const UserProvider = ({
             setExpiry(expiry);
             getUserMe(token).then(res => {
                 setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
+            }).catch( () => {
+                if (location.pathname !== '/') {
+                    window.location.href = '/';
+                }
+                return;
             });
             if (location.pathname === '/') {
                 window.location.href = '/dashboard';
             }
             setLoading(false);
         }).catch( err => { 
-            if (location.pathname !== '/' && (err.response.status !== 401 || err.response.status === 403)) {
-                window.location.href = '/';
-            }
             setLoading(false);
             return; 
         });
@@ -68,6 +70,11 @@ export const UserProvider = ({
                 setExpiry(expiry);
                 getUserMe(token).then(res => {
                     setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
+                }).catch( () => {
+                    if (location.pathname !== '/') {
+                        window.location.href = '/';
+                    }
+                    return;
                 });
                 if (location.pathname === '/') {
                     window.location.href = '/dashboard';
@@ -96,6 +103,11 @@ export const UserProvider = ({
                 setExpiry(expiry);
                 getUserMe(token).then(res => {
                     setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
+                }).catch( () => {
+                    if (location.pathname !== '/') {
+                        window.location.href = '/';
+                    }
+                    return;
                 });
                 if (location.pathname === '/') {
                     window.location.href = '/dashboard';
