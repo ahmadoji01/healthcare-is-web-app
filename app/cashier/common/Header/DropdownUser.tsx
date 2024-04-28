@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion"
 import Link from "next/link";
-import Image from "next/image";
 import defaultAvatar from "@/public/images/avatar-256.jpg";
 import { useUserContext } from "@/contexts/user-context";
+import { directusClient, imageHandler } from "@/utils/request-handler";
 
 const DropdownUser = () => {
   const [avatar, setAvatar] = useState(defaultAvatar.src);
@@ -26,7 +26,7 @@ const DropdownUser = () => {
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, [dropdownOpen]);
 
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
@@ -35,13 +35,19 @@ const DropdownUser = () => {
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
-  });
+  }, [dropdownOpen]);
 
   useEffect(() => {
     if (user.avatar !== null) {
-      setAvatar(user.avatar);
+      setAvatar(imageHandler(user.avatar.id, user.avatar.filename_download));
     }
-  });
+  }, [avatar]);
+
+  const handleSignOut = () => {
+    directusClient.logout().then( () => {
+      window.location.href = '/';
+    });
+  }
 
   return (
     <div className="relative">
@@ -53,9 +59,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {user?.first_name + " " + user?.last_name}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{user?.role}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -165,7 +171,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button onClick={handleSignOut} className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
           <svg
             className="fill-current"
             width="22"

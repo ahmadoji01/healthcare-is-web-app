@@ -4,13 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Snackbar, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ItemCard from "./item-card";
-import Medicine from "@/modules/medicines/domain/medicine";
+import Medicine, { medicineMapper } from "@/modules/medicines/domain/medicine";
 import { medicinesFakeData } from "@/modules/medicines/infrastructure/medicines.fakes";
-import { Treatment } from "@/modules/treatments/domain/treatment";
+import { Treatment, treatmentMapper } from "@/modules/treatments/domain/treatment";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import Medication from "@/modules/medical-records/domain/medication";
 import OrderItem from "@/modules/orders/domain/order-item";
 import { v4 as uuidv4 } from 'uuid';
+import { MedicineDoses } from "@/modules/medical-records/domain/medical-record";
+import { getAllMedicines } from "@/modules/medicines/domain/medicines.actions";
+import { useUserContext } from "@/contexts/user-context";
+import { getAllTreatments } from "@/modules/treatments/domain/treatments.actions";
 
 function isAMedicine(obj: Medicine|Treatment) {
     if (obj.hasOwnProperty('category')) {
@@ -25,13 +29,25 @@ const AddItem = () => {
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
     const [medicines, setMedicines] = useState<Medicine[]>([]);
+    const [treatments, setTreatments] = useState<Treatment[]>([]);
     
     const { selectedOrder, handleModal, setSelectedOrder } = useOrderSummaryContext();
+    const {accessToken} = useUserContext();
 
-    useEffect(() => {
-        setMedicines(medicinesFakeData);
-        setTimeout(() => setLoading(false), 1000);
-    }, []);
+    useEffect( () => {
+        getAllMedicines(accessToken, 1).then( res => {
+          let meds:Medicine[] = [];
+          res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
+          setMedicines(meds);
+          setLoading(false);
+        });
+        getAllTreatments(accessToken, 1).then( res => {
+          let treats:Treatment[] = [];
+          res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
+          setTreatments(treats);
+          setLoading(false);
+        });
+    }, []);    
 
     const handleChange = () => {
         setLoading(true);
@@ -42,7 +58,6 @@ const AddItem = () => {
         if (reason === 'clickaway') {
           return;
         }
-    
         setOpenSnackbar(false);
     };
 
@@ -53,18 +68,17 @@ const AddItem = () => {
             return;
         }
         let newSelectedOrder = {...selectedOrder};
-        let items = [...newSelectedOrder.orderItems];
+        let items = [...newSelectedOrder.order_items];
 
-        let orderItem:OrderItem = { id: items.length, medication: null, treatment: null, name: item.name, price: item.price, description: "", quantity: 1, total: item.price, image: "" } 
+        let orderItem:OrderItem = { id: items.length, medicine: null, treatment: null, name: item.name, price: item.price, description: "", quantity: 1, total: item.price, image: "" } 
         if (isAMedicine(item)) {
-            let medication:Medication = { medicine: item, doses: "", quantity: quantity };
-            orderItem.medication = medication;
+            orderItem.medicine = item;
             orderItem.quantity = quantity;
             orderItem.total = item.price * quantity;
         } else {
             orderItem.treatment = item;
         }
-        newSelectedOrder.orderItems[items.length] = orderItem;
+        newSelectedOrder.order_items[items.length] = orderItem;
         setSelectedOrder(newSelectedOrder);
         setOpenSnackbar(true);
         setSnackbarMsg("Item has successfully been added");
@@ -115,10 +129,9 @@ const AddItem = () => {
                         <h4 className="font-extrabold">Treatments</h4>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                            malesuada lacus ex, sit amet blandit leo lobortis eget.
-                        </Typography>
+                        { treatments?.map( (treatment) => (
+                            <ItemCard item={treatment} showQtyHandler={true} handleAddItem={handleAddItem} />
+                        )) }
                     </AccordionDetails>
                 </Accordion>
             </>

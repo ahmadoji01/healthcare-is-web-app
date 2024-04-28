@@ -35,10 +35,10 @@ const ItemCard = ({ item, showQtyHandler, handleAddItem }:ItemCardProps) => {
     }
 
     const isInOrderItems = (item:Medicine|Treatment) => {
-        if (selectedOrder?.orderItems.some(val => val.medication?.medicine.id === item.id)) {
+        if (selectedOrder?.order_items.some(val => val.medicine?.id === item.id)) {
             setHidden(true);
         }
-        if (selectedOrder?.orderItems.some(val => val.treatment?.id === item.id)) {
+        if (selectedOrder?.order_items.some(val => val.treatment?.id === item.id)) {
             setHidden(true);
         }
         return;
@@ -54,7 +54,7 @@ const ItemCard = ({ item, showQtyHandler, handleAddItem }:ItemCardProps) => {
                     <Currency value={item.price} />
                 </div>
                 <div className="custom-number-input m-auto">
-                    { (showQtyHandler && !hidden) &&
+                    { (showQtyHandler && !hidden && item.treatment === null) &&
                         <div className="flex flex-row w-full rounded-lg mt-1">
                             <button className="h-full w-15 rounded-l cursor-pointer outline-none">
                                 <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract')}>−</span>
