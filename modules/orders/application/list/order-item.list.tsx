@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import OrderItem, { orderItemCategory } from "../../domain/order-item";
+import OrderItem, { orderItemCategory, orderItemName } from "../../domain/order-item";
 import Currency from "@/components/Currency";
 import { useEffect, useState } from "react";
 
@@ -18,7 +18,6 @@ const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemLis
 
   useEffect( () => {
     setItems(orderItems);
-    console.log(orderItems);
   }, [items]);
 
   const handleChange = (action:string, itemIndex:number, qty:number) => {
@@ -64,14 +63,14 @@ const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemLis
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{orderItemCategory(item)}: {item.name}</p>
+              <p className="text-black dark:text-white">{orderItemCategory(item)}: {orderItemName(item)}</p>
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
               <p className="text-meta-3"><Currency value={item.price} /></p>
             </div>
             
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              { item.medication !== null && 
+              { item.treatment === null && 
                 <div className="custom-number-input h-10">
                   <div className="flex flex-row h-10 w-full rounded-lg mt-1">
                     <button className="h-full w-10 rounded-l cursor-pointer outline-none">
