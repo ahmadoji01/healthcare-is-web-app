@@ -1,7 +1,7 @@
 import AlertModal from '@/components/Modal/AlertModal';
-import { ALERT_STATUS } from '@/constants/alert';
+import { ALERT_MESSAGE, ALERT_STATUS } from '@/constants/alert';
 import { Order, defaultOrder, orderMapper } from '@/modules/orders/domain/order';
-import { getOrdersWithFilter } from '@/modules/orders/domain/order.actions';
+import { getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.actions';
 import { PaymentMethod, defaultPaymentMethod } from '@/modules/payment-methods/domain/payment-method';
 import { Alert, Snackbar } from '@mui/material';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
@@ -88,10 +88,25 @@ export const OrderSummaryProvider = ({
             setOpenSnackbar(true);
             return;
         }
-        setAlertStatus(ALERT_STATUS.success);
-        setAlertMessage("Your payment has been received!");
-        setAlertAction("refresh");
-        setOpenAlertModal(true);
+
+        let orderPatcher = defaultOrder;
+        if (typeof(selectedOrder) === 'undefined') {
+            return;
+        }
+
+        orderPatcher = selectedOrder;
+        orderPatcher.status = ORDER_STATUS.paid;
+        updateOrder(accessToken, orderPatcher.id, orderPatcher).then( () => {
+            setAlertStatus(ALERT_STATUS.success);
+            setAlertMessage("Your payment has been received!");
+            setAlertAction("refresh");
+            setOpenAlertModal(true);
+            return;
+        }).catch( () => {
+            setSnackbarMsg(ALERT_MESSAGE.server_error);
+            setOpenSnackbar(true);
+            return;
+        });
     }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
