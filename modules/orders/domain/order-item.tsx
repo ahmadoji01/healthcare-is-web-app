@@ -26,6 +26,16 @@ export const orderItemCategory = (item:OrderItem) => {
   return "Other";
 }
 
+export const orderItemName = (item:OrderItem) => {
+  if (item.medicine !== null) {
+    return item.medicine.name;
+  }
+  if (item.treatment !== null) {
+    return item.treatment.name;
+  }
+  return item.name;
+}
+
 export const defaultOrderItem:OrderItem = {
   id: 0,
   medicine: defaultMedicine,

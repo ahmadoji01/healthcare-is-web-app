@@ -21,14 +21,14 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
 
     useEffect(() => {
         let options:SelectOption[] = [];
-        treatments?.map( (treatment) => { options.push({ value: treatment.id.toString(), label: treatment.name }); });
+        treatments?.map( (treatment) => { options.push({ value: treatment.id.toString(), label: treatment.name, value2: treatment.price.toString() }); });
         setTreatOptions(options);
     }, [treatments]);
 
     const treatmentsMapper = (choices: SelectOption[]) => {
         let treatments:Treatment[] = [];
         choices?.map( (choice) => { 
-            treatments.push({ id: parseInt(choice.value), name: choice.label, code: '', price: 0 }); 
+            treatments.push({ id: parseInt(choice.value), name: choice.label, code: '', price: parseInt(choice.value2) }); 
         });
         setMedicalRecord({ ...medicalRecord, treatments: treatments });
     }

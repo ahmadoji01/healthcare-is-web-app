@@ -56,7 +56,7 @@ const Checkout = () => {
                 <RegisterFinished />
             ) : (
                 <>
-                    {getStepContent(activeStep, selectedOrder?.orderItems, total)}
+                    {getStepContent(activeStep, selectedOrder?.order_items, total)}
                     <div className="flex justify-end mt-2 gap-x-2">
                         <div className="flex-1 space-x-2">
                             {activeStep !== 0 && (

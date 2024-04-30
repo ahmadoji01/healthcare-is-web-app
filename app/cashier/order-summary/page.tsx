@@ -19,7 +19,7 @@ const OrderSummary = () => {
             return;
         }
         let newSelectedOrder = {...selectedOrder}
-        let item = {...newSelectedOrder.orderItems[itemIndex]};
+        let item = {...newSelectedOrder.order_items[itemIndex]};
         if (action === 'substract' && item.quantity === 1) {
             handleModal(true, false, false);
             return;
@@ -30,7 +30,7 @@ const OrderSummary = () => {
         if (action === 'add') {
             item.quantity++;
         }
-        newSelectedOrder.orderItems[itemIndex] = item;
+        newSelectedOrder.order_items[itemIndex] = item;
         setSelectedOrder(newSelectedOrder);
         return;
     }
@@ -52,7 +52,7 @@ const OrderSummary = () => {
                     </div>
                     <div className="mt-6 text-black dark:text-white">
                         <h3 className="text-3xl font-extrabold mb-2">Order Items</h3>
-                        <OrderItemList orderItems={selectedOrder?.orderItems} handleModal={() => handleModal(true,false,false)} handleQtyChange={handleQtyChange} />
+                        <OrderItemList orderItems={selectedOrder?.order_items} handleModal={() => handleModal(true,false,false)} handleQtyChange={handleQtyChange} />
                     </div>
                     <div className="flex mt-6">
                         <div className="w-full gap-2">

@@ -25,14 +25,14 @@ const MedicationForm = ({ medicines, medicineDoses, setMedicineDoses }:Medicatio
 
     useEffect(() => {
         let options:SelectOption[] = [];
-        medicines?.map( (medicine) => { options.push({ value: medicine.id.toString(), label: medicine.name }); });
+        medicines?.map( (medicine) => { options.push({ value: medicine.id.toString(), label: medicine.name, value2: medicine.price.toString() }); });
         setMedOptions(options);
     }, [medicines]);
 
     const handleChange = (choices: SelectOption[]) => {
         let medDoses:MedicineDoses[] = [];
         choices?.map( (choice) => { 
-            medDoses.push({ medicine: { id: parseInt(choice.value), name: choice.label, code: "", stock: 0, category: defaultMedicineCategory, price: 0 }, doses: "", quantity: 0 }); 
+            medDoses.push({ medicine: { id: parseInt(choice.value), name: choice.label, code: "", stock: 0, category: defaultMedicineCategory, price: parseInt(choice.value2) }, doses: "", quantity: 0 }); 
         });
         setMedicineDoses(medDoses);
     }

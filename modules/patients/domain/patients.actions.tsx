@@ -22,6 +22,13 @@ export const patientExistChecker = (token:string, idCardNumber = '', familyIDNum
 			} 
 		})) 
 	)
+
+export const getPatientsWithFilter = (token:string, filter:object) => 
+	directusClient.request( 
+		withToken(token, readItems('patients', { fields: ['*.*'],
+			filter: filter
+		})) 
+	)
     
 export const createAPatient = (token:string, patient:PatientNoID) => 
 	directusClient.request( withToken(token, createItem('patients', patient)) )

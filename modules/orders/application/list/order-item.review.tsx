@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { orderItemsFakeData } from "../../infrastructure/order-item.fakes";
-import OrderItem, { orderItemCategory } from "../../domain/order-item";
+import OrderItem, { orderItemCategory, orderItemName } from "../../domain/order-item";
 import Currency from "@/components/Currency";
 
 interface OrderItemReviewProps {
@@ -46,7 +46,7 @@ const OrderItemReview = ({ orderItems, total = 0 }:OrderItemReviewProps) => {
             key={key}
             >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{orderItemCategory(item)}: {item.name}</p>
+              <p className="text-black dark:text-white">{orderItemCategory(item)}: {orderItemName(item)}</p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">

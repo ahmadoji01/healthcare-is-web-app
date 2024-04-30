@@ -1,10 +1,13 @@
 import AlertModal from '@/components/Modal/AlertModal';
-import { ALERT_STATUS } from '@/constants/alert';
-import { Order } from '@/modules/orders/domain/order';
-import { ordersFakeData } from '@/modules/orders/infrastructure/order.fakes';
-import { PaymentMethod } from '@/modules/payment-methods/domain/payment-method';
+import { ALERT_MESSAGE, ALERT_STATUS } from '@/constants/alert';
+import { Order, defaultOrder, orderMapper } from '@/modules/orders/domain/order';
+import { getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.actions';
+import { PaymentMethod, defaultPaymentMethod } from '@/modules/payment-methods/domain/payment-method';
 import { Alert, Snackbar } from '@mui/material';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { useUserContext } from './user-context';
+import { statusFilter } from '@/modules/orders/domain/order.specifications';
+import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
  
 interface OrderSummaryContextType {
     deleteModalOpen: boolean,
@@ -28,9 +31,9 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     deleteModalOpen: false,
     itemModalOpen: false,
     checkoutModalOpen: false,
-    selectedPayment: undefined,
+    selectedPayment: defaultPaymentMethod,
     orders: [],
-    selectedOrder: undefined,
+    selectedOrder: defaultOrder,
     total: 0,
     cashReceived: 0,
     setTotal: () => {},
@@ -63,9 +66,16 @@ export const OrderSummaryProvider = ({
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertAction, setAlertAction] = useState<string>("");
 
+    const {accessToken} = useUserContext();
+
     useEffect( () => {
-        setOrders(ordersFakeData);
-    })
+        getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay))
+        .then( (res) => {
+            let ords:Order[] = [];
+            res?.map( (order) => { ords.push(orderMapper(order)) });
+            setOrders(ords);
+        })
+    }, [orders]);
 
     const confirmPayment = () => {
         if (typeof(selectedPayment) === 'undefined') {
@@ -78,10 +88,25 @@ export const OrderSummaryProvider = ({
             setOpenSnackbar(true);
             return;
         }
-        setAlertStatus(ALERT_STATUS.success);
-        setAlertMessage("Your payment has been received!");
-        setAlertAction("refresh");
-        setOpenAlertModal(true);
+
+        let orderPatcher = defaultOrder;
+        if (typeof(selectedOrder) === 'undefined') {
+            return;
+        }
+
+        orderPatcher = selectedOrder;
+        orderPatcher.status = ORDER_STATUS.paid;
+        updateOrder(accessToken, orderPatcher.id, orderPatcher).then( () => {
+            setAlertStatus(ALERT_STATUS.success);
+            setAlertMessage("Your payment has been received!");
+            setAlertAction("refresh");
+            setOpenAlertModal(true);
+            return;
+        }).catch( () => {
+            setSnackbarMsg(ALERT_MESSAGE.server_error);
+            setOpenSnackbar(true);
+            return;
+        });
     }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
