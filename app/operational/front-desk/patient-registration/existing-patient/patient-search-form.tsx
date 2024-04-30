@@ -8,7 +8,11 @@ import { nameFilter } from "@/modules/patients/domain/patient.specifications";
 import { ALERT_MESSAGE, ALERT_STATUS } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 
-const PatientSearchForm = () => {
+interface PatientSearchFormProps {
+    handleNext: () => void,
+}
+
+const PatientSearchForm = ({ handleNext }:PatientSearchFormProps) => {
 
     const [loading, setLoading] = useState(false);
     const [patients, setPatients] = useState<Patient[]>([]);
@@ -37,7 +41,7 @@ const PatientSearchForm = () => {
     return (
         <>
             <PatientSearch handleChange={handleChange} />
-            <PatientSearchListTable patients={patients} searched={searched} loading={loading} />
+            <PatientSearchListTable patients={patients} searched={searched} loading={loading} handleNext={handleNext} />
         </>
     )
 }
