@@ -22,8 +22,13 @@ export const defaultDoctor: Doctor = {
     specialization: "",
 }
 
-export function doctorMapper(res:Record<string,any>) {
+export function doctorMapper(res:Record<string,any>) {    
     let doctor = defaultDoctor;
+
+    if (res == null) {
+        return doctor;
+    }
+
     doctor = { 
         id: res.id, 
         name: res.name, 

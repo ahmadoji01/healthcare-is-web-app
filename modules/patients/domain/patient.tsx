@@ -34,6 +34,11 @@ export const defaultPatient: Patient = {
 
 export function patientMapper(res:Record<string,any>) {
     let patient = defaultPatient;
+    
+    if (res == null) {
+        return patient;
+    }
+    
     patient = { 
         id: res.id, 
         name: res.name, 
