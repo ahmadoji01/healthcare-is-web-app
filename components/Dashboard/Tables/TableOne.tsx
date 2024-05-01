@@ -48,41 +48,36 @@ const TableOne = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
-        Top Channels
+        Recent Visits
       </h4>
 
       <div className="flex flex-col">
-        <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
+        <div className="grid grid-cols-4 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-4">
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Source
+              Date
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Visitors
+              Patient's Name
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Revenues
+              Doctor's Name
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Sales
-            </h5>
-          </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Conversion
+              Order Total
             </h5>
           </div>
         </div>
 
         {brandData.map((brand, key) => (
           <div
-            className={`grid grid-cols-3 sm:grid-cols-5 ${
+            className={`grid grid-cols-4 sm:grid-cols-4 ${
               key === brandData.length - 1
                 ? ""
                 : "border-b border-stroke dark:border-strokedark"
@@ -96,10 +91,6 @@ const TableOne = () => {
               <p className="hidden text-black dark:text-white sm:block">
                 {brand.name}
               </p>
-            </div>
-
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{brand.visitors}K</p>
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
