@@ -1,10 +1,13 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
+import DashboardModal from "@/components/Modal/Modal";
 import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
+import { useVisitContext } from "@/contexts/visit-context";
+import VisitDeleteConfirmation from "@/modules/visits/application/form/visit.delete-confirmation";
 import VisitList from "@/modules/visits/application/visit.list";
 import { Visit, visitMapper } from "@/modules/visits/domain/visit";
 import { getAllVisits, getTotalVisits } from "@/modules/visits/domain/visits.actions";
@@ -16,6 +19,7 @@ const VisitsDashboardPage = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
+  const {setActiveVisit} = useVisitContext();
   const [visits, setVisits] = useState<Visit[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -67,11 +71,12 @@ const VisitsDashboardPage = () => {
 
   return (
     <>
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Visits" />
 
       <div className="flex flex-col gap-10">
       { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-      { dataLoaded && <VisitList visits={visits} /> }
+      { dataLoaded && <VisitList visits={visits} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveVisit={setActiveVisit} /> }
       </div>
     </>
   );
