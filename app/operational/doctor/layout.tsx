@@ -11,7 +11,7 @@ import { Doctor } from "@/modules/doctors/domain/doctor";
 import { DoctorProvider } from "@/contexts/doctor-context";
 import Footer from "./common/Footer";
 import { PatientProvider } from "@/contexts/patient-context";
-import { UserProvider } from "@/contexts/user-context";
+import { UserProvider, useUserContext } from "@/contexts/user-context";
 import { MedicalRecordProvider } from "@/contexts/medical-record-context";
 import { VisitProvider } from "@/contexts/visit-context";
 import { AlertProvider } from "@/contexts/alert-context";
@@ -22,12 +22,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
+
+  const {loading} = useUserContext();
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
 
     const onStorageChange = () => {
       const item = localStorage.getItem("color-theme");
@@ -44,31 +43,27 @@ export default function RootLayout({
           {loading ? (
             <Loader />
           ) : (
-            <AlertProvider>
-              <UserProvider>
-                <VisitProvider>
-                  <MedicalRecordProvider>
-                    <DoctorProvider>
-                      <div className="flex h-screen overflow-hidden">
-                        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                          <Header
-                            sidebarOpen={sidebarOpen}
-                            setSidebarOpen={setSidebarOpen}
-                          />
-                          <ThemeProvider theme={theme} >
-                            <main>
-                              <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
-                                {children}
-                              </div>
-                            </main>
-                          </ThemeProvider>
-                        </div>
-                      </div>
-                    </DoctorProvider>
-                  </MedicalRecordProvider>
-                </VisitProvider>
-              </UserProvider>
-            </AlertProvider>
+            <VisitProvider>
+              <MedicalRecordProvider>
+                <DoctorProvider>
+                  <div className="flex h-screen overflow-hidden">
+                    <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                      <Header
+                        sidebarOpen={sidebarOpen}
+                        setSidebarOpen={setSidebarOpen}
+                      />
+                      <ThemeProvider theme={theme} >
+                        <main>
+                          <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
+                            {children}
+                          </div>
+                        </main>
+                      </ThemeProvider>
+                    </div>
+                  </div>
+                </DoctorProvider>
+              </MedicalRecordProvider>
+            </VisitProvider>
           )}
         </div>
       </body>

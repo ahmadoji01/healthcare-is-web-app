@@ -30,7 +30,6 @@ export const DoctorProvider = ({
     const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
     const [loading, setLoading] = useState(false);
     const {accessToken} = useUserContext();
-    const {openSnackbarNotification} = useAlertContext();
 
     useEffect( () => {
         setLoading(true);
@@ -47,7 +46,6 @@ export const DoctorProvider = ({
                 clearInterval(interval);
             }).catch( err => {
                 setLoading(false);
-                //openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
             })
         }, 100)
 
