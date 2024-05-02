@@ -3,14 +3,37 @@
 import CardDataStats from "@/components/Dashboard/CardDataStats";
 import ChartOne from "@/components/Dashboard/Charts/ChartOne";
 import ChartThree from "@/components/Dashboard/Charts/ChartThree";
-import ChartTwo from "@/components/Dashboard/Charts/ChartTwo";
-import ChatCard from "@/components/Dashboard/Chat/ChatCard";
-import MapOne from "@/components/Dashboard/Maps/MapOne";
 import TableOne from "@/components/Dashboard/Tables/TableOne";
+import Spinner from "@/components/Spinner";
+import { LIMIT_PER_PAGE } from "@/constants/request";
+import { useAlertContext } from "@/contexts/alert-context";
+import { useUserContext } from "@/contexts/user-context";
+import { useVisitContext } from "@/contexts/visit-context";
+import VisitList from "@/modules/visits/application/visit.list";
+import { Visit, visitMapper } from "@/modules/visits/domain/visit";
+import { getAllVisits, getTotalVisits } from "@/modules/visits/domain/visits.actions";
 import { faClock, faPills, faUser, faUserDoctor } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 
 const DashboardHome = () => {
+
+  const {accessToken} = useUserContext();
+  const [visits, setVisits] = useState<Visit[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  useEffect( () => {
+    if (!dataLoaded) {
+      getAllVisits(accessToken, 1)
+        .then( res => {
+          let vits:Visit[] = [];
+          res?.map( (visit) => { vits.push(visitMapper(visit)); });
+          setVisits(vits);
+          setDataLoaded(true);
+        });
+    }
+  }, [visits]);
 
   return (
     <>
@@ -32,9 +55,12 @@ const DashboardHome = () => {
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <ChartOne />
         <ChartThree />
-        <div className="col-span-12">
-          <TableOne />
-        </div>
+        { !dataLoaded && <Spinner /> }
+        { dataLoaded &&
+          <div className="col-span-12">
+            <VisitList totalPages={totalPages} visits={visits} />
+          </div>
+        }
       </div>
     </>
   );

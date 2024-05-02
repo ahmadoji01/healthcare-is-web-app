@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction, createContext, useContext, useEffect, useStat
 interface UserContextType {
     accessToken: string,
     user: User,
+    loading: boolean,
     setUser: Dispatch<SetStateAction<User>>,
     refreshToken: () => void,
 }
@@ -15,6 +16,7 @@ let EXPIRY_MS = 1000;
 export const UserContext = createContext<UserContextType | null>({
     accessToken: "",
     user: defaultUser,
+    loading: false,
     setUser: () => {},
     refreshToken: () => {},
 });
@@ -27,7 +29,7 @@ export const UserProvider = ({
     const [accessToken, setAccessToken] = useState<string>("");
     const [expiry, setExpiry] = useState(50);
     const [user, setUser] = useState(defaultUser);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const refreshToken = async () => {
         await directusClient.refresh().then( (res) => {
@@ -124,7 +126,7 @@ export const UserProvider = ({
     }, [expiry]);
 
     return (
-        <UserContext.Provider value={{ accessToken, user, setUser, refreshToken }}>
+        <UserContext.Provider value={{ accessToken, user, setUser, refreshToken, loading }}>
             {children}
         </UserContext.Provider>
     );

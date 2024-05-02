@@ -8,6 +8,7 @@ import Loader from "@/components/Dashboard/Loader";
 import Sidebar from "@/components/Dashboard/Sidebar";
 import Header from "@/components/Dashboard/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
+import { useUserContext } from "@/contexts/user-context";
 
 export default function RootLayout({
   children,
@@ -15,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const {loading} = useUserContext();
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
 
   useEffect(() => {
