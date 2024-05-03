@@ -5,15 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import useColorMode from "@/hooks/useColorMode";
 import { signIn } from "@/modules/users/domain/users.actions";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
-    const [colorMode, setColorMode] = useColorMode();
+
+    const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSignIn = () => {
         signIn(email, password).then(() => {
-            window.location.href = '/dashboard';
+            router.back();
         });
     }
 

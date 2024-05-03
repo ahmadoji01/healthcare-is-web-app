@@ -86,7 +86,7 @@ const MedicalRecord = () => {
           setOrder(order);
         }
       });
-    }, [order])
+    }, [])
 
     if (activeMedicalRecord.id === 0) {
       window.location.href = '/operational/doctor/patients-list';

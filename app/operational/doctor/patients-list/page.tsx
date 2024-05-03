@@ -44,7 +44,7 @@ const PatientsList = () => {
                     setTotalPages(pages);
                 })
         }
-    });
+    }, []);
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setDataLoaded(false);
