@@ -15,7 +15,12 @@ const Login = () => {
 
     const handleSignIn = () => {
         signIn(email, password).then(() => {
-            router.back();
+            if (location.pathname === "/" && window.history.length == 2) {
+                router.push("/dashboard");
+            }
+            if (location.pathname === "/" && window.history.length > 2) {
+                router.back();
+            }
         });
     }
 

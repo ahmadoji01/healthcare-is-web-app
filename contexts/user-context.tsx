@@ -50,9 +50,14 @@ export const UserProvider = ({
                 }
                 return;
             });
-            if (location.pathname === '/') {
+
+            if (location.pathname === "/" && window.history.length == 2) {
+                router.push("/dashboard");
+            }
+            if (location.pathname === "/" && window.history.length > 2) {
                 router.back();
             }
+            
             setLoading(false);
             if (!isLooping)
                 clearInterval(interval);
@@ -68,7 +73,6 @@ export const UserProvider = ({
     }
 
     useEffect(() => {
-        router.push(window.location.href);
         let interval = setInterval(async () => {
             refreshToken(interval, false);
         }, 100);
