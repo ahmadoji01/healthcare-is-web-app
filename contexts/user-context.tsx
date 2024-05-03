@@ -1,13 +1,14 @@
 import { User, defaultUser } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
 import { directusClient } from '@/utils/request-handler';
+import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
  
 interface UserContextType {
     accessToken: string,
     user: User,
+    loading: boolean,
     setUser: Dispatch<SetStateAction<User>>,
-    refreshToken: () => void,
 }
 
 let EXPIRY_MS = 1000;
@@ -15,8 +16,8 @@ let EXPIRY_MS = 1000;
 export const UserContext = createContext<UserContextType | null>({
     accessToken: "",
     user: defaultUser,
+    loading: false,
     setUser: () => {},
-    refreshToken: () => {},
 });
  
 export const UserProvider = ({
@@ -24,15 +25,17 @@ export const UserProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
+
+    const router = useRouter();
     const [accessToken, setAccessToken] = useState<string>("");
     const [expiry, setExpiry] = useState(50);
     const [user, setUser] = useState(defaultUser);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    const refreshToken = async () => {
+    const refreshToken = async (interval:NodeJS.Timeout, isLooping:boolean) => {
         await directusClient.refresh().then( (res) => {
             if (res.access_token === null) {
-                window.location.href = '/';
+                router.push('/');
                 return;
             }
             let token = res.access_token? res.access_token : '';
@@ -43,88 +46,50 @@ export const UserProvider = ({
                 setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
             }).catch( () => {
                 if (location.pathname !== '/') {
-                    window.location.href = '/';
+                    router.push('/');
                 }
                 return;
             });
-            if (location.pathname === '/') {
-                window.location.href = '/dashboard';
+
+            if (location.pathname === "/" && window.history.length == 2) {
+                router.push("/dashboard");
+            }
+            if (location.pathname === "/" && window.history.length > 2) {
+                router.back();
+            }
+            
+            setLoading(false);
+            if (!isLooping)
+                clearInterval(interval);
+            return;
+        }).catch( err => {
+            if (location.pathname !== '/' && (err.response.status === 400 || err.response.status === 401 || err.response.status === 403)) {
+                router.push("/");
             }
             setLoading(false);
-        }).catch( err => { 
-            setLoading(false);
+            clearInterval(interval);
             return; 
         });
     }
 
     useEffect(() => {
         let interval = setInterval(async () => {
-            await directusClient.refresh().then( (res) => {
-                if (res.access_token === null) {
-                    window.location.href = '/';
-                    return;
-                }
-                let token = res.access_token? res.access_token : '';
-                let expiry = res.expires? res.expires : 0;
-                setAccessToken(token);
-                setExpiry(expiry);
-                getUserMe(token).then(res => {
-                    setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
-                }).catch( () => {
-                    if (location.pathname !== '/') {
-                        window.location.href = '/';
-                    }
-                    return;
-                });
-                if (location.pathname === '/') {
-                    window.location.href = '/dashboard';
-                }
-                setLoading(false);
-                clearInterval(interval);
-            }).catch( err => { 
-                if (location.pathname !== '/' && (err.response.status === 401 || err.response.status === 403)) {
-                    window.location.href = '/';
-                }
-                setLoading(false);
-                clearInterval(interval);
-                return; 
-            });
-        }, expiry);
+            refreshToken(interval, false);
+        }, 100);
 
         return () => clearInterval(interval);    
     }, [loading]);
 
     useEffect(() => {
         let interval = setInterval(async () => {
-            await directusClient.refresh().then( (res) => { 
-                let token = res.access_token? res.access_token : '';
-                let expiry = res.expires? res.expires : 0;
-                setAccessToken(token);
-                setExpiry(expiry);
-                getUserMe(token).then(res => {
-                    setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
-                }).catch( () => {
-                    if (location.pathname !== '/') {
-                        window.location.href = '/';
-                    }
-                    return;
-                });
-                if (location.pathname === '/') {
-                    window.location.href = '/dashboard';
-                }
-            }).catch( err => { 
-                if (location.pathname !== '/' && (err.response.status === 401 || err.response.status === 403)) {
-                    window.location.href = '/';
-                }
-                return; 
-            });
+            refreshToken(interval, true);
         }, 900000);
 
         return () => clearInterval(interval);    
-    }, [expiry]);
+    }, []);
 
     return (
-        <UserContext.Provider value={{ accessToken, user, setUser, refreshToken }}>
+        <UserContext.Provider value={{ accessToken, user, setUser, loading }}>
             {children}
         </UserContext.Provider>
     );
