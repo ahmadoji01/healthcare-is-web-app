@@ -27,6 +27,11 @@ export const defaultVisit: Visit = {
 
 export function visitMapper(res:Record<string,any>) {
     let visit = defaultVisit;
+
+    if (res === null) {
+        return visit;
+    }
+
     visit = { 
         id: res.id, 
         date_created: res.date_created, 
