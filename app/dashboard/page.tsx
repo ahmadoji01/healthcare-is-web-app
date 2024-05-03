@@ -57,9 +57,14 @@ const DashboardHome = () => {
         <ChartThree />
         { !dataLoaded && <Spinner /> }
         { dataLoaded &&
-          <div className="col-span-12">
-            <VisitList totalPages={totalPages} visits={visits} />
-          </div>
+          <>
+            <h4 className="col-span-12 text-3xl font-semibold text-black dark:text-white">
+              Recent Visits
+            </h4>
+            <div className="col-span-12">
+              <VisitList totalPages={totalPages} visits={visits} />
+            </div>
+          </>
         }
       </div>
     </>
