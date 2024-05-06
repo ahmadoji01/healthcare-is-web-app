@@ -1,8 +1,11 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
+import DashboardModal from "@/components/Modal/Modal";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
+import MedicineDeleteConfirmation from "@/modules/medicines/application/form/medicine.delete-confirmation";
+import MedicineForm from "@/modules/medicines/application/form/medicine.form";
 import MedicineListTable from "@/modules/medicines/application/list/medicine.list-table";
 import { Medicine, defaultMedicine, medicineMapper } from "@/modules/medicines/domain/medicine";
 import { getAllMedicines } from "@/modules/medicines/domain/medicines.actions";
@@ -57,9 +60,15 @@ const MedicinesDashboardPage = () => {
         setDataLoaded(true);
       });
   };
+
+  const handleSubmit = (medicine:Medicine) => {
+    console.log(medicine);
+  }
   
   return (
     <>
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <MedicineForm initMedicine={activeMedicine} handleSubmit={handleSubmit} /> } title="Doctor's Detail" />
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <MedicineDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Medicines" />
 
       <div className="flex flex-col gap-10">
