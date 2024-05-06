@@ -96,6 +96,7 @@ export const OrderSummaryProvider = ({
 
         orderPatcher = selectedOrder;
         orderPatcher.status = ORDER_STATUS.paid;
+        orderPatcher.total = total;
         updateOrder(accessToken, orderPatcher.id, orderPatcher).then( () => {
             setAlertStatus(ALERT_STATUS.success);
             setAlertMessage("Your payment has been received!");
