@@ -75,13 +75,15 @@ const PatientsDashboardPage = () => {
   } 
 
   const handleSearch = (query:string) => {
-    setDataLoaded(false);
-    searchPatients(accessToken, query).then( res => {
-      let pats:Patient[] = [];
-      res?.map( (patient) => { pats.push(patientMapper(patient)); });
-      setPatients(pats);
-      setDataLoaded(true);
-    })
+    if (query.length > 3) {
+      setDataLoaded(false);
+      searchPatients(accessToken, query).then( res => {
+        let pats:Patient[] = [];
+        res?.map( (patient) => { pats.push(patientMapper(patient)); });
+        setPatients(pats);
+        setDataLoaded(true);
+      })
+    }
   }
 
   const handleChange = (query:string) => {

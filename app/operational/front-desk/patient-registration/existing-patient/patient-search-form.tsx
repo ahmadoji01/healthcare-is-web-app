@@ -2,11 +2,13 @@ import PatientSearch from "@/modules/patients/application/patient.search"
 import { useEffect, useState } from "react"
 import PatientSearchListTable from "./patient-search-list-table";
 import { Patient, patientMapper } from "@/modules/patients/domain/patient";
-import { getAllPatients, getPatientsWithFilter } from "@/modules/patients/domain/patients.actions";
+import { getAllPatients, getPatientsWithFilter, searchPatients } from "@/modules/patients/domain/patients.actions";
 import { useUserContext } from "@/contexts/user-context";
 import { nameFilter } from "@/modules/patients/domain/patient.specifications";
 import { ALERT_MESSAGE, ALERT_STATUS } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
+
+let activeTimeout = null;
 
 interface PatientSearchFormProps {
     handleNext: () => void,
@@ -20,22 +22,25 @@ const PatientSearchForm = ({ handleNext }:PatientSearchFormProps) => {
     const {openSnackbarNotification} = useAlertContext();
     const {accessToken} = useUserContext();
 
-    const getPatients = async (patientName:string) => {
-        let pats:Patient[] = [];
-        await getPatientsWithFilter(accessToken, nameFilter(patientName)).then( res => {
-            res?.map( (patient) => { pats.push(patientMapper(patient)) });
-        }).catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
-        });
-        setLoading(false);
-        return pats;
-    }
+    const handleChange = (query:string) => {
+        if (activeTimeout) {
+          clearTimeout(activeTimeout);
+        }
+        
+        activeTimeout = setTimeout(() => {
+          handleSearch(query);
+        }, 1000);
+      }
 
-    const handleChange = async (patientName:string) => {
-        setLoading(true);
-        setSearched(true);
-        let pats = await getPatients(patientName);
-        setPatients(pats);
+
+    const handleSearch = (query:string) => {
+        if (query.length > 3) {
+            searchPatients(accessToken, query).then( res => {
+                let pats:Patient[] = [];
+                res?.map( (patient) => { pats.push(patientMapper(patient)); });
+                setPatients(pats);
+            })
+        }
     }
 
     return (
