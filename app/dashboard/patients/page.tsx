@@ -8,9 +8,13 @@ import PatientDeleteConfirmation from "@/modules/patients/application/form/patie
 import PatientForm from "@/modules/patients/application/form/patient.form";
 import PatientListTable from "@/modules/patients/application/list/patient.list-table";
 import { Patient, defaultPatient, patientMapper } from "@/modules/patients/domain/patient";
-import { getAllPatients, getTotalPatients } from "@/modules/patients/domain/patients.actions";
+import { getAllPatients, getTotalPatients, searchPatients } from "@/modules/patients/domain/patients.actions";
+import { faArrowRight, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
+
+let activeTimeout = null;
 
 const PatientsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -37,7 +41,7 @@ const PatientsDashboardPage = () => {
           setTotalPages(pages);
         })
     }
-  });
+  }, [patients]);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {
@@ -70,11 +74,47 @@ const PatientsDashboardPage = () => {
     console.log(patient);
   } 
 
+  const handleSearch = (query:string) => {
+    if (query.length > 3) {
+      setDataLoaded(false);
+      searchPatients(accessToken, query).then( res => {
+        let pats:Patient[] = [];
+        res?.map( (patient) => { pats.push(patientMapper(patient)); });
+        setPatients(pats);
+        setDataLoaded(true);
+      })
+    }
+  }
+
+  const handleChange = (query:string) => {
+    if (activeTimeout) {
+      clearTimeout(activeTimeout);
+    }
+    
+    activeTimeout = setTimeout(() => {
+      handleSearch(query);
+    }, 1000);
+  }
+
   return (
     <>
       <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm initPatient={activePatient} handleSubmit={handleSubmit} /> } title="Patient's Detail" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Patients" />
+      
+      <div className="relative mb-4">
+        <button className="absolute left-0 top-1/2 -translate-y-1/2">
+          <FontAwesomeIcon icon={faSearch} width={20} />
+        </button>
+
+        <input
+          type="text"
+          placeholder="Type to search..."
+          onChange={e => {handleChange(e.target.value) }}
+          className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
+          />
+      </div>
+
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
         { dataLoaded && <PatientListTable totalPages={totalPages} patients={patients} setActivePatient={setActivePatient} handlePageChange={handlePageChange} handleModal={handleModal} /> }

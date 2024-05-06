@@ -32,3 +32,8 @@ export const getPatientsWithFilter = (token:string, filter:object) =>
     
 export const createAPatient = (token:string, patient:PatientNoID) => 
 	directusClient.request( withToken(token, createItem('patients', patient)) )
+
+export const searchPatients = (token:string, query:string) =>
+	directusClient.request(
+		withToken(token, readItems('patients', { fields: ['*.*'], search: query }))
+	)

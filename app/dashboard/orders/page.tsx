@@ -1,9 +1,11 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
+import DashboardModal from "@/components/Modal/Modal";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { useUserContext } from "@/contexts/user-context";
+import OrderDeleteConfirmation from "@/modules/orders/application/form/order.delete-confirmation";
 import OrderListTable from "@/modules/orders/application/list/order.list";
 import { Order, orderMapper } from "@/modules/orders/domain/order";
 import { getAllOrders } from "@/modules/orders/domain/order.actions";
@@ -60,6 +62,7 @@ const OrdersDashboardPage = () => {
   
   return (
     <>
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <OrderDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Orders" />
 
       <div className="flex flex-col gap-10">

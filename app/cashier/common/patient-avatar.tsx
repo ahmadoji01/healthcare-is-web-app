@@ -21,11 +21,17 @@ function stringToColor(string: string) {
 }
 
 function stringAvatar(name: string) {
+  let avatarName = name.split(' ')[0][0];
+
+  if (typeof(name.split(' ')[1]) !== 'undefined') {
+    avatarName += name.split(' ')[1][0];
+  }
+
   return {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+    children: `${avatarName}`,
   };
 }
 
