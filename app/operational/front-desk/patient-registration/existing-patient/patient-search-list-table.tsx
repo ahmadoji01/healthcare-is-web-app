@@ -24,7 +24,17 @@ const PatientSearchListTable = ({ patients, searched, loading, handleNext }:Pati
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             { loading && <Spinner /> }
             { (patients.length === 0 && !searched && !loading) && <h3 className="mb-6">Type the patient's name above and press "Enter"</h3> }
-            { (patients.length === 0 && searched && !loading) && <h3 className="mb-6">No patient found. Try searching with another query</h3> }
+            { (patients.length === 0 && searched && !loading) && 
+                <div className="mb-6">
+                    <h3 className="text-center">No patient found. Try searching with another query</h3>
+                    <h3 className="text-center py-3">or register here if you are new.</h3>
+                    <a href="new-patient">
+                        <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
+                            New Patient Registration
+                        </button>
+                    </a>
+                </div>
+            }
             { (patients.length > 0 && !loading) &&
                 <div className="flex flex-col">
                     <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">

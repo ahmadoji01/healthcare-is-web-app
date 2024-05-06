@@ -34,11 +34,14 @@ const PatientSearchForm = ({ handleNext }:PatientSearchFormProps) => {
 
 
     const handleSearch = (query:string) => {
+        setSearched(true);
         if (query.length > 3) {
+            setLoading(true);
             searchPatients(accessToken, query).then( res => {
                 let pats:Patient[] = [];
                 res?.map( (patient) => { pats.push(patientMapper(patient)); });
                 setPatients(pats);
+                setLoading(false);
             })
         }
     }
