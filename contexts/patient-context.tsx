@@ -1,9 +1,5 @@
 import { Patient, defaultPatient, patientMapper } from '@/modules/patients/domain/patient';
-import { getAllPatients } from '@/modules/patients/domain/patients.actions';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
-import { useUserContext } from './user-context';
-import { useAlertContext } from './alert-context';
-import { ALERT_MESSAGE } from '@/constants/alert';
  
 interface PatientContextType {
     patients: Patient[],
