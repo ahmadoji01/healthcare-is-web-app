@@ -41,7 +41,6 @@ export const DoctorProvider = ({
                 if (docs.length >= 1) {
                     setActiveDoctor(docs[0]);
                 }
-
                 setLoading(false);
                 clearInterval(interval);
             }).catch( err => {
