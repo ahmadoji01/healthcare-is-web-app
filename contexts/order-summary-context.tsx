@@ -69,7 +69,7 @@ export const OrderSummaryProvider = ({
     const {accessToken} = useUserContext();
 
     useEffect( () => {
-        getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay))
+        getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay), 1)
         .then( (res) => {
             let ords:Order[] = [];
             res?.map( (order) => { ords.push(orderMapper(order)) });

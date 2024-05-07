@@ -8,7 +8,9 @@ import { useUserContext } from "@/contexts/user-context";
 import OrderDeleteConfirmation from "@/modules/orders/application/form/order.delete-confirmation";
 import OrderListTable from "@/modules/orders/application/list/order.list";
 import { Order, orderMapper } from "@/modules/orders/domain/order";
-import { getAllOrders } from "@/modules/orders/domain/order.actions";
+import { getAllOrders, getOrdersWithFilter } from "@/modules/orders/domain/order.actions";
+import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
+import { statusFilter } from "@/modules/orders/domain/order.specifications";
 import { useEffect, useState } from "react";
 
 const OrdersDashboardPage = () => {
@@ -23,7 +25,8 @@ const OrdersDashboardPage = () => {
 
   useEffect( () => {
     if (!dataLoaded || orders.length == 0) {
-      getAllOrders(accessToken, 1)
+      
+      getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.paid), 1)
         .then( res => {
           let ords:Order[] = [];
           res?.map( (order) => { ords.push(orderMapper(order)); });
@@ -51,7 +54,7 @@ const OrdersDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllOrders(accessToken, 1)
+    getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.paid), 1)
       .then( res => {
         let ords:Order[] = [];
         res?.map( (order) => { ords.push(orderMapper(order)); });

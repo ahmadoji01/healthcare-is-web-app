@@ -80,7 +80,7 @@ const MedicalRecord = () => {
         res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
         setTreatments(treats);
       });
-      getOrdersWithFilter(accessToken, visitFilter(activeVisit.id)).then( res => {
+      getOrdersWithFilter(accessToken, visitFilter(activeVisit.id), 1).then( res => {
         if (res.length > 0) {
           let order = orderMapper(res[0]);
           setOrder(order);

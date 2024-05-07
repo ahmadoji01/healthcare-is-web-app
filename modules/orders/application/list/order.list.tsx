@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { Order } from "../../domain/order";
+import Currency from "@/components/Currency";
 
 interface OrderListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -15,7 +16,7 @@ interface OrderListTableProps {
 }
 
 const OrderListTable = ({ orders, setActiveOrder, totalPages, handlePageChange, handleModal }: OrderListTableProps) => {
-
+  
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
@@ -61,13 +62,15 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handlePageChange, 
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
+              <ul>
                 { order.order_items?.map( (item) => 
-                    <>
-                        { item.treatment != null && <p className="text-black dark:text-white">{ item.treatment?.name }<br /></p> }
-                        { item.medicine != null && <p className="text-black dark:text-white">{ item.medicine?.name }<br /></p> }
-                        { item.name != "" && <p className="text-black dark:text-white">{ item.name }<br /></p> }
-                    </>
+                    <li>
+                        { item.treatment != null && <p className="text-black dark:text-white">{ item.treatment?.name }</p> }
+                        { item.medicine != null && <p className="text-black dark:text-white">{ item.medicine?.name }</p> }
+                        { item.name != "" && <p className="text-black dark:text-white">{ item.name }</p> }
+                    </li>
                 )}
+              </ul>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
@@ -75,7 +78,7 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handlePageChange, 
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
-                <p className="text-black dark:text-white">{order.total}</p>
+                <p className="text-black dark:text-white">{<Currency value={order.total} />}</p>
             </div>
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
