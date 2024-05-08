@@ -1,4 +1,4 @@
-import Loader from "@/components/Dashboard/Loader";
+import Loader from "@/components/Loader";
 import { faArrowAltCircleUp, faArrowCircleRight, faArrowDown, faArrowRight, faExpand, faExpandArrowsAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Snackbar, Typography } from "@mui/material";

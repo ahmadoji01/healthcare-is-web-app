@@ -3,10 +3,10 @@ import "@/styles/globals.css";
 import "@/styles/data-tables-css.css";
 import "@/styles/satoshi.css";
 import { useState, useEffect } from "react";
-import Loader from "@/components/Dashboard/Loader";
+import Loader from "@/components/Loader";
 
 import Sidebar from "./common/sidebar";
-import Header from "@/components/Dashboard/Header";
+import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { DoctorProvider, useDoctorContext } from "@/contexts/doctor-context";
 import { VisitProvider } from "@/contexts/visit-context";
