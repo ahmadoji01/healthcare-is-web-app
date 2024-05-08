@@ -3,13 +3,14 @@
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
 import Spinner from "@/components/Spinner";
+import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import MedicineDeleteConfirmation from "@/modules/medicines/application/form/medicine.delete-confirmation";
 import MedicineForm from "@/modules/medicines/application/form/medicine.form";
 import MedicineListTable from "@/modules/medicines/application/list/medicine.list-table";
 import { Medicine, defaultMedicine, medicineMapper } from "@/modules/medicines/domain/medicine";
-import { getAllMedicines, searchMedicines } from "@/modules/medicines/domain/medicines.actions";
+import { getAllMedicines, getTotalMedicines, searchMedicines } from "@/modules/medicines/domain/medicines.actions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -26,6 +27,7 @@ const MedicinesDashboardPage = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect( () => {
     if (!dataLoaded || medicines.length == 0) {
@@ -36,6 +38,12 @@ const MedicinesDashboardPage = () => {
           setMedicines(meds);
           setDataLoaded(true);
         });
+      getTotalMedicines(accessToken)
+        .then( res => { 
+          let total = res[0].count? parseInt(res[0].count) : 0;
+          let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+          setTotalPages(pages);
+        })
     }
   }, [medicines]);
 
@@ -57,7 +65,7 @@ const MedicinesDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllMedicines(accessToken, 1)
+    searchMedicines(accessToken, searchQuery, value)
       .then( res => {
         let meds:Medicine[] = [];
         res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
@@ -69,7 +77,7 @@ const MedicinesDashboardPage = () => {
   const handleSearch = (query:string) => {
     if (query.length > 3) {
       setDataLoaded(false);
-      searchMedicines(accessToken, query).then( res => {
+      searchMedicines(accessToken, query, 1).then( res => {
         let meds:Medicine[] = [];
         res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
         setMedicines(meds);
@@ -79,6 +87,7 @@ const MedicinesDashboardPage = () => {
   }
 
   const handleChange = (query:string) => {
+    setSearchQuery(query);
     if (activeTimeout) {
       clearTimeout(activeTimeout);
     }
