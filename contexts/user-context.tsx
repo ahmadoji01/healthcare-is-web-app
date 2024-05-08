@@ -3,7 +3,7 @@ import { getOrganization } from '@/modules/organizations/domain/organizations.ac
 import { User, defaultUser } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
 import { directusClient } from '@/utils/request-handler';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
  
 interface UserContextType {
@@ -33,6 +33,7 @@ export const UserProvider = ({
 }) => {
 
     const router = useRouter();
+    const pathname = usePathname();
     const [accessToken, setAccessToken] = useState<string>("");
     const [expiry, setExpiry] = useState(50);
     const [user, setUser] = useState(defaultUser);
@@ -51,13 +52,13 @@ export const UserProvider = ({
             setExpiry(expiry);
             getUserMe(token).then(res => {
                 setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
-                setOrganization(organizationMapper(res.organization));
             }).catch( () => {
                 if (location.pathname !== '/') {
                     router.push('/');
                 }
                 return;
             });
+            fetchOrganization();
 
             if (location.pathname === "/" && window.history.length == 2) {
                 router.push("/dashboard");
@@ -80,6 +81,15 @@ export const UserProvider = ({
         });
     }
 
+    const fetchOrganization = () => {
+        getOrganization(accessToken, 1).then( res => {
+            if (res.length < 1) {
+                return;
+            }
+            setOrganization(organizationMapper(res[0]));
+        })
+    }
+
     useEffect(() => {
         let interval = setInterval(async () => {
             refreshToken(interval, false);
@@ -97,13 +107,8 @@ export const UserProvider = ({
     }, []);
 
     useEffect(() => {
-        getOrganization(accessToken, 1).then( res => {
-            if (res.length < 1) {
-                return;
-            }
-            setOrganization(organizationMapper(res[0]));
-        })
-    }, [organization])
+        fetchOrganization();
+    }, [pathname])
 
     return (
         <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading }}>
