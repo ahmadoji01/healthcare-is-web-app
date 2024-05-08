@@ -51,18 +51,12 @@ export const UserProvider = ({
             setExpiry(expiry);
             getUserMe(token).then(res => {
                 setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
+                setOrganization(organizationMapper(res.organization));
             }).catch( () => {
                 if (location.pathname !== '/') {
                     router.push('/');
                 }
                 return;
-            });
-
-            getOrganization(token, 1).then( res => {
-                if (res.length < 1) {
-                    return;
-                }
-                setOrganization(organizationMapper(res[0]));
             });
 
             if (location.pathname === "/" && window.history.length == 2) {
@@ -101,6 +95,15 @@ export const UserProvider = ({
 
         return () => clearInterval(interval);    
     }, []);
+
+    useEffect(() => {
+        getOrganization(accessToken, 1).then( res => {
+            if (res.length < 1) {
+                return;
+            }
+            setOrganization(organizationMapper(res[0]));
+        })
+    }, [organization])
 
     return (
         <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading }}>

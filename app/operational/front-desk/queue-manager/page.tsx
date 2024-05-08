@@ -46,9 +46,11 @@ const QueueManager = () => {
     }
 
     return (
-        <DataModalProvider>
-            <BoardSectionList handleSubmit={handleSubmit} />
-        </DataModalProvider>
+        <div className="h-screen">
+            <DataModalProvider>
+                <BoardSectionList handleSubmit={handleSubmit} />
+            </DataModalProvider>
+        </div>
     );
 }
 

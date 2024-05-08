@@ -20,7 +20,8 @@ export default function RootLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
 
-  const {loading} = useUserContext();
+  const {accessToken, loading} = useUserContext();
+  const [clinicStatus, setClinicStatus] = useState("Loading...");
 
   useEffect(() => {
 
