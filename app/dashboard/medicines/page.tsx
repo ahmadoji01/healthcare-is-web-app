@@ -2,14 +2,19 @@
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
+import Spinner from "@/components/Spinner";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import MedicineDeleteConfirmation from "@/modules/medicines/application/form/medicine.delete-confirmation";
 import MedicineForm from "@/modules/medicines/application/form/medicine.form";
 import MedicineListTable from "@/modules/medicines/application/list/medicine.list-table";
 import { Medicine, defaultMedicine, medicineMapper } from "@/modules/medicines/domain/medicine";
-import { getAllMedicines } from "@/modules/medicines/domain/medicines.actions";
+import { getAllMedicines, searchMedicines } from "@/modules/medicines/domain/medicines.actions";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+
+let activeTimeout = null;
 
 const MedicinesDashboardPage = () => {
   
@@ -32,7 +37,7 @@ const MedicinesDashboardPage = () => {
           setDataLoaded(true);
         });
     }
-  });
+  }, [medicines]);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {
@@ -61,6 +66,28 @@ const MedicinesDashboardPage = () => {
       });
   };
 
+  const handleSearch = (query:string) => {
+    if (query.length > 3) {
+      setDataLoaded(false);
+      searchMedicines(accessToken, query).then( res => {
+        let meds:Medicine[] = [];
+        res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
+        setMedicines(meds);
+        setDataLoaded(true);
+      })
+    }
+  }
+
+  const handleChange = (query:string) => {
+    if (activeTimeout) {
+      clearTimeout(activeTimeout);
+    }
+    
+    activeTimeout = setTimeout(() => {
+      handleSearch(query);
+    }, 1000);
+  }
+
   const handleSubmit = (medicine:Medicine) => {
     console.log(medicine);
   }
@@ -71,9 +98,23 @@ const MedicinesDashboardPage = () => {
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <MedicineDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Medicines" />
 
-      <div className="flex flex-col gap-10">
-        <MedicineListTable medicines={medicines} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveMedicine={setActiveMedicine} />
+      <div className="relative mb-4">
+        <button className="absolute left-0 top-1/2 -translate-y-1/2">
+          <FontAwesomeIcon icon={faSearch} width={20} />
+        </button>
+
+        <input
+          type="text"
+          placeholder="Type to search..."
+          onChange={e => {handleChange(e.target.value) }}
+          className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
+          />
       </div>
+
+      <div className="flex flex-col gap-10">
+        { !dataLoaded && <div className="flex"><Spinner /></div> }    
+        { dataLoaded && <MedicineListTable medicines={medicines} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveMedicine={setActiveMedicine} /> }
+        </div>
     </>
   );
 };

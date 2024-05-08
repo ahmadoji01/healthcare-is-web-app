@@ -11,8 +11,12 @@ export const medicineExistChecker = (token:string, name = "") =>
 				name: { _eq: name }
 			} 
 		})) 
-	)
+	);
 
 export const createAMedicine = (token:string, medicine:MedicineNoID) => 
-    directusClient.request( withToken(token, createItem('medicines', medicine)) )
-    
+    directusClient.request( withToken(token, createItem('medicines', medicine)) );
+
+export const searchMedicines = (token:string, query:string) =>
+	directusClient.request(
+		withToken(token, readItems('medicines', { fields: ['*.*'], search: query }))
+	)
