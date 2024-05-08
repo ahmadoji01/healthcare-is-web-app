@@ -3,10 +3,10 @@ import "@/styles/globals.css";
 import "@/styles/data-tables-css.css";
 import "@/styles/satoshi.css";
 import { useState, useEffect } from "react";
-import Loader from "@/components/Dashboard/Loader";
+import Loader from "@/components/Loader";
 
 import Sidebar from "@/components/Dashboard/Sidebar";
-import Header from "@/components/Dashboard/Header";
+import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { useUserContext } from "@/contexts/user-context";
 
@@ -32,31 +32,29 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning={true}>
         <div className="dark:bg-boxdark-2 dark:text-bodydark">
-          <div className="flex h-screen overflow-hidden">
-            {loading ? (
-              <Loader />
-            ) : (
-              <>
-                <Sidebar
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="flex h-screen overflow-hidden">
+              <Sidebar
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
+              <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                <Header
                   sidebarOpen={sidebarOpen}
                   setSidebarOpen={setSidebarOpen}
                 />
-                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                  <Header
-                    sidebarOpen={sidebarOpen}
-                    setSidebarOpen={setSidebarOpen}
-                  />
-                  <ThemeProvider theme={theme} >
-                    <main>
-                      <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-                        {children}
-                      </div>
-                    </main>
-                  </ThemeProvider>
-                </div>
-              </>
-            )}
-          </div>
+                <ThemeProvider theme={theme} >
+                  <main>
+                    <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                      {children}
+                    </div>
+                  </main>
+                </ThemeProvider>
+              </div>
+            </div>
+          )}
         </div>
       </body>
     </html>

@@ -3,18 +3,14 @@ import "@/styles/globals.css";
 import "@/styles/data-tables-css.css";
 import "@/styles/satoshi.css";
 import { useState, useEffect } from "react";
-import Loader from "@/components/Dashboard/Loader";
+import Loader from "@/components/Loader";
 
-import Header from "./common/Header";
+import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { Doctor } from "@/modules/doctors/domain/doctor";
 import { DoctorProvider } from "@/contexts/doctor-context";
-import Footer from "./common/Footer";
-import { PatientProvider } from "@/contexts/patient-context";
-import { UserProvider, useUserContext } from "@/contexts/user-context";
+import { useUserContext } from "@/contexts/user-context";
 import { MedicalRecordProvider } from "@/contexts/medical-record-context";
 import { VisitProvider } from "@/contexts/visit-context";
-import { AlertProvider } from "@/contexts/alert-context";
 
 export default function RootLayout({
   children,

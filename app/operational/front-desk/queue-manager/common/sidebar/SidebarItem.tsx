@@ -3,7 +3,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserDoctor } from "@fortawesome/free-solid-svg-icons";
 import { useDoctorContext } from "@/contexts/doctor-context";
-import Loader from "@/components/Dashboard/Loader";
+import Loader from "@/components/Loader";
 import Spinner from "@/components/Spinner";
 import { Doctor } from "@/modules/doctors/domain/doctor";
 import { getVisitByDoctorID } from "@/modules/visits/domain/visits.actions";

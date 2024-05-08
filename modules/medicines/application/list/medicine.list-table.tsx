@@ -103,7 +103,7 @@ const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChang
           </div>
         ))}
         <div className="py-3">
-          <PageNav count={10} />
+          <PageNav count={totalPages} handlePageChange={handlePageChange} />
         </div>
       </div>
     </div>

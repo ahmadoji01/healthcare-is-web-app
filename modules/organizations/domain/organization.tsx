@@ -15,6 +15,7 @@ export interface Organization {
     slug: string,
     logo: string,
     status: string,
+    tax_rate: number,
 }
 
 export const defaultOrganization:Organization = {
@@ -27,6 +28,7 @@ export const defaultOrganization:Organization = {
     slug: "",
     logo: "",
     status: ORG_STATUS.close,
+    tax_rate: 0,
 }
 
 export function organizationMapper(res:Record<string,any>) {
@@ -41,6 +43,7 @@ export function organizationMapper(res:Record<string,any>) {
         slug: res.slug? res.slug : "",
         logo: res.logo? res.logo : "",
         status: res.status? res.status : ORG_STATUS.close,
+        tax_rate: res.tax_rate? res.tax_rate : 0,
     }
     return organization;
 }
@@ -54,6 +57,7 @@ export function organizationPatcherMapper(organization:Organization) {
         type: organization.type? organization.type : "",
         logo: organization.logo? organization.logo : "",
         status: organization.status? organization.status : ORG_STATUS.close,
+        tax_rate: organization.tax_rate? organization.tax_rate : 0,
     }
     return organizationPatcher;
 }

@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, createContext, useContext, useEffect, useStat
 import { useUserContext } from './user-context';
 import { useAlertContext } from './alert-context';
 import { ALERT_MESSAGE } from '@/constants/alert';
+import { useVisitContext } from './visit-context';
  
 interface DoctorContextType {
     doctors: Doctor[],
@@ -30,6 +31,7 @@ export const DoctorProvider = ({
     const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
     const [loading, setLoading] = useState(false);
     const {accessToken} = useUserContext();
+    const {handleDoctorVisits} = useVisitContext();
 
     useEffect( () => {
         setLoading(true);
@@ -40,6 +42,7 @@ export const DoctorProvider = ({
                 setDoctors(docs);
                 if (docs.length >= 1) {
                     setActiveDoctor(docs[0]);
+                    handleDoctorVisits(docs[0].id);
                 }
                 setLoading(false);
                 clearInterval(interval);

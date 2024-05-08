@@ -3,10 +3,10 @@ import "@/styles/globals.css";
 import "@/styles/data-tables-css.css";
 import "@/styles/satoshi.css";
 import { useState, useEffect } from "react";
-import Loader from "@/components/Dashboard/Loader";
+import Loader from "@/components/Loader";
 
 import Sidebar from "./common/sidebar";
-import Header from "@/components/Dashboard/Header";
+import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { DoctorProvider, useDoctorContext } from "@/contexts/doctor-context";
 import { VisitProvider } from "@/contexts/visit-context";
@@ -31,36 +31,36 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <DoctorProvider>
-        <body suppressHydrationWarning={true}>
-          <div className="dark:bg-boxdark-2 dark:text-bodydark">
-            {loading ? (
-              <Loader />
-            ) : (
-              <VisitProvider>
-                <div className="flex h-screen overflow-hidden">
-                  <Sidebar
-                    sidebarOpen={sidebarOpen}
-                    setSidebarOpen={setSidebarOpen} />
-                  <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                    <Header
+      <VisitProvider>
+        <DoctorProvider>
+          <body suppressHydrationWarning={true}>
+            <div className="dark:bg-boxdark-2 dark:text-bodydark">
+              {loading ? (
+                <Loader />
+              ) : (
+                  <div className="flex h-screen overflow-hidden">
+                    <Sidebar
                       sidebarOpen={sidebarOpen}
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    <ThemeProvider theme={theme} >
-                      <main>
-                        <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
-                          {children}
-                        </div>
-                      </main>
-                    </ThemeProvider>
+                      setSidebarOpen={setSidebarOpen} />
+                    <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                      <Header
+                        sidebarOpen={sidebarOpen}
+                        setSidebarOpen={setSidebarOpen}
+                      />
+                      <ThemeProvider theme={theme} >
+                        <main>
+                          <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
+                            {children}
+                          </div>
+                        </main>
+                      </ThemeProvider>
+                    </div>
                   </div>
-                </div>
-              </VisitProvider>
-            )}
-          </div>
-        </body>
-      </DoctorProvider>
+              )}
+            </div>
+          </body>
+        </DoctorProvider>
+      </VisitProvider>
     </html>
   );
 }

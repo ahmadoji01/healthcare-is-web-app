@@ -15,26 +15,9 @@ import { Button } from "@mui/material";
 
 const OpenCloseClinic = () => {
 
-    const [organization, setOrganization] = useState(defaultOrganization);
     const [loading, setLoading] = useState(true);
-    const {accessToken} = useUserContext();
+    const {accessToken, organization} = useUserContext();
     const router = useRouter();
-    
-    useEffect( () => {
-        let interval = setInterval(async () => {
-            getOrganization(accessToken, 1).then( res => {
-                if (res?.length < 1) {
-                    clearInterval(interval);
-                    return;
-                }
-                setOrganization(organizationMapper(res[0]));
-                setLoading(false);
-                clearInterval(interval);
-            });
-        }, 100);
-
-        return () => clearInterval(interval);
-    }, [loading]);
 
     const openOrCloseClinic = (status:string) => {
         if (status === ORG_STATUS.open) {
@@ -59,8 +42,8 @@ const OpenCloseClinic = () => {
                     <div className="flex justify-end mt-2 h-1/2">
                         <Button
                             onClick={() => openOrCloseClinic(ORG_STATUS.open)}
-                            className="inline-block align-middle w-full bg-meta-3 py-4 px-10 text-center text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
-                            Open Clinic
+                            className="inline-block align-middle w-full bg-meta-3 py-4 px-10 text-center text-white lg:px-8 xl:px-10">
+                            <p className="text-3xl text-bold">Open Clinic</p>
                         </Button>
                     </div>
                 }
@@ -68,8 +51,8 @@ const OpenCloseClinic = () => {
                     <div className="flex justify-end mt-2 h-1/2">
                         <Button
                             onClick={() => openOrCloseClinic(ORG_STATUS.close)}
-                            className="flex-1 grow bg-primary py-4 px-10 text-center text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
-                            Close Clinic
+                            className="flex-1 grow bg-primary py-4 px-10 text-center text-white lg:px-8 xl:px-10">
+                            <p className="text-3xl text-bold">Close Clinic</p>
                         </Button>
                     </div>
                 }
