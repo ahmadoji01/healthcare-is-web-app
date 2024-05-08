@@ -5,7 +5,7 @@ import "@/styles/satoshi.css";
 import { useState, useEffect } from "react";
 import Loader from "@/components/Loader";
 
-import Header from "./common/Header";
+import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { DoctorProvider } from "@/contexts/doctor-context";
 import { useUserContext } from "@/contexts/user-context";
