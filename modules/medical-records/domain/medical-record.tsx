@@ -108,6 +108,28 @@ export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, orgID:numbe
     return medicalRecordNoID;
 }
 
+export type MedicalRecordCreator = Omit<MedicalRecord, 'id'|'patient'|'doctor'|'physical_checkup'> & { patient:number, doctor:number, physical_checkup:number } & Organization;
+export function medicalRecordCreatorMapper(medicalRecord:MedicalRecord, orgID:number) {
+
+    let medicalRecordNoID: MedicalRecordCreator = { 
+        code: medicalRecord.code,
+        patient: medicalRecord.patient.id,
+        doctor: medicalRecord.doctor.id,
+        anamnesis: medicalRecord.anamnesis,
+        care_type: medicalRecord.care_type,
+        signature: medicalRecord.signature,
+        death: medicalRecord.death,
+        illnesses: medicalRecord.illnesses,
+        medicines: medicalRecord.medicines,
+        treatments: medicalRecord.treatments,
+        physical_checkup: medicalRecord.physical_checkup.id,
+        date_created: medicalRecord.date_created,
+        date_updated: medicalRecord.date_updated,
+        organization: orgID,
+    }
+    return medicalRecordNoID;
+}
+
 type TreatmentPatchers = {
     treatments: TreatmentPatcher[],
 }
