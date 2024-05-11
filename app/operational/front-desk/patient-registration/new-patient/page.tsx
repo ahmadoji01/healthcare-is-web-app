@@ -21,7 +21,7 @@ import { defaultPatient, patientMapper, patientNoIDMapper } from "@/modules/pati
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
 import { ALERT_MESSAGE } from "@/constants/alert";
-import { defaultMedicalRecord, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
+import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultVisit, visitMapper, visitCreatorMapper } from "@/modules/visits/domain/visit";
 import { createAVisit } from "@/modules/visits/domain/visits.actions";
@@ -93,8 +93,8 @@ const NewPatient = () => {
         medicalRecord.patient = patient;
         medicalRecord.doctor = activeDoctor;
         medicalRecord.physical_checkup = physicalCheckup;
-        let medicalRecordNoID = medicalRecordNoIDMapper(medicalRecord, user.organizationID);
-        await createAMedicalRecord(accessToken, medicalRecordNoID).then( res => {
+        let medicalRecordCreator = medicalRecordCreatorMapper(medicalRecord, user.organizationID);
+        await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
             medicalRecord = medicalRecordMapper(res);
         }).catch( err => {
             isError = true;

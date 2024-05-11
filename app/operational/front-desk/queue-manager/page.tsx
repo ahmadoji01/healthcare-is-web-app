@@ -8,7 +8,7 @@ import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
 import { ALERT_MESSAGE } from "@/constants/alert";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
-import { defaultMedicalRecord, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
+import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useVisitContext } from "@/contexts/visit-context";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
@@ -27,12 +27,12 @@ const QueueManager = () => {
             checkupRes = physicalCheckupMapper(res);
         }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
 
-        let medicalRecordNoID = medicalRecordNoIDMapper(defaultMedicalRecord, user.organizationID);
+        let medicalRecordCreator = medicalRecordCreatorMapper(defaultMedicalRecord, user.organizationID);
         let medicalRecordRes = defaultMedicalRecord;
-        medicalRecordNoID.doctor = activeVisit.doctor;
-        medicalRecordNoID.patient = checkup.patient;
-        medicalRecordNoID.physical_checkup = checkupRes;
-        await createAMedicalRecord(accessToken, medicalRecordNoID).then( res => {
+        medicalRecordCreator.doctor = activeVisit.doctor.id;
+        medicalRecordCreator.patient = checkup.patient.id;
+        medicalRecordCreator.physical_checkup = checkupRes.id;
+        await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
             medicalRecordRes = medicalRecordMapper(res);
         }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
 

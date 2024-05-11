@@ -10,14 +10,7 @@ import DoctorForm from "@/modules/doctors/application/form/doctor.form";
 import DoctorListTable from "@/modules/doctors/application/list/doctor.list-table";
 import { Doctor, defaultDoctor, doctorMapper } from "@/modules/doctors/domain/doctor";
 import { getAllDoctors, getTotalDoctors } from "@/modules/doctors/domain/doctors.actions";
-
-//import { Metadata } from "next";
 import { useEffect, useState } from "react";
-
-//export const metadata: Metadata = {
-//  title: "Tables Page | Next.js E-commerce Dashboard Template",
-//  description: "This is Tables page for TailAdmin Next.js",
-//};
 
 const DoctorsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
