@@ -10,6 +10,7 @@ export interface User {
 	avatar: Avatar|null,
 	email: string,
 	username: string,
+	password: string,
 	role_name: string ,
 }
 
@@ -18,8 +19,9 @@ export const defaultUser:User = {
 	first_name: "",
 	last_name: "",
 	avatar: null,
-	username: "",
 	email: "",
+	username: "",
+	password: "",
 	role_name: "",
 }
 
@@ -32,6 +34,7 @@ export function userMapper(res:Record<string,any>) {
         avatar: res.avatar? res.avatar : null,
         username: res.username,
 		email: res.email,
+		password: "",
         role_name: res.role? res.role.name : "",
     }
     return user;
