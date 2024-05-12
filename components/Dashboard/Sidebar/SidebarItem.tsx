@@ -1,6 +1,5 @@
 import React from "react";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

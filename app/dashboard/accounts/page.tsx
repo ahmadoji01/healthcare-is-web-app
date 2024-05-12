@@ -10,32 +10,29 @@ import DoctorForm from "@/modules/doctors/application/form/doctor.form";
 import DoctorListTable from "@/modules/doctors/application/list/doctor.list-table";
 import { Doctor, defaultDoctor, doctorMapper } from "@/modules/doctors/domain/doctor";
 import { getAllDoctors, getTotalDoctors } from "@/modules/doctors/domain/doctors.actions";
+import UserListTable from "@/modules/users/application/list/user.list-table";
+import { User, defaultUser, userMapper } from "@/modules/users/domain/user";
+import { getAllUsers } from "@/modules/users/domain/users.actions";
 import { useEffect, useState } from "react";
 
-const DoctorsDashboardPage = () => {
+const AccountManagementDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
+  const [users, setUsers] = useState<User[]>([]);
+  const [activeUser, setActiveUser] = useState<User>(defaultUser);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const {accessToken} = useUserContext();
 
   useEffect( () => {
-    if (!dataLoaded || doctors.length == 0) {
-      getAllDoctors(accessToken, 1)
+    if (!dataLoaded || users.length == 0) {
+      getAllUsers(accessToken, 1)
         .then( res => {
-          let docs:Doctor[] = [];
-          res?.map( (doctor) => { docs.push(doctorMapper(doctor)); });
-          setDoctors(docs);
+          let usrs:User[] = [];
+          res?.map( (user) => { usrs.push(userMapper(user)); });
+          setUsers(usrs);
           setDataLoaded(true);
         });
-      getTotalDoctors(accessToken)
-        .then( res => { 
-          let total = res[0].count? parseInt(res[0].count) : 0;
-          let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
-          setTotalPages(pages);
-        })
     }
   });
 
@@ -57,30 +54,28 @@ const DoctorsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllDoctors(accessToken, value)
+    getAllUsers(accessToken, value)
       .then( res => {
-        let docs:Doctor[] = [];
-        res?.map( (doctor) => { docs.push(doctorMapper(doctor)); });
-        setDoctors(docs);
+        let usrs:User[] = [];
+        res?.map( (user) => { usrs.push(userMapper(user)); });
+        setUsers(usrs);
         setDataLoaded(true);
       });
   };
 
-  const handleSubmit = (doctor:Doctor) => {
-    console.log(doctor);
+  const handleSubmit = (user:User) => {
+    console.log(user);
   }
 
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <DoctorForm initDoctor={activeDoctor} handleSubmit={handleSubmit} /> } title="Doctor's Detail" />
-      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DoctorDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
-      <Breadcrumb pageName="Doctors" />
+      <Breadcrumb pageName="Account Management" />
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-        { dataLoaded && <DoctorListTable totalPages={totalPages} doctors={doctors} handlePageChange={handlePageChange} setActiveDoctor={setActiveDoctor} handleModal={handleModal} /> }
+        { dataLoaded && <UserListTable totalPages={totalPages} users={users} handlePageChange={handlePageChange} setActiveUser={setActiveUser} handleModal={handleModal} /> }
       </div>
     </>
   );
 };
 
-export default DoctorsDashboardPage;
+export default AccountManagementDashboardPage;

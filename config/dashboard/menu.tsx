@@ -1,5 +1,5 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faBusinessTime, faCashRegister, faCreditCard, faFileImport, faFileMedical, faFlask, faHospitalUser, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faUser, faUserDoctor } from "@fortawesome/free-solid-svg-icons";
+import { faBusinessTime, faCashRegister, faCreditCard, faFileImport, faFileMedical, faFlask, faHospitalUser, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faUser, faUserDoctor, faUserInjured } from "@fortawesome/free-solid-svg-icons";
 
 interface SubMenuItem {
     title: string,
@@ -26,7 +26,7 @@ export const sidebarMenuItems: MenuGroup[] = [
             {
                 title: "Patient Data",
                 allowedRole: ["admins", "staffs"],
-                icon: faUser,
+                icon: faUserInjured,
                 url: "patients",
                 subMenu: [ 
                     { title: "All Patients", url: "patients" }, 
@@ -80,6 +80,16 @@ export const sidebarMenuItems: MenuGroup[] = [
     {
         headerTitle: "CLINIC MANAGEMENT",
         menuItems: [
+            {
+                title: "Account Management",
+                allowedRole: ["admins", "staffs"],
+                icon: faUser,
+                url: "staffs",
+                subMenu: [ 
+                    { title: "All Users", url: "accounts" }, 
+                    { title: "Add a User", url: "accounts/create" } 
+                ],
+            },
             {
                 title: "Doctors",
                 allowedRole: ["admins", "staffs"],
