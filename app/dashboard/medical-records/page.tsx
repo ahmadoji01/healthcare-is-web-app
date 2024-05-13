@@ -62,10 +62,6 @@ const MedicalRecordsDashboardPage = () => {
       });
   }
 
-  const handleView = (medicalRecord:MedicalRecord) => {
-    
-  } 
-
   const handleDelete = () => {
     deleteAMedicalRecord(accessToken, activeMedicalRecord.id)
       .then( () => {
