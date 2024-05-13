@@ -1,3 +1,5 @@
+import { DOCTOR_STATUS } from "./doctor.constants";
+
 export interface Doctor {
     id: number,
     name: string,
@@ -43,11 +45,7 @@ export function doctorMapper(res:Record<string,any>) {
     return doctor;
 }
 
-type DoctorOrganization = {
-    doctor_organizations: object,
-}
-
-export type DoctorNoID = Omit<Doctor, 'id'> & DoctorOrganization;
+export type DoctorNoID = Omit<Doctor, 'id'> & { doctor_organizations: object };
 export function doctorNoIDMapper(doctor:Doctor, orgID:number) {
 
     let doctorNoID: DoctorNoID = { 
@@ -62,4 +60,27 @@ export function doctorNoIDMapper(doctor:Doctor, orgID:number) {
         doctor_organizations: [{ organizations_id: orgID }]
     }
     return doctorNoID;
+}
+
+export interface DoctorOrganization {
+    doctor: Doctor,
+    status: string,
+}
+
+export const defaultDoctorOrganization:DoctorOrganization = {
+    doctor: defaultDoctor,
+    status: "",
+}
+
+export function doctorOrgMapper(res:Record<string,any>) {  
+    let doctorOrg = defaultDoctorOrganization;
+    if (res == null) {
+        return doctorOrg;
+    }
+
+    doctorOrg = { 
+        doctor: doctorMapper(res.doctor),
+        status: res.status? res.status : DOCTOR_STATUS.absent, 
+    }
+    return doctorOrg;
 }

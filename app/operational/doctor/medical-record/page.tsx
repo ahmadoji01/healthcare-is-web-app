@@ -9,7 +9,7 @@ import MedicalRecordForm from '@/modules/medical-records/application/form/medica
 import MedicationForm from '@/modules/medical-records/application/form/medication.form';
 import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
-import { Illness, IllnessPatcher, MedicineDosesPatcher, illnessPatcherMapper, medicalRecordPatcherMapper, medicineDosesPatcherMapper } from '@/modules/medical-records/domain/medical-record';
+import { IllnessPatcher, MedicineDosesPatcher, illnessPatcherMapper, medicalRecordPatcherMapper, medicineDosesPatcherMapper } from '@/modules/medical-records/domain/medical-record';
 import Footer from '../common/Footer';
 import { updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
 import { useUserContext } from '@/contexts/user-context';
@@ -25,7 +25,7 @@ import { updateVisit } from '@/modules/visits/domain/visits.actions';
 import { defaultOrder, orderMapper } from '@/modules/orders/domain/order';
 import { getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.actions';
 import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
-import OrderItem, { OrderItemCreator, orderItemCreatorMapper } from '@/modules/orders/domain/order-item';
+import { OrderItemCreator, orderItemCreatorMapper } from '@/modules/orders/domain/order-item';
 import { visitFilter } from '@/modules/orders/domain/order.specifications';
 
 interface TabPanelProps {

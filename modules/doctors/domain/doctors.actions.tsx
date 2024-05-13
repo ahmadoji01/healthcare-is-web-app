@@ -21,3 +21,5 @@ export const doctorExistChecker = (token:string, licenseNumber = '') =>
     
 export const createADoctor = (token:string, doctor:DoctorNoID) => 
 	directusClient.request( withToken(token, createItem('doctors', doctor)) )
+
+export const getDoctorsInOrg = (token:string) => directusClient.request( withToken(token, readItems('doctor_organizations', { fields: ['*.*'] })) );

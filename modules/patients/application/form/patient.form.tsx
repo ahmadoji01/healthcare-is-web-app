@@ -11,7 +11,7 @@ interface PatientFormProps {
 }
 
 const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
-    const [patient, setPatient] = useState(initPatient);
+    const [patient, setPatient] = useState(initPatient);console.log(patient.birthday)
 
     return (
         <>
@@ -47,7 +47,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         <input
                                             type="date"
                                             name="birthday"
-                                            defaultValue={moment(patient.birthday).format("l")}
+                                            defaultValue={moment(patient.birthday).format("YYYY-MM-DD")}
                                             onChange={ e => setPatient({ ...patient, birthday: new Date(e.target.value) })}
                                             required
                                             className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"

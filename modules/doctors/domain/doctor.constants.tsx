@@ -26,3 +26,8 @@ export const GENDER = {
     male: true,
     female: false,
 }
+
+export const DOCTOR_STATUS = {
+    present: "present",
+    absent: "absent"
+}
