@@ -58,6 +58,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
                                 </label>
                                 <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
                                 <textarea
+                                    defaultValue={medicalRecord.anamnesis}
                                     onChange={e => setMedicalRecord({ ...medicalRecord, anamnesis: e.target.value })}
                                     rows={4}
                                     placeholder="Anamnesis"

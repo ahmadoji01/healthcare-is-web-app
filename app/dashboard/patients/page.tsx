@@ -73,7 +73,7 @@ const PatientsDashboardPage = () => {
         setPatients(pats);
         setDataLoaded(true);
       });
-  };
+  }
 
   const handleSubmit = (patient:Patient) => {
     updateAPatient(accessToken, patient.id, patientPatcherMapper(patient))

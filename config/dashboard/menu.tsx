@@ -38,10 +38,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 allowedRole: ["admins", "staffs"],
                 icon: faHospitalUser,
                 url: "visits",
-                subMenu: [ 
-                    { title: "All Visits", url: "visits" }, 
-                    { title: "Create a Visit", url: "visits/create" } 
-                ],
+                subMenu: [],
             },
         ],
     },
@@ -53,20 +50,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 allowedRole: ["admins", "staffs"],
                 icon: faFileMedical,
                 url: "medical-records",
-                subMenu: [ 
-                    { title: "All Medical Records", url: "medical-records" }, 
-                    { title: "Create a Medical Records", url: "patients/create" } 
-                ],
-            },
-            {
-                title: "Lab Results",
-                allowedRole: ["admins", "staffs"],
-                icon: faFlask,
-                url: "lab-results",
-                subMenu: [ 
-                    { title: "All Lab Results", url: "lab-results" }, 
-                    { title: "Create a Lab Result", url: "lab-results/create" } 
-                ],
+                subMenu: [],
             },
             {
                 title: "Submit Record to Satusehat",

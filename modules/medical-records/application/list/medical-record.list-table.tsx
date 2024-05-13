@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
@@ -57,7 +57,7 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{record.patient.name}</p>
+              <p className="text-black dark:text-white">{record.patient?.name}</p>
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
@@ -81,7 +81,7 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
                     onClick={() => { handleModal(false, true); setActiveMedicalRecord(record) }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
-                    <FontAwesomeIcon width={18} height={18} icon={faPencil} />
+                    <FontAwesomeIcon width={18} height={18} icon={faEye} />
                   </Link>
                 </motion.li>
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
