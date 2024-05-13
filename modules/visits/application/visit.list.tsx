@@ -12,7 +12,7 @@ interface VisitListProps {
   visits: Visit[],
   totalPages: number,
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
-  setActiveVisit: Dispatch<SetStateAction<Visit>>
+  setActiveVisit: Dispatch<SetStateAction<Visit>>,
 }
 
 const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiveVisit }:VisitListProps) => {
