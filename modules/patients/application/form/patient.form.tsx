@@ -11,7 +11,7 @@ interface PatientFormProps {
 }
 
 const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
-    const [patient, setPatient] = useState(initPatient);console.log(patient.birthday)
+    const [patient, setPatient] = useState(initPatient);
 
     return (
         <>

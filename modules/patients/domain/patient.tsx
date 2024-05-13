@@ -83,3 +83,24 @@ export function patientNoIDMapper(patient:Patient, orgID:number) {
     }
     return patientNoID;
 }
+
+export type PatientPatcher = Omit<Patient, 'id'>;
+export function patientPatcherMapper(patient:Patient) {
+
+    let patientNoID: PatientPatcher = { 
+        name: patient.name, 
+        fathers_name: patient.fathers_name,
+        mothers_name: patient.mothers_name,
+        birthday: patient.birthday, 
+        religion: patient.religion, 
+        job: patient.job,
+        education: patient.education, 
+        marrital_status: patient.marrital_status,
+        gender: patient.gender,
+        id_card_number: patient.id_card_number,
+        address: patient.address,
+        slug: patient.slug,
+        family_id_number: patient.family_id_number,
+    }
+    return patientNoID;
+}

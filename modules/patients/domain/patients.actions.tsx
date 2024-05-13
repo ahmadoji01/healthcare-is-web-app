@@ -1,7 +1,7 @@
-import { aggregate, createItem, readItems, withToken } from "@directus/sdk";
+import { aggregate, createItem, deleteItem, readItems, updateItem, withToken } from "@directus/sdk";
 import { directusClient } from "@/utils/request-handler";
 import { LIMIT_PER_PAGE } from "@/constants/request";
-import { Patient, PatientNoID } from "./patient";
+import { Patient, PatientNoID, PatientPatcher } from "./patient";
 
 export const getAllPatients = (token:string, page:number) => directusClient.request( withToken(token, readItems('patients', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
 export const getTotalPatients = (token:string) => directusClient.request( withToken(token, aggregate('patients', { aggregate: { count: '*' } })) );
@@ -31,9 +31,15 @@ export const getPatientsWithFilter = (token:string, filter:object) =>
 	)
     
 export const createAPatient = (token:string, patient:PatientNoID) => 
-	directusClient.request( withToken(token, createItem('patients', patient)) )
+	directusClient.request( withToken(token, createItem('patients', patient)) );
 
 export const searchPatients = (token:string, query:string) =>
 	directusClient.request(
 		withToken(token, readItems('patients', { fields: ['*.*'], search: query }))
-	)
+	);
+
+export const updateAPatient = (token:string, id:number, data:object) => 
+	directusClient.request( withToken(token, updateItem('patients', id, data)) );
+
+export const deleteAPatient = (token:string, id:number) => 
+	directusClient.request( withToken(token, deleteItem('patients', id)) )

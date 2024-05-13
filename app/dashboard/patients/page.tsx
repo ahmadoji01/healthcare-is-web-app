@@ -2,15 +2,18 @@
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
+import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
+import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
 import PatientForm from "@/modules/patients/application/form/patient.form";
 import PatientListTable from "@/modules/patients/application/list/patient.list-table";
-import { Patient, defaultPatient, patientMapper } from "@/modules/patients/domain/patient";
-import { getAllPatients, getTotalPatients, searchPatients } from "@/modules/patients/domain/patients.actions";
+import { Patient, defaultPatient, patientMapper, patientPatcherMapper } from "@/modules/patients/domain/patient";
+import { deleteAPatient, getAllPatients, getTotalPatients, searchPatients, updateAPatient } from "@/modules/patients/domain/patients.actions";
 import { faArrowRight, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 
@@ -24,6 +27,8 @@ const PatientsDashboardPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const {accessToken} = useUserContext();
+  const router = useRouter();
+  const {openSnackbarNotification} = useAlertContext();
 
   useEffect( () => {
     if (!dataLoaded || patients.length == 0) {
@@ -71,7 +76,13 @@ const PatientsDashboardPage = () => {
   };
 
   const handleSubmit = (patient:Patient) => {
-    console.log(patient);
+    updateAPatient(accessToken, patient.id, patientPatcherMapper(patient))
+      .then( () => {
+        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        window.location.reload();
+      }).catch( () => {
+        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+      })
   } 
 
   const handleSearch = (query:string) => {
@@ -96,10 +107,20 @@ const PatientsDashboardPage = () => {
     }, 1000);
   }
 
+  const handleDelete = () => {
+    deleteAPatient(accessToken, activePatient.id)
+      .then( () => {
+        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        window.location.reload();
+      }).catch( () => {
+        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+      })
+  }
+
   return (
     <>
       <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm initPatient={activePatient} handleSubmit={handleSubmit} /> } title="Patient's Detail" />
-      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation patient={activePatient} handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
       <Breadcrumb pageName="Patients" />
       
       <div className="relative mb-4">
