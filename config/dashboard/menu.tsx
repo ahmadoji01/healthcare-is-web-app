@@ -68,7 +68,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 title: "Account Management",
                 allowedRole: ["admins", "staffs"],
                 icon: faUser,
-                url: "staffs",
+                url: "accounts",
                 subMenu: [ 
                     { title: "All Users", url: "accounts" }, 
                     { title: "Add a User", url: "accounts/create" } 
@@ -81,7 +81,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 url: "doctors",
                 subMenu: [ 
                     { title: "All Doctors", url: "doctors" }, 
-                    { title: "Add a Doctor", url: "doctors/create" } 
+                    { title: "Add a Doctor", url: "accounts/create?role=Doctor" } 
                 ],
             },
             {
@@ -91,7 +91,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 url: "staffs",
                 subMenu: [ 
                     { title: "All Staffs", url: "staffs" }, 
-                    { title: "Add a Staff", url: "staffs/create" } 
+                    { title: "Add a Staff", url: "accounts/create?role=Staff" } 
                 ],
             },
             {
@@ -109,10 +109,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 allowedRole: ["admins", "staffs"],
                 icon: faCashRegister,
                 url: "orders",
-                subMenu: [ 
-                    { title: "All Order History", url: "orders" }, 
-                    { title: "Create an Order History", url: "orders/create" } 
-                ],
+                subMenu: [],
             },
             {
                 title: "Medicines",
