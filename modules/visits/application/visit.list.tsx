@@ -91,6 +91,9 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
           </div>
         ))}
       </div>
+      <div className="py-3">
+        <Pagination count={totalPages} onChange={handlePageChange} />
+      </div>
     </div>
   );
 };

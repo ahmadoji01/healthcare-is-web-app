@@ -1,5 +1,5 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faBusinessTime, faCashRegister, faCreditCard, faFileImport, faFileMedical, faFlask, faHospitalUser, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faUser, faUserDoctor, faUserInjured } from "@fortawesome/free-solid-svg-icons";
+import { faCashRegister, faCreditCard, faFileImport, faFileMedical, faHospitalUser, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faUser, faUserDoctor, faUserInjured } from "@fortawesome/free-solid-svg-icons";
 
 interface SubMenuItem {
     title: string,
@@ -127,14 +127,11 @@ export const sidebarMenuItems: MenuGroup[] = [
         headerTitle: "SETTINGS",
         menuItems: [
             {
-                title: "Opening Hours",
+                title: "Tax and Administration",
                 allowedRole: ["admins", "staffs"],
-                icon: faBusinessTime,
-                url: "opening-hours",
-                subMenu: [ 
-                    { title: "All Opening Hours", url: "opening-hours" }, 
-                    { title: "Add an Opening Hour", url: "opening-hours/create" } 
-                ],
+                icon: faNoteSticky,
+                url: "payment-methods",
+                subMenu: [],
             },
             {
                 title: "Payment Methods",

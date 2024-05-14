@@ -61,7 +61,7 @@ const VisitsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllVisits(accessToken, 1)
+    getAllVisits(accessToken, value)
       .then( res => {
         let vits:Visit[] = [];
         res?.map( (visit) => { vits.push(visitMapper(visit)); });
