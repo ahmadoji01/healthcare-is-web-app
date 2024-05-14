@@ -8,7 +8,7 @@ import MedicineForm from "@/modules/medicines/application/form/medicine.form";
 import { Medicine, defaultMedicine, medicineNoIDMapper } from "@/modules/medicines/domain/medicine";
 import { createAMedicine, medicineExistChecker } from "@/modules/medicines/domain/medicines.actions";
 import TreatmentForm from "@/modules/treatments/application/form/treatment.form";
-import { Treatment, defaultTreatment, treatmentNoIDMapper } from "@/modules/treatments/domain/treatment";
+import { Treatment, defaultTreatment, treatmentCreatorMapper } from "@/modules/treatments/domain/treatment";
 import { createATreatment, treatmentExistChecker } from "@/modules/treatments/domain/treatments.actions";
 
 import { useState } from "react";

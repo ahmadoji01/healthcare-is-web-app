@@ -5,7 +5,7 @@ import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import TreatmentForm from "@/modules/treatments/application/form/treatment.form";
-import { Treatment, defaultTreatment, treatmentNoIDMapper } from "@/modules/treatments/domain/treatment";
+import { Treatment, defaultTreatment, treatmentCreatorMapper } from "@/modules/treatments/domain/treatment";
 import { createATreatment, treatmentExistChecker } from "@/modules/treatments/domain/treatments.actions";
 
 import { useState } from "react";
@@ -32,7 +32,7 @@ const TreatmentCreatePage = () => {
       return;
     }
 
-    let treatmentNoID = treatmentNoIDMapper(treatment, user.organizationID);
+    let treatmentNoID = treatmentCreatorMapper(treatment, user.organizationID);
     await createATreatment(accessToken, treatmentNoID).then( () => {
       setOpen(true);
       setMessage("Success! Treatment has been created!");

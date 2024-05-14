@@ -18,7 +18,7 @@ import { ALERT_MESSAGE } from '@/constants/alert';
 import { Medicine, medicineMapper } from '@/modules/medicines/domain/medicine';
 import { getAllMedicines } from '@/modules/medicines/domain/medicines.actions';
 import { getAllTreatments } from '@/modules/treatments/domain/treatments.actions';
-import { Treatment, TreatmentPatcher, treatmentMapper, treatmentPatcherMapper } from '@/modules/treatments/domain/treatment';
+import { Treatment, TreatmentOrg, treatmentMapper, treatmentOrgMapper } from '@/modules/treatments/domain/treatment';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
 import { useVisitContext } from '@/contexts/visit-context';
 import { updateVisit } from '@/modules/visits/domain/visits.actions';
@@ -64,7 +64,7 @@ const MedicalRecord = () => {
     const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
     const {activeVisit} = useVisitContext();
     const [order, setOrder] = useState(defaultOrder);
-    const {user, accessToken} = useUserContext();
+    const {organization, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [treatments, setTreatments] = useState<Treatment[]>([]);
@@ -97,18 +97,18 @@ const MedicalRecord = () => {
     };
 
     const handleSubmit = async () => {
-      let treatmentPatchers:TreatmentPatcher[] = [];
+      let treatmentPatchers:TreatmentOrg[] = [];
       let medicineDosesPatchers:MedicineDosesPatcher[] = [];
       let illnessPatchers:IllnessPatcher[] = [];
       let orderItems:OrderItemCreator[] = [];
 
       activeMedicalRecord.treatments?.map( (treatment) => { 
-        treatmentPatchers.push(treatmentPatcherMapper(treatment, user.organizationID));
-        orderItems.push(orderItemCreatorMapper(null, treatment, user.organizationID));
+        treatmentPatchers.push(treatmentOrgMapper(treatment, organization.id));
+        orderItems.push(orderItemCreatorMapper(null, treatment, organization.id));
       })
       medicineDoses.map( (med) => { 
-        medicineDosesPatchers.push(medicineDosesPatcherMapper(med, user.organizationID));
-        orderItems.push(orderItemCreatorMapper(med, null, user.organizationID));
+        medicineDosesPatchers.push(medicineDosesPatcherMapper(med, organization.id));
+        orderItems.push(orderItemCreatorMapper(med, null, organization.id));
       });
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
       

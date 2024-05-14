@@ -1,7 +1,7 @@
 import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine"
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient"
 import { PhysicalCheckup, defaultPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup"
-import { Treatment, TreatmentPatcher, defaultTreatment } from "@/modules/treatments/domain/treatment"
+import { Treatment, TreatmentOrg, defaultTreatment } from "@/modules/treatments/domain/treatment"
 import { Doctor, defaultDoctor } from "@/modules/doctors/domain/doctor"
 
 interface Signature {
@@ -131,7 +131,7 @@ export function medicalRecordCreatorMapper(medicalRecord:MedicalRecord, orgID:nu
 }
 
 type TreatmentPatchers = {
-    treatments: TreatmentPatcher[],
+    treatments: TreatmentOrg[],
 }
 
 export type IllnessPatcher = Omit<Illness, 'id'>;
@@ -162,7 +162,7 @@ type MedicineDosesPatchers = {
 }
 
 export type MedicalRecordPatcher = Omit<MedicalRecord, 'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'> & IllnessPatchers & TreatmentPatchers & MedicineDosesPatchers;
-export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, illnesses: IllnessPatcher[], meds: MedicineDosesPatcher[], treatments:TreatmentPatcher[]) {
+export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, illnesses: IllnessPatcher[], meds: MedicineDosesPatcher[], treatments:TreatmentOrg[]) {
 
     let medicalRecordPatcher: MedicalRecordPatcher = { 
         id: medicalRecord.id,
