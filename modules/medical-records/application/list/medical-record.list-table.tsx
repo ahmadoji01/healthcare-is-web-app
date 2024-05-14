@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { MedicalRecord } from "../../domain/medical-record";
+import { Pagination } from "@mui/material";
 
 interface MedicalRecordListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -99,7 +100,7 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
           </div>
         ))}
         <div className="py-3">
-          <PageNav count={totalPages} />
+          <Pagination count={totalPages} onChange={handlePageChange} />
         </div>
       </div>
     </div>

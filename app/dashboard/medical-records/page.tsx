@@ -3,6 +3,7 @@
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
 import { ALERT_MESSAGE } from "@/constants/alert";
+import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useMedicalRecordContext } from "@/contexts/medical-record-context";
 import { useUserContext } from "@/contexts/user-context";
@@ -10,7 +11,7 @@ import MedicalRecordDeleteConfirmation from "@/modules/medical-records/applicati
 import MedicalRecordForm from "@/modules/medical-records/application/form/medical-record.form";
 import MedicalRecordListTable from "@/modules/medical-records/application/list/medical-record.list-table";
 import { MedicalRecord, defaultMedicalRecord, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
-import { deleteAMedicalRecord, getAllMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";
+import { deleteAMedicalRecord, getAllMedicalRecords, getTotalMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";
 import { useEffect, useState } from "react";
 
 const MedicalRecordsDashboardPage = () => {
@@ -31,6 +32,12 @@ const MedicalRecordsDashboardPage = () => {
           res?.map( (record) => { records.push(medicalRecordMapper(record)); });
           setmedicalRecords(records);
           setDataLoaded(true);
+        });
+      getTotalMedicalRecords(accessToken)
+        .then( res => {
+          let total = res[0].count? parseInt(res[0].count) : 0;
+          let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+          setTotalPages(pages);
         });
     }
   });
@@ -53,7 +60,7 @@ const MedicalRecordsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllMedicalRecords(accessToken, 1)
+    getAllMedicalRecords(accessToken, value)
       .then( res => {
         let records:MedicalRecord[] = [];
         res?.map( (record) => { records.push(medicalRecordMapper(record)); });
@@ -79,7 +86,8 @@ const MedicalRecordsDashboardPage = () => {
       <Breadcrumb pageName="Medical Records" />
 
       <div className="flex flex-col gap-10">
-        <MedicalRecordListTable medicalRecords={medicalRecords} handleModal={handleModal} totalPages={totalPages} handlePageChange={handlePageChange} setActiveMedicalRecord={setActiveMedicalRecord} />
+        { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
+        { dataLoaded && <MedicalRecordListTable medicalRecords={medicalRecords} handleModal={handleModal} totalPages={totalPages} handlePageChange={handlePageChange} setActiveMedicalRecord={setActiveMedicalRecord} /> }
       </div>
     </>
   );
