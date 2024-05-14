@@ -77,7 +77,7 @@ const TreatmentsDashboardPage = () => {
         setTreatments(treats);
         setDataLoaded(true);
       });
-  };
+  }
 
   const handleSubmit = (treatment:Treatment) => {
     updateATreatment(accessToken, treatment.id, treatmentPatcherMapper(treatment))

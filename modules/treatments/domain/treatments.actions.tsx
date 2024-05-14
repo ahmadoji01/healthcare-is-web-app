@@ -16,7 +16,7 @@ export const treatmentExistChecker = (token:string, code = '') =>
 	)
 
 export const createATreatment = (token:string, treatment:TreatmentCreator) => 
-	directusClient.request( withToken(token, createItem('treatments', treatment)) )
+	directusClient.request( withToken(token, createItem('treatments', treatment)) );
 export const updateATreatment = (token:string, id:number, data:object) =>
 	directusClient.request( withToken(token, updateItem('treatments', id, data)) );
 export const deleteATreatment = (token:string, id:number) =>
