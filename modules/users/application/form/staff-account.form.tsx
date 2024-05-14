@@ -43,7 +43,7 @@ const StaffAccountForm = ({ staff, setStaff }:StaffAccountFormProps) => {
                                 <div className="relative">
                                     <input
                                         type="date"
-                                        defaultValue={moment(staff.birthday).format("l")}
+                                        defaultValue={moment(staff.birthday).format("YYYY-MM-DD")}
                                         onChange={ e => setStaff({ ...staff, birthday: new Date(e.target.value) })}
                                         required
                                         className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"

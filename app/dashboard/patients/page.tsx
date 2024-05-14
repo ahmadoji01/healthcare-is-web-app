@@ -132,12 +132,12 @@ const PatientsDashboardPage = () => {
       <Breadcrumb pageName="Patients" />
       
       <div className="relative mb-4">
-        <button className="absolute left-0 top-1/2 -translate-y-1/2">
+        <button className="absolute left-0 top-1/2 -translate-y-1/2" onClick={() => handleChange(searchQuery)}>
           <FontAwesomeIcon icon={faSearch} width={20} />
         </button>
 
         <input
-          type="text"
+          type="search"
           placeholder="Type to search..."
           onChange={e => {handleChange(e.target.value) }}
           className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"

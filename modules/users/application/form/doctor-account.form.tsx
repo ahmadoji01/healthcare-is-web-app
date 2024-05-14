@@ -42,7 +42,7 @@ const DoctorAccountForm = ({ doctor, setDoctor }:DoctorFormProps) => {
                                 <div className="relative">
                                     <input
                                         type="date"
-                                        defaultValue={moment(doctor.birthday).format('l')}
+                                        defaultValue={moment(doctor.birthday).format('YYYY-MM-DD')}
                                         required
                                         onChange={ e => setDoctor({ ...doctor, birthday: new Date(e.target.value) })}
                                         className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"

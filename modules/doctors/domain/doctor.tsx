@@ -84,3 +84,19 @@ export function doctorOrgMapper(res:Record<string,any>) {
     }
     return doctorOrg;
 }
+
+export type DoctorPatcher = Omit<Doctor, 'id'>;
+export function doctorPatcherMapper(doctor:Doctor) {
+
+    let doctorPatcher: DoctorPatcher = { 
+        name: doctor.name, 
+        birthday: doctor.birthday,
+        gender: doctor.gender,
+        marrital_status: doctor.marrital_status,
+        address: doctor.address,
+        specialization: doctor.specialization,
+        education: doctor.education, 
+        license_number: doctor.license_number,
+    }
+    return doctorPatcher;
+}
