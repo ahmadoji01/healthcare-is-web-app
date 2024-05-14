@@ -33,13 +33,17 @@ export const getPatientsWithFilter = (token:string, filter:object) =>
 export const createAPatient = (token:string, patient:PatientNoID) => 
 	directusClient.request( withToken(token, createItem('patients', patient)) );
 
-export const searchPatients = (token:string, query:string) =>
+export const searchPatients = (token:string, query:string, page:number) =>
 	directusClient.request(
-		withToken(token, readItems('patients', { fields: ['*.*'], search: query }))
+		withToken(token, readItems('patients', { fields: ['*.*'], search: query, limit: LIMIT_PER_PAGE, page }))
+	);
+export const getTotalSearchPatients = (token:string, query:string) =>
+	directusClient.request(
+		withToken(token, readItems('patients', { fields: ['*.*'], search: query, aggregate: { count: "*" } }))
 	);
 
 export const updateAPatient = (token:string, id:number, data:object) => 
 	directusClient.request( withToken(token, updateItem('patients', id, data)) );
 
 export const deleteAPatient = (token:string, id:number) => 
-	directusClient.request( withToken(token, deleteItem('patients', id)) )
+	directusClient.request( withToken(token, deleteItem('patients', id)) );

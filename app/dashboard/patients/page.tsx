@@ -10,7 +10,7 @@ import PatientDeleteConfirmation from "@/modules/patients/application/form/patie
 import PatientForm from "@/modules/patients/application/form/patient.form";
 import PatientListTable from "@/modules/patients/application/list/patient.list-table";
 import { Patient, defaultPatient, patientMapper, patientPatcherMapper } from "@/modules/patients/domain/patient";
-import { deleteAPatient, getAllPatients, getTotalPatients, searchPatients, updateAPatient } from "@/modules/patients/domain/patients.actions";
+import { deleteAPatient, getAllPatients, getTotalPatients, getTotalSearchPatients, searchPatients, updateAPatient } from "@/modules/patients/domain/patients.actions";
 import { faArrowRight, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
@@ -26,6 +26,7 @@ const PatientsDashboardPage = () => {
   const [activePatient, setActivePatient] = useState<Patient>(defaultPatient);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const {accessToken} = useUserContext();
   const router = useRouter();
   const {openSnackbarNotification} = useAlertContext();
@@ -44,7 +45,7 @@ const PatientsDashboardPage = () => {
           let total = res[0].count? parseInt(res[0].count) : 0;
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
           setTotalPages(pages);
-        })
+        });
     }
   }, [patients]);
 
@@ -66,7 +67,7 @@ const PatientsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllPatients(accessToken, value)
+    searchPatients(accessToken, searchQuery, value)
       .then( res => {
         let pats:Patient[] = [];
         res?.map( (patient) => { pats.push(patientMapper(patient)); });
@@ -88,16 +89,23 @@ const PatientsDashboardPage = () => {
   const handleSearch = (query:string) => {
     if (query.length > 3) {
       setDataLoaded(false);
-      searchPatients(accessToken, query).then( res => {
+      searchPatients(accessToken, query, 1).then( res => {
         let pats:Patient[] = [];
         res?.map( (patient) => { pats.push(patientMapper(patient)); });
         setPatients(pats);
         setDataLoaded(true);
-      })
+      });
+      getTotalSearchPatients(accessToken, query)
+        .then( res => {
+          let total = res[0].count? parseInt(res[0].count) : 0;
+          let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+          setTotalPages(pages);
+        });
     }
   }
 
   const handleChange = (query:string) => {
+    setSearchQuery(query);
     if (activeTimeout) {
       clearTimeout(activeTimeout);
     }

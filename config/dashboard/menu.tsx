@@ -105,13 +105,6 @@ export const sidebarMenuItems: MenuGroup[] = [
                 ],
             },
             {
-                title: "Order History",
-                allowedRole: ["admins", "staffs"],
-                icon: faCashRegister,
-                url: "orders",
-                subMenu: [],
-            },
-            {
                 title: "Medicines",
                 allowedRole: ["admins", "staffs"],
                 icon: faPills,
@@ -120,6 +113,13 @@ export const sidebarMenuItems: MenuGroup[] = [
                     { title: "All Medicines", url: "medicines" }, 
                     { title: "Add a Medicine", url: "medicines/create" } 
                 ],
+            },
+            {
+                title: "Order History",
+                allowedRole: ["admins", "staffs"],
+                icon: faCashRegister,
+                url: "orders",
+                subMenu: [],
             },
         ],
     },
