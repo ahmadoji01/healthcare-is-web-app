@@ -30,23 +30,27 @@ const DoctorsDashboardPage = () => {
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
 
+  const fetchAllDoctors = () => {
+    getAllDoctors(accessToken, 1)
+      .then( res => {
+        let docs:Doctor[] = [];
+        res?.map( (doctor) => { docs.push(doctorMapper(doctor)); });
+        setDoctors(docs);
+        setDataLoaded(true);
+      });
+    getTotalDoctors(accessToken)
+      .then( res => { 
+        let total = res[0].count? parseInt(res[0].count) : 0;
+        let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+        setTotalPages(pages);
+      })
+  }
+
   useEffect( () => {
     if (!dataLoaded || doctors.length == 0) {
-      getAllDoctors(accessToken, 1)
-        .then( res => {
-          let docs:Doctor[] = [];
-          res?.map( (doctor) => { docs.push(doctorMapper(doctor)); });
-          setDoctors(docs);
-          setDataLoaded(true);
-        });
-      getTotalDoctors(accessToken)
-        .then( res => { 
-          let total = res[0].count? parseInt(res[0].count) : 0;
-          let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
-          setTotalPages(pages);
-        })
+      fetchAllDoctors();
     }
-  });
+  }, [doctors]);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {
@@ -100,6 +104,10 @@ const DoctorsDashboardPage = () => {
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
           setTotalPages(pages);
         });
+    }
+    if (query.length === 0) {
+      setDataLoaded(false);
+      fetchAllDoctors();
     }
   }
 
