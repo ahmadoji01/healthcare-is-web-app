@@ -133,6 +133,35 @@ const MedicinesDashboardPage = () => {
       })
   }
 
+  const handleSubmitQty = (medicine:Medicine) => {
+    updateAMedicine(accessToken, medicine.id, { stock: medicine.stock })
+      .then( () => {
+        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+      }).catch( () => {
+        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+      })
+  } 
+
+  const handleQtyChange = (action:string, medicine:Medicine) => {
+    if (typeof(medicine) === 'undefined') {
+        return;
+    }
+    let newMedicine = {...medicine};
+    let stock = newMedicine.stock;
+    if (action === 'substract' && stock === 1) {
+      return;
+    }
+    if (action === 'substract') {
+      stock--;
+    }
+    if (action === 'add') {
+      stock++;
+    }
+    newMedicine.stock = stock;
+    handleSubmitQty(newMedicine);
+    setActiveMedicine(newMedicine);
+    return;
+  }
   
   return (
     <>
@@ -155,7 +184,7 @@ const MedicinesDashboardPage = () => {
 
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><Spinner /></div> }    
-        { dataLoaded && <MedicineListTable medicines={medicines} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveMedicine={setActiveMedicine} /> }
+        { dataLoaded && <MedicineListTable handleQtyChange={handleQtyChange} medicines={medicines} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveMedicine={setActiveMedicine} /> }
         </div>
     </>
   );

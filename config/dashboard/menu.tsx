@@ -130,7 +130,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 title: "Tax and Administration",
                 allowedRole: ["admins", "staffs"],
                 icon: faNoteSticky,
-                url: "payment-methods",
+                url: "administration",
                 subMenu: [],
             },
             {
