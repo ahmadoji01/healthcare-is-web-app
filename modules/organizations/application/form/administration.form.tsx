@@ -1,6 +1,7 @@
 import SubmitButton from "@/components/Dashboard/Submit";
 import { Organization } from "../../domain/organization";
 import { ChangeEvent, useState } from "react";
+import { LogoURL } from "@/utils/profile-image-url";
 
 interface AdministrationFormProps {
     initOrg: Organization,
@@ -56,7 +57,7 @@ const AdministrationForm = ({ initOrg, handleSubmit, handleFileChange }: Adminis
                                         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                                         <div className="relative z-30 mx-auto h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
                                             <div className="relative drop-shadow-2">
-                                                <img src={organization.logo} width={160} height={160} className="shadow-lg rounded-full max-w-full h-auto align-middle border-none" />
+                                                <img src={LogoURL(organization.logo)} width={160} height={160} className="shadow-lg rounded-full max-w-full h-auto align-middle border-none" />
                                                     <label
                                                         htmlFor="profile"
                                                         className="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
@@ -99,6 +100,7 @@ const AdministrationForm = ({ initOrg, handleSubmit, handleFileChange }: Adminis
                                                     Change Logo
                                                 </label>
                                                 <input
+                                                    onChange={handleFileChange}
                                                     type="file"
                                                     className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
                                                     />
