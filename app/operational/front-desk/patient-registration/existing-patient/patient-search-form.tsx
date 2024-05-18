@@ -37,7 +37,7 @@ const PatientSearchForm = ({ handleNext }:PatientSearchFormProps) => {
         setSearched(true);
         if (query.length > 3) {
             setLoading(true);
-            searchPatients(accessToken, query).then( res => {
+            searchPatients(accessToken, query, 1).then( res => {
                 let pats:Patient[] = [];
                 res?.map( (patient) => { pats.push(patientMapper(patient)); });
                 setPatients(pats);

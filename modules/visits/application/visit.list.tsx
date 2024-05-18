@@ -12,7 +12,7 @@ interface VisitListProps {
   visits: Visit[],
   totalPages: number,
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
-  setActiveVisit: Dispatch<SetStateAction<Visit>>
+  setActiveVisit: Dispatch<SetStateAction<Visit>>,
 }
 
 const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiveVisit }:VisitListProps) => {
@@ -90,6 +90,9 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
             </div>
           </div>
         ))}
+      </div>
+      <div className="py-3">
+        <Pagination count={totalPages} onChange={handlePageChange} />
       </div>
     </div>
   );

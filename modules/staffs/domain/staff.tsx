@@ -28,9 +28,9 @@ export function staffMapper(res:Record<string,any>) {
         birthday: res.birthday, 
         marrital_status: res.marrital_status,
         education: res.education,
-        id_card_number: "",
-        family_id_number: "",
-        address: "",
+        id_card_number: res.id_card_number,
+        family_id_number: res.family_id_number,
+        address: res.address,
     }
     return staff;
 }
@@ -53,4 +53,19 @@ export function staffNoIDMapper(staff:Staff, orgID:number) {
         staff_organizations: [{ organizations_id: orgID }],
     }
     return staffNoID;
+}
+
+export type StaffPatcher = Omit<Staff, 'id'>;
+export function staffPatcherMapper(staff:Staff) {
+
+    let staffPatcher: StaffPatcher = { 
+        name: staff.name, 
+        birthday: staff.birthday, 
+        marrital_status: staff.marrital_status,
+        education: staff.education, 
+        id_card_number: staff.id_card_number,
+        family_id_number: staff.family_id_number,
+        address: staff.address,
+    }
+    return staffPatcher;
 }

@@ -1,8 +1,12 @@
+import { Patient } from "../../domain/patient";
+
 interface DeleteConfirmationProps {
-    handleClose: any,
+    handleClose: () => void,
+    handleDelete: () => void,
+    patient:Patient,
 }
 
-const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => {
+const PatientDeleteConfirmation = ({ handleClose, handleDelete, patient }: DeleteConfirmationProps) => {
     return (
         <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
             <span className="mx-auto inline-block">
@@ -12,7 +16,7 @@ const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => 
                 </svg>
             </span>
             <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">Are you sure you want to delete this patient's data?</h3>
-            <p className="mb-10">Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem Ipsum been.</p>
+            <p className="mb-10">{patient.name}'s data and anything related to it will be deleted</p>
             <div className="-mx-3 flex flex-wrap gap-y-10">
                 <div className="w-full px-3 2xsm:w-1/2">
                     <button onClick={handleClose} className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
@@ -20,7 +24,7 @@ const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => 
                     </button>
                 </div>
                 <div className="w-full px-3 2xsm:w-1/2">
-                    <button className="block w-full rounded border border-meta-1 bg-meta-1 p-3 text-center font-medium text-white transition hover:bg-opacity-90">
+                    <button onClick={handleDelete} className="block w-full rounded border border-meta-1 bg-meta-1 p-3 text-center font-medium text-white transition hover:bg-opacity-90">
                         Delete
                     </button>
                 </div>

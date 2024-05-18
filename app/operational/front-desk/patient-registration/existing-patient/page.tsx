@@ -21,7 +21,7 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { useDoctorContext } from "@/contexts/doctor-context";
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
 import { ALERT_MESSAGE } from "@/constants/alert";
-import { defaultMedicalRecord, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
+import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultVisit, visitCreatorMapper, visitMapper } from "@/modules/visits/domain/visit";
@@ -81,8 +81,8 @@ const ExistingPatient = () => {
         medicalRecord.patient = activePatient;
         medicalRecord.doctor = activeDoctor;
         medicalRecord.physical_checkup = physicalCheckup;
-        let medicalRecordNoID = medicalRecordNoIDMapper(medicalRecord, user.organizationID);
-        await createAMedicalRecord(accessToken, medicalRecordNoID).then( res => {
+        let medicalRecordCreator = medicalRecordCreatorMapper(medicalRecord, user.organizationID);
+        await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
             medicalRecord = medicalRecordMapper(res);
         }).catch( err => {
             openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
@@ -100,6 +100,7 @@ const ExistingPatient = () => {
         await createAVisit(accessToken, visitCreator).then( res => {
             visit = visitMapper(res);
         }).catch( err => {
+            console.log(err);
             openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
             return;
         });
@@ -112,6 +113,7 @@ const ExistingPatient = () => {
         await createAnOrder(accessToken, orderCreator).then( res => {
             order = orderMapper(res);
         }).catch( err => {
+            console.log(err);
             openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
             return;
         });

@@ -10,6 +10,7 @@ import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { DoctorProvider, useDoctorContext } from "@/contexts/doctor-context";
 import { VisitProvider } from "@/contexts/visit-context";
+import Footer from "./common/footer";
 
 export default function RootLayout({
   children,
@@ -54,6 +55,7 @@ export default function RootLayout({
                           </div>
                         </main>
                       </ThemeProvider>
+                      <Footer />
                     </div>
                   </div>
               )}

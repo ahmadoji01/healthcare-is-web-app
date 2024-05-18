@@ -2,15 +2,18 @@
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
+import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
+import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
 import PatientForm from "@/modules/patients/application/form/patient.form";
 import PatientListTable from "@/modules/patients/application/list/patient.list-table";
-import { Patient, defaultPatient, patientMapper } from "@/modules/patients/domain/patient";
-import { getAllPatients, getTotalPatients, searchPatients } from "@/modules/patients/domain/patients.actions";
+import { Patient, defaultPatient, patientMapper, patientPatcherMapper } from "@/modules/patients/domain/patient";
+import { deleteAPatient, getAllPatients, getTotalPatients, getTotalSearchPatients, searchPatients, updateAPatient } from "@/modules/patients/domain/patients.actions";
 import { faArrowRight, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 
@@ -23,7 +26,10 @@ const PatientsDashboardPage = () => {
   const [activePatient, setActivePatient] = useState<Patient>(defaultPatient);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const {accessToken} = useUserContext();
+  const router = useRouter();
+  const {openSnackbarNotification} = useAlertContext();
 
   useEffect( () => {
     if (!dataLoaded || patients.length == 0) {
@@ -39,7 +45,7 @@ const PatientsDashboardPage = () => {
           let total = res[0].count? parseInt(res[0].count) : 0;
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
           setTotalPages(pages);
-        })
+        });
     }
   }, [patients]);
 
@@ -61,32 +67,45 @@ const PatientsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllPatients(accessToken, value)
+    searchPatients(accessToken, searchQuery, value)
       .then( res => {
         let pats:Patient[] = [];
         res?.map( (patient) => { pats.push(patientMapper(patient)); });
         setPatients(pats);
         setDataLoaded(true);
       });
-  };
+  }
 
   const handleSubmit = (patient:Patient) => {
-    console.log(patient);
+    updateAPatient(accessToken, patient.id, patientPatcherMapper(patient))
+      .then( () => {
+        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        window.location.reload();
+      }).catch( () => {
+        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+      })
   } 
 
   const handleSearch = (query:string) => {
     if (query.length > 3) {
       setDataLoaded(false);
-      searchPatients(accessToken, query).then( res => {
+      searchPatients(accessToken, query, 1).then( res => {
         let pats:Patient[] = [];
         res?.map( (patient) => { pats.push(patientMapper(patient)); });
         setPatients(pats);
         setDataLoaded(true);
-      })
+      });
+      getTotalSearchPatients(accessToken, query)
+        .then( res => {
+          let total = res[0].count? parseInt(res[0].count) : 0;
+          let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+          setTotalPages(pages);
+        });
     }
   }
 
   const handleChange = (query:string) => {
+    setSearchQuery(query);
     if (activeTimeout) {
       clearTimeout(activeTimeout);
     }
@@ -96,19 +115,29 @@ const PatientsDashboardPage = () => {
     }, 1000);
   }
 
+  const handleDelete = () => {
+    deleteAPatient(accessToken, activePatient.id)
+      .then( () => {
+        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        window.location.reload();
+      }).catch( () => {
+        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+      })
+  }
+
   return (
     <>
       <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm initPatient={activePatient} handleSubmit={handleSubmit} /> } title="Patient's Detail" />
-      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation patient={activePatient} handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
       <Breadcrumb pageName="Patients" />
       
       <div className="relative mb-4">
-        <button className="absolute left-0 top-1/2 -translate-y-1/2">
+        <button className="absolute left-0 top-1/2 -translate-y-1/2" onClick={() => handleChange(searchQuery)}>
           <FontAwesomeIcon icon={faSearch} width={20} />
         </button>
 
         <input
-          type="text"
+          type="search"
           placeholder="Type to search..."
           onChange={e => {handleChange(e.target.value) }}
           className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"

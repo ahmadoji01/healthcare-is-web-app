@@ -1,6 +1,5 @@
 import React from "react";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -41,10 +40,12 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                                             "bg-graydark dark:bg-meta-4"
                                         }`}
                                         onClick={(e) => {
-                                            e.preventDefault();
-                                            sidebarExpanded
-                                            ? handleClick()
-                                            : setSidebarExpanded(true);
+                                            if (subitem.subMenu.length > 0) {
+                                                e.preventDefault();
+                                                sidebarExpanded
+                                                ? handleClick()
+                                                : setSidebarExpanded(true);
+                                            }
                                         }}
                                         >
                                         <FontAwesomeIcon icon={subitem.icon} width={18} height={18} />

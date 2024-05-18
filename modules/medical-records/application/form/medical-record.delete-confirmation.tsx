@@ -1,8 +1,9 @@
 interface DeleteConfirmationProps {
-    handleClose: any,
+    handleClose: () => void,
+    handleDelete: () => void,
 }
 
-const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => {
+const MedicalRecordDeleteConfirmation = ({ handleClose, handleDelete }: DeleteConfirmationProps) => {
     return (
         <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
             <span className="mx-auto inline-block">
@@ -20,8 +21,8 @@ const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => 
                     </button>
                 </div>
                 <div className="w-full px-3 2xsm:w-1/2">
-                    <button className="block w-full rounded border border-meta-1 bg-meta-1 p-3 text-center font-medium text-white transition hover:bg-opacity-90">
-                        Deactivate
+                    <button onClick={handleDelete} className="block w-full rounded border border-meta-1 bg-meta-1 p-3 text-center font-medium text-white transition hover:bg-opacity-90">
+                        Delete
                     </button>
                 </div>
             </div>
@@ -29,4 +30,4 @@ const PatientDeleteConfirmation = ({ handleClose }: DeleteConfirmationProps) => 
     )
 }
 
-export default PatientDeleteConfirmation;
+export default MedicalRecordDeleteConfirmation;

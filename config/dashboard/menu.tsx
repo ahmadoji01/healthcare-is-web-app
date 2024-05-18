@@ -1,5 +1,5 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faBusinessTime, faCashRegister, faCreditCard, faFileImport, faFileMedical, faFlask, faHospitalUser, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faUser, faUserDoctor } from "@fortawesome/free-solid-svg-icons";
+import { faCashRegister, faCreditCard, faFileImport, faFileMedical, faHospitalUser, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faUser, faUserDoctor, faUserInjured } from "@fortawesome/free-solid-svg-icons";
 
 interface SubMenuItem {
     title: string,
@@ -26,7 +26,7 @@ export const sidebarMenuItems: MenuGroup[] = [
             {
                 title: "Patient Data",
                 allowedRole: ["admins", "staffs"],
-                icon: faUser,
+                icon: faUserInjured,
                 url: "patients",
                 subMenu: [ 
                     { title: "All Patients", url: "patients" }, 
@@ -38,10 +38,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 allowedRole: ["admins", "staffs"],
                 icon: faHospitalUser,
                 url: "visits",
-                subMenu: [ 
-                    { title: "All Visits", url: "visits" }, 
-                    { title: "Create a Visit", url: "visits/create" } 
-                ],
+                subMenu: [],
             },
         ],
     },
@@ -53,20 +50,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 allowedRole: ["admins", "staffs"],
                 icon: faFileMedical,
                 url: "medical-records",
-                subMenu: [ 
-                    { title: "All Medical Records", url: "medical-records" }, 
-                    { title: "Create a Medical Records", url: "patients/create" } 
-                ],
-            },
-            {
-                title: "Lab Results",
-                allowedRole: ["admins", "staffs"],
-                icon: faFlask,
-                url: "lab-results",
-                subMenu: [ 
-                    { title: "All Lab Results", url: "lab-results" }, 
-                    { title: "Create a Lab Result", url: "lab-results/create" } 
-                ],
+                subMenu: [],
             },
             {
                 title: "Submit Record to Satusehat",
@@ -81,13 +65,23 @@ export const sidebarMenuItems: MenuGroup[] = [
         headerTitle: "CLINIC MANAGEMENT",
         menuItems: [
             {
+                title: "Account Management",
+                allowedRole: ["admins", "staffs"],
+                icon: faUser,
+                url: "accounts",
+                subMenu: [ 
+                    { title: "All Users", url: "accounts" }, 
+                    { title: "Add a User", url: "accounts/create" } 
+                ],
+            },
+            {
                 title: "Doctors",
                 allowedRole: ["admins", "staffs"],
                 icon: faUserDoctor,
                 url: "doctors",
                 subMenu: [ 
                     { title: "All Doctors", url: "doctors" }, 
-                    { title: "Add a Doctor", url: "doctors/create" } 
+                    { title: "Add a Doctor", url: "accounts/create?role=Doctor" } 
                 ],
             },
             {
@@ -97,7 +91,7 @@ export const sidebarMenuItems: MenuGroup[] = [
                 url: "staffs",
                 subMenu: [ 
                     { title: "All Staffs", url: "staffs" }, 
-                    { title: "Add a Staff", url: "staffs/create" } 
+                    { title: "Add a Staff", url: "accounts/create?role=Staff" } 
                 ],
             },
             {
@@ -111,16 +105,6 @@ export const sidebarMenuItems: MenuGroup[] = [
                 ],
             },
             {
-                title: "Order History",
-                allowedRole: ["admins", "staffs"],
-                icon: faCashRegister,
-                url: "orders",
-                subMenu: [ 
-                    { title: "All Order History", url: "orders" }, 
-                    { title: "Create an Order History", url: "orders/create" } 
-                ],
-            },
-            {
                 title: "Medicines",
                 allowedRole: ["admins", "staffs"],
                 icon: faPills,
@@ -130,20 +114,24 @@ export const sidebarMenuItems: MenuGroup[] = [
                     { title: "Add a Medicine", url: "medicines/create" } 
                 ],
             },
+            {
+                title: "Order History",
+                allowedRole: ["admins", "staffs"],
+                icon: faCashRegister,
+                url: "orders",
+                subMenu: [],
+            },
         ],
     },
     {
         headerTitle: "SETTINGS",
         menuItems: [
             {
-                title: "Opening Hours",
+                title: "Tax and Administration",
                 allowedRole: ["admins", "staffs"],
-                icon: faBusinessTime,
-                url: "opening-hours",
-                subMenu: [ 
-                    { title: "All Opening Hours", url: "opening-hours" }, 
-                    { title: "Add an Opening Hour", url: "opening-hours/create" } 
-                ],
+                icon: faNoteSticky,
+                url: "administration",
+                subMenu: [],
             },
             {
                 title: "Payment Methods",

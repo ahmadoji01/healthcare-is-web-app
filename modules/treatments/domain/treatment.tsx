@@ -27,24 +27,34 @@ type Organization = {
     organization: number,
 }
 
-export type TreatmentNoID = Omit<Treatment, 'id'> & Organization;
-export function treatmentNoIDMapper(treatment:Treatment, orgID:number) {
+export type TreatmentCreator = Omit<Treatment, 'id'> & Organization;
+export function treatmentCreatorMapper(treatment:Treatment, orgID:number) {
 
-    let treatmentNoID: TreatmentNoID = { 
+    let treatmentCreator: TreatmentCreator = { 
         name: treatment.name, 
         code: treatment.code,
         price: treatment.price,
         organization: orgID,
     }
-    return treatmentNoID;
+    return treatmentCreator;
 }
 
-export type TreatmentPatcher = Omit<Treatment, 'name'|'code'|'price'> & Organization;
-export function treatmentPatcherMapper(treatment:Treatment, orgID:number) {
+export type TreatmentOrg = Omit<Treatment, 'name'|'code'|'price'> & Organization;
+export function treatmentOrgMapper(treatment:Treatment, orgID:number) {
 
-    let treatmentPatcher: TreatmentPatcher = {
+    let treatmentOrg: TreatmentOrg = {
         id: treatment.id,
         organization: orgID,
+    }
+    return treatmentOrg;
+}
+
+export type TreatmentPatcher = Omit<Treatment, 'id'>;
+export function treatmentPatcherMapper(treatment:Treatment) {
+    let treatmentPatcher: TreatmentPatcher = {
+        name: treatment.name, 
+        code: treatment.code,
+        price: treatment.price,
     }
     return treatmentPatcher;
 }

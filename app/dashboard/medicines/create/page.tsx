@@ -5,10 +5,10 @@ import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import MedicineForm from "@/modules/medicines/application/form/medicine.form";
-import { Medicine, defaultMedicine, medicineNoIDMapper } from "@/modules/medicines/domain/medicine";
+import { Medicine, defaultMedicine, medicineCreatorMapper } from "@/modules/medicines/domain/medicine";
 import { createAMedicine, medicineExistChecker } from "@/modules/medicines/domain/medicines.actions";
 import TreatmentForm from "@/modules/treatments/application/form/treatment.form";
-import { Treatment, defaultTreatment, treatmentNoIDMapper } from "@/modules/treatments/domain/treatment";
+import { Treatment, defaultTreatment, treatmentCreatorMapper } from "@/modules/treatments/domain/treatment";
 import { createATreatment, treatmentExistChecker } from "@/modules/treatments/domain/treatments.actions";
 
 import { useState } from "react";
@@ -35,7 +35,7 @@ const TreatmentCreatePage = () => {
       return;
     }
 
-    let medicineNoID = medicineNoIDMapper(medicine, user.organizationID);
+    let medicineNoID = medicineCreatorMapper(medicine, user.organizationID);
     await createAMedicine(accessToken, medicineNoID).then( () => {
       setOpen(true);
       setMessage("Success! Medicine has been created!");

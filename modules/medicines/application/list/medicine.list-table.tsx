@@ -16,10 +16,15 @@ interface MedicineListTableProps {
   medicines: Medicine[],
   totalPages: number,
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
-  setActiveMedicine: Dispatch<SetStateAction<Medicine>>
+  setActiveMedicine: Dispatch<SetStateAction<Medicine>>,
+  handleQtyChange: (action:string, medicine:Medicine) => void,
 }
 
-const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChange, setActiveMedicine }: MedicineListTableProps) => {
+const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChange, setActiveMedicine, handleQtyChange }: MedicineListTableProps) => {
+
+  const handleChange = (action:string, medicine:Medicine) => {
+    handleQtyChange(action, medicine);
+  }
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -74,7 +79,21 @@ const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChang
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{medicine.stock}</p>
+              <div className="custom-number-input h-10">
+                <div className="flex flex-row h-10 w-full rounded-lg mt-1">
+                  <button className="h-full w-10 rounded-l cursor-pointer outline-none">
+                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', medicine)}>−</span>
+                  </button>
+                  <input 
+                    value={medicine.stock}
+                    type="number" 
+                    className="quantity-input text-center w-10 font-semibold bg-transparent" 
+                    name="custom-input-number" />
+                  <button data-action="increment" className="h-full w-10">
+                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', medicine)}>+</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
@@ -103,7 +122,7 @@ const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChang
           </div>
         ))}
         <div className="py-3">
-          <PageNav count={totalPages} handlePageChange={handlePageChange} />
+          <Pagination count={totalPages} onChange={handlePageChange} />
         </div>
       </div>
     </div>

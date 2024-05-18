@@ -3,7 +3,7 @@ import { getOrganization } from '@/modules/organizations/domain/organizations.ac
 import { User, defaultUser } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
 import { directusClient } from '@/utils/request-handler';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
  
 interface UserContextType {
@@ -33,6 +33,7 @@ export const UserProvider = ({
 }) => {
 
     const router = useRouter();
+    const pathname = usePathname();
     const [accessToken, setAccessToken] = useState<string>("");
     const [expiry, setExpiry] = useState(50);
     const [user, setUser] = useState(defaultUser);
@@ -57,13 +58,7 @@ export const UserProvider = ({
                 }
                 return;
             });
-
-            getOrganization(token, 1).then( res => {
-                if (res.length < 1) {
-                    return;
-                }
-                setOrganization(organizationMapper(res[0]));
-            });
+            fetchOrganization();
 
             if (location.pathname === "/" && window.history.length == 2) {
                 router.push("/dashboard");
@@ -86,6 +81,15 @@ export const UserProvider = ({
         });
     }
 
+    const fetchOrganization = () => {
+        getOrganization(accessToken, 1).then( res => {
+            if (res.length < 1) {
+                return;
+            }
+            setOrganization(organizationMapper(res[0]));
+        })
+    }
+
     useEffect(() => {
         let interval = setInterval(async () => {
             refreshToken(interval, false);
@@ -101,6 +105,10 @@ export const UserProvider = ({
 
         return () => clearInterval(interval);    
     }, []);
+
+    useEffect(() => {
+        fetchOrganization();
+    }, [pathname])
 
     return (
         <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading }}>

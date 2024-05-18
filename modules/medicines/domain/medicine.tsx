@@ -35,10 +35,10 @@ type Organization = {
     organization: number,
 }
 
-export type MedicineNoID = Omit<Medicine, 'id'> & Organization;
-export function medicineNoIDMapper(medicine:Medicine, orgID:number) {
+export type MedicineCreator = Omit<Medicine, 'id'> & Organization;
+export function medicineCreatorMapper(medicine:Medicine, orgID:number) {
 
-    let medicineNoID: MedicineNoID = { 
+    let medicineCreator: MedicineCreator = { 
         name: medicine.name, 
         code: medicine.code,
         price: medicine.price,
@@ -46,5 +46,17 @@ export function medicineNoIDMapper(medicine:Medicine, orgID:number) {
         category: medicine.category,
         organization: orgID,
     }
-    return medicineNoID;
+    return medicineCreator;
+}
+
+export type MedicinePatcher = Omit<Medicine, 'id'>;
+export function medicinePatcherMapper(medicine:Medicine) {
+    let medicinePatcher:MedicinePatcher = {
+        name: medicine.name, 
+        code: medicine.code,
+        price: medicine.price,
+        stock: medicine.stock,
+        category: medicine.category,
+    }
+    return medicinePatcher;
 }

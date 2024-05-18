@@ -8,9 +8,10 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import { useVisitContext } from "@/contexts/visit-context";
 import VisitDeleteConfirmation from "@/modules/visits/application/form/visit.delete-confirmation";
+import VisitForm from "@/modules/visits/application/form/visit.form";
 import VisitList from "@/modules/visits/application/visit.list";
-import { Visit, visitMapper } from "@/modules/visits/domain/visit";
-import { getAllVisits, getTotalVisits } from "@/modules/visits/domain/visits.actions";
+import { Visit, defaultVisit, visitCreatorMapper, visitMapper } from "@/modules/visits/domain/visit";
+import { deleteAVisit, getAllVisits, getTotalVisits, updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useEffect, useState } from "react";
 
 const VisitsDashboardPage = () => {
@@ -19,7 +20,7 @@ const VisitsDashboardPage = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {setActiveVisit} = useVisitContext();
+  const [activeVisit, setActiveVisit] = useState(defaultVisit);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -60,7 +61,7 @@ const VisitsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllVisits(accessToken, 1)
+    getAllVisits(accessToken, value)
       .then( res => {
         let vits:Visit[] = [];
         res?.map( (visit) => { vits.push(visitMapper(visit)); });
@@ -69,9 +70,30 @@ const VisitsDashboardPage = () => {
       });
   };
 
+  const handleSubmit = (visit:Visit) => {
+    updateVisit(accessToken, visit.id, { status: visit.status })
+      .then( () => {
+        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        window.location.reload();
+      }).catch( () => {
+        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+      });
+  }
+
+  const handleDelete = () => {
+    deleteAVisit(accessToken, activeVisit.id)
+      .then( () => {
+        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        window.location.reload();
+      }).catch( () => {
+        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+      })
+  }
+
   return (
     <>
-      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <VisitForm initVisit={activeVisit} handleSubmit={handleSubmit} /> } title="Visit's Detail" />
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
       <Breadcrumb pageName="Visits" />
 
       <div className="flex flex-col gap-10">
