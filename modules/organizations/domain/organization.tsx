@@ -5,6 +5,11 @@ import Medication from "./medication"
 import { Doctor } from "@/modules/doctors/domain/doctor"
 import { ORG_STATUS } from "./organizations.constants"
 
+interface Logo {
+	id: string,
+	filename_download: string,
+}
+
 export interface Organization {
     id: number,
     name: string,
@@ -13,7 +18,7 @@ export interface Organization {
     subscription_expiry: Date,
     domain_name: string,
     slug: string,
-    logo: string,
+    logo: Logo|null,
     status: string,
     tax_rate: number,
 }
@@ -26,7 +31,7 @@ export const defaultOrganization:Organization = {
     subscription_expiry: new Date,
     domain_name: "",
     slug: "",
-    logo: "",
+    logo: null,
     status: ORG_STATUS.close,
     tax_rate: 0,
 }
@@ -41,7 +46,7 @@ export function organizationMapper(res:Record<string,any>) {
         subscription_expiry: new Date,
         domain_name: res.domain_name? res.domain_name : "",
         slug: res.slug? res.slug : "",
-        logo: res.logo? res.logo : "",
+        logo: res.logo? res.logo : null,
         status: res.status? res.status : ORG_STATUS.close,
         tax_rate: res.tax_rate? res.tax_rate : 0,
     }
@@ -55,7 +60,7 @@ export function organizationPatcherMapper(organization:Organization) {
         id: organization.id,
         name: organization.name,
         type: organization.type? organization.type : "",
-        logo: organization.logo? organization.logo : "",
+        logo: organization.logo? organization.logo : null,
         status: organization.status? organization.status : ORG_STATUS.close,
         tax_rate: organization.tax_rate? organization.tax_rate : 0,
     }

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useUserContext } from "@/contexts/user-context";
 import { directusClient, imageHandler } from "@/utils/request-handler";
 import defaultAvatar from "@/public/images/avatar-256.jpg";
-import appConfig from "@/config";
 
 const DropdownUser = () => {
   const [avatar, setAvatar] = useState(defaultAvatar.src);

@@ -13,6 +13,7 @@ interface UserContextType {
     organization: Organization,
     setUser: Dispatch<SetStateAction<User>>,
     setOrganization: Dispatch<SetStateAction<Organization>>,
+    fetchOrganization: () => void,
 }
 
 let EXPIRY_MS = 1000;
@@ -24,6 +25,7 @@ export const UserContext = createContext<UserContextType | null>({
     organization: defaultOrganization,
     setUser: () => {},
     setOrganization: () => {},
+    fetchOrganization: () => {},
 });
  
 export const UserProvider = ({
@@ -111,7 +113,7 @@ export const UserProvider = ({
     }, [pathname])
 
     return (
-        <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading }}>
+        <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading, fetchOrganization }}>
             {children}
         </UserContext.Provider>
     );
