@@ -185,7 +185,7 @@ const MedicinesDashboardPage = () => {
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><Spinner /></div> }    
         { dataLoaded && <MedicineListTable handleQtyChange={handleQtyChange} medicines={medicines} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveMedicine={setActiveMedicine} /> }
-        </div>
+      </div>
     </>
   );
 };

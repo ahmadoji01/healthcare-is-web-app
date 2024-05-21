@@ -15,7 +15,7 @@ const MedicineCategoryForm = ({ initCategory, handleSubmit }:MedicineCategoryFor
     return (
         <>
             <div className="grid gap-9">
-                <form onSubmit={e => { e.preventDefault(); handleSubmit(medicine) } }>
+                <form onSubmit={e => { e.preventDefault(); handleSubmit(category) } }>
                     <div className="flex flex-col gap-9">
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <div className="flex flex-col gap-5.5 p-6.5">
