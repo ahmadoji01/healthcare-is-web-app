@@ -111,7 +111,8 @@ export const sidebarMenuItems: MenuGroup[] = [
                 url: "medicines",
                 subMenu: [ 
                     { title: "All Medicines", url: "medicines" }, 
-                    { title: "Add a Medicine", url: "medicines/create" } 
+                    { title: "Add a Medicine", url: "medicines/create" }, 
+                    { title: "Medicine Categories", url: "medicines/category" } 
                 ],
             },
             {
