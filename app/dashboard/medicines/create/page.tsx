@@ -6,17 +6,27 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import MedicineForm from "@/modules/medicines/application/form/medicine.form";
 import { Medicine, defaultMedicine, medicineCreatorMapper } from "@/modules/medicines/domain/medicine";
+import { getAllMedicineCategories } from "@/modules/medicines/domain/medicine-categories.actions";
+import MedicineCategory, { defaultMedicineCategory, medicineCategoryMapper } from "@/modules/medicines/domain/medicine-category";
 import { createAMedicine, medicineExistChecker } from "@/modules/medicines/domain/medicines.actions";
-import TreatmentForm from "@/modules/treatments/application/form/treatment.form";
-import { Treatment, defaultTreatment, treatmentCreatorMapper } from "@/modules/treatments/domain/treatment";
-import { createATreatment, treatmentExistChecker } from "@/modules/treatments/domain/treatments.actions";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const TreatmentCreatePage = () => {
   const [medicine, setMedicine] = useState(defaultMedicine);
-  const {accessToken, user} = useUserContext();
+  const [categories, setCategories] = useState<MedicineCategory[]>([]);
+  const [categoryName, setCategoryName] = useState("");
+  const {accessToken, organization} = useUserContext();
   const {setOpen, setMessage, setStatus} = useAlertContext();
+
+  useEffect( () => {
+    getAllMedicineCategories(accessToken, 1)
+      .then(res => {
+        let cats:MedicineCategory[] = [];
+        res?.map( category => { cats.push(medicineCategoryMapper(category)) });
+        setCategories(cats);
+      })
+  })
 
   const handleSubmit = async (medicine:Medicine) => {
     let medicineExists = false;
@@ -35,12 +45,12 @@ const TreatmentCreatePage = () => {
       return;
     }
 
-    let medicineNoID = medicineCreatorMapper(medicine, user.organizationID);
+    let medicineNoID = medicineCreatorMapper(medicine, organization.id);
     await createAMedicine(accessToken, medicineNoID).then( () => {
       setOpen(true);
       setMessage("Success! Medicine has been created!");
       setStatus("success");
-      window.location.href = '/dashboard/medicines'
+      window.location.href = '/dashboard/medicines';
       return;
     }).catch( err => {
       setOpen(true);
@@ -53,7 +63,7 @@ const TreatmentCreatePage = () => {
   return (
     <>
       <Breadcrumb pageName="Add Medicine" />
-      <MedicineForm handleSubmit={handleSubmit} initMedicine={medicine} />
+      <MedicineForm setCategoryName={setCategoryName} categories={categories} handleSubmit={handleSubmit} initMedicine={medicine} />
     </>
   );
 };
