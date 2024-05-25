@@ -112,7 +112,8 @@ const MedicalRecord = () => {
       });
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
       
-      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, illnessPatchers, medicineDosesPatchers, treatmentPatchers);
+      
+      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, illnessPatchers, medicineDosesPatchers, treatmentPatchers, organization.id);
       await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
         .catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
 

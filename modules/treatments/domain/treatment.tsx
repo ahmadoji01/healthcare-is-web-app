@@ -39,11 +39,11 @@ export function treatmentCreatorMapper(treatment:Treatment, orgID:number) {
     return treatmentCreator;
 }
 
-export type TreatmentOrg = Omit<Treatment, 'name'|'code'|'price'> & Organization;
+export type TreatmentOrg = Omit<Treatment, 'id'|'name'|'code'|'price'> & Organization & { treatments_id:number };
 export function treatmentOrgMapper(treatment:Treatment, orgID:number) {
 
     let treatmentOrg: TreatmentOrg = {
-        id: treatment.id,
+        treatments_id: treatment.id,
         organization: orgID,
     }
     return treatmentOrg;

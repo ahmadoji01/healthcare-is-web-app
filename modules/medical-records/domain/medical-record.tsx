@@ -1,7 +1,7 @@
 import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine"
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient"
 import { PhysicalCheckup, defaultPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup"
-import { Treatment, TreatmentOrg, defaultTreatment } from "@/modules/treatments/domain/treatment"
+import { Treatment, TreatmentOrg } from "@/modules/treatments/domain/treatment"
 import { Doctor, defaultDoctor } from "@/modules/doctors/domain/doctor"
 
 interface Signature {
@@ -146,10 +146,10 @@ export type IllnessPatchers = {
     illnesses: IllnessPatcher[],
 }
 
-export type MedicineDosesPatcher = Omit<MedicineDoses, 'medicine'> & Organization & { id: number };
+export type MedicineDosesPatcher = Omit<MedicineDoses, 'medicine'> & Organization & { medicines_id: number };
 export function medicineDosesPatcherMapper(medicineDoses:MedicineDoses, orgID:number) {
     let medicineDosesPatcher: MedicineDosesPatcher = {
-        id: medicineDoses.medicine.id,
+        medicines_id: medicineDoses.medicine.id,
         doses: medicineDoses.doses,
         quantity: medicineDoses.quantity,
         organization: orgID,
@@ -161,8 +161,8 @@ type MedicineDosesPatchers = {
     medicines: MedicineDosesPatcher[],
 }
 
-export type MedicalRecordPatcher = Omit<MedicalRecord, 'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'> & IllnessPatchers & TreatmentPatchers & MedicineDosesPatchers;
-export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, illnesses: IllnessPatcher[], meds: MedicineDosesPatcher[], treatments:TreatmentOrg[]) {
+export type MedicalRecordPatcher = Omit<MedicalRecord, 'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'> & IllnessPatchers & TreatmentPatchers & MedicineDosesPatchers & { organization:number };
+export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, illnesses: IllnessPatcher[], meds: MedicineDosesPatcher[], treatments:TreatmentOrg[], orgID:number) {
 
     let medicalRecordPatcher: MedicalRecordPatcher = { 
         id: medicalRecord.id,
@@ -176,6 +176,7 @@ export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, illnesse
         treatments: treatments,
         physical_checkup: medicalRecord.physical_checkup,
         date_updated: medicalRecord.date_updated,
+        organization: orgID,
     }
     return medicalRecordPatcher;
 }

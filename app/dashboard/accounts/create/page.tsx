@@ -9,7 +9,7 @@ import { createADoctor } from "@/modules/doctors/domain/doctors.actions";
 import { Staff, staffNoIDMapper } from "@/modules/staffs/domain/staff";
 import { createAStaff } from "@/modules/staffs/domain/staffs.actions";
 import UserForm from "@/modules/users/application/form/user.form";
-import { User, UserRole, defaultRole, defaultUser, roleMapper, userCreatorMapper } from "@/modules/users/domain/user";
+import { User, UserRole, defaultRole, defaultUser, roleMapper, userCreatorMapper, userMapper } from "@/modules/users/domain/user";
 import { createAUser, getAllRoles } from "@/modules/users/domain/users.actions";
 import { ROLES } from "@/modules/users/domain/users.constants";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -53,8 +53,10 @@ const AccountCreatePage = () => {
 
     let isError = false;
     let redirectPath = "/dashboard/doctors";
+    let newUser = defaultUser;
     
     await createAUser(usr).then( res => {
+      newUser = userMapper(res);
       openSnackbarNotification(ALERT_MESSAGE.success, "success");
       router.push(redirectPath);
     }).catch( () => {
@@ -67,7 +69,7 @@ const AccountCreatePage = () => {
     }
 
     if (staff.name === "") {
-      await createADoctor(accessToken, doctorNoIDMapper(doctor, organization.id)).then( res => {
+      await createADoctor(accessToken, doctorNoIDMapper(doctor, organization.id, newUser.id)).then( res => {
         openSnackbarNotification(ALERT_MESSAGE.success, "success");
         router.push(redirectPath);
       }).catch( () => {
@@ -75,7 +77,7 @@ const AccountCreatePage = () => {
       });
     } else {
       redirectPath = "/dashboard/staffs";
-      await createAStaff(accessToken, staffNoIDMapper(staff, organization.id)).then( res => {
+      await createAStaff(accessToken, staffNoIDMapper(staff, organization.id, newUser.id)).then( res => {
         openSnackbarNotification(ALERT_MESSAGE.success, "success");
         router.push(redirectPath);
       }).catch( () => {

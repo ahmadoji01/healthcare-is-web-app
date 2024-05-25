@@ -39,8 +39,8 @@ type StaffOrganization = {
     staff_organizations: object,
 }
 
-export type StaffNoID = Omit<Staff, 'id'> & StaffOrganization;
-export function staffNoIDMapper(staff:Staff, orgID:number) {
+export type StaffNoID = Omit<Staff, 'id'> & { staff_organizations: object, user: string };
+export function staffNoIDMapper(staff:Staff, orgID:number, userID:string) {
 
     let staffNoID: StaffNoID = { 
         name: staff.name, 
@@ -51,6 +51,7 @@ export function staffNoIDMapper(staff:Staff, orgID:number) {
         family_id_number: staff.family_id_number,
         address: staff.address,
         staff_organizations: [{ organizations_id: orgID }],
+        user: userID,
     }
     return staffNoID;
 }
