@@ -42,7 +42,7 @@ const DropdownUser = () => {
     if (user.avatar !== null) {
       setAvatar(imageHandler(user.avatar.id, user.avatar.filename_download));
     }
-  });
+  }, [user]);
 
   const handleSignOut = () => {
     directusClient.logout().then( () => {
