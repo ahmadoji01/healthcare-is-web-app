@@ -5,6 +5,7 @@ import VisitReview from '@/modules/visits/application/visit.review';
 import { useDoctorContext } from '@/contexts/doctor-context';
 import { defaultVisit } from '@/modules/visits/domain/visit';
 import { useEffect, useState } from 'react';
+import { useFrontDeskContext } from '@/contexts/front-desk-context';
 
 interface ReviewProps {
   status: string,
@@ -15,7 +16,7 @@ export default function Review({ status }:ReviewProps) {
   const [visit, setVisit] = useState(defaultVisit);
 
   const {activePatient} = usePatientContext();
-  const {activeDoctor} = useDoctorContext();
+  const {activeDoctor} = useFrontDeskContext();
 
   useEffect( () => { 
     let visit = defaultVisit; 

@@ -10,6 +10,7 @@ import { CssBaseline } from "@mui/material";
 import DarkModeSwitcher from "@/components/Operational/Header/DarkModeSwitcher";
 import { PatientProvider } from "@/contexts/patient-context";
 import { DoctorProvider } from "@/contexts/doctor-context";
+import { FrontDeskProvider } from "@/contexts/front-desk-context";
 
 const fontFamily = {
   typography: {
@@ -34,23 +35,25 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <PatientProvider>
         <DoctorProvider>
-          <body className="dark">
-            <div className="dark:bg-boxdark-2 dark:text-bodydark min-h-screen">
-              <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                <div className="fixed top-[2%] right-[2%]">
-                  <DarkModeSwitcher />
+          <FrontDeskProvider>
+            <body className="dark">
+              <div className="dark:bg-boxdark-2 dark:text-bodydark min-h-screen">
+                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                  <div className="fixed top-[2%] right-[2%]">
+                    <DarkModeSwitcher />
+                  </div>
+                  <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <main>
+                      <div className="min-h-screen mx-auto max-w-screen-md p-4 md:p-6 2xl:p-10">
+                        {children}
+                      </div>
+                    </main>
+                  </ThemeProvider>
                 </div>
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  <main>
-                    <div className="min-h-screen mx-auto max-w-screen-md p-4 md:p-6 2xl:p-10">
-                      {children}
-                    </div>
-                  </main>
-                </ThemeProvider>
               </div>
-            </div>
-          </body>
+            </body>
+          </FrontDeskProvider>
         </DoctorProvider>
       </PatientProvider>
     </html>
