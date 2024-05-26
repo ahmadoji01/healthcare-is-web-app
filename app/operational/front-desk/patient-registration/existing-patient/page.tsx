@@ -25,7 +25,7 @@ import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, 
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultVisit, visitCreatorMapper, visitMapper } from "@/modules/visits/domain/visit";
-import { createAVisit } from "@/modules/visits/domain/visits.actions";
+import { createAVisit, getTotalQueueByDoctorID } from "@/modules/visits/domain/visits.actions";
 import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
@@ -70,6 +70,17 @@ const ExistingPatient = () => {
         let physicalCheckup = defaultPhysicalCheckup;
         physicalCheckup.patient = activePatient;
         let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, organization.id, activePatient.id);
+        
+        let queueNum = "";
+        await getTotalQueueByDoctorID(accessToken, activeDoctor.id).then( res => {
+            let total = res[0].count? parseInt(res[0].count) + 1 : 1;
+            setQueueNumber(total.toString());
+            queueNum = total.toString();
+        }).catch( err => {
+            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            return;
+        });
+        
         await createAPhysicalCheckup(accessToken, physicalCheckupNoID).then( res => {
             physicalCheckup = physicalCheckupMapper(res);
         }).catch( err => {
@@ -90,11 +101,11 @@ const ExistingPatient = () => {
             return;
         });
 
+
         let visit = defaultVisit;
         visit.doctor = activeDoctor;
         visit.patient = activePatient;
-        visit.queue_number = "A01";
-        setQueueNumber("A01");
+        visit.queue_number = queueNum;
         visit.status = visitStatus;
         visit.medical_record = medicalRecord;
         let visitCreator = visitCreatorMapper(visit, medicalRecord.id, organization.id);
@@ -137,7 +148,7 @@ const ExistingPatient = () => {
                 ))}
             </Stepper>
             {activeStep === steps.length ? (
-                <RegisterFinished />
+                <RegisterFinished queueNumber={queueNumber} />
             ) : (
                 <>
                     {getStepContent(activeStep, handleNext, visitStatus, setVisitStatus)}

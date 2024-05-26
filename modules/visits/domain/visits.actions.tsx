@@ -17,6 +17,17 @@ export const getVisitByDoctorID = (token:string, doctorID = 0) =>
 			} 
 		})) 
 	)
+export const getTotalQueueByDoctorID = (token:string, doctorID = 0) => 
+	directusClient.request( 
+		withToken(token, readItems('visits', {
+			filter: {
+				_and: [
+					{ doctor: { _eq: doctorID } },
+					{ _or: [ { status: { _eq: 'waiting' } }, { status: { _eq: 'temporary_leave' } }, { status: { _eq: 'examining' } }, { status: { _eq: 'to_be_examined' } }, { status: { _eq: 'waiting_to_pay' } }, { status: { _eq: 'active' } } ] }
+				]
+			}, 
+		aggregate: { count: '*' } })) 
+	)
 
 export const getVisitByStatus = (token:string, status = "") => 
 	directusClient.request( 
