@@ -11,6 +11,7 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import { DoctorProvider, useDoctorContext } from "@/contexts/doctor-context";
 import { VisitProvider } from "@/contexts/visit-context";
 import Footer from "./common/footer";
+import { FrontDeskProvider } from "@/contexts/front-desk-context";
 
 export default function RootLayout({
   children,
@@ -34,33 +35,35 @@ export default function RootLayout({
     <html lang="en">
       <VisitProvider>
         <DoctorProvider>
-          <body suppressHydrationWarning={true}>
-            <div className="dark:bg-boxdark-2 dark:text-bodydark">
-              {loading ? (
-                <Loader />
-              ) : (
-                  <div className="flex h-screen overflow-hidden">
-                    <Sidebar
-                      sidebarOpen={sidebarOpen}
-                      setSidebarOpen={setSidebarOpen} />
-                    <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                      <Header
+          <FrontDeskProvider>
+            <body suppressHydrationWarning={true}>
+              <div className="dark:bg-boxdark-2 dark:text-bodydark">
+                {loading ? (
+                  <Loader />
+                ) : (
+                    <div className="flex h-screen overflow-hidden">
+                      <Sidebar
                         sidebarOpen={sidebarOpen}
-                        setSidebarOpen={setSidebarOpen}
-                      />
-                      <ThemeProvider theme={theme} >
-                        <main>
-                          <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
-                            {children}
-                          </div>
-                        </main>
-                      </ThemeProvider>
-                      <Footer />
+                        setSidebarOpen={setSidebarOpen} />
+                      <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                        <Header
+                          sidebarOpen={sidebarOpen}
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <ThemeProvider theme={theme} >
+                          <main>
+                            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
+                              {children}
+                            </div>
+                          </main>
+                        </ThemeProvider>
+                        <Footer />
+                      </div>
                     </div>
-                  </div>
-              )}
-            </div>
-          </body>
+                )}
+              </div>
+            </body>
+          </FrontDeskProvider>
         </DoctorProvider>
       </VisitProvider>
     </html>

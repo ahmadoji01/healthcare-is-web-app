@@ -1,33 +1,31 @@
-import { Doctor, defaultDoctor, doctorMapper } from '@/modules/doctors/domain/doctor';
-import { getAllDoctors } from '@/modules/doctors/domain/doctors.actions';
+import { Doctor, DoctorOrganization, defaultDoctor, doctorMapper, doctorOrgMapper } from '@/modules/doctors/domain/doctor';
+import { getAllDoctors, getDoctorsInOrg, getPresentDoctors } from '@/modules/doctors/domain/doctors.actions';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import { useUserContext } from './user-context';
-import { useAlertContext } from './alert-context';
-import { ALERT_MESSAGE } from '@/constants/alert';
 import { useVisitContext } from './visit-context';
  
-interface DoctorContextType {
-    doctors: Doctor[],
+interface FrontDeskContextType {
+    presentDoctors: Doctor[],
     activeDoctor: Doctor,
     loading: boolean,
-    setDoctors: Dispatch<SetStateAction<Doctor[]>>,
+    setPresentDoctors: Dispatch<SetStateAction<Doctor[]>>,
     setActiveDoctor: Dispatch<SetStateAction<Doctor>>,
 }
 
-export const DoctorContext = createContext<DoctorContextType | null>({
-    doctors: [defaultDoctor],
+export const FrontDeskContext = createContext<FrontDeskContextType | null>({
+    presentDoctors: [defaultDoctor],
     activeDoctor: defaultDoctor,
     loading: false,
-    setDoctors: () => {},
+    setPresentDoctors: () => {},
     setActiveDoctor: () => {},
 });
  
-export const DoctorProvider = ({
+export const FrontDeskProvider = ({
     children,
 }: {
     children: React.ReactNode;
 }) => {
-    const [doctors, setDoctors] = useState<Doctor[]>([]);
+    const [presentDoctors, setPresentDoctors] = useState<Doctor[]>([]);
     const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
     const [loading, setLoading] = useState(false);
     const {accessToken} = useUserContext();
@@ -36,10 +34,14 @@ export const DoctorProvider = ({
     useEffect( () => {
         setLoading(true);
         let interval = setInterval(async () => {
-            await getAllDoctors(accessToken, 1).then( res => { 
+            await getPresentDoctors(accessToken).then( res => { 
+                console.log(res);
                 let docs:Doctor[] = [];
-                res?.map( (doctor) => { docs.push(doctorMapper(doctor)); });
-                setDoctors(docs);
+                res?.map( (docOrg) => { 
+                    let org = doctorOrgMapper(docOrg);
+                    docs.push(org.doctor);
+                });
+                setPresentDoctors(docs);
                 if (docs.length >= 1) {
                     setActiveDoctor(docs[0]);
                     handleDoctorVisits(docs[0].id);
@@ -55,14 +57,14 @@ export const DoctorProvider = ({
     }, [])
 
     return (
-        <DoctorContext.Provider value={{ doctors, activeDoctor, loading, setDoctors, setActiveDoctor }}>
+        <FrontDeskContext.Provider value={{ presentDoctors, activeDoctor, loading, setPresentDoctors, setActiveDoctor }}>
             {children}
-        </DoctorContext.Provider>
+        </FrontDeskContext.Provider>
     );
 };
  
-export const useDoctorContext = () => {
-    const context = useContext(DoctorContext);
+export const useFrontDeskContext = () => {
+    const context = useContext(FrontDeskContext);
     
     if (!context) {
         throw new Error('useThemeContext must be used inside the ThemeProvider');

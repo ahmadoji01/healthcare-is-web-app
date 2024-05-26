@@ -15,19 +15,19 @@ import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 
 const QueueManager = () => {
 
-    const {accessToken, user} = useUserContext();
+    const {accessToken, user, organization} = useUserContext();
     const {activeVisit} = useVisitContext();
     const {openSnackbarNotification} = useAlertContext();
     const {handleModal} = useDataModalContext();
 
     const handleSubmit = async (checkup:PhysicalCheckup) => {
-        let checkupNoID = physicalCheckupNoIDMapper(checkup, user.organizationID, checkup.patient.id);
+        let checkupNoID = physicalCheckupNoIDMapper(checkup, organization.id, checkup.patient.id);
         let checkupRes = defaultPhysicalCheckup;
         await createAPhysicalCheckup(accessToken, checkupNoID).then( res => {
             checkupRes = physicalCheckupMapper(res);
         }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
 
-        let medicalRecordCreator = medicalRecordCreatorMapper(defaultMedicalRecord, user.organizationID);
+        let medicalRecordCreator = medicalRecordCreatorMapper(defaultMedicalRecord, organization.id);
         let medicalRecordRes = defaultMedicalRecord;
         medicalRecordCreator.doctor = activeVisit.doctor.id;
         medicalRecordCreator.patient = checkup.patient.id;

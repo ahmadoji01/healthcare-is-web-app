@@ -9,6 +9,7 @@ import { Doctor } from "@/modules/doctors/domain/doctor";
 import { getVisitByDoctorID } from "@/modules/visits/domain/visits.actions";
 import { useUserContext } from "@/contexts/user-context";
 import { useVisitContext } from "@/contexts/visit-context";
+import { useFrontDeskContext } from "@/contexts/front-desk-context";
 
 interface SidebarItemProps {
     sidebarExpanded: Boolean,
@@ -16,7 +17,7 @@ interface SidebarItemProps {
 }
 
 const SidebarItem = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
-    const { loading, doctors, activeDoctor, setActiveDoctor } = useDoctorContext();
+    const { loading, presentDoctors, activeDoctor, setActiveDoctor } = useFrontDeskContext();
     const {handleDoctorVisits} = useVisitContext();
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, doctor:Doctor) => {
@@ -37,7 +38,7 @@ const SidebarItem = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
 
             <ul className="mb-6 flex flex-col gap-1.5">
                 { loading && <Spinner /> }
-                { !loading && doctors?.map((doctor) => 
+                { !loading && presentDoctors?.map((doctor) => 
                     (doctor.id !== 0) &&
                         <Link
                             href={"/operational/front-desk/queue-manager"}
