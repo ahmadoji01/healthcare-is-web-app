@@ -34,27 +34,25 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <PatientProvider>
-        <DoctorProvider>
-          <FrontDeskProvider>
-            <body className="dark">
-              <div className="dark:bg-boxdark-2 dark:text-bodydark min-h-screen">
-                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                  <div className="fixed top-[2%] right-[2%]">
-                    <DarkModeSwitcher />
-                  </div>
-                  <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <main>
-                      <div className="min-h-screen mx-auto max-w-screen-md p-4 md:p-6 2xl:p-10">
-                        {children}
-                      </div>
-                    </main>
-                  </ThemeProvider>
+        <FrontDeskProvider>
+          <body className="dark">
+            <div className="dark:bg-boxdark-2 dark:text-bodydark min-h-screen">
+              <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                <div className="fixed top-[2%] right-[2%]">
+                  <DarkModeSwitcher />
                 </div>
+                <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  <main>
+                    <div className="min-h-screen mx-auto max-w-screen-md p-4 md:p-6 2xl:p-10">
+                      {children}
+                    </div>
+                  </main>
+                </ThemeProvider>
               </div>
-            </body>
-          </FrontDeskProvider>
-        </DoctorProvider>
+            </div>
+          </body>
+        </FrontDeskProvider>
       </PatientProvider>
     </html>
   );

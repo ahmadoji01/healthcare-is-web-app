@@ -35,7 +35,6 @@ export const FrontDeskProvider = ({
         setLoading(true);
         let interval = setInterval(async () => {
             await getPresentDoctors(accessToken).then( res => { 
-                console.log(res);
                 let docs:Doctor[] = [];
                 res?.map( (docOrg) => { 
                     let org = doctorOrgMapper(docOrg);
@@ -50,7 +49,7 @@ export const FrontDeskProvider = ({
                 clearInterval(interval);
             }).catch( err => {
                 setLoading(false);
-            })
+            });
         }, 110)
 
         return () => clearInterval(interval);

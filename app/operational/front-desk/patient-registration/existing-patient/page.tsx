@@ -29,6 +29,7 @@ import { createAVisit } from "@/modules/visits/domain/visits.actions";
 import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
+import { useFrontDeskContext } from "@/contexts/front-desk-context";
 
 const steps = ['Search Your Data', 'Doctor to Visit', 'Examination Time', 'Review Your Input'];
 
@@ -51,10 +52,10 @@ const ExistingPatient = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [visitStatus, setVisitStatus] = useState("");
     const [queueNumber, setQueueNumber] = useState("");
-    const {accessToken, user} = useUserContext();
+    const {accessToken, organization} = useUserContext();
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
-    const {activeDoctor} = useDoctorContext();
+    const {activeDoctor} = useFrontDeskContext();
 
 
     const handleNext = () => {
@@ -68,7 +69,7 @@ const ExistingPatient = () => {
     const handleSubmit = async () => {
         let physicalCheckup = defaultPhysicalCheckup;
         physicalCheckup.patient = activePatient;
-        let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, user.organizationID, activePatient.id);
+        let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, organization.id, activePatient.id);
         await createAPhysicalCheckup(accessToken, physicalCheckupNoID).then( res => {
             physicalCheckup = physicalCheckupMapper(res);
         }).catch( err => {
@@ -81,7 +82,7 @@ const ExistingPatient = () => {
         medicalRecord.patient = activePatient;
         medicalRecord.doctor = activeDoctor;
         medicalRecord.physical_checkup = physicalCheckup;
-        let medicalRecordCreator = medicalRecordCreatorMapper(medicalRecord, user.organizationID);
+        let medicalRecordCreator = medicalRecordCreatorMapper(medicalRecord, organization.id);
         await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
             medicalRecord = medicalRecordMapper(res);
         }).catch( err => {
@@ -96,7 +97,7 @@ const ExistingPatient = () => {
         setQueueNumber("A01");
         visit.status = visitStatus;
         visit.medical_record = medicalRecord;
-        let visitCreator = visitCreatorMapper(visit, medicalRecord.id, user.organizationID);
+        let visitCreator = visitCreatorMapper(visit, medicalRecord.id, organization.id);
         await createAVisit(accessToken, visitCreator).then( res => {
             visit = visitMapper(res);
         }).catch( err => {
@@ -109,7 +110,7 @@ const ExistingPatient = () => {
         order.visit = visit;
         order.patient = activePatient;
         order.status = ORDER_STATUS.active;
-        let orderCreator = orderCreatorMapper(order, visit.id, user.organizationID);
+        let orderCreator = orderCreatorMapper(order, visit.id, organization.id);
         await createAnOrder(accessToken, orderCreator).then( res => {
             order = orderMapper(res);
         }).catch( err => {

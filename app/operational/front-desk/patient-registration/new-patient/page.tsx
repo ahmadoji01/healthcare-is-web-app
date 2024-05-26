@@ -54,7 +54,7 @@ const NewPatient = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [visitStatus, setVisitStatus] = useState("");
     const [queueNumber, setQueueNumber] = useState("");
-    const {accessToken, user} = useUserContext();
+    const {accessToken, user, organization} = useUserContext();
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
     const {activeDoctor} = useDoctorContext();
@@ -68,7 +68,7 @@ const NewPatient = () => {
     };
 
     const handleSubmit = async () => {
-        let patientNoID = patientNoIDMapper(activePatient, user.organizationID);
+        let patientNoID = patientNoIDMapper(activePatient, organization.id);
         let patient = defaultPatient;
         let isError = false;
         await createAPatient(accessToken, patientNoID).then( res => {
@@ -80,7 +80,7 @@ const NewPatient = () => {
 
         let physicalCheckup = defaultPhysicalCheckup;
         physicalCheckup.patient = patient;
-        let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, user.organizationID, patient.id);
+        let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, organization.id, patient.id);
         await createAPhysicalCheckup(accessToken, physicalCheckupNoID).then( res => {
             physicalCheckup = physicalCheckupMapper(res);
         }).catch( err => {
@@ -93,7 +93,7 @@ const NewPatient = () => {
         medicalRecord.patient = patient;
         medicalRecord.doctor = activeDoctor;
         medicalRecord.physical_checkup = physicalCheckup;
-        let medicalRecordCreator = medicalRecordCreatorMapper(medicalRecord, user.organizationID);
+        let medicalRecordCreator = medicalRecordCreatorMapper(medicalRecord, organization.id);
         await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
             medicalRecord = medicalRecordMapper(res);
         }).catch( err => {
@@ -108,7 +108,7 @@ const NewPatient = () => {
         setQueueNumber("A01");
         visit.status = visitStatus;
         visit.medical_record = medicalRecord;
-        let visitCreator = visitCreatorMapper(visit, medicalRecord.id, user.organizationID);
+        let visitCreator = visitCreatorMapper(visit, medicalRecord.id, organization.id);
         await createAVisit(accessToken, visitCreator).then( res => {
             visit = visitMapper(res);
         }).catch( err => {
