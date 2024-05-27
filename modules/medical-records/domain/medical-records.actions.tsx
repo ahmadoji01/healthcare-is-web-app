@@ -21,3 +21,5 @@ export const getCompleteMedicalRecords = (token:string, patientId: number) =>
 			} 
 		}) 
 	));
+
+export const searchMedicalRecords = (token:string, filter:object, page:number) => directusClient.request( withToken(token, readItems('medical_records', { fields: ['*.*.*'], filter: filter, limit: LIMIT_PER_PAGE, page })) );

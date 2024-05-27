@@ -70,8 +70,8 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
-              { record.treatments != null && <p className="text-black dark:text-white">Treatment(s): <br />{record.treatments?.map( (treatment) => <>{treatment.name}<br /></>)}<br /></p> }
-              { record.medicines != null && <p className="text-black dark:text-white">Medicine(s): <br />{record.medicines?.map( (medicine) => <>{medicine.medicine.name}<br /></>)}</p> }
+              { record.treatments != null && <p className="text-black dark:text-white w-full">Treatment(s): <br />{record.treatments?.map( (treatment) => <>{treatment.name}<br /></>)}<br /></p> }
+              { record.medicines != null && <p className="text-black dark:text-white w-full">Medicine(s): <br />{record.medicines?.map( (medicine) => <>{medicine.medicine.name}<br /></>)}</p> }
             </div>
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
