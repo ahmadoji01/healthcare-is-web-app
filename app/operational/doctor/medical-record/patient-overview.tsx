@@ -2,12 +2,14 @@ import { Patient } from "@/modules/patients/domain/patient";
 import PatientAvatar from "../common/patient-avatar";
 import { MedicalRecord } from "@/modules/medical-records/domain/medical-record";
 import moment from "moment";
+import MedicalHistoryCard from "../common/medical-history-card";
 
 interface PatientOverviewProps {
-    medicalRecord: MedicalRecord;
+    medicalRecord: MedicalRecord,
+    medicalHistories: MedicalRecord[],
 }
 
-const PatientOverview = ({ medicalRecord }:PatientOverviewProps) => {
+const PatientOverview = ({ medicalRecord, medicalHistories }:PatientOverviewProps) => {
     return (
         <div className="flex flex-col md:flex-row">
             <div className="w-full p-2 h-[calc(100vh-12rem)] overflow-y-scroll overscroll-contain">
@@ -39,7 +41,13 @@ const PatientOverview = ({ medicalRecord }:PatientOverviewProps) => {
                 </div>
             </div>
             <div className="w-full p-2">
-                <h2 className="text-xl text-center font-extrabold text-black dark:text-white">Medical History</h2>
+                <h2 className="text-xl mb-2 text-center font-extrabold text-black dark:text-white">Medical History</h2>
+                { medicalHistories.length === 0 && 
+                    <h2 className="text-xl text-center font-extrabold text-black dark:text-white">
+                        No Medical History Found
+                    </h2>
+                }
+                { medicalHistories?.map( history => <MedicalHistoryCard medicalRecord={history} />) }
             </div> 
         </div>
     )

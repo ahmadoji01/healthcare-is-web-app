@@ -9,9 +9,9 @@ import MedicalRecordForm from '@/modules/medical-records/application/form/medica
 import MedicationForm from '@/modules/medical-records/application/form/medication.form';
 import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
-import { IllnessPatcher, MedicineDosesPatcher, illnessPatcherMapper, medicalRecordPatcherMapper, medicineDosesPatcherMapper } from '@/modules/medical-records/domain/medical-record';
+import { IllnessPatcher, MedicalRecord, MedicineDosesPatcher, illnessPatcherMapper, medicalRecordMapper, medicalRecordPatcherMapper, medicineDosesPatcherMapper } from '@/modules/medical-records/domain/medical-record';
 import Footer from '../common/Footer';
-import { updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
+import { getCompleteMedicalRecords, updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
 import { useUserContext } from '@/contexts/user-context';
 import { useAlertContext } from '@/contexts/alert-context';
 import { ALERT_MESSAGE } from '@/constants/alert';
@@ -27,6 +27,7 @@ import { getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.
 import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
 import { OrderItemCreator, orderItemCreatorMapper } from '@/modules/orders/domain/order-item';
 import { visitFilter } from '@/modules/orders/domain/order.specifications';
+import { MR_STATUS } from '@/modules/medical-records/domain/medical-records.constants';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -61,14 +62,16 @@ interface TabPanelProps {
 
 const MedicalRecord = () => {
     const [value, setValue] = useState(0);
-    const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
-    const {activeVisit} = useVisitContext();
-    const [order, setOrder] = useState(defaultOrder);
-    const {organization, accessToken} = useUserContext();
-    const {openSnackbarNotification} = useAlertContext();
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [treatments, setTreatments] = useState<Treatment[]>([]);
-
+    const [order, setOrder] = useState(defaultOrder);
+    const [medHistories, setMedHistories] = useState<MedicalRecord[]>([]);
+    
+    const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
+    const {activeVisit} = useVisitContext();
+    const {organization, accessToken} = useUserContext();
+    const {openSnackbarNotification} = useAlertContext();
+    
     useEffect( () => {
       getAllMedicines(accessToken, 1).then( res => {
         let meds:Medicine[] = [];
@@ -86,6 +89,12 @@ const MedicalRecord = () => {
           setOrder(order);
         }
       });
+      getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id).then( res => {
+        console.log(res);
+        let mrs:MedicalRecord[] = [];
+        res?.map( (mr) => { mrs.push(medicalRecordMapper(mr)); });
+        setMedHistories(mrs);
+      })
     }, [])
 
     if (activeMedicalRecord.id === 0) {
@@ -113,7 +122,7 @@ const MedicalRecord = () => {
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
       
       
-      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, illnessPatchers, medicineDosesPatchers, treatmentPatchers, organization.id);
+      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, illnessPatchers, medicineDosesPatchers, treatmentPatchers, organization.id, MR_STATUS.complete);
       await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
         .catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
 
@@ -139,11 +148,10 @@ const MedicalRecord = () => {
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
                       <Tab label="Patient Overview" {...a11yProps(0)} />
                       <Tab label="Diagnosis" {...a11yProps(1)} />
-                      <Tab label="Lab Results" {...a11yProps(2)} />
                   </Tabs>
               </Box>
               <CustomTabPanel value={value} index={0}>
-                <PatientOverview medicalRecord={activeMedicalRecord} />
+                <PatientOverview medicalRecord={activeMedicalRecord} medicalHistories={medHistories} />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
                 <div className="flex flex-col md:flex-row">
@@ -154,13 +162,6 @@ const MedicalRecord = () => {
                     <MedicationForm medicines={medicines} medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />    
                   </div>
                 </div>
-              </CustomTabPanel>
-              <CustomTabPanel value={value} index={2}>
-                  <div className="flex">
-                    <div className="w-full p-1 h-[calc(100vh-7.5rem)] overflow-y-scroll overscroll-contain">
-                      <h2 className="text-xl text-center font-extrabold text-black dark:text-white">Lab Results</h2>
-                    </div>
-                  </div>
               </CustomTabPanel>
             </>
           }
