@@ -90,7 +90,6 @@ const MedicalRecord = () => {
         }
       });
       getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id).then( res => {
-        console.log(res);
         let mrs:MedicalRecord[] = [];
         res?.map( (mr) => { mrs.push(medicalRecordMapper(mr)); });
         setMedHistories(mrs);

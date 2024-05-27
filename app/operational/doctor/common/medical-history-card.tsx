@@ -15,7 +15,7 @@ const MedicalHistoryCard = ({ medicalRecord }:MedicalHistoryCardProps) => {
                     <p>{ medicalRecord.patient.name }</p>
                     <h5 className="mb-1 text-lg font-medium text-black dark:text-white">Visit Date</h5>
                     <p>{ moment(medicalRecord.date_updated).format("MMMM Do YYYY") }</p>
-                    { medicalRecord.medicines && <h5 className="mb-1 text-lg font-medium text-black dark:text-white">Medicines:</h5> }
+                    { medicalRecord.medicines?.length > 0 && <h5 className="mb-1 text-lg font-medium text-black dark:text-white">Medicines:</h5> }
                     <p>
                         <ul>
                             { medicalRecord.medicines?.map( medicine => (
@@ -23,7 +23,7 @@ const MedicalHistoryCard = ({ medicalRecord }:MedicalHistoryCardProps) => {
                             )) }
                         </ul>
                     </p>
-                    { medicalRecord.treatments && <h5 className="mb-1 text-lg font-medium text-black dark:text-white">Treatments:</h5> }
+                    { medicalRecord.treatments?.length > 0 && <h5 className="mb-1 text-lg font-medium text-black dark:text-white">Treatments:</h5> }
                     <p>
                         <ul>
                             { medicalRecord.treatments?.map( treatment => (
