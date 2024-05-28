@@ -53,15 +53,12 @@ export function organizationMapper(res:Record<string,any>) {
     return organization;
 }
 
-export type OrganizationPatcher = Omit<Organization, 'subscription_type'|'subscription_expiry'|'domain_name'|'slug'>;
+export type OrganizationPatcher = Omit<Organization, 'subscription_type'|'subscription_expiry'|'domain_name'|'slug'|'status'|'logo'|'type'>;
 export function organizationPatcherMapper(organization:Organization) {
 
     let organizationPatcher: OrganizationPatcher = {
         id: organization.id,
         name: organization.name,
-        type: organization.type? organization.type : "",
-        logo: organization.logo? organization.logo : null,
-        status: organization.status? organization.status : ORG_STATUS.close,
         tax_rate: organization.tax_rate? organization.tax_rate : 0,
     }
     return organizationPatcher;

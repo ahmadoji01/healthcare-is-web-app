@@ -3,8 +3,10 @@
 import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
+import { errorMapper } from "@/modules/errors/domains/error";
+import { errorMessage } from "@/modules/errors/domains/errors.specifications";
 import AdministrationForm from "@/modules/organizations/application/form/administration.form";
-import { Organization, defaultOrganization, organizationMapper } from "@/modules/organizations/domain/organization";
+import { Organization, defaultOrganization, organizationMapper, organizationPatcherMapper } from "@/modules/organizations/domain/organization";
 import { getOrganization, updateOrganization, uploadClinicLogo } from "@/modules/organizations/domain/organizations.actions";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -14,7 +16,14 @@ const AdministrationPage = () => {
     const {openSnackbarNotification} = useAlertContext();
 
     const handleSubmit = (organization:Organization) => {
-        console.log(organization);
+      let orgPatcher = organizationPatcherMapper(organization);
+      updateOrganization(accessToken, organization.id, orgPatcher).then( res => {
+        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+      }).catch( err => {
+        let error = errorMapper(err);
+        let message = errorMessage(error.code, error.field);
+        openSnackbarNotification(message, "error");
+      })
     }
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
