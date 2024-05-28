@@ -11,6 +11,8 @@ import MedicineDeleteConfirmation from "@/modules/medicines/application/form/med
 import MedicineForm from "@/modules/medicines/application/form/medicine.form";
 import MedicineListTable from "@/modules/medicines/application/list/medicine.list-table";
 import { Medicine, defaultMedicine, medicineMapper, medicinePatcherMapper } from "@/modules/medicines/domain/medicine";
+import { getAllMedicineCategories } from "@/modules/medicines/domain/medicine-categories.actions";
+import MedicineCategory, { medicineCategoryMapper } from "@/modules/medicines/domain/medicine-category";
 import { deleteAMedicine, getAllMedicines, getTotalMedicines, getTotalSearchMedicines, searchMedicines, updateAMedicine } from "@/modules/medicines/domain/medicines.actions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,6 +24,8 @@ const MedicinesDashboardPage = () => {
   
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [categories, setCategories] = useState<MedicineCategory[]>([]);
+  const [categoryName, setCategoryName] = useState("");
   const [activeMedicine, setActiveMedicine] = useState<Medicine>(defaultMedicine);
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -34,6 +38,7 @@ const MedicinesDashboardPage = () => {
   const fetchAllMedicines = () => {
     getAllMedicines(accessToken, 1)
       .then( res => {
+        console.log(res);
         let meds:Medicine[] = [];
         res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
         setMedicines(meds);
@@ -46,6 +51,15 @@ const MedicinesDashboardPage = () => {
         setTotalPages(pages);
       });
   }
+
+  useEffect( () => {
+    getAllMedicineCategories(accessToken, 1)
+      .then(res => {
+        let cats:MedicineCategory[] = [];
+        res?.map( category => { cats.push(medicineCategoryMapper(category)) });
+        setCategories(cats);
+      })
+  }, []);
 
   useEffect( () => {
     if (!dataLoaded || medicines.length == 0) {
@@ -165,7 +179,7 @@ const MedicinesDashboardPage = () => {
   
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <MedicineForm initMedicine={activeMedicine} handleSubmit={handleSubmit} /> } title="Doctor's Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <MedicineForm setCategoryName={setCategoryName} categories={categories} initMedicine={activeMedicine} handleSubmit={handleSubmit} /> } title="Doctor's Detail" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <MedicineDeleteConfirmation medicine={activeMedicine} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Medicines" />
 

@@ -32,7 +32,7 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                         defaultValue={medicine.name}
                                         required
                                         onChange={ e => setMedicine({ ...medicine, name: e.target.value })}
-                                        placeholder="Input Your Full Name"
+                                        placeholder="Input the Medicine's Name"
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
@@ -48,6 +48,7 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                             options={categories?.map((cat) => cat.name)}
                                             renderInput={(params) => (
                                                 <TextField
+                                                    defaultValue={medicine.category?.name}
                                                     {...params}
                                                     InputProps={{
                                                         ...params.InputProps,

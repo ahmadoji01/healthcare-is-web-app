@@ -18,9 +18,9 @@ export const medicineCategoryMapper = (res:Record<string,any>) => {
 }
 
 export type MedicineCategoryCreator = Omit<MedicineCategory, 'id'> & { organization: number };
-export const medicineCategoryCreatorMapper = (category:MedicineCategory, orgID:number) => {
+export const medicineCategoryCreatorMapper = (name:string, orgID:number) => {
     let categoryCreator:MedicineCategoryCreator = {
-        name: category.name,
+        name: name,
         organization: orgID,
     }
     return categoryCreator;

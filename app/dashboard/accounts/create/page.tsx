@@ -62,7 +62,6 @@ const AccountCreatePage = () => {
       openSnackbarNotification(ALERT_MESSAGE.success, "success");
       router.push(redirectPath);
     }).catch( err => {
-      console.log(err);
       let error = errorMapper(err.errors[0]);
       let message = errorMessage(error.code, error.field);
       isError = true;

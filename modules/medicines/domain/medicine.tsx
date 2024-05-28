@@ -1,4 +1,4 @@
-import MedicineCategory, { defaultMedicineCategory } from "./medicine-category";
+import MedicineCategory, { MedicineCategoryCreator, defaultMedicineCategory, medicineCategoryCreatorMapper } from "./medicine-category";
 
 export interface Medicine {
     id: number,
@@ -35,15 +35,15 @@ type Organization = {
     organization: number,
 }
 
-export type MedicineCreator = Omit<Medicine, 'id'> & Organization;
-export function medicineCreatorMapper(medicine:Medicine, orgID:number) {
+export type MedicineCreator = Omit<Medicine, 'id'|'category'> & { category:number, organization: number };
+export function medicineCreatorMapper(medicine:Medicine, catID:number, orgID:number) {
 
     let medicineCreator: MedicineCreator = { 
         name: medicine.name, 
         code: medicine.code,
         price: medicine.price,
         stock: medicine.stock,
-        category: medicine.category,
+        category: catID,
         organization: orgID,
     }
     return medicineCreator;
