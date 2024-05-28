@@ -33,3 +33,8 @@ export const CARE_TYPE = {
     inpatient: 'inpatient',
     outpatient: 'outpatient',
 }
+
+export const MR_STATUS = {
+    created: 'created',
+    complete: 'complete',
+}

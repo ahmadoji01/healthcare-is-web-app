@@ -70,7 +70,7 @@ export const orderItemsMapper = (order_items:Record<string, any>) => {
   return results;
 }
 
-export type OrderItemCreator = Omit<OrderItem, 'id'|'medicine'|'treatment'> & { medicine:number|null, treatment:number|null, organization: number };
+export type OrderItemCreator = Omit<OrderItem, 'id'|'medicine'|'treatment'|'name'|'description'> & { medicine:number|null, treatment:number|null, organization: number };
 export const orderItemCreatorMapper = (medicineDoses:MedicineDoses|null, treatment:Treatment|null, orgID:number) => {
   
   let price = 0;
@@ -94,8 +94,6 @@ export const orderItemCreatorMapper = (medicineDoses:MedicineDoses|null, treatme
   let orderItemCreator:OrderItemCreator = {
     medicine: medicineID,
     treatment: treatmentID,
-    name: "",
-    description: "",
     price: price,
     quantity: quantity,
     total: total,

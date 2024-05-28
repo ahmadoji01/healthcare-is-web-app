@@ -1,3 +1,4 @@
+import { ROLES } from "@/modules/users/domain/users.constants";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faCashRegister, faCreditCard, faFileImport, faFileMedical, faHospitalUser, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faUser, faUserDoctor, faUserInjured } from "@fortawesome/free-solid-svg-icons";
 
@@ -25,7 +26,7 @@ export const sidebarMenuItems: MenuGroup[] = [
         menuItems: [
             {
                 title: "Patient Data",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faUserInjured,
                 url: "patients",
                 subMenu: [ 
@@ -35,7 +36,7 @@ export const sidebarMenuItems: MenuGroup[] = [
             },
             {
                 title: "Visits",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faHospitalUser,
                 url: "visits",
                 subMenu: [],
@@ -47,14 +48,14 @@ export const sidebarMenuItems: MenuGroup[] = [
         menuItems: [
             {
                 title: "Medical Records",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faFileMedical,
                 url: "medical-records",
                 subMenu: [],
             },
             {
                 title: "Submit Record to Satusehat",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faFileImport,
                 url: "submit-record",
                 subMenu: [],
@@ -66,7 +67,7 @@ export const sidebarMenuItems: MenuGroup[] = [
         menuItems: [
             {
                 title: "Account Management",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faUser,
                 url: "accounts",
                 subMenu: [ 
@@ -76,7 +77,7 @@ export const sidebarMenuItems: MenuGroup[] = [
             },
             {
                 title: "Doctors",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faUserDoctor,
                 url: "doctors",
                 subMenu: [ 
@@ -86,7 +87,7 @@ export const sidebarMenuItems: MenuGroup[] = [
             },
             {
                 title: "Staffs",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faPerson,
                 url: "staffs",
                 subMenu: [ 
@@ -96,7 +97,7 @@ export const sidebarMenuItems: MenuGroup[] = [
             },
             {
                 title: "Treatments",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faSyringe,
                 url: "treatments",
                 subMenu: [ 
@@ -106,17 +107,18 @@ export const sidebarMenuItems: MenuGroup[] = [
             },
             {
                 title: "Medicines",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faPills,
                 url: "medicines",
                 subMenu: [ 
                     { title: "All Medicines", url: "medicines" }, 
-                    { title: "Add a Medicine", url: "medicines/create" } 
+                    { title: "Add a Medicine", url: "medicines/create" }, 
+                    { title: "Medicine Categories", url: "medicines/category" } 
                 ],
             },
             {
                 title: "Order History",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faCashRegister,
                 url: "orders",
                 subMenu: [],
@@ -128,28 +130,28 @@ export const sidebarMenuItems: MenuGroup[] = [
         menuItems: [
             {
                 title: "Tax and Administration",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faNoteSticky,
                 url: "administration",
                 subMenu: [],
             },
             {
                 title: "Payment Methods",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faCreditCard,
                 url: "payment-methods",
                 subMenu: [],
             },
             {
                 title: "Satusehat Integration",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faPrescription,
                 url: "satusehat-settings",
                 subMenu: [],
             },
             {
                 title: "BPJS Integration",
-                allowedRole: ["admins", "staffs"],
+                allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faPrescriptionBottle,
                 url: "bpjs-settings",
                 subMenu: [],

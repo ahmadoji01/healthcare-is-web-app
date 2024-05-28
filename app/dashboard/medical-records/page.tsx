@@ -11,7 +11,8 @@ import MedicalRecordDeleteConfirmation from "@/modules/medical-records/applicati
 import MedicalRecordForm from "@/modules/medical-records/application/form/medical-record.form";
 import MedicalRecordListTable from "@/modules/medical-records/application/list/medical-record.list-table";
 import { MedicalRecord, defaultMedicalRecord, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
-import { deleteAMedicalRecord, getAllMedicalRecords, getTotalMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";
+import { deleteAMedicalRecord, getAllMedicalRecords, getTotalMedicalRecords, searchMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";
+import { MR_STATUS } from "@/modules/medical-records/domain/medical-records.constants";
 import { useEffect, useState } from "react";
 
 const MedicalRecordsDashboardPage = () => {
@@ -26,7 +27,7 @@ const MedicalRecordsDashboardPage = () => {
 
   useEffect( () => {
     if (!dataLoaded || medicalRecords.length == 0) {
-      getAllMedicalRecords(accessToken, 1)
+      searchMedicalRecords(accessToken, { status: { _eq: MR_STATUS.complete } }, 1)
         .then( res => {
           let records:MedicalRecord[] = [];
           res?.map( (record) => { records.push(medicalRecordMapper(record)); });
@@ -60,7 +61,7 @@ const MedicalRecordsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllMedicalRecords(accessToken, value)
+    searchMedicalRecords(accessToken, { status: { _eq: MR_STATUS.complete } }, value)
       .then( res => {
         let records:MedicalRecord[] = [];
         res?.map( (record) => { records.push(medicalRecordMapper(record)); });

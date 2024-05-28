@@ -1,7 +1,8 @@
 'use client';
 
 import { Doctor } from "@/modules/doctors/domain/doctor";
-import { Visit } from "../domain/visit";
+import { Visit, defaultVisit } from "../domain/visit";
+import { useEffect, useState } from "react";
 
 interface VisitReviewProps {
     doctor: Doctor,
@@ -9,6 +10,11 @@ interface VisitReviewProps {
 }
 
 const VisitReview = ({ doctor, visit }:VisitReviewProps) => {
+
+    const [vis, setVis] = useState(defaultVisit)
+    useEffect( () => {
+        setVis(visit);
+    })
 
     return (
         <>
@@ -34,7 +40,7 @@ const VisitReview = ({ doctor, visit }:VisitReviewProps) => {
                                     Visit Status
                                 </label>
                                 <div className="relative font-bold">
-                                    { visit.status }
+                                    { vis.status }
                                 </div>
                             </div>
                         </div>

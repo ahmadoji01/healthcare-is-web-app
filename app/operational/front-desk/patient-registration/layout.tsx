@@ -10,6 +10,7 @@ import { CssBaseline } from "@mui/material";
 import DarkModeSwitcher from "@/components/Operational/Header/DarkModeSwitcher";
 import { PatientProvider } from "@/contexts/patient-context";
 import { DoctorProvider } from "@/contexts/doctor-context";
+import { FrontDeskProvider } from "@/contexts/front-desk-context";
 
 const fontFamily = {
   typography: {
@@ -33,7 +34,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <PatientProvider>
-        <DoctorProvider>
+        <FrontDeskProvider>
           <body className="dark">
             <div className="dark:bg-boxdark-2 dark:text-bodydark min-h-screen">
               <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
@@ -51,7 +52,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           </body>
-        </DoctorProvider>
+        </FrontDeskProvider>
       </PatientProvider>
     </html>
   );

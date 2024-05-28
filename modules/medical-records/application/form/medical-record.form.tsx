@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
 import { Illness, MedicalRecord } from "../../domain/medical-record";
 import SelectOption from "@/interfaces/select-option";
-import { Treatment, TreatmentOrg } from "@/modules/treatments/domain/treatment";
+import { Treatment } from "@/modules/treatments/domain/treatment";
 import Illnesses from "@/constants/illnesses";
 
 interface MedicalRecordFormProps {

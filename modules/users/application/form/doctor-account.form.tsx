@@ -132,19 +132,21 @@ const DoctorAccountForm = ({ doctor, setDoctor }:DoctorFormProps) => {
                                     </select>
                                 </div>
                             </div>
-                            <div>
-                                <label className="mb-3 block text-black dark:text-white">
-                                    Specialization
-                                </label>
-                                <input
-                                    type="text"
-                                    defaultValue={doctor.specialization}
-                                    onChange={ e => setDoctor({ ...doctor, specialization: e.target.value }) }
-                                    required
-                                    placeholder="Input Doctor's Specialization"
-                                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                    />
-                            </div>
+                            { doctor.education === 'specialist' && 
+                                <div>
+                                    <label className="mb-3 block text-black dark:text-white">
+                                        Specialization
+                                    </label>
+                                    <input
+                                        type="text"
+                                        defaultValue={doctor.specialization}
+                                        onChange={ e => setDoctor({ ...doctor, specialization: e.target.value }) }
+                                        required
+                                        placeholder="Input Doctor's Specialization"
+                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        />
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

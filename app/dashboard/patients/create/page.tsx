@@ -12,7 +12,7 @@ import { useState } from "react";
 
 const PatientCreatePage = () => {
   const [patient, setPatient] = useState(defaultPatient);
-  const {accessToken, user} = useUserContext();
+  const {accessToken, organization} = useUserContext();
   const {setOpen, setMessage, setStatus} = useAlertContext();
 
   const handleSubmit = async (patient:Patient) => {
@@ -32,7 +32,7 @@ const PatientCreatePage = () => {
       return;
     }
 
-    let patientNoID = patientNoIDMapper(patient, user.organizationID);
+    let patientNoID = patientNoIDMapper(patient, organization.id);
     await createAPatient(accessToken, patientNoID).then( () => {
       setOpen(true);
       setMessage("Success! Patient has been created!");

@@ -28,7 +28,7 @@ const UserListTable = ({ handleModal, users, totalPages, handlePageChange, setAc
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              License Number
+              Email
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
@@ -56,11 +56,11 @@ const UserListTable = ({ handleModal, users, totalPages, handlePageChange, setAc
               <p className="text-black dark:text-white">{user.first_name + " " + user.last_name }</p>
             </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
+            <div className="flex items-center justify p-2.5 xl:p-5">
               <p className="text-black dark:text-white">{user.email}</p>
             </div>
 
-            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+            <div className="hidden items-center justify sm:flex p-2.5 xl:p-5">
               <p className="text-meta-3">{user.role_name}</p>
             </div>
 

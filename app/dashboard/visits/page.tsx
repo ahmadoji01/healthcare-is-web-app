@@ -11,7 +11,9 @@ import VisitDeleteConfirmation from "@/modules/visits/application/form/visit.del
 import VisitForm from "@/modules/visits/application/form/visit.form";
 import VisitList from "@/modules/visits/application/visit.list";
 import { Visit, defaultVisit, visitCreatorMapper, visitMapper } from "@/modules/visits/domain/visit";
-import { deleteAVisit, getAllVisits, getTotalVisits, updateVisit } from "@/modules/visits/domain/visits.actions";
+import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
+import { statusNotEqual } from "@/modules/visits/domain/visit.specifications";
+import { deleteAVisit, getAllVisits, getTotalVisits, getVisitsWithFilter, updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useEffect, useState } from "react";
 
 const VisitsDashboardPage = () => {
@@ -25,9 +27,11 @@ const VisitsDashboardPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  const [filter, setFilter] = useState({ _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] })
+
   useEffect( () => {
     if (!dataLoaded || visits.length == 0) {
-      getAllVisits(accessToken, 1)
+      getVisitsWithFilter(accessToken, filter, 1)
         .then( res => {
           let vits:Visit[] = [];
           res?.map( (visit) => { vits.push(visitMapper(visit)); });
@@ -61,7 +65,7 @@ const VisitsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getAllVisits(accessToken, value)
+    getVisitsWithFilter(accessToken, filter, value)
       .then( res => {
         let vits:Visit[] = [];
         res?.map( (visit) => { vits.push(visitMapper(visit)); });

@@ -49,7 +49,7 @@ export const DoctorProvider = ({
             }).catch( err => {
                 setLoading(false);
             })
-        }, 100)
+        }, 110)
 
         return () => clearInterval(interval);
     }, [])

@@ -17,6 +17,17 @@ export const getVisitByDoctorID = (token:string, doctorID = 0) =>
 			} 
 		})) 
 	)
+export const getTotalQueueByDoctorID = (token:string, doctorID = 0) => 
+	directusClient.request( 
+		withToken(token, readItems('visits', {
+			filter: {
+				_and: [
+					{ doctor: { _eq: doctorID } },
+					{ _or: [ { status: { _eq: 'waiting' } }, { status: { _eq: 'temporary_leave' } }, { status: { _eq: 'examining' } }, { status: { _eq: 'to_be_examined' } }, { status: { _eq: 'waiting_to_pay' } }, { status: { _eq: 'active' } } ] }
+				]
+			}, 
+		aggregate: { count: '*' } })) 
+	)
 
 export const getVisitByStatus = (token:string, status = "") => 
 	directusClient.request( 
@@ -25,6 +36,12 @@ export const getVisitByStatus = (token:string, status = "") =>
 				status: { _eq: status }
 			} 
 		})) 
+	)
+export const getVisitsWithFilter = (token:string, filter:object, page:number) => 
+	directusClient.request( 
+		withToken(token, readItems('visits', { fields: ['*.*.*'],
+			filter: filter,
+		limit: LIMIT_PER_PAGE, page})) 
 	)
 
 export const updateVisit = (token:string, id:number, data:object) => directusClient.request( withToken(token, updateItem('visits', id, data)));

@@ -12,7 +12,7 @@ import { useState } from "react";
 
 const TreatmentCreatePage = () => {
   const [treatment, setTreatment] = useState(defaultTreatment);
-  const {accessToken, user} = useUserContext();
+  const {accessToken, organization} = useUserContext();
   const {setOpen, setMessage, setStatus} = useAlertContext();
 
   const handleSubmit = async (treatment:Treatment) => {
@@ -32,7 +32,7 @@ const TreatmentCreatePage = () => {
       return;
     }
 
-    let treatmentNoID = treatmentCreatorMapper(treatment, user.organizationID);
+    let treatmentNoID = treatmentCreatorMapper(treatment, organization.id);
     await createATreatment(accessToken, treatmentNoID).then( () => {
       setOpen(true);
       setMessage("Success! Treatment has been created!");

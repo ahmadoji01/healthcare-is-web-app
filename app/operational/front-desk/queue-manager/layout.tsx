@@ -11,6 +11,7 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import { DoctorProvider, useDoctorContext } from "@/contexts/doctor-context";
 import { VisitProvider } from "@/contexts/visit-context";
 import Footer from "./common/footer";
+import { FrontDeskProvider } from "@/contexts/front-desk-context";
 
 export default function RootLayout({
   children,
@@ -33,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <VisitProvider>
-        <DoctorProvider>
+        <FrontDeskProvider>
           <body suppressHydrationWarning={true}>
             <div className="dark:bg-boxdark-2 dark:text-bodydark">
               {loading ? (
@@ -61,7 +62,7 @@ export default function RootLayout({
               )}
             </div>
           </body>
-        </DoctorProvider>
+        </FrontDeskProvider>
       </VisitProvider>
     </html>
   );

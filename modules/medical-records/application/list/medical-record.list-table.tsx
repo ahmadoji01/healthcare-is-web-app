@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { MedicalRecord } from "../../domain/medical-record";
 import { Pagination } from "@mui/material";
+import moment from "moment";
 
 interface MedicalRecordListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -33,7 +33,7 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Illness
+              Visit Date
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
@@ -66,13 +66,16 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{record.illnesses?.map( (illness) => <>{ illness.name }<br/></>)}</p>
+              <p className="text-meta-3">{moment(record.date_updated).format("MMMM Do YYYY")}</p>
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
-              { record.treatments != null && <p className="text-black dark:text-white">Treatment(s): <br />{record.treatments?.map( (treatment) => <>{treatment.name}<br /></>)}<br /></p> }
-              { record.medicines != null && <p className="text-black dark:text-white">Medicine(s): <br />{record.medicines?.map( (medicine) => <>{medicine.medicine.name}<br /></>)}</p> }
+              <ul>
+              { record.treatments?.length > 0 && <li className="mb-2"><p className="text-black dark:text-white w-full">Treatment(s): <ul>{record.treatments?.map( (treatment) => <li>{treatment.name}</li> )}</ul></p></li> }
+              { record.medicines?.length > 0 && <li className="mb-2"><p className="text-black dark:text-white w-full">Medicine(s): <ul>{record.medicines?.map( (medicine) => <li>{medicine.medicine.name}</li>)}</ul></p></li> }
+              </ul>
             </div>
+            
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
               <ul className="flex items-center gap-2 2xsm:gap-4">

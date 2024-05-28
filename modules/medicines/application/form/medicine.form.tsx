@@ -3,13 +3,17 @@
 import SubmitButton from '@/components/Dashboard/Submit';
 import { Medicine } from '../../domain/medicine';
 import { useState } from 'react';
+import { Autocomplete, TextField } from '@mui/material';
+import MedicineCategory from '../../domain/medicine-category';
 
 interface MedicineFormProps {
     initMedicine: Medicine,
+    categories: MedicineCategory[],
     handleSubmit: (medicine:Medicine) => void,
+    setCategoryName: (categoryName:string) => void,
 }
 
-const MedicineForm = ({ initMedicine, handleSubmit }:MedicineFormProps) => {
+const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName }:MedicineFormProps) => {
     const [medicine, setMedicine] = useState(initMedicine);
 
     return (
@@ -28,9 +32,33 @@ const MedicineForm = ({ initMedicine, handleSubmit }:MedicineFormProps) => {
                                         defaultValue={medicine.name}
                                         required
                                         onChange={ e => setMedicine({ ...medicine, name: e.target.value })}
-                                        placeholder="Input Your Full Name"
+                                        placeholder="Input the Medicine's Name"
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
+                                </div>
+                                <div>
+                                    <label className="mb-3 block text-black dark:text-white">
+                                        Category
+                                    </label>
+                                    <div className="relative">
+                                        <Autocomplete
+                                            freeSolo
+                                            id="free-solo-2-demo"
+                                            disableClearable
+                                            options={categories?.map((cat) => cat.name)}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    defaultValue={medicine.category?.name}
+                                                    {...params}
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        type: 'search',
+                                                    }}
+                                                    onChange={ e => setCategoryName(e.target.value)}
+                                                />
+                                            )}
+                                        />
+                                    </div>
                                 </div>
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">

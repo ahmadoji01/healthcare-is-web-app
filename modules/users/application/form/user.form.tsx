@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from "react";
+import { ChangeEvent, SelectHTMLAttributes, useEffect, useState } from "react";
 import { ROLES } from "../../domain/users.constants";
-import { User, defaultUser } from "../../domain/user";
+import { User, UserRole, defaultUser } from "../../domain/user";
 import { Doctor, defaultDoctor } from "@/modules/doctors/domain/doctor";
 import { Staff, defaultStaff } from "@/modules/staffs/domain/staff";
 import DoctorAccountForm from "./doctor-account.form";
@@ -11,26 +11,38 @@ import SubmitButton from "@/components/Dashboard/Submit";
 
 interface UserFormProps {
     initUser: User,
+    initRoles: UserRole[],
     initRole?: string,
-    handleSubmit: (user:User, doctor:Doctor, staff:Staff) => void,
+    handleSubmit: (user:User, doctor:Doctor, staff:Staff, role:string) => void,
 }
 
-const UserForm = ({ initUser, initRole = "", handleSubmit }:UserFormProps) => {
+const UserForm = ({ initUser, initRoles, initRole = "", handleSubmit }:UserFormProps) => {
 
     const [user, setUser] = useState(initUser);
+    const [roles, setRoles] = useState(initRoles);
+    const [selectedRole, setSelectedRole] = useState("");
+    const [selectedRoleName, setSelectedRoleName] = useState("");
     const [doctor, setDoctor] = useState(defaultDoctor);
     const [staff, setStaff] = useState(defaultStaff);
 
-    const roleChange = (role:string) => {
-        if ((user.role_name === ROLES.doctor && role !== ROLES.doctor) || (user.role_name !== ROLES.doctor && role === ROLES.doctor)) {
+    useEffect( () => {
+        setRoles(initRoles);
+    }, [initRoles]);
+
+    const roleChange = (e:ChangeEvent<HTMLSelectElement>) => {
+        let index = e.target.selectedIndex;
+        let label = e.target[index].textContent;
+        let role = e.target.value; 
+        if ((selectedRoleName === ROLES.doctor && role !== ROLES.doctor) || (selectedRoleName !== ROLES.doctor && role === ROLES.doctor)) {
             setDoctor(defaultDoctor);
             setStaff(defaultStaff);
-            return;
         }
+        setSelectedRole(e.target.value);
+        setSelectedRoleName(label? label : "");
     }
 
     return (
-        <form onSubmit={ e => { e.preventDefault(); handleSubmit(user, doctor, staff) }}>
+        <form onSubmit={ e => { e.preventDefault(); handleSubmit(user, doctor, staff, selectedRole) }}>
             <div className="grid gap-9 mb-6">
                 <div className="flex flex-col gap-9">
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -40,28 +52,6 @@ const UserForm = ({ initUser, initRole = "", handleSubmit }:UserFormProps) => {
                             </h3>
                         </div>
                         <div className="flex flex-col gap-5.5 p-6.5">
-                            <div>
-                                <label className="mb-3 block text-black dark:text-white">
-                                    First Name
-                                </label>
-                                <input
-                                    onChange={ e => setUser({ ...user, first_name: e.target.value })}
-                                    type="text"
-                                    placeholder="Input Your First Name"
-                                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                    />
-                            </div>
-                            <div>
-                                <label className="mb-3 block text-black dark:text-white">
-                                    Last Name
-                                </label>
-                                <input
-                                    onChange={ e => setUser({ ...user, last_name: e.target.value })}
-                                    type="text"
-                                    placeholder="Input Your Last Name"
-                                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                    />
-                            </div>
                             <div>
                                 <label className="mb-3 block text-black dark:text-white">
                                     Email
@@ -92,13 +82,12 @@ const UserForm = ({ initUser, initRole = "", handleSubmit }:UserFormProps) => {
                                     <select
                                         defaultValue={initRole}
                                         required 
-                                        onChange={e =>  { roleChange(e.target.value); setUser({ ...user, role_name: e.target.value }) }} className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
+                                        onChange={e =>  { roleChange(e) }} className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
                                         <option value="">Choose One of the Roles Below</option>
-                                        <option value={ROLES.doctor}>{ROLES.doctor}</option>
-                                        <option value={ROLES.administrator}>{ROLES.administrator}</option>
-                                        <option value={ROLES.apothecary}>{ROLES.apothecary}</option>
-                                        <option value={ROLES.cashier}>{ROLES.cashier}</option>
-                                        <option value={ROLES.receptionist}>{ROLES.receptionist}</option>
+                                        { roles?.map( role => (
+                                            <option value={role.id}>{role.name}</option>
+                                        )) 
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -107,9 +96,9 @@ const UserForm = ({ initUser, initRole = "", handleSubmit }:UserFormProps) => {
                 </div>
             </div>
 
-            { user.role_name === ROLES.doctor ?
+            { selectedRoleName === ROLES.doctor ?
                 <DoctorAccountForm doctor={doctor} setDoctor={setDoctor} />
-                : user.role_name !== "" && <StaffAccountForm staff={staff} setStaff={setStaff} />
+                : selectedRoleName !== "" && <StaffAccountForm staff={staff} setStaff={setStaff} />
             }
             <SubmitButton />
         </form>
