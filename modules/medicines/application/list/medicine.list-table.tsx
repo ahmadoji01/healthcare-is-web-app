@@ -17,13 +17,13 @@ interface MedicineListTableProps {
   totalPages: number,
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
   setActiveMedicine: Dispatch<SetStateAction<Medicine>>,
-  handleQtyChange: (action:string, medicine:Medicine) => void,
+  handleQtyChange: (action:string, medicine:Medicine, index:number, qty:number) => void,
 }
 
 const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChange, setActiveMedicine, handleQtyChange }: MedicineListTableProps) => {
 
-  const handleChange = (action:string, medicine:Medicine) => {
-    handleQtyChange(action, medicine);
+  const handleChange = (action:string, medicine:Medicine, index:number, qty:number) => {
+    handleQtyChange(action, medicine, index, qty);
   }
 
   return (
@@ -82,15 +82,17 @@ const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChang
               <div className="custom-number-input h-10">
                 <div className="flex flex-row h-10 w-full rounded-lg mt-1">
                   <button className="h-full w-10 rounded-l cursor-pointer outline-none">
-                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', medicine)}>−</span>
+                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', medicine, key, 0)}>−</span>
                   </button>
                   <input 
-                    value={medicine.stock}
+                    defaultValue={medicine.stock}
                     type="number" 
                     className="quantity-input text-center w-10 font-semibold bg-transparent" 
-                    name="custom-input-number" />
+                    name="custom-input-number"
+                    min={0}
+                    onBlur={e => handleChange('input', medicine, key, parseInt(e.target.value)) } />
                   <button data-action="increment" className="h-full w-10">
-                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', medicine)}>+</span>
+                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', medicine, key, 0)}>+</span>
                   </button>
                 </div>
               </div>

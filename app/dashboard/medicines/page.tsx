@@ -38,7 +38,6 @@ const MedicinesDashboardPage = () => {
   const fetchAllMedicines = () => {
     getAllMedicines(accessToken, 1)
       .then( res => {
-        console.log(res);
         let meds:Medicine[] = [];
         res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
         setMedicines(meds);
@@ -156,12 +155,13 @@ const MedicinesDashboardPage = () => {
       })
   } 
 
-  const handleQtyChange = (action:string, medicine:Medicine) => {
+  const handleQtyChange = (action:string, medicine:Medicine, index:number, qty:number) => {
     if (typeof(medicine) === 'undefined') {
         return;
     }
-    let newMedicine = {...medicine};
-    let stock = newMedicine.stock;
+    let newMeds = [...medicines];
+    let med = {...medicines[index]};
+    let stock = med.stock;
     if (action === 'substract' && stock === 1) {
       return;
     }
@@ -171,9 +171,13 @@ const MedicinesDashboardPage = () => {
     if (action === 'add') {
       stock++;
     }
-    newMedicine.stock = stock;
-    handleSubmitQty(newMedicine);
-    setActiveMedicine(newMedicine);
+    if (action === 'input') {
+      stock = qty;
+    }
+    med.stock = stock;
+    newMeds[index] = med;
+    setMedicines(newMeds);
+    handleSubmitQty(med);
     return;
   }
   
