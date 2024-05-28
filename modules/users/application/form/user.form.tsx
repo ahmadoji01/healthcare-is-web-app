@@ -36,7 +36,6 @@ const UserForm = ({ initUser, initRoles, initRole = "", handleSubmit }:UserFormP
         if ((selectedRoleName === ROLES.doctor && role !== ROLES.doctor) || (selectedRoleName !== ROLES.doctor && role === ROLES.doctor)) {
             setDoctor(defaultDoctor);
             setStaff(defaultStaff);
-            return;
         }
         setSelectedRole(e.target.value);
         setSelectedRoleName(label? label : "");
@@ -99,7 +98,7 @@ const UserForm = ({ initUser, initRoles, initRole = "", handleSubmit }:UserFormP
 
             { selectedRoleName === ROLES.doctor ?
                 <DoctorAccountForm doctor={doctor} setDoctor={setDoctor} />
-                : user.role_name !== "" && <StaffAccountForm staff={staff} setStaff={setStaff} />
+                : selectedRoleName !== "" && <StaffAccountForm staff={staff} setStaff={setStaff} />
             }
             <SubmitButton />
         </form>

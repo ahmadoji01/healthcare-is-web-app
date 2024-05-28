@@ -23,7 +23,6 @@ const AccountCreatePage = () => {
   const [title, setTitle] = useState("User");
   const [initUser, setInitUser] = useState(defaultUser);
   const [roles, setRoles] = useState<UserRole[]>([]);
-  const [selectedRole, setSelectedRole] = useState("");
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
 
@@ -59,7 +58,8 @@ const AccountCreatePage = () => {
       newUser = userMapper(res);
       openSnackbarNotification(ALERT_MESSAGE.success, "success");
       router.push(redirectPath);
-    }).catch( () => {
+    }).catch( err => {
+      console.log(err);
       isError = true;
       openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
     })
