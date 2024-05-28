@@ -4,7 +4,7 @@ import PatientAvatar from "./patient-avatar";
 import { useEffect, useState } from "react";
 import { Patient } from "@/modules/patients/domain/patient";
 import { Order } from "@/modules/orders/domain/order";
-import { DoctorName } from "@/utils/doctor-name-format";
+import { DoctorName } from "@/modules/doctors/domain/doctor.specifications";
 
 
 const PatientOverview = () => {

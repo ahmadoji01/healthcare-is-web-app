@@ -1,4 +1,4 @@
-import { DoctorName } from "@/utils/doctor-name-format";
+import { DoctorName } from "@/modules/doctors/domain/doctor.specifications";
 import { Doctor } from "../../domain/doctor";
 
 interface DeleteConfirmationProps {

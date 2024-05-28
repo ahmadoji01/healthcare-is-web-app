@@ -1,7 +1,7 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
-import { Button, Checkbox, Pagination } from "@mui/material";
+import { ChangeEvent, useState } from "react";
+import { Button, Checkbox } from "@mui/material";
 import { DoctorOrganization } from "../domain/doctor";
-import { DoctorName } from "@/utils/doctor-name-format";
+import { DoctorName } from "@/modules/doctors/domain/doctor.specifications";
 
 interface DoctorListTableProps {
   doctorOrgs: DoctorOrganization[],

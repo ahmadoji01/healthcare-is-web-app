@@ -1,6 +1,5 @@
-import { useDoctorContext } from "@/contexts/doctor-context";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
-import { DoctorName } from "@/utils/doctor-name-format";
+import { DoctorName } from "@/modules/doctors/domain/doctor.specifications";
 import Link from "next/link";
 
 interface DoctorToVisitProps {
