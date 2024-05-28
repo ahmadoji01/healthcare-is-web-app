@@ -7,6 +7,8 @@ import { useUserContext } from "@/contexts/user-context";
 import { Doctor, doctorNoIDMapper } from "@/modules/doctors/domain/doctor";
 import { createADoctor } from "@/modules/doctors/domain/doctors.actions";
 import { errorMapper } from "@/modules/errors/domains/error";
+import { ERROR_CODE } from "@/modules/errors/domains/errors.constants";
+import { errorMessage } from "@/modules/errors/domains/errors.specifications";
 import { Staff, staffNoIDMapper } from "@/modules/staffs/domain/staff";
 import { createAStaff } from "@/modules/staffs/domain/staffs.actions";
 import UserForm from "@/modules/users/application/form/user.form";
@@ -60,9 +62,11 @@ const AccountCreatePage = () => {
       openSnackbarNotification(ALERT_MESSAGE.success, "success");
       router.push(redirectPath);
     }).catch( err => {
+      console.log(err);
       let error = errorMapper(err.errors[0]);
+      let message = errorMessage(error.code, error.field);
       isError = true;
-      openSnackbarNotification(ALERT_MESSAGE.dataExists(error.field), "error");
+      openSnackbarNotification(message, "error");
     })
 
     if (isError) {

@@ -14,7 +14,7 @@ export function errorMapper(res:Record<string,any>) {
     let error:Error = {
         message: res.message,
         code: res.extensions.code,
-        field: res.extensions.field,
+        field: res.extensions.field? res.extensions.field : "",
     }
     return error;
 }
