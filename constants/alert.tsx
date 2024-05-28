@@ -7,5 +7,5 @@ export const ALERT_STATUS = {
 export const ALERT_MESSAGE = {
     success: 'Your request has successfully been processed!',
     server_error: 'Oops! Something went wrong. Try again!',
-    dataExists: (name:string) => { return 'This ' + name + ' already exists. Please try again with different input.' }
+    dataExists: (name:string) => { return 'This ' + name + ' already exists. Please try again with different ' + name + '.' }
 }
