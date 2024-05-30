@@ -49,15 +49,15 @@ type Organization = {
     organization: number,
 }
 
-export type VisitCreator = Omit<Visit, 'id'|'medical_record'> & Organization & { medical_record: number };
+export type VisitCreator = Omit<Visit, 'id'|'patient'|'doctor'|'medical_record'> & Organization & { patient:number, doctor:number, medical_record: number };
 export function visitCreatorMapper(visit:Visit, medicalRecordID:number, orgID:number) {
 
     let visitCreator: VisitCreator = {
         date_created: visit.date_created, 
         date_updated: visit.date_updated, 
         queue_number: visit.queue_number,
-        patient: visit.patient,
-        doctor: visit.doctor,
+        patient: visit.patient.id,
+        doctor: visit.doctor.id,
         status: visit.status,
         medical_record: medicalRecordID,
         organization: orgID,

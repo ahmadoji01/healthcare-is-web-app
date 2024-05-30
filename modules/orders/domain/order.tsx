@@ -38,11 +38,11 @@ type Organization = {
     organization: number,
 }
 
-export type OrderCreator = Omit<Order, 'id'|'visit'> & Organization & { visit: number };
+export type OrderCreator = Omit<Order, 'id'|'patient'|'visit'> & Organization & { patient:number|null, visit: number };
 export function orderCreatorMapper(order:Order, visitID:number, orgID:number) {
 
     let orderCreator: OrderCreator = { 
-        patient: order.patient,
+        patient: order.patient ? order.patient.id : null,
         order_items: order.order_items,
         total: order.total,
         status: order.status,

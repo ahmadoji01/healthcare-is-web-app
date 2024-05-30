@@ -72,22 +72,34 @@ const ExistingPatient = () => {
         let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, organization.id, activePatient.id);
         
         let queueNum = "";
+        let isError = false;
+
         await getTotalQueueByDoctorID(accessToken, activeDoctor.id).then( res => {
             let total = res[0].count? parseInt(res[0].count) + 1 : 1;
             setQueueNumber(total.toString());
             queueNum = total.toString();
         }).catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
+
+        if (isError) {
+            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            return;
+        }
         
         await createAPhysicalCheckup(accessToken, physicalCheckupNoID).then( res => {
             physicalCheckup = physicalCheckupMapper(res);
         }).catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
         
+        if (isError) {
+            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            return;
+        }
+
         let medicalRecord = defaultMedicalRecord;
         medicalRecord.care_type = CARE_TYPE.outpatient;
         medicalRecord.patient = activePatient;
@@ -97,10 +109,14 @@ const ExistingPatient = () => {
         await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
             medicalRecord = medicalRecordMapper(res);
         }).catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
 
+        if (isError) {
+            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            return;
+        }
 
         let visit = defaultVisit;
         visit.doctor = activeDoctor;
@@ -112,11 +128,15 @@ const ExistingPatient = () => {
         await createAVisit(accessToken, visitCreator).then( res => {
             visit = visitMapper(res);
         }).catch( err => {
-            console.log(err);
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
-        
+
+        if (isError) {
+            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            return;
+        }
+
         let order = defaultOrder;
         order.visit = visit;
         order.patient = activePatient;
@@ -125,10 +145,14 @@ const ExistingPatient = () => {
         await createAnOrder(accessToken, orderCreator).then( res => {
             order = orderMapper(res);
         }).catch( err => {
-            console.log(err);
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
+
+        if (isError) {
+            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            return;
+        }
 
         openSnackbarNotification(ALERT_MESSAGE.success, 'success');
         setActiveStep(activeStep + 1);
