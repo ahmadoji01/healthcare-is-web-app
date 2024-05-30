@@ -153,7 +153,7 @@ const MedicalRecord = () => {
                 <PatientOverview medicalRecord={activeMedicalRecord} medicalHistories={medHistories} />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
-                <div className="flex flex-col md:flex-row">
+                <div className="flex flex-col md:flex-row mb-8">
                   <div className="w-full p-2 h-[calc(100vh-12rem)] overflow-y-scroll overscroll-contain">
                     <MedicalRecordForm treatments={treatments} medicalRecord={activeMedicalRecord} setMedicalRecord={setActiveMedicalRecord} />
                   </div>

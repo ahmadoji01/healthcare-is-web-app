@@ -1,5 +1,5 @@
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient";
-import OrderItem, { orderItemsMapper } from "./order-item";
+import OrderItem, { OrderItemPatcher, orderItemPatcherMapper, orderItemsMapper } from "./order-item";
 import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
 import { ORDER_STATUS } from "./order.constants";
 
@@ -50,4 +50,21 @@ export function orderCreatorMapper(order:Order, visitID:number, orgID:number) {
         organization: orgID,
     }
     return orderCreator;
+}
+
+export type OrderPatcher = Omit<Order, 'id'|'patient'|'visit'|'order_items'> & Organization & { order_items: OrderItemPatcher[], patient:number|null, visit:number|null };
+export function orderPatcherMapper(order:Order, orgID:number) {
+
+    let items:OrderItemPatcher[] = [];
+    order.order_items?.map( (item) => items.push(orderItemPatcherMapper(item, orgID)));
+
+    let orderPatcher: OrderPatcher = { 
+        patient: order.patient ? order.patient.id : null,
+        order_items: items,
+        total: order.total,
+        status: order.status,
+        visit: order.visit ? order.visit.id : null,
+        organization: orgID,
+    }
+    return orderPatcher;
 }

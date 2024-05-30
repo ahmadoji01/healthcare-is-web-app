@@ -1,6 +1,6 @@
 import AlertModal from '@/components/Modal/AlertModal';
 import { ALERT_MESSAGE, ALERT_STATUS } from '@/constants/alert';
-import { Order, defaultOrder, orderMapper } from '@/modules/orders/domain/order';
+import { Order, defaultOrder, orderMapper, orderPatcherMapper } from '@/modules/orders/domain/order';
 import { getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.actions';
 import { PaymentMethod, defaultPaymentMethod } from '@/modules/payment-methods/domain/payment-method';
 import { Alert, Snackbar } from '@mui/material';
@@ -66,7 +66,7 @@ export const OrderSummaryProvider = ({
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertAction, setAlertAction] = useState<string>("");
 
-    const {accessToken} = useUserContext();
+    const {accessToken, organization} = useUserContext();
 
     useEffect( () => {
         getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay), 1)
@@ -89,15 +89,16 @@ export const OrderSummaryProvider = ({
             return;
         }
 
-        let orderPatcher = defaultOrder;
         if (typeof(selectedOrder) === 'undefined') {
+            setSnackbarMsg("Choose the order you want to finish first!");
+            setOpenSnackbar(true);
             return;
         }
 
-        orderPatcher = selectedOrder;
+        let orderPatcher = orderPatcherMapper(selectedOrder, organization.id)
         orderPatcher.status = ORDER_STATUS.paid;
         orderPatcher.total = total;
-        updateOrder(accessToken, orderPatcher.id, orderPatcher).then( () => {
+        updateOrder(accessToken, selectedOrder.id, orderPatcher).then( () => {
             setAlertStatus(ALERT_STATUS.success);
             setAlertMessage("Your payment has been received!");
             setAlertAction("refresh");

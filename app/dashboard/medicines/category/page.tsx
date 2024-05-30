@@ -162,7 +162,7 @@ const MedicineCategoryPage = () => {
     }
 
     const handleCreateSubmit = async (category:MedicineCategory) => {
-        let categoryCreator = medicineCategoryCreatorMapper(category, organization.id);
+        let categoryCreator = medicineCategoryCreatorMapper(category.name, organization.id);
 
         let categoryExists = false;
         await searchMedicineCategories(accessToken, category.name, 1).then( res => {
