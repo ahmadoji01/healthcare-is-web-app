@@ -8,6 +8,7 @@ import { Dispatch, SetStateAction, createContext, useContext, useEffect, useStat
 import { useUserContext } from './user-context';
 import { statusFilter } from '@/modules/orders/domain/order.specifications';
 import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
+import { OrderItem, defaultOrderItem } from '@/modules/orders/domain/order-item';
  
 interface OrderSummaryContextType {
     deleteModalOpen: boolean,
@@ -16,6 +17,7 @@ interface OrderSummaryContextType {
     selectedPayment: PaymentMethod|undefined,
     orders: Order[],
     selectedOrder: Order|undefined,
+    selectedItem: OrderItem,
     total: number,
     cashReceived: number,
     setTotal: Dispatch<SetStateAction<number>>,
@@ -23,6 +25,7 @@ interface OrderSummaryContextType {
     setSelectedPayment: Dispatch<SetStateAction<PaymentMethod|undefined>>,
     setOrders: Dispatch<SetStateAction<Order[]>>,
     setSelectedOrder: Dispatch<SetStateAction<Order|undefined>>,
+    setSelectedItem: Dispatch<SetStateAction<OrderItem>>,
     setCashReceived: Dispatch<SetStateAction<number>>,
     confirmPayment: () => void,
 }
@@ -34,6 +37,7 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     selectedPayment: defaultPaymentMethod,
     orders: [],
     selectedOrder: defaultOrder,
+    selectedItem: defaultOrderItem,
     total: 0,
     cashReceived: 0,
     setTotal: () => {},
@@ -41,6 +45,7 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     setSelectedPayment: () => {},
     setOrders: () => {},
     setSelectedOrder: () => {},
+    setSelectedItem: () => {},
     setCashReceived: () => {},
     confirmPayment: () => {},
 });
@@ -56,6 +61,7 @@ export const OrderSummaryProvider = ({
     const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>();
     const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order>();
+    const [selectedItem, setSelectedItem] = useState<OrderItem>(defaultOrderItem);
     const [total, setTotal] = useState<number>(1);
     const [cashReceived, setCashReceived] = useState<number>(0);
 
@@ -145,7 +151,7 @@ export const OrderSummaryProvider = ({
     }
 
     return (
-        <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedPayment, cashReceived, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, confirmPayment }}>
+        <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedItem, selectedPayment, cashReceived, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, setSelectedItem, confirmPayment }}>
             {children}
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSnackbar} autoHideDuration={6000} onClose={handleClose} sx={{ zIndex: 2147483647 }}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>

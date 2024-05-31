@@ -2,17 +2,17 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import OrderItem, { orderItemCategory, orderItemName } from "../../domain/order-item";
+import { OrderItem, orderItemCategory, orderItemName } from "../../domain/order-item";
 import Currency from "@/components/Currency";
 import { useEffect, useState } from "react";
 
 interface OrderItemListProps {
   orderItems: OrderItem[]|undefined,
-  handleModal: () => void,
   handleQtyChange: (action:string, itemIndex:number, qty:number) => void,
+  handleDelete: (item:OrderItem, index:number) => void,
 }
 
-const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemListProps) => {
+const OrderItemList = ({ orderItems, handleDelete, handleQtyChange }:OrderItemListProps) => {
 
   const [items, setItems] = useState<OrderItem[]|undefined>(orderItems);
 
@@ -98,7 +98,7 @@ const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemLis
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={handleModal}
+                    onClick={ () => handleDelete(item, key)}
                     style={{ background: "red" }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >

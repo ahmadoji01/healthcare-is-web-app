@@ -1,0 +1,7 @@
+{
+    "title": "Test",
+    "cashier": {
+        "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
+        "no_active_order": "No active order here. Please wait until an order appears"
+    }
+}

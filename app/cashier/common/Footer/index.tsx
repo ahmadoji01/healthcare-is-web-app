@@ -1,4 +1,4 @@
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
@@ -46,6 +46,16 @@ const Footer = () => {
                 </div>
 
                 <div className="flex items-center gap-3 2xsm:gap-7">
+                    <Link
+                        href={ typeof(selectedOrder) === 'undefined' ? "" : "#payment_method" }
+                        onClick={() => handleModal(false, true, false)}
+                        className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+                        >
+                        <span>
+                            <FontAwesomeIcon icon={faPlus} />
+                        </span>
+                        Add Item
+                    </Link>
                     <Link
                         href={ typeof(selectedOrder) === 'undefined' ? "" : "#payment_method" }
                         onClick={handleClick}
