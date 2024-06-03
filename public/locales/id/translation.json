@@ -20,7 +20,9 @@
         "discount": "Diskon/Asuransi",
         "confirm_order": "Konfirmasi Pembayaran",
         "item_already_added": "Item ini sudah ditambahkan",
-        "add_item": "Tambah Item"
+        "add_item": "Tambah Item",
+        "input_received_cash": "Masukkan Uang yang Diterima",
+        "change": "Kembalian"
     },
     "module_app": {
         "item_name": "Nama Item",

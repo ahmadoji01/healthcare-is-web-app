@@ -1,6 +1,7 @@
 import Currency from "@/components/Currency";
 import appConfig from "@/config";
 import { Dispatch, SetStateAction, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface CashPaymentProps {
     total: number,
@@ -10,6 +11,7 @@ interface CashPaymentProps {
 const CashPayment = ({ total, handleChange }: CashPaymentProps) => {
 
     const [cashReceived, setCashReceived] = useState<number>(0);
+    const {t} = useTranslation();
 
     const handleCashChange = (event: React.BaseSyntheticEvent) => {
         let received = 0;
@@ -34,12 +36,12 @@ const CashPayment = ({ total, handleChange }: CashPaymentProps) => {
                     <input
                         type="number"
                         onChange={event => handleCashChange(event)}
-                        placeholder="Input the Cash Received"
+                        placeholder={t("cashier.input_received_cash")}
                         className="w-full text-black dark:text-white rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                 </div>
                 <div>
-                    <h4 className="font-extrabold text-black dark:text-white text-xl">Change:</h4>
+                    <h4 className="font-extrabold text-black dark:text-white text-xl">{ t("cashier.change") }:</h4>
                     <h4 className="font-extrabold text-black dark:text-white text-xl"><Currency value={cashReceived-total} /></h4>
                 </div>
             </div>

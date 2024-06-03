@@ -26,7 +26,7 @@ import { defaultVisit, visitMapper, visitCreatorMapper } from "@/modules/visits/
 import { createAVisit, getTotalQueueByDoctorID } from "@/modules/visits/domain/visits.actions";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
-import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
+import { DOCTOR_PAID, ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
 import { defaultPhysicalCheckup, physicalCheckupMapper, physicalCheckupNoIDMapper } from "@/modules/physical-checkups/domain/physical-checkup";
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
@@ -140,6 +140,7 @@ const NewPatient = () => {
         order.visit = visit;
         order.patient = patient;
         order.status = ORDER_STATUS.active;
+        order.doctor_paid = DOCTOR_PAID.unpaid;
         let orderCreator = orderCreatorMapper(order, visit.id, organization.id);
         await createAnOrder(accessToken, orderCreator).then( res => {
             order = orderMapper(res);

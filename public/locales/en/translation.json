@@ -20,7 +20,9 @@
         "discount": "Discount/Insurance",
         "confirm_order": "Confirm Order",
         "item_already_added": "This item is already added",
-        "add_item": "Add Item"
+        "add_item": "Add Item",
+        "input_received_cash": "Input the Cash Received",
+        "change": "Change"
     },
     "module_app": {
         "item_name": "Item Name",
