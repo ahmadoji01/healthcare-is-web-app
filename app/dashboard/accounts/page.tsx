@@ -1,15 +1,7 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
-import TableOne from "@/components/Dashboard/Tables/TableOne";
-import DashboardModal from "@/components/Modal/Modal";
-import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useUserContext } from "@/contexts/user-context";
-import DoctorDeleteConfirmation from "@/modules/doctors/application/form/doctor.delete-confirmation";
-import DoctorForm from "@/modules/doctors/application/form/doctor.form";
-import DoctorListTable from "@/modules/doctors/application/list/doctor.list-table";
-import { Doctor, defaultDoctor, doctorMapper } from "@/modules/doctors/domain/doctor";
-import { getAllDoctors, getTotalDoctors } from "@/modules/doctors/domain/doctors.actions";
 import UserListTable from "@/modules/users/application/list/user.list-table";
 import { User, defaultUser, userMapper } from "@/modules/users/domain/user";
 import { getAllUsers } from "@/modules/users/domain/users.actions";
@@ -62,10 +54,6 @@ const AccountManagementDashboardPage = () => {
         setDataLoaded(true);
       });
   };
-
-  const handleSubmit = (user:User) => {
-    console.log(user);
-  }
 
   return (
     <>

@@ -10,6 +10,18 @@
     "back": "Back",
     "next": "Next",
     "examination_fee": "Examination Fee",
+    "patient_information": "Patient Information",
+    "name": "Name",
+    "resident_number_or_family_id_number": "Resident/Family ID",
+    "physical_info": "Physical Information",
+    "brief_complaint": "Brief Complaint",
+    "brief_complaint_placeholder": "What are the patient's complaints?",
+    "weight": "Weight",
+    "weight_placeholder": "Input Patient's Weight",
+    "height": "Height",
+    "height_placeholder": "Input Patient's Height",
+    "tension": "Tension",
+    "tension_placeholder": "Input Patient's Tension",
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
         "no_active_order": "No active order here. Please wait until an order appears",
@@ -23,6 +35,18 @@
         "add_item": "Add Item",
         "input_received_cash": "Input the Cash Received",
         "change": "Change"
+    },
+    "front_desk": {
+        "select_present_doctor": "Select the following doctors that are present",
+        "welcome": "Welcome, click the button below to open/close the clinic",
+        "open_clinic": "Open Clinic",
+        "close_clinic": "Close Clinic",
+        "queue_title": "Queue for Doctor",
+        "add_patient": "Add Patient",
+        "initial_checkup": "Initial Checkup",
+        "not_this_patient": "Not this patient?",
+        "search_for_a_patient": "Search for a Patient",
+        "new_patient": "New Patient"
     },
     "module_app": {
         "item_name": "Item Name",

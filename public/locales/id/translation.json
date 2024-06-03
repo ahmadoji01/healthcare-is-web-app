@@ -10,6 +10,18 @@
     "back": "Kembali",
     "next": "Lanjut",
     "examination_fee": "Biaya Pemeriksaan",
+    "patient_information": "Informasi Pasien",
+    "name": "Nama",
+    "resident_number_or_family_id_number": "NIK/KK",
+    "physical_info": "Informasi Fisik",
+    "brief_complaint": "Keluhan Singkat",
+    "brief_complaint_placeholder": "Apa Keluhan Pasien?",
+    "weight": "Berat",
+    "weight_placeholder": "Masukkan Berat Pasien",
+    "height": "Tinggi",
+    "height_placeholder": "Masukkan Tinggi Pasien",
+    "tension": "Tensi",
+    "tension_placeholder": "Masukkan Hasil Tensi Pasien",
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
         "no_active_order": "Saat ini belum ada pembayaran yang dapat diproses. Harap tunggu",
@@ -23,6 +35,18 @@
         "add_item": "Tambah Item",
         "input_received_cash": "Masukkan Uang yang Diterima",
         "change": "Kembalian"
+    },
+    "front_desk": {
+        "select_present_doctor": "Pilih dokter berikut yang akan praktik",
+        "welcome": "Selamat Datang! Tekan tombol di bawah ini untuk membuka/menutup klinik",
+        "open_clinic": "Buka Klinik",
+        "close_clinic": "Tutup Klinik",
+        "queue_title": "Antrian untuk",
+        "add_patient": "Tambah Pasien",
+        "initial_checkup": "Pemeriksaan Awal",
+        "not_this_patient": "Bukan pasien ini?",
+        "search_for_a_patient": "Cari Pasien",
+        "new_patient": "Daftarkan Pasien Baru"
     },
     "module_app": {
         "item_name": "Nama Item",

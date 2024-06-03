@@ -35,17 +35,20 @@ import QueueModal from '../../Modal';
 import PhysicalCheckupForm from '@/modules/physical-checkups/application/form/physical-checkup.form';
 import PatientInfo from '../../patient-info';
 import { PhysicalCheckup, defaultPhysicalCheckup } from '@/modules/physical-checkups/domain/physical-checkup';
-import { updateVisit } from '@/modules/visits/domain/visits.actions';
+import { deleteAVisit, updateVisit } from '@/modules/visits/domain/visits.actions';
 import { useUserContext } from '@/contexts/user-context';
 import { useAlertContext } from '@/contexts/alert-context';
 import { useTranslation } from 'react-i18next';
+import { DoctorName } from '@/utils/doctor-name-format';
+import { defaultDoctor } from '@/modules/doctors/domain/doctor';
+import { useFrontDeskContext } from '@/contexts/front-desk-context';
 
 interface BoardSectionListProps {
   handleSubmit: (checkup:PhysicalCheckup) => void,
 }
 
 const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
-  const {doctorVisits, activePatient} = useVisitContext();
+  const {doctorVisits, activePatient, activeVisit} = useVisitContext();
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const {t} = useTranslation();
@@ -173,34 +176,45 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
   const boardTitle = BOARD_SECTIONS;
 
   const { editModalOpen, deleteModalOpen, handleModal } = useDataModalContext();
-  const { activeDoctor } = useDoctorContext();
+  const { activeDoctor } = useFrontDeskContext();
+  const [doctor, setDoctor] = useState(defaultDoctor);
+
+  const handleDelete = () => {
+    deleteAVisit(accessToken, activeVisit.id)
+      .then( () => {
+        openSnackbarNotification(t('alert_msg.success'), "success");
+        window.location.reload();
+      }).catch( () => {
+        openSnackbarNotification(t('alert_msg.server_error'), "error");
+      })
+  }
 
   return (
     <>
       <div className="flex flex-col gap-y-4 rounded-sm border border-stroke bg-white p-3 shadow-default dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="pl-2 text-title-lg font-semibold text-black dark:text-white">Queue for Doctor { activeDoctor.name }</h3>
+          <h3 className="pl-2 text-title-lg font-semibold text-black dark:text-white">{t("front_desk.queue_title")} {DoctorName(activeDoctor.name, activeDoctor.specialization)}</h3>
         </div>
         <div>
           <Link
-              href="/operational/front-desk/patient-registration"
-              target="_blank"
-              className="inline-flex items-center justify-center gap-2.5 rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
-              <span>
-                <FontAwesomeIcon icon={faPlus} width={20} height={20} />
-              </span>
-              Add Patient
-            </Link>
+            href="/operational/front-desk/patient-registration"
+            target="_blank"
+            className="inline-flex items-center justify-center gap-2.5 rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
+            <span>
+              <FontAwesomeIcon icon={faPlus} width={20} height={20} />
+            </span>
+            {t("front_desk.add_patient")}
+          </Link>
         </div>
       </div>
       <div className="grid grid-cols-1 gap-7.5 grid-cols-2">
-        <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } title="Initial Checkup">
+        <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } title={t("front_desk.initial_checkup")}>
           <>
             <PatientInfo patient={activePatient} />
             <PhysicalCheckupForm patient={activePatient} initCheckup={defaultPhysicalCheckup} handleSubmit={handleSubmit} />
           </>
         </QueueModal>
-        <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
+        <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}

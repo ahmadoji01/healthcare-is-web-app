@@ -6,6 +6,7 @@ import { faBullhorn, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons
 import { useDataModalContext } from "@/contexts/data-modal-context";
 import { Visit } from "@/modules/visits/domain/visit";
 import { useVisitContext } from "@/contexts/visit-context";
+import { useTranslation } from "react-i18next";
 
 type TaskItemProps = {
   visit: Visit,
@@ -14,13 +15,14 @@ type TaskItemProps = {
 const TaskItem = ({ visit }: TaskItemProps) => {
   const { handleModal } = useDataModalContext();
   const { setActivePatient, setActiveVisit } = useVisitContext();
+  const {t} = useTranslation();
 
   return (
     <div className="mb-1 task rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="relative flex cursor-move justify-between">
         <div>
           <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{visit?.patient.name}</h5>
-          <p>Queue Number</p>
+          <p>{t("queue_number")}</p>
           <h4 className="text-xl font-medium text-black dark:text-white">{visit.queue_number}</h4>
         </div>
         <div className="items-center justify-center p-1 sm:flex xl:p-2">
@@ -38,7 +40,7 @@ const TaskItem = ({ visit }: TaskItemProps) => {
               <Link
                 href="#"
                 style={{ background: "red" }}
-                onMouseDown={ () => handleModal(false, false) }
+                onMouseDown={ () => { setActiveVisit(visit); handleModal(false, false);} }
                 className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                 >
                 <FontAwesomeIcon width={18} height={18} icon={faTrash} style={{ color: 'white' }} />
