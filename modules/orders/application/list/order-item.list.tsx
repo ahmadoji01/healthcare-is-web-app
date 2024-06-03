@@ -4,7 +4,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { OrderItem, orderItemCategory, orderItemName } from "../../domain/order-item";
 import Currency from "@/components/Currency";
-import { useEffect, useState } from "react";
+import { FocusEvent, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface OrderItemListProps {
@@ -16,13 +16,41 @@ interface OrderItemListProps {
 const OrderItemList = ({ orderItems, handleDelete, handleQtyChange }:OrderItemListProps) => {
 
   const [items, setItems] = useState<OrderItem[]|undefined>(orderItems);
+  const qtyRef = useRef<HTMLInputElement>(null)
+  const [quantity, setQuantity] = useState(0);
   const { t } = useTranslation();
 
   useEffect( () => {
     setItems(orderItems);
   }, [items]);
 
-  const handleChange = (action:string, itemIndex:number, qty:number) => {
+  const handleChange = (action:string, itemIndex:number, e: FocusEvent<HTMLInputElement,Element>|null) => {
+    let qty = 0;
+    
+    if (qtyRef.current === null) {
+      return;
+    }
+
+    qty = parseInt(qtyRef.current.value);
+
+    if (e === null) {
+      if (action === "add")
+        qty++;
+      if (action === "substract")
+        qty--;
+
+      qtyRef.current.value = qty.toString();
+      handleQtyChange(action, itemIndex, qty);
+      return;
+    }
+
+    if (parseInt(e.target.value) <= 0 || e.target.value === "") {
+      qty = 1;
+      e.target.value = qty.toString();
+    } else {
+      qty = parseInt(e.target.value);
+    }
+    setQuantity(qty);
     handleQtyChange(action, itemIndex, qty);
   }
 
@@ -50,9 +78,6 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange }:OrderItemLi
               Total
             </h5>
           </div>
-          <div className="p-1 text-center xl:p-2">
-            
-          </div>
         </div>
 
         {typeof(items) !== "undefined" && items.map((item, key) => (
@@ -76,17 +101,19 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange }:OrderItemLi
                 <div className="custom-number-input h-10">
                   <div className="flex flex-row h-10 w-full rounded-lg mt-1">
                     <button className="h-full w-10 rounded-l cursor-pointer outline-none">
-                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', key, 0)}>−</span>
+                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', key, null)}>−</span>
                     </button>
                     <input 
+                      ref={qtyRef}
+                      required
                       defaultValue={item.quantity}
                       min="1"
                       type="number" 
                       className="quantity-input text-center w-10 font-semibold bg-transparent" 
                       name="custom-input-number"
-                      onBlur={e => handleChange('input', key, parseInt(e.target.value? e.target.value : "1"))} />
+                      onBlur={e => { handleChange('input', key, e)} } />
                     <button data-action="increment" className="h-full w-10">
-                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', key, 0)}>+</span>
+                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', key, null)}>+</span>
                     </button>
                   </div>
                 </div>
