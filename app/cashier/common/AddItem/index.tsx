@@ -1,20 +1,18 @@
-import Loader from "@/components/Loader";
-import { faArrowAltCircleUp, faArrowCircleRight, faArrowDown, faArrowRight, faExpand, faExpandArrowsAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faArrowAltCircleUp, faArrowRight, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Snackbar, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import ItemCard from "./item-card";
-import Medicine, { medicineMapper } from "@/modules/medicines/domain/medicine";
-import { medicinesFakeData } from "@/modules/medicines/infrastructure/medicines.fakes";
+import { Medicine, medicineMapper } from "@/modules/medicines/domain/medicine";
 import { Treatment, treatmentMapper } from "@/modules/treatments/domain/treatment";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
-import Medication from "@/modules/medical-records/domain/medication";
-import OrderItem from "@/modules/orders/domain/order-item";
-import { v4 as uuidv4 } from 'uuid';
-import { MedicineDoses } from "@/modules/medical-records/domain/medical-record";
-import { getAllMedicines } from "@/modules/medicines/domain/medicines.actions";
+import { OrderItem } from "@/modules/orders/domain/order-item";
+import { getAllMedicines, searchMedicines } from "@/modules/medicines/domain/medicines.actions";
 import { useUserContext } from "@/contexts/user-context";
-import { getAllTreatments } from "@/modules/treatments/domain/treatments.actions";
+import { getAllTreatments, searchTreatments } from "@/modules/treatments/domain/treatments.actions";
+import { useTranslation } from "react-i18next";
+import { useAlertContext } from "@/contexts/alert-context";
+import { ALERT_MESSAGE } from "@/constants/alert";
 
 function isAMedicine(obj: Medicine|Treatment) {
     if (obj.hasOwnProperty('category')) {
@@ -23,6 +21,8 @@ function isAMedicine(obj: Medicine|Treatment) {
     return false;
 }
 
+let activeTimeout = null;
+
 const AddItem = () => {
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -30,9 +30,27 @@ const AddItem = () => {
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [treatments, setTreatments] = useState<Treatment[]>([]);
+    const [searchQuery, setSearchQuery] = useState("");
     
     const { selectedOrder, handleModal, setSelectedOrder } = useOrderSummaryContext();
     const {accessToken} = useUserContext();
+    const {openSnackbarNotification} = useAlertContext();
+    const { t } = useTranslation();
+
+    const fetchAllData = () => {
+        getAllMedicines(accessToken, 1).then( res => {
+            let meds:Medicine[] = [];
+            res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
+            setMedicines(meds);
+            setLoading(false);
+        });
+        getAllTreatments(accessToken, 1).then( res => {
+            let treats:Treatment[] = [];
+            res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
+            setTreatments(treats);
+            setLoading(false);
+        });
+    }
 
     useEffect( () => {
         getAllMedicines(accessToken, 1).then( res => {
@@ -47,11 +65,39 @@ const AddItem = () => {
           setTreatments(treats);
           setLoading(false);
         });
-    }, []);    
+    }, []);  
+    
+    const handleSearch = (query:string) => {
+        if (query.length > 3) {
+            setLoading(true);
+            searchMedicines(accessToken, query, 1).then( res => {
+                let meds:Medicine[] = [];
+                res?.map( (med) => { meds.push(medicineMapper(med)); });
+                setMedicines(meds);
+                setLoading(false);
+            });
+            searchTreatments(accessToken, query, 1).then( res => {
+                let treats:Treatment[] = [];
+                res?.map( (treat) => { treats.push(treatmentMapper(treat)); });
+                setTreatments(treats);
+                setLoading(false);
+            });
+        }
+        if (query.length === 0) {
+            setLoading(false);
+            fetchAllData();
+        }
+    }
 
-    const handleChange = () => {
-        setLoading(true);
-        setTimeout(() => setLoading(false), 1000);
+    const handleChange = (query:string) => {
+        setSearchQuery(query);
+        if (activeTimeout) {
+          clearTimeout(activeTimeout);
+        }
+        
+        activeTimeout = setTimeout(() => {
+          handleSearch(query);
+        }, 1000);
     }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -63,8 +109,7 @@ const AddItem = () => {
 
     const handleAddItem = (item:Medicine|Treatment, quantity:number) => {
         if (typeof(selectedOrder) === 'undefined') {
-            setOpenSnackbar(true);
-            setSnackbarMsg("No active order is selected");
+            openSnackbarNotification(ALERT_MESSAGE.no_order_selected, "warning");
             return;
         }
         let newSelectedOrder = {...selectedOrder};
@@ -80,8 +125,7 @@ const AddItem = () => {
         }
         newSelectedOrder.order_items[items.length] = orderItem;
         setSelectedOrder(newSelectedOrder);
-        setOpenSnackbar(true);
-        setSnackbarMsg("Item has successfully been added");
+        openSnackbarNotification(ALERT_MESSAGE.item_added, "success");
         return;   
     }
 
@@ -95,7 +139,7 @@ const AddItem = () => {
                 <input
                     type="text"
                     placeholder="Type to search..."
-                    onChange={handleChange}
+                    onChange={ e => handleChange(e.target.value)}
                     className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
                     />
                 
@@ -112,7 +156,7 @@ const AddItem = () => {
                         aria-controls="panel1-content"
                         id="panel1-header"
                         >
-                        <h4 className="font-extrabold">Items and Medicines</h4>
+                        <h4 className="font-extrabold">{ t("medicines") }</h4>
                     </AccordionSummary>
                     <AccordionDetails>
                         { medicines?.map( (medicine) => (
@@ -126,11 +170,11 @@ const AddItem = () => {
                         aria-controls="panel1-content"
                         id="panel1-header"
                         >
-                        <h4 className="font-extrabold">Treatments</h4>
+                        <h4 className="font-extrabold">{ t("treatments") }</h4>
                     </AccordionSummary>
                     <AccordionDetails>
                         { treatments?.map( (treatment) => (
-                            <ItemCard item={treatment} showQtyHandler={true} handleAddItem={handleAddItem} />
+                            <ItemCard item={treatment} showQtyHandler={false} handleAddItem={handleAddItem} />
                         )) }
                     </AccordionDetails>
                 </Accordion>

@@ -23,7 +23,7 @@ const OrderSummary = () => {
 
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const { accessToken, organization } = useUserContext();
     const { openSnackbarNotification } = useAlertContext();
     const { orders, selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, selectedItem, setSelectedOrder, setSelectedItem, handleModal } = useOrderSummaryContext();
@@ -109,7 +109,7 @@ const OrderSummary = () => {
                         </div>
                     </div>
                     <div className="mt-6 text-black dark:text-white">
-                        <h3 className="text-3xl font-extrabold mb-2">Order Items</h3>
+                        <h3 className="text-3xl font-extrabold mb-2">{ t("order_items") }</h3>
                         <OrderItemList orderItems={selectedOrder?.order_items} handleDelete={handleDeleteItem} handleQtyChange={handleQtyChange} />
                     </div>
                     <div className="flex mt-6">

@@ -1,7 +1,28 @@
 {
     "title": "Test",
+    "queue_number": "Queue Number",
+    "medicines": "Medicines",
+    "treatments": "Treatments",
+    "tax": "Tax",
+    "order_items": "Order Items",
+    "quantity": "Quantity",
+    "unit_price": "Unit Price",
+    "back": "Kembali",
+    "next": "Lanjut",
     "cashier": {
-        "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
-        "no_active_order": "No active order here. Please wait until an order appears"
+        "select_patient": "Choose one of patient besides to process the order",
+        "no_active_order": "No active order here. Please wait until an order appears",
+        "payment": "Payment",
+        "default_patient_name": "Patient Name",
+        "treated_by": "Treated by",
+        "treatment_exam": "Treatment & Exam",
+        "discount": "Discount/Insurance",
+        "confirm_order": "Confirm Order",
+        "item_already_added": "This item is already added"
+    },
+    "module_app": {
+        "item_name": "Item Name",
+        "delete_confirmation": "Are you sure you want to delete this data?",
+        "delete_subtitle": "Any related data to this item will be deleted"
     }
 }

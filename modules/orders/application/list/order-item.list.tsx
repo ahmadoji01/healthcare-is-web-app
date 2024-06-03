@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { OrderItem, orderItemCategory, orderItemName } from "../../domain/order-item";
 import Currency from "@/components/Currency";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface OrderItemListProps {
   orderItems: OrderItem[]|undefined,
@@ -15,6 +16,7 @@ interface OrderItemListProps {
 const OrderItemList = ({ orderItems, handleDelete, handleQtyChange }:OrderItemListProps) => {
 
   const [items, setItems] = useState<OrderItem[]|undefined>(orderItems);
+  const { t } = useTranslation();
 
   useEffect( () => {
     setItems(orderItems);
@@ -30,17 +32,17 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange }:OrderItemLi
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
           <div className="p-2 xl:p-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Item Name
+              { t("module_app.item_name") }
             </h5>
           </div>
           <div className="hidden p-2 text-center sm:block xl:p-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Unit Price
+              { t("unit_price") }
             </h5>
           </div>
           <div className="hidden p-2 text-center sm:block xl:p-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Quantity
+              { t("quantity") }
             </h5>
           </div>
           <div className="p-2 text-center xl:p-4">

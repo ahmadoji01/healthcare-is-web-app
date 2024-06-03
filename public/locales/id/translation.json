@@ -1,7 +1,28 @@
 {
     "title": "Test",
+    "queue_number": "Nomor Antrian",
+    "medicines": "Obat",
+    "treatments": "Tindakan",
+    "tax": "Pajak",
+    "order_items": "Daftar Item",
+    "quantity": "Jumlah",
+    "unit_price": "Harga Satuan",
+    "back": "Kembali",
+    "next": "Lanjut",
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
-        "no_active_order": "Saat ini belum ada pembayaran yang dapat diproses. Harap tunggu"
+        "no_active_order": "Saat ini belum ada pembayaran yang dapat diproses. Harap tunggu",
+        "payment": "Pembayaran",
+        "default_patient_name": "Nama Pasien",
+        "treated_by": "Diperiksa oleh",
+        "treatment_exam": "Tindakan dan Pemeriksaan",
+        "discount": "Diskon/Asuransi",
+        "confirm_order": "Konfirmasi Pembayaran",
+        "item_already_added": "Item ini sudah ditambahkan"
+    },
+    "module_app": {
+        "item_name": "Nama Item",
+        "delete_confirmation": "Yakin ingin menghapus data ini?",
+        "delete_subtitle": "Data yang berkaitan dengan item ini akan dihapus"
     }
 }

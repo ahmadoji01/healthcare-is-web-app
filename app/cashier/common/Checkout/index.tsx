@@ -12,8 +12,9 @@ import Link from "next/link";
 import RegisterFinished from "@/app/operational/front-desk/patient-registration/common/register-finished";
 import Payment from "./payment";
 import OrderItemReview from "@/modules/orders/application/list/order-item.review";
-import OrderItem from "@/modules/orders/domain/order-item";
+import { OrderItem } from "@/modules/orders/domain/order-item";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
+import { useTranslation } from "react-i18next";
 
 const steps = ['Review Items', 'Payment'];
 
@@ -31,6 +32,7 @@ function getStepContent(step: number, orderItems: OrderItem[]|undefined, total: 
 const Checkout = () => {
     const [activeStep, setActiveStep] = React.useState(0);
     const { selectedOrder, total, confirmPayment } = useOrderSummaryContext();
+    const { t } = useTranslation();
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
@@ -64,7 +66,7 @@ const Checkout = () => {
                                     href="#"
                                     onClick={handleBack}
                                     className="flex flex-col items-center justify-center rounded-full bg-meta-3 py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                    Back
+                                    { t("back") }
                                 </Link>
                             )}
                         </div>
@@ -73,7 +75,7 @@ const Checkout = () => {
                             href="#"
                             onClick={activeStep === steps.length - 1 ? confirmPayment : handleNext}
                             className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                                {activeStep === steps.length - 1 ? t('cashier.confirm_order') : t('next')}
                             </Link>
                         </div>
                     </div>

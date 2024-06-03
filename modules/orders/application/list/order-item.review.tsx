@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { orderItemsFakeData } from "../../infrastructure/order-item.fakes";
 import OrderItem, { orderItemCategory, orderItemName } from "../../domain/order-item";
 import Currency from "@/components/Currency";
+import { useTranslation } from "react-i18next";
 
 interface OrderItemReviewProps {
   orderItems: OrderItem[]|undefined,
@@ -10,23 +11,25 @@ interface OrderItemReviewProps {
 
 const OrderItemReview = ({ orderItems, total = 0 }:OrderItemReviewProps) => {
   
+  const { t } = useTranslation();
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-4">
           <div className="p-2 xl:p-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Item Name
+              { t("module_app.item_name") }
             </h5>
           </div>
           <div className="hidden p-2 text-center sm:block xl:p-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Unit Price
+              { t("unit_price") }
             </h5>
           </div>
           <div className="hidden p-2 text-center sm:block xl:p-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Quantity
+              { t("quantity") }
             </h5>
           </div>
           <div className="p-2 text-center xl:p-4">
