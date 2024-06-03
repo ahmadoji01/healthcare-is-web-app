@@ -1,6 +1,5 @@
 import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine";
 import { Treatment, defaultTreatment } from "@/modules/treatments/domain/treatment";
-import { Order, defaultOrder } from "./order";
 import { MedicineDoses } from "@/modules/medical-records/domain/medical-record";
 
 export interface OrderItem {

@@ -1,7 +1,6 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import MedicineForm from "@/modules/medicines/application/form/medicine.form";
@@ -11,6 +10,7 @@ import MedicineCategory, { defaultMedicineCategory, medicineCategoryCreatorMappe
 import { createAMedicine, medicineExistChecker } from "@/modules/medicines/domain/medicines.actions";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const MedicineCreatePage = () => {
   const [medicine, setMedicine] = useState(defaultMedicine);
@@ -18,6 +18,7 @@ const MedicineCreatePage = () => {
   const [categoryName, setCategoryName] = useState("");
   const {accessToken, organization} = useUserContext();
   const {setOpen, setMessage, setStatus} = useAlertContext();
+  const {t} = useTranslation();
 
   useEffect( () => {
     getAllMedicineCategories(accessToken, 1)
@@ -40,7 +41,7 @@ const MedicineCreatePage = () => {
     
     if (medicineExists) { 
       setOpen(true);
-      setMessage(ALERT_MESSAGE.dataExists('medicine'));
+      setMessage(t("alert_msg.data_exists"));
       setStatus("error");
       return;
     }
@@ -64,7 +65,7 @@ const MedicineCreatePage = () => {
       return;
     }).catch( err => {
       setOpen(true);
-      setMessage(ALERT_MESSAGE.server_error);
+      setMessage(t("alert_msg.server_error"));
       setStatus("error");
       return;
     })

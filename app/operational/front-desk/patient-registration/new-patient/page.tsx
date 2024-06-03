@@ -20,7 +20,6 @@ import { createAPatient } from "@/modules/patients/domain/patients.actions";
 import { defaultPatient, patientMapper, patientNoIDMapper } from "@/modules/patients/domain/patient";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultVisit, visitMapper, visitCreatorMapper } from "@/modules/visits/domain/visit";
@@ -28,10 +27,10 @@ import { createAVisit } from "@/modules/visits/domain/visits.actions";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
-import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
 import { defaultPhysicalCheckup, physicalCheckupMapper, physicalCheckupNoIDMapper } from "@/modules/physical-checkups/domain/physical-checkup";
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
+import { useTranslation } from "react-i18next";
 
 const steps = ['Personal Data', 'Doctor to Visit', 'Examination Time', 'Review Your Input'];
 
@@ -58,6 +57,7 @@ const NewPatient = () => {
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
     const {activeDoctor} = useDoctorContext();
+    const {t} = useTranslation();
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
@@ -120,7 +120,7 @@ const NewPatient = () => {
         order.visit = visit;
         order.patient = patient;
         order.status = ORDER_STATUS.active;
-        let orderCreator = orderCreatorMapper(order, visit.id, user.organizationID);
+        let orderCreator = orderCreatorMapper(order, visit.id, organization.id);
         await createAnOrder(accessToken, orderCreator).then( res => {
             order = orderMapper(res);
         }).catch( err => {
@@ -128,7 +128,7 @@ const NewPatient = () => {
             return;
         });
 
-        openSnackbarNotification(ALERT_MESSAGE.success, 'success');
+        openSnackbarNotification(t('alert_msg.success'), 'success');
         setActiveStep(activeStep + 1);
         return;
     }

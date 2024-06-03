@@ -12,7 +12,6 @@ import { useUserContext } from "@/contexts/user-context";
 import { getAllTreatments, searchTreatments } from "@/modules/treatments/domain/treatments.actions";
 import { useTranslation } from "react-i18next";
 import { useAlertContext } from "@/contexts/alert-context";
-import { ALERT_MESSAGE } from "@/constants/alert";
 
 function isAMedicine(obj: Medicine|Treatment) {
     if (obj.hasOwnProperty('category')) {
@@ -109,7 +108,7 @@ const AddItem = () => {
 
     const handleAddItem = (item:Medicine|Treatment, quantity:number) => {
         if (typeof(selectedOrder) === 'undefined') {
-            openSnackbarNotification(ALERT_MESSAGE.no_order_selected, "warning");
+            openSnackbarNotification(t("alert_msg.no_order_selected"), "warning");
             return;
         }
         let newSelectedOrder = {...selectedOrder};
@@ -125,7 +124,7 @@ const AddItem = () => {
         }
         newSelectedOrder.order_items[items.length] = orderItem;
         setSelectedOrder(newSelectedOrder);
-        openSnackbarNotification(ALERT_MESSAGE.item_added, "success");
+        openSnackbarNotification(t("alert_msg.item_added"), "success");
         return;   
     }
 

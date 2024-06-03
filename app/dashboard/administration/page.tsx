@@ -1,6 +1,5 @@
 'use client';
 
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import { errorMapper } from "@/modules/errors/domains/error";
@@ -9,16 +8,18 @@ import AdministrationForm from "@/modules/organizations/application/form/adminis
 import { Organization, defaultOrganization, organizationMapper, organizationPatcherMapper } from "@/modules/organizations/domain/organization";
 import { getOrganization, updateOrganization, uploadClinicLogo } from "@/modules/organizations/domain/organizations.actions";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const AdministrationPage = () => {
 
     const {organization, setOrganization, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
+    const {t} = useTranslation();
 
     const handleSubmit = (organization:Organization) => {
       let orgPatcher = organizationPatcherMapper(organization);
       updateOrganization(accessToken, organization.id, orgPatcher).then( res => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
       }).catch( err => {
         let error = errorMapper(err);
         let message = errorMessage(error.code, error.field);
@@ -38,15 +39,15 @@ const AdministrationPage = () => {
         await uploadClinicLogo(accessToken, data)
           .then( res => logo = res)
           .catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+            openSnackbarNotification(t("alert_msg.server_error"), "error");
           });
         await updateOrganization(accessToken, organization.id, { logo: logo })
           .then( res => { 
-            openSnackbarNotification(ALERT_MESSAGE.success, "success");
+            openSnackbarNotification(t("alert_msg.success"), "success");
             setOrganization({ ...organization, logo: { id: logo.id, filename_download: logo.filename_download } })
           })
           .catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+            openSnackbarNotification(t("alert_msg.server_error"), "error");
           });
       };
 

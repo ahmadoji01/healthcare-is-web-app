@@ -4,8 +4,6 @@ import PatientSearchListTable from "./patient-search-list-table";
 import { Patient, patientMapper } from "@/modules/patients/domain/patient";
 import { getAllPatients, getPatientsWithFilter, searchPatients } from "@/modules/patients/domain/patients.actions";
 import { useUserContext } from "@/contexts/user-context";
-import { nameFilter } from "@/modules/patients/domain/patient.specifications";
-import { ALERT_MESSAGE, ALERT_STATUS } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 
 let activeTimeout = null;
@@ -19,7 +17,6 @@ const PatientSearchForm = ({ handleNext }:PatientSearchFormProps) => {
     const [loading, setLoading] = useState(false);
     const [patients, setPatients] = useState<Patient[]>([]);
     const [searched, setSearched] = useState(false);
-    const {openSnackbarNotification} = useAlertContext();
     const {accessToken} = useUserContext();
 
     const handleChange = (query:string) => {

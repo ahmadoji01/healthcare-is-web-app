@@ -24,5 +24,16 @@
         "item_name": "Item Name",
         "delete_confirmation": "Are you sure you want to delete this data?",
         "delete_subtitle": "Any related data to this item will be deleted"
+    },
+    "alert_msg": {
+        "success": "Your request has successfully been processed!",
+        "server_error": "Oops! Something went wrong. Try again!",
+        "forbidden": "You are not allowed to do this operation!",
+        "data_exists": "The data with this input already exists. Please try again with different input.",
+        "no_order_selected": "No active order is selected.",
+        "item_added": "Item has successfully been added.",
+        "amount_not_enough": "Received amount is not enough.",
+        "no_payment_selected": "Choose the payment method first!",
+        "payment_received": "Payment has been received!"
     }
 }

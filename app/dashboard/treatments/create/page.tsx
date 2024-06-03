@@ -1,7 +1,6 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import TreatmentForm from "@/modules/treatments/application/form/treatment.form";
@@ -9,11 +8,13 @@ import { Treatment, defaultTreatment, treatmentCreatorMapper } from "@/modules/t
 import { createATreatment, treatmentExistChecker } from "@/modules/treatments/domain/treatments.actions";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const TreatmentCreatePage = () => {
   const [treatment, setTreatment] = useState(defaultTreatment);
   const {accessToken, organization} = useUserContext();
-  const {setOpen, setMessage, setStatus} = useAlertContext();
+  const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
 
   const handleSubmit = async (treatment:Treatment) => {
     let treatmentExists = false;
@@ -26,23 +27,17 @@ const TreatmentCreatePage = () => {
       });
     
     if (treatmentExists) { 
-      setOpen(true);
-      setMessage(ALERT_MESSAGE.dataExists('treatment'));
-      setStatus("error");
+      openSnackbarNotification(t('alert_msg.data_exists'), "error");
       return;
     }
 
     let treatmentNoID = treatmentCreatorMapper(treatment, organization.id);
     await createATreatment(accessToken, treatmentNoID).then( () => {
-      setOpen(true);
-      setMessage("Success! Treatment has been created!");
-      setStatus("success");
+      openSnackbarNotification(t('alert_msg.success'), "success");
       window.location.href = '/dashboard/treatments'
       return;
     }).catch( err => {
-      setOpen(true);
-      setMessage(ALERT_MESSAGE.server_error);
-      setStatus("error");
+      openSnackbarNotification(t('alert_msg.server_error'), "error");
       return;
     })
   }

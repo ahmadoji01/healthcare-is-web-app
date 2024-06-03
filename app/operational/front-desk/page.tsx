@@ -15,8 +15,8 @@ import { Doctor, DoctorOrganization, doctorMapper, doctorOrgMapper } from "@/mod
 import DashboardModal from "@/components/Modal/Modal";
 import { getAllDoctors, getDoctorsInOrg, updateDoctorOrgsStatus } from "@/modules/doctors/domain/doctors.actions";
 import { useAlertContext } from "@/contexts/alert-context";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import Spinner from "@/components/Spinner";
+import { useTranslation } from "react-i18next";
 
 const OpenCloseClinic = () => {
 
@@ -26,6 +26,7 @@ const OpenCloseClinic = () => {
 
     const {accessToken, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
+    const {t} = useTranslation();
     const router = useRouter();
 
     const fetchDoctors = () => {
@@ -36,7 +37,7 @@ const OpenCloseClinic = () => {
             setDoctors(docOrgs);
             setLoading(false);
         }).catch( () => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+            openSnackbarNotification(t('alert_msg.server_error'), "error");
             setLoading(false);
         })
     }
@@ -63,14 +64,14 @@ const OpenCloseClinic = () => {
         await updateDoctorOrgsStatus(accessToken, selectedDoctorOrgIds, { status: "present" })
             .catch( () => {
                 isError = true;
-                openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+                openSnackbarNotification(t('alert_msg.server_error'), "error");
             })
         
         if (isError)
             return;
 
         updateOrganization(accessToken, organization.id, { status: ORG_STATUS.open }).then( res => {
-            openSnackbarNotification(ALERT_MESSAGE.success, "success");
+            openSnackbarNotification(t('alert_msg.success'), "success");
             router.push("front-desk/queue-manager");
         });
     }

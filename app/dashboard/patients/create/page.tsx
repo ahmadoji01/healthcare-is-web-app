@@ -1,7 +1,6 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import PatientForm from "@/modules/patients/application/form/patient.form";
@@ -9,11 +8,13 @@ import { Patient, defaultPatient, patientNoIDMapper } from "@/modules/patients/d
 import { createAPatient, patientExistChecker } from "@/modules/patients/domain/patients.actions";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const PatientCreatePage = () => {
   const [patient, setPatient] = useState(defaultPatient);
   const {accessToken, organization} = useUserContext();
-  const {setOpen, setMessage, setStatus} = useAlertContext();
+  const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
 
   const handleSubmit = async (patient:Patient) => {
     let patientExists = false;
@@ -26,23 +27,17 @@ const PatientCreatePage = () => {
       });
     
     if (patientExists) { 
-      setOpen(true);
-      setMessage(ALERT_MESSAGE.dataExists('patient'));
-      setStatus("error");
+      openSnackbarNotification(t("alert_msg.data_exists"), "success");
       return;
     }
 
     let patientNoID = patientNoIDMapper(patient, organization.id);
     await createAPatient(accessToken, patientNoID).then( () => {
-      setOpen(true);
-      setMessage("Success! Patient has been created!");
-      setStatus("success");
+      openSnackbarNotification(t("alert_msg.success"), "success");
       window.location.href = '/dashboard/patients'
       return;
     }).catch( err => {
-      setOpen(true);
-      setMessage(ALERT_MESSAGE.server_error);
-      setStatus("error");
+      openSnackbarNotification(t("alert_msg.server_error"), "error");
       return;
     })
   }

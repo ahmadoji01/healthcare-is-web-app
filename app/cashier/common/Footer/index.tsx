@@ -7,22 +7,24 @@ import { useState } from "react";
 import Currency from "@/components/Currency";
 import AlertModal from "@/components/Modal/AlertModal";
 import { ALERT_STATUS } from "@/constants/alert";
+import { useAlertContext } from "@/contexts/alert-context";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
 
     const { selectedOrder, total, selectedPayment, handleModal } = useOrderSummaryContext();
+    const {openSnackbarNotification} = useAlertContext();
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
+    const {t} = useTranslation();
 
     const handleClick = () => {
         if (typeof(selectedOrder) === 'undefined') {
-            setOpenSnackbar(true);
-            setSnackbarMsg("Choose the patient first!")
+            openSnackbarNotification(t("alert_msg.no_order_selected"), "error");
             return;
         }
         if (typeof(selectedPayment) === 'undefined') {
-            setOpenSnackbar(true);
-            setSnackbarMsg("Choose the right payment method first!")
+            openSnackbarNotification(t("alert_msg.no_payment_selected"), "error");
             return;
         }
         handleModal(false,false,true);

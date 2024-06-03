@@ -3,7 +3,6 @@
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
 import Spinner from "@/components/Spinner";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
@@ -16,6 +15,7 @@ import { faAdd, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -32,6 +32,7 @@ const MedicineCategoryPage = () => {
     
     const {accessToken, user, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
+    const {t} = useTranslation();
 
     const fetchAllCategories = () => {
         getAllMedicineCategories(accessToken, 1).then( res => {
@@ -89,10 +90,10 @@ const MedicineCategoryPage = () => {
     const handleDelete = () => {
         deleteAMedicineCategory(accessToken, activeCategory.id)
           .then( () => {
-            openSnackbarNotification(ALERT_MESSAGE.success, "success");
+            openSnackbarNotification(t("alert_msg.success"), "success");
             window.location.reload();
           }).catch( () => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+            openSnackbarNotification(t("alert_msg.server_error"), "error");
           })
     }
 
@@ -149,15 +150,15 @@ const MedicineCategoryPage = () => {
         })
 
         if (categoryExists) {
-            openSnackbarNotification(ALERT_MESSAGE.dataExists(category.name), "error");
+            openSnackbarNotification(t("alert_msg.data_exists"), "error");
             return;
         }
 
         updateAMedicineCategory(accessToken, category.id, {name: category.name}).then( res => {
-            openSnackbarNotification(ALERT_MESSAGE.success, "success");
+            openSnackbarNotification(t("alert_msg.success"), "success");
             window.location.reload();
         }).catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error")
+            openSnackbarNotification(t("alert_msg.server_error"), "error")
         });
     }
 
@@ -172,15 +173,15 @@ const MedicineCategoryPage = () => {
         })
 
         if (categoryExists) {
-            openSnackbarNotification(ALERT_MESSAGE.dataExists(category.name), "error");
+            openSnackbarNotification(t("alert_msg.data_exists"), "error");
             return;
         }
 
         createAMedicineCategory(accessToken, categoryCreator).then( res => {
-            openSnackbarNotification(ALERT_MESSAGE.success, "success");
+            openSnackbarNotification(t("alert_msg.success"), "success");
             window.location.reload();
         }).catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error")
+            openSnackbarNotification(t("alert_msg.server_error"), "error")
         });
     }
 

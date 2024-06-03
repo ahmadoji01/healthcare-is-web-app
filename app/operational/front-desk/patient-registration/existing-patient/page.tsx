@@ -18,9 +18,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { usePatientContext } from "@/contexts/patient-context";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
-import { useDoctorContext } from "@/contexts/doctor-context";
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
@@ -30,6 +28,7 @@ import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
+import { useTranslation } from "react-i18next";
 
 const steps = ['Search Your Data', 'Doctor to Visit', 'Examination Time', 'Review Your Input'];
 
@@ -56,6 +55,7 @@ const ExistingPatient = () => {
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
     const {activeDoctor} = useFrontDeskContext();
+    const {t} = useTranslation();
 
 
     const handleNext = () => {
@@ -84,7 +84,7 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
         
@@ -96,7 +96,7 @@ const ExistingPatient = () => {
         });
         
         if (isError) {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
 
@@ -114,7 +114,7 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
 
@@ -133,7 +133,7 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
 
@@ -150,11 +150,11 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
 
-        openSnackbarNotification(ALERT_MESSAGE.success, 'success');
+        openSnackbarNotification(t('alert_msg.success'), 'success');
         setActiveStep(activeStep + 1);
         return;
     }

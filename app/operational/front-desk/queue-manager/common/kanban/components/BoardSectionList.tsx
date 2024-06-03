@@ -38,7 +38,7 @@ import { PhysicalCheckup, defaultPhysicalCheckup } from '@/modules/physical-chec
 import { updateVisit } from '@/modules/visits/domain/visits.actions';
 import { useUserContext } from '@/contexts/user-context';
 import { useAlertContext } from '@/contexts/alert-context';
-import { ALERT_MESSAGE } from '@/constants/alert';
+import { useTranslation } from 'react-i18next';
 
 interface BoardSectionListProps {
   handleSubmit: (checkup:PhysicalCheckup) => void,
@@ -48,6 +48,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
   const {doctorVisits, activePatient} = useVisitContext();
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
 
   const initialBoardSections = initializeBoard(doctorVisits);
   const [boardSections, setBoardSections] =
@@ -138,8 +139,8 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
 
     if (prevContainer !== activeContainer) {
       updateVisit(accessToken, active.id as number, { status: activeContainer })
-      .then( () => openSnackbarNotification(ALERT_MESSAGE.success, 'success'))
-      .catch( () => {openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); return; } );
+      .then( () => openSnackbarNotification(t('alert_msg.success'), 'success'))
+      .catch( () => {openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; } );
     }
 
     const activeIndex = boardSections[activeContainer].findIndex(

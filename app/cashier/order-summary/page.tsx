@@ -15,7 +15,6 @@ import { OrderItem } from "@/modules/orders/domain/order-item";
 import { deleteAnOrderItem, updateOrder } from "@/modules/orders/domain/order.actions";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { useState } from "react";
 import { orderPatcherMapper } from "@/modules/orders/domain/order";
 
@@ -44,6 +43,9 @@ const OrderSummary = () => {
         if (action === 'add') {
             item.quantity++;
         }
+        if (action === 'input') {
+            item.quantity = qty;
+        }
         newSelectedOrder.order_items[itemIndex] = item;
         setSelectedOrder(newSelectedOrder);
         return;
@@ -63,22 +65,22 @@ const OrderSummary = () => {
         });
 
         if (isError) {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+            openSnackbarNotification(t("alert_msg.server_error"), "error");
             return;
         }
 
         let newOrder = removeItemFromOrder();
         if (typeof(newOrder) === 'undefined') {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+            openSnackbarNotification(t("alert_msg.server_error"), "error");
             return;
         }
 
         updateOrder(accessToken, newOrder.id, orderPatcherMapper(newOrder, organization.id))
         .then( () => {
-            openSnackbarNotification(ALERT_MESSAGE.success, "success");
+            openSnackbarNotification(t("alert_msg.success"), "success");
             handleModal(false, false, false);
         }).catch( () => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+            openSnackbarNotification(t("alert_msg.server_error"), "error");
             return;
         })
     }

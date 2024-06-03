@@ -24,5 +24,16 @@
         "item_name": "Nama Item",
         "delete_confirmation": "Yakin ingin menghapus data ini?",
         "delete_subtitle": "Data yang berkaitan dengan item ini akan dihapus"
+    },
+    "alert_msg": {
+        "success": "Permintaan Anda berhasil diproses!",
+        "server_error": "Ada kendala terjadi. Coba lagi beberapa saat.",
+        "forbidden": "Permintaan ini tidak diperbolehkan!",
+        "data_exists": "Data dengan input ini sudah ada. Coba lagi dengan input yang lain.",
+        "no_order_selected": "Tidak ada pesanan yang dipilih.",
+        "item_added": "Item telah berhasil ditambahkan!",
+        "amount_not_enough": "Jumlah pembayaran tidak cukup!",
+        "no_payment_selected": "Pilih salah satu metode pembayaran terlebih dahulu!",
+        "payment_received": "Pembayaran telah diterima!"
     }
 }

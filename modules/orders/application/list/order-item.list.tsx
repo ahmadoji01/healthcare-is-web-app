@@ -79,10 +79,12 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange }:OrderItemLi
                       <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', key, 0)}>−</span>
                     </button>
                     <input 
-                      value={item.quantity}
+                      defaultValue={item.quantity}
+                      min="1"
                       type="number" 
                       className="quantity-input text-center w-10 font-semibold bg-transparent" 
-                      name="custom-input-number" />
+                      name="custom-input-number"
+                      onBlur={e => handleChange('input', key, parseInt(e.target.value? e.target.value : "1"))} />
                     <button data-action="increment" className="h-full w-10">
                       <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', key, 0)}>+</span>
                     </button>

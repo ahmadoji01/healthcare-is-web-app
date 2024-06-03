@@ -2,7 +2,6 @@
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
@@ -16,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -30,6 +30,7 @@ const PatientsDashboardPage = () => {
   const {accessToken} = useUserContext();
   const router = useRouter();
   const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
 
   useEffect( () => {
     if (!dataLoaded || patients.length == 0) {
@@ -79,10 +80,10 @@ const PatientsDashboardPage = () => {
   const handleSubmit = (patient:Patient) => {
     updateAPatient(accessToken, patient.id, patientPatcherMapper(patient))
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   } 
 
@@ -118,10 +119,10 @@ const PatientsDashboardPage = () => {
   const handleDelete = () => {
     deleteAPatient(accessToken, activePatient.id)
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   }
 

@@ -9,6 +9,8 @@ import { useUserContext } from './user-context';
 import { statusFilter } from '@/modules/orders/domain/order.specifications';
 import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
 import { OrderItem, defaultOrderItem } from '@/modules/orders/domain/order-item';
+import { useAlertContext } from './alert-context';
+import { useTranslation } from 'react-i18next';
  
 interface OrderSummaryContextType {
     deleteModalOpen: boolean,
@@ -73,6 +75,8 @@ export const OrderSummaryProvider = ({
     const [alertAction, setAlertAction] = useState<string>("");
 
     const {accessToken, organization} = useUserContext();
+    const {openSnackbarNotification} = useAlertContext();
+    const {t} = useTranslation();
 
     useEffect( () => {
         getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay), 1)
@@ -85,19 +89,18 @@ export const OrderSummaryProvider = ({
 
     const confirmPayment = () => {
         if (typeof(selectedPayment) === 'undefined') {
-            setSnackbarMsg("Choose the payment method first!");
+            openSnackbarNotification(t("alert_msg.no_payment_selected"), "error");
             setOpenSnackbar(true);
             return;
         }
         if (selectedPayment.name.toLowerCase() === 'cash' && (cashReceived == 0 || cashReceived < total)) {
-            setSnackbarMsg("Cash received is less than the total amount needs to be paid!");
+            openSnackbarNotification(t("alert_msg.amount_not_enough"), "error");
             setOpenSnackbar(true);
             return;
         }
 
         if (typeof(selectedOrder) === 'undefined') {
-            setSnackbarMsg("Choose the order you want to finish first!");
-            setOpenSnackbar(true);
+            openSnackbarNotification(t("alert_msg.no_order_selected"), "error");
             return;
         }
 
@@ -106,13 +109,12 @@ export const OrderSummaryProvider = ({
         orderPatcher.total = total;
         updateOrder(accessToken, selectedOrder.id, orderPatcher).then( () => {
             setAlertStatus(ALERT_STATUS.success);
-            setAlertMessage("Your payment has been received!");
+            setAlertMessage(t("alert_msg.payment_received"));
             setAlertAction("refresh");
             setOpenAlertModal(true);
             return;
         }).catch( () => {
-            setSnackbarMsg(ALERT_MESSAGE.server_error);
-            setOpenSnackbar(true);
+            openSnackbarNotification(t("alert_msg.server_error"), "error");
             return;
         });
     }

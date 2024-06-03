@@ -3,7 +3,6 @@
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
 import Spinner from "@/components/Spinner";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
@@ -96,10 +95,10 @@ const MedicinesDashboardPage = () => {
   const handleSubmit = (medicine:Medicine) => {
     updateAMedicine(accessToken, medicine.id, medicinePatcherMapper(medicine))
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   } 
 
@@ -139,19 +138,19 @@ const MedicinesDashboardPage = () => {
   const handleDelete = () => {
     deleteAMedicine(accessToken, activeMedicine.id)
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   }
 
   const handleSubmitQty = (medicine:Medicine) => {
     updateAMedicine(accessToken, medicine.id, { stock: medicine.stock })
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   } 
 
