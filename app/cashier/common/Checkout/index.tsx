@@ -18,10 +18,10 @@ import { useTranslation } from "react-i18next";
 
 const steps = ['Review Items', 'Payment'];
 
-function getStepContent(step: number, orderItems: OrderItem[]|undefined, total: number) {
+function getStepContent(step: number, orderItems: OrderItem[]|undefined, total: number, examFee: number) {
   switch (step) {
     case 0:
-      return <OrderItemReview orderItems={orderItems} total={total} />;
+      return <OrderItemReview orderItems={orderItems} total={total} examFee={examFee} />;
     case 1:
       return <Payment />;
     default:
@@ -31,7 +31,7 @@ function getStepContent(step: number, orderItems: OrderItem[]|undefined, total: 
 
 const Checkout = () => {
     const [activeStep, setActiveStep] = React.useState(0);
-    const { selectedOrder, total, confirmPayment } = useOrderSummaryContext();
+    const { selectedOrder, total, confirmPayment, examFee } = useOrderSummaryContext();
     const { t } = useTranslation();
 
     const handleNext = () => {
@@ -58,7 +58,7 @@ const Checkout = () => {
                 <RegisterFinished />
             ) : (
                 <>
-                    {getStepContent(activeStep, selectedOrder?.order_items, total)}
+                    {getStepContent(activeStep, selectedOrder?.order_items, total, examFee)}
                     <div className="flex justify-end mt-2 gap-x-2">
                         <div className="flex-1 space-x-2">
                             {activeStep !== 0 && (

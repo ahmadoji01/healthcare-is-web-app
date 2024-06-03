@@ -9,6 +9,7 @@
     "unit_price": "Harga Satuan",
     "back": "Kembali",
     "next": "Lanjut",
+    "examination_fee": "Biaya Pemeriksaan",
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
         "no_active_order": "Saat ini belum ada pembayaran yang dapat diproses. Harap tunggu",
@@ -18,7 +19,8 @@
         "treatment_exam": "Tindakan dan Pemeriksaan",
         "discount": "Diskon/Asuransi",
         "confirm_order": "Konfirmasi Pembayaran",
-        "item_already_added": "Item ini sudah ditambahkan"
+        "item_already_added": "Item ini sudah ditambahkan",
+        "add_item": "Tambah Item"
     },
     "module_app": {
         "item_name": "Nama Item",

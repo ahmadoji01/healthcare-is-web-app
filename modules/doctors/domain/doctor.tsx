@@ -69,6 +69,7 @@ export interface DoctorOrganization {
     doctor: Doctor,
     organization: Organization,
     status: string,
+    examination_fee: number,
 }
 
 export const defaultDoctorOrganization:DoctorOrganization = {
@@ -76,6 +77,7 @@ export const defaultDoctorOrganization:DoctorOrganization = {
     doctor: defaultDoctor,
     organization: defaultOrganization,
     status: "",
+    examination_fee: 0,
 }
 
 export function doctorOrgMapper(res:Record<string,any>) {  
@@ -89,6 +91,7 @@ export function doctorOrgMapper(res:Record<string,any>) {
         doctor: doctorMapper(res.doctors_id),
         organization: organizationMapper(res.organizations_id),
         status: res.status? res.status : DOCTOR_STATUS.absent, 
+        examination_fee: res.examination_fee? parseFloat(res.examination_fee) : 0.0, 
     }
     return doctorOrg;
 }

@@ -5,3 +5,9 @@ export const ORDER_STATUS = {
     paid: 'paid',
     waiting_to_pay: 'waiting_to_pay',
 }
+
+export const DOCTOR_PAID = {
+    paid: 'paid',
+    unpaid: 'unpaid',
+    no_doctor: 'no_doctor',
+}

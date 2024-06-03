@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
-import { orderItemsFakeData } from "../../infrastructure/order-item.fakes";
-import OrderItem, { orderItemCategory, orderItemName } from "../../domain/order-item";
+import { OrderItem, orderItemCategory, orderItemName } from "../../domain/order-item";
 import Currency from "@/components/Currency";
 import { useTranslation } from "react-i18next";
 
 interface OrderItemReviewProps {
   orderItems: OrderItem[]|undefined,
   total: number,
+  examFee?: number,
 }
 
-const OrderItemReview = ({ orderItems, total = 0 }:OrderItemReviewProps) => {
+const OrderItemReview = ({ orderItems, total = 0, examFee = 0 }:OrderItemReviewProps) => {
   
   const { t } = useTranslation();
 
@@ -38,7 +37,21 @@ const OrderItemReview = ({ orderItems, total = 0 }:OrderItemReviewProps) => {
             </h5>
           </div>
         </div>
-
+        { (typeof(examFee) !== "undefined" || examFee !== 0) && 
+          <div className={`grid grid-cols-3 sm:grid-cols-4 border-b border-stroke dark:border-strokedark`}>
+            <div className="flex items-center justify p-2.5 xl:p-5">
+              <p className="text-black dark:text-white">{ t('examination_fee') }</p>
+            </div>
+            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+              <p className="text-meta-3"><Currency value={examFee? examFee : 0} /></p>
+            </div>
+            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+            </div>
+            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+              <p className="text-center text-black dark:text-white"><Currency value={examFee? examFee : 0} /></p>
+            </div>
+          </div>
+        }
         {typeof(orderItems) !== "undefined" && orderItems.map((item, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-4 ${
@@ -64,7 +77,7 @@ const OrderItemReview = ({ orderItems, total = 0 }:OrderItemReviewProps) => {
             </div>
           </div>
         ))}
-        <h4 className="font-extrabold text-2xl text-black dark:text-white mb-4">Total: <Currency value={total} /></h4>
+        <h4 className="font-extrabold mt-4 mb-4 text-2xl text-black dark:text-white">Total: <Currency value={total} /></h4>
       </div>
     </div>
   );

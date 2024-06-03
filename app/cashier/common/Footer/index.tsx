@@ -56,7 +56,7 @@ const Footer = () => {
                         <span>
                             <FontAwesomeIcon icon={faPlus} />
                         </span>
-                        Add Item
+                        {t('cashier.add_item')}
                     </Link>
                     <Link
                         href={ typeof(selectedOrder) === 'undefined' ? "" : "#payment_method" }

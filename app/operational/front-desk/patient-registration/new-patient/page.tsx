@@ -23,7 +23,7 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultVisit, visitMapper, visitCreatorMapper } from "@/modules/visits/domain/visit";
-import { createAVisit } from "@/modules/visits/domain/visits.actions";
+import { createAVisit, getTotalQueueByDoctorID } from "@/modules/visits/domain/visits.actions";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
@@ -71,12 +71,32 @@ const NewPatient = () => {
         let patientNoID = patientNoIDMapper(activePatient, organization.id);
         let patient = defaultPatient;
         let isError = false;
+        let queueNum = "";
         await createAPatient(accessToken, patientNoID).then( res => {
             patient = patientMapper(res);
         }).catch( err => {
             isError = true;
             return;
         });
+
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
+
+        await getTotalQueueByDoctorID(accessToken, activeDoctor.id).then( res => {
+            let total = res[0].count? parseInt(res[0].count) + 1 : 1;
+            setQueueNumber(total.toString());
+            queueNum = total.toString();
+        }).catch( err => {
+            isError = true;
+            return;
+        });
+
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
 
         let physicalCheckup = defaultPhysicalCheckup;
         physicalCheckup.patient = patient;
@@ -104,8 +124,8 @@ const NewPatient = () => {
         let visit = defaultVisit;
         visit.doctor = activeDoctor;
         visit.patient = patient;
-        visit.queue_number = "A01";
-        setQueueNumber("A01");
+        visit.queue_number = queueNum;
+        setQueueNumber(queueNum);
         visit.status = visitStatus;
         visit.medical_record = medicalRecord;
         let visitCreator = visitCreatorMapper(visit, medicalRecord.id, organization.id);
@@ -127,6 +147,11 @@ const NewPatient = () => {
             isError = true;
             return;
         });
+
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
 
         openSnackbarNotification(t('alert_msg.success'), 'success');
         setActiveStep(activeStep + 1);

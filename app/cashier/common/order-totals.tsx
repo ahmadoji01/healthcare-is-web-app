@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 const OrderTotals = () => {
 
-    const { selectedOrder, total, setTotal } = useOrderSummaryContext();
+    const { selectedOrder, total, setTotal, examFee } = useOrderSummaryContext();
     const { organization } = useUserContext();
     const { t } = useTranslation();
     const [treatmentFee, setTreatmentFee] = useState<number>(0);
@@ -33,8 +33,8 @@ const OrderTotals = () => {
             setMedicineFee(medFee);
         }
         let taxRate = organization.tax_rate? (organization.tax_rate/100) : TAX_RATE;
-        setTax((treatmentFee + medicineFee - discount) * taxRate);
-        setTotal(treatmentFee + medicineFee + tax - discount);   
+        setTax((examFee + treatmentFee + medicineFee - discount) * taxRate);
+        setTotal(examFee + treatmentFee + medicineFee + tax - discount);   
     })
 
     return (
@@ -42,7 +42,7 @@ const OrderTotals = () => {
             <div className="rounded-sm border border-stroke p-4 mb-1 bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="grid grid-row-2 text-black dark:text-white">
                     <div>{ t("cashier.treatment_exam") }</div>
-                    <div className="text-left text-xl font-extrabold"><Currency value={treatmentFee} /></div>
+                    <div className="text-left text-xl font-extrabold"><Currency value={treatmentFee + examFee} /></div>
                 </div>
             </div>
             <div className="rounded-sm border border-stroke p-4 mb-1 bg-white shadow-default dark:border-strokedark dark:bg-boxdark">

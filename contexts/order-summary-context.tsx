@@ -11,6 +11,8 @@ import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
 import { OrderItem, defaultOrderItem } from '@/modules/orders/domain/order-item';
 import { useAlertContext } from './alert-context';
 import { useTranslation } from 'react-i18next';
+import { getADoctorOrg, getDoctorsInOrg } from '@/modules/doctors/domain/doctors.actions';
+import { defaultDoctorOrganization, doctorOrgMapper } from '@/modules/doctors/domain/doctor';
  
 interface OrderSummaryContextType {
     deleteModalOpen: boolean,
@@ -22,6 +24,7 @@ interface OrderSummaryContextType {
     selectedItem: OrderItem,
     total: number,
     cashReceived: number,
+    examFee: number,
     setTotal: Dispatch<SetStateAction<number>>,
     handleModal: (deleteModalOpen: boolean, itemModalOpen: boolean, checkoutModalOpen: boolean) => void,
     setSelectedPayment: Dispatch<SetStateAction<PaymentMethod|undefined>>,
@@ -29,6 +32,7 @@ interface OrderSummaryContextType {
     setSelectedOrder: Dispatch<SetStateAction<Order|undefined>>,
     setSelectedItem: Dispatch<SetStateAction<OrderItem>>,
     setCashReceived: Dispatch<SetStateAction<number>>,
+    setExamFee: Dispatch<SetStateAction<number>>,
     confirmPayment: () => void,
 }
 
@@ -42,6 +46,7 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     selectedItem: defaultOrderItem,
     total: 0,
     cashReceived: 0,
+    examFee: 0,
     setTotal: () => {},
     handleModal: () => {},
     setSelectedPayment: () => {},
@@ -49,6 +54,7 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     setSelectedOrder: () => {},
     setSelectedItem: () => {},
     setCashReceived: () => {},
+    setExamFee: () => {},
     confirmPayment: () => {},
 });
  
@@ -66,6 +72,7 @@ export const OrderSummaryProvider = ({
     const [selectedItem, setSelectedItem] = useState<OrderItem>(defaultOrderItem);
     const [total, setTotal] = useState<number>(1);
     const [cashReceived, setCashReceived] = useState<number>(0);
+    const [examFee, setExamFee] = useState<number>(0);
 
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -86,6 +93,16 @@ export const OrderSummaryProvider = ({
             setOrders(ords);
         })
     }, []);
+
+    useEffect( () => {
+        getADoctorOrg(accessToken, { _and: [ { doctors_id: { _eq: selectedOrder?.visit.doctor.id } }, { organizations_id: { _eq: organization.id } } ] })
+        .then( res => {
+            let doctorOrg = defaultDoctorOrganization;
+            if (res.length > 0)
+                doctorOrg = doctorOrgMapper(res[0]);
+            setExamFee(doctorOrg.examination_fee);
+        })
+    }, [selectedOrder])
 
     const confirmPayment = () => {
         if (typeof(selectedPayment) === 'undefined') {
@@ -153,7 +170,7 @@ export const OrderSummaryProvider = ({
     }
 
     return (
-        <OrderSummaryContext.Provider value={{ deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedItem, selectedPayment, cashReceived, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, setSelectedItem, confirmPayment }}>
+        <OrderSummaryContext.Provider value={{ examFee, deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedItem, selectedPayment, cashReceived, setExamFee, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, setSelectedItem, confirmPayment }}>
             {children}
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSnackbar} autoHideDuration={6000} onClose={handleClose} sx={{ zIndex: 2147483647 }}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>

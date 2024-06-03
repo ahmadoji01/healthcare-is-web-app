@@ -1,7 +1,7 @@
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient";
 import OrderItem, { OrderItemPatcher, orderItemPatcherMapper, orderItemsMapper } from "./order-item";
 import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
-import { ORDER_STATUS } from "./order.constants";
+import { DOCTOR_PAID, ORDER_STATUS } from "./order.constants";
 
 export interface Order {
     id: number,
@@ -9,6 +9,7 @@ export interface Order {
     order_items: OrderItem[],
     total: number,
     status: string,
+    doctor_paid: string,
     visit: Visit,
 }
 
@@ -18,6 +19,7 @@ export const defaultOrder: Order = {
     order_items: [],
     total: 0,
     status: ORDER_STATUS.inactive,
+    doctor_paid: DOCTOR_PAID.no_doctor,
     visit: defaultVisit,
 }
 
@@ -29,6 +31,7 @@ export function orderMapper(res:Record<string,any>) {
         order_items: orderItemsMapper(res.order_items),
         total: res.total,
         status: res.status,
+        doctor_paid: res.doctor_paid? res.doctor_paid : DOCTOR_PAID.no_doctor,
         visit: visitMapper(res.visit),
     }
     return order;
@@ -47,6 +50,7 @@ export function orderCreatorMapper(order:Order, visitID:number, orgID:number) {
         total: order.total,
         status: order.status,
         visit: visitID,
+        doctor_paid: order.doctor_paid,
         organization: orgID,
     }
     return orderCreator;
@@ -64,6 +68,7 @@ export function orderPatcherMapper(order:Order, orgID:number) {
         total: order.total,
         status: order.status,
         visit: order.visit ? order.visit.id : null,
+        doctor_paid: order.doctor_paid,
         organization: orgID,
     }
     return orderPatcher;

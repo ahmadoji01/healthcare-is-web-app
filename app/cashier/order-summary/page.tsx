@@ -25,7 +25,7 @@ const OrderSummary = () => {
     const { t } = useTranslation();
     const { accessToken, organization } = useUserContext();
     const { openSnackbarNotification } = useAlertContext();
-    const { orders, selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, selectedItem, setSelectedOrder, setSelectedItem, handleModal } = useOrderSummaryContext();
+    const { examFee, orders, selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, selectedItem, setSelectedOrder, setSelectedItem, handleModal } = useOrderSummaryContext();
 
     const handleQtyChange = (action:string, itemIndex:number, qty:number) => {
         if (typeof(selectedOrder) === 'undefined') {
@@ -112,7 +112,7 @@ const OrderSummary = () => {
                     </div>
                     <div className="mt-6 text-black dark:text-white">
                         <h3 className="text-3xl font-extrabold mb-2">{ t("order_items") }</h3>
-                        <OrderItemList orderItems={selectedOrder?.order_items} handleDelete={handleDeleteItem} handleQtyChange={handleQtyChange} />
+                        <OrderItemList examFee={examFee} orderItems={selectedOrder?.order_items} handleDelete={handleDeleteItem} handleQtyChange={handleQtyChange} />
                     </div>
                     <div className="flex mt-6">
                         <div className="w-full gap-2">

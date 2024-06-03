@@ -25,7 +25,7 @@ import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-r
 import { defaultVisit, visitCreatorMapper, visitMapper } from "@/modules/visits/domain/visit";
 import { createAVisit, getTotalQueueByDoctorID } from "@/modules/visits/domain/visits.actions";
 import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
-import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
+import { DOCTOR_PAID, ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
 import { useTranslation } from "react-i18next";
@@ -140,6 +140,7 @@ const ExistingPatient = () => {
         let order = defaultOrder;
         order.visit = visit;
         order.patient = activePatient;
+        order.doctor_paid = DOCTOR_PAID.unpaid;
         order.status = ORDER_STATUS.active;
         let orderCreator = orderCreatorMapper(order, visit.id, organization.id);
         await createAnOrder(accessToken, orderCreator).then( res => {

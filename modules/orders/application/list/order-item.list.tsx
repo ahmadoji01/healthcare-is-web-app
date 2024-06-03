@@ -11,9 +11,10 @@ interface OrderItemListProps {
   orderItems: OrderItem[]|undefined,
   handleQtyChange: (action:string, itemIndex:number, qty:number) => void,
   handleDelete: (item:OrderItem, index:number) => void,
+  examFee?: number
 }
 
-const OrderItemList = ({ orderItems, handleDelete, handleQtyChange }:OrderItemListProps) => {
+const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 }:OrderItemListProps) => {
 
   const [items, setItems] = useState<OrderItem[]|undefined>(orderItems);
   const qtyRef = useRef<HTMLInputElement>(null)
@@ -79,7 +80,23 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange }:OrderItemLi
             </h5>
           </div>
         </div>
-
+        { (typeof(examFee) !== "undefined" || examFee !== 0) && 
+          <div className={`grid grid-cols-3 sm:grid-cols-5 border-b border-stroke dark:border-strokedark`}>
+            <div className="flex items-center justify p-2.5 xl:p-5">
+              <p className="text-black dark:text-white">{ t('examination_fee') }</p>
+            </div>
+            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+              <p className="text-meta-3"><Currency value={examFee? examFee : 0} /></p>
+            </div>
+            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+            </div>
+            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+              <p className="text-center text-black dark:text-white"><Currency value={examFee? examFee : 0} /></p>
+            </div>
+            <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
+            </div>
+          </div>
+        }
         {typeof(items) !== "undefined" && items.map((item, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-5 ${

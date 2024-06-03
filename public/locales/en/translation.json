@@ -7,8 +7,9 @@
     "order_items": "Order Items",
     "quantity": "Quantity",
     "unit_price": "Unit Price",
-    "back": "Kembali",
-    "next": "Lanjut",
+    "back": "Back",
+    "next": "Next",
+    "examination_fee": "Examination Fee",
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
         "no_active_order": "No active order here. Please wait until an order appears",
@@ -18,7 +19,8 @@
         "treatment_exam": "Treatment & Exam",
         "discount": "Discount/Insurance",
         "confirm_order": "Confirm Order",
-        "item_already_added": "This item is already added"
+        "item_already_added": "This item is already added",
+        "add_item": "Add Item"
     },
     "module_app": {
         "item_name": "Item Name",
