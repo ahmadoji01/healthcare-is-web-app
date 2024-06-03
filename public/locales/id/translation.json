@@ -22,6 +22,8 @@
     "height_placeholder": "Masukkan Tinggi Pasien",
     "tension": "Tensi",
     "tension_placeholder": "Masukkan Hasil Tensi Pasien",
+    "open": "Buka",
+    "close": "Tutup",
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
         "no_active_order": "Saat ini belum ada pembayaran yang dapat diproses. Harap tunggu",
@@ -46,7 +48,9 @@
         "initial_checkup": "Pemeriksaan Awal",
         "not_this_patient": "Bukan pasien ini?",
         "search_for_a_patient": "Cari Pasien",
-        "new_patient": "Daftarkan Pasien Baru"
+        "new_patient": "Daftarkan Pasien Baru",
+        "practicing_doctors": "Dokter yang Praktek",
+        "clinic_status_title": "Klinik saat ini"
     },
     "module_app": {
         "item_name": "Nama Item",

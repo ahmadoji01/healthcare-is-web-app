@@ -22,6 +22,8 @@
     "height_placeholder": "Input Patient's Height",
     "tension": "Tension",
     "tension_placeholder": "Input Patient's Tension",
+    "open": "Open",
+    "close": "Close",
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
         "no_active_order": "No active order here. Please wait until an order appears",
@@ -46,7 +48,9 @@
         "initial_checkup": "Initial Checkup",
         "not_this_patient": "Not this patient?",
         "search_for_a_patient": "Search for a Patient",
-        "new_patient": "New Patient"
+        "new_patient": "New Patient",
+        "practicing_doctors": "Practicing Doctors",
+        "clinic_status_title": "The clinic is now"
     },
     "module_app": {
         "item_name": "Item Name",

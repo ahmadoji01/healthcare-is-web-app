@@ -10,6 +10,8 @@ import { getVisitByDoctorID } from "@/modules/visits/domain/visits.actions";
 import { useUserContext } from "@/contexts/user-context";
 import { useVisitContext } from "@/contexts/visit-context";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
+import { useTranslation } from "react-i18next";
+import { DoctorName } from "@/utils/doctor-name-format";
 
 interface SidebarItemProps {
     sidebarExpanded: Boolean,
@@ -19,6 +21,7 @@ interface SidebarItemProps {
 const SidebarItem = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
     const { loading, presentDoctors, activeDoctor, setActiveDoctor } = useFrontDeskContext();
     const {handleDoctorVisits} = useVisitContext();
+    const {t} = useTranslation();
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, doctor:Doctor) => {
         event.preventDefault();
@@ -33,7 +36,7 @@ const SidebarItem = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
     return (
         <>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-                PRACTICING DOCTORS
+                {t('front_desk.practicing_doctors')}
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
@@ -49,7 +52,7 @@ const SidebarItem = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                             onClick={(e) => { handleClick(e, doctor) }}
                             >
                             <FontAwesomeIcon icon={faUserDoctor} width={18} height={18} />
-                            { doctor.name }
+                            { DoctorName(doctor.name, doctor.specialization) }
                         </Link>
                 )}
             </ul>
