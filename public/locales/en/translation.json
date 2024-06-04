@@ -77,6 +77,16 @@
     "clinic_status": "Clinic Status",
     "clinic_close": "Clinic Closed",
     "manage_cashier": "Manage Cashier",
+    "examine": "Examine",
+    "input_doctors_name": "Input Doctor's Full Name",
+    "input_doctors_address": "Input Doctor's Address",
+    "input_doctors_license_number": "Input Doctor's License Number",
+    "input_doctors_specialization": "Input Doctor's Specialization",
+    "license_number": "License Number",
+    "general": "General Practitioner",
+    "specialist": "Specialist",
+    "specialization": "Specialization",
+
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
         "no_active_order": "No active order here. Please wait until an order appears",
@@ -91,6 +101,7 @@
         "input_received_cash": "Input the Cash Received",
         "change": "Change"
     },
+
     "front_desk": {
         "select_present_doctor": "Select the following doctors that are present",
         "welcome": "Welcome, click the button below to open/close the clinic",
@@ -121,11 +132,13 @@
         "print_ticket": "Print Ticket",
         "clinic_close_notif": "Clinic is close. Open this clinic by clicking this button below."
     },
+
     "module_app": {
         "item_name": "Item Name",
         "delete_confirmation": "Are you sure you want to delete this data?",
         "delete_subtitle": "Any related data to this item will be deleted"
     },
+
     "alert_msg": {
         "success": "Your request has successfully been processed!",
         "server_error": "Oops! Something went wrong. Try again!",
@@ -138,6 +151,7 @@
         "payment_received": "Payment has been received!",
         "clinic_is_close": "Clinic is close now. Wait until it's open!"
     },
+
     "menu": {
         "patient_header": "PATIENTS",
         "patient_data": "Patient Data",

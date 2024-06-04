@@ -16,6 +16,7 @@ import { deleteAMedicine, getAllMedicines, getTotalMedicines, getTotalSearchMedi
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -33,6 +34,7 @@ const MedicinesDashboardPage = () => {
 
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
   
   const fetchAllMedicines = () => {
     getAllMedicines(accessToken, 1)

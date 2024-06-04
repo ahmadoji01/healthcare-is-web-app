@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 };
 
 const SubmitRecord = () => {
+  const {t} = useTranslation();
   return (
     <>
       <div className="mx-auto max-w-270">
@@ -30,7 +31,7 @@ const SubmitRecord = () => {
                         className="mb-3 block text-sm font-medium text-black dark:text-white"
                         htmlFor="fullName"
                       >
-                        Full Name
+                        { t('full_name') }
                       </label>
                       <div className="relative">
                         <span className="absolute left-4.5 top-4">
