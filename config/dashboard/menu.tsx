@@ -202,6 +202,6 @@ export const userMenuItems: UserMenuItem[] = [
         title: "menu.patients_list",
         icon: faUserInjured,
         url: "/operational/doctor/patients-list",
-        role: [ROLES.administrator, ROLES.front_desk]
+        role: [ROLES.administrator, ROLES.doctor]
     }
 ]
