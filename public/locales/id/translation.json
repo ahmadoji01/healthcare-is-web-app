@@ -72,6 +72,10 @@
     "payment_methods": "Metode Pembayaran",
     "satusehat_integration": "Integrasi Satusehat",
     "bpjs_integration": "Integrasi BPJS",
+    "type_to_search": "Ketik untuk mencari...",
+    "patient_registration": "Pendaftaran Pasien",
+    "clinic_status": "Status Klinik",
+    "clinic_close": "Klinik Tutup",
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
         "no_active_order": "Saat ini belum ada pembayaran yang dapat diproses. Harap tunggu",
@@ -113,7 +117,8 @@
         "thank_you_input": "Terima kasih atas masukannya",
         "your_queue_number": "Nomor antrian Anda adalah",
         "look_forward": "Kami akan segera melayani Anda",
-        "print_ticket": "Cetak Nomor Antrian"
+        "print_ticket": "Cetak Nomor Antrian",
+        "clinic_close_notif": "Klinik saat ini sedang tutup. Buka klinik dengan menekan tombol di bawah ini."
     },
     "module_app": {
         "item_name": "Nama Item",
@@ -154,6 +159,10 @@
         "all_medicines": "Semua Obat",
         "add_medicine": "Tambah Obat",
         "settings_header": "PENGATURAN",
-        "tax_and_administrations": "Pajak dan Administrasi"
+        "tax_and_administrations": "Pajak dan Administrasi",
+        "my_profile": "Profil Saya",
+        "dashboard": "Dasbor",
+        "queue_manager": "Pengelola Antrian",
+        "patients_list": "Daftar Pasien"
     }
 }

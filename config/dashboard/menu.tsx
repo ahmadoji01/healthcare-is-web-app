@@ -1,7 +1,6 @@
 import { ROLES } from "@/modules/users/domain/users.constants";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faCashRegister, faCreditCard, faFileImport, faFileMedical, faHospitalUser, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faUser, faUserDoctor, faUserInjured } from "@fortawesome/free-solid-svg-icons";
-import { useTranslation } from "react-i18next";
+import { faCashRegister, faClinicMedical, faClipboard, faClock, faCreditCard, faDashboard, faFileImport, faFileMedical, faHospitalUser, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faTimes, faUser, faUserDoctor, faUserInjured, faUsers, faUsersBetweenLines } from "@fortawesome/free-solid-svg-icons";
 
 interface SubMenuItem {
     title: string,
@@ -19,6 +18,13 @@ interface MenuItem {
 interface MenuGroup {
     headerTitle: string,
     menuItems: MenuItem[],
+}
+
+export interface UserMenuItem {
+    title: string,
+    icon: IconProp,
+    url: string,
+    role: string[]
 }
 
 export const sidebarMenuItems: MenuGroup[] = [
@@ -159,4 +165,43 @@ export const sidebarMenuItems: MenuGroup[] = [
             },
         ],
     },
+]
+
+export const userMenuItems: UserMenuItem[] = [
+    {
+        title: "menu.my_profile",
+        icon: faUser,
+        url: "/dashboard/profile",
+        role: [ROLES.administrator, ROLES.apothecary, ROLES.cashier, ROLES.doctor, ROLES.receptionist, ROLES.staff, ROLES.front_desk]
+    },
+    {
+        title: "menu.dashboard",
+        icon: faDashboard,
+        url: "/dashboard",
+        role: [ROLES.administrator, ROLES.apothecary]
+    },
+    {
+        title: "menu.queue_manager",
+        icon: faUsersBetweenLines,
+        url: "/operational/front-desk/queue-manager",
+        role: [ROLES.administrator, ROLES.front_desk]
+    },
+    {
+        title: "patient_registration",
+        icon: faClipboard,
+        url: "/operational/front-desk/patient-registration",
+        role: [ROLES.administrator, ROLES.front_desk]
+    },
+    {
+        title: "clinic_status",
+        icon: faClinicMedical,
+        url: "/operational/front-desk",
+        role: [ROLES.administrator, ROLES.front_desk]
+    },
+    {
+        title: "menu.patients_list",
+        icon: faUserInjured,
+        url: "/operational/doctor/patients-list",
+        role: [ROLES.administrator, ROLES.front_desk]
+    }
 ]

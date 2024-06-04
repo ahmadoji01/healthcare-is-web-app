@@ -72,6 +72,10 @@
     "payment_methods": "Payment Methods",
     "satusehat_integration": "Satusehat Integration",
     "bpjs_integration": "BPJS Integration",
+    "type_to_search": "Type to search...",
+    "patient_registration": "Patient Registration",
+    "clinic_status": "Clinic Status",
+    "clinic_close": "Clinic Closed",
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
         "no_active_order": "No active order here. Please wait until an order appears",
@@ -113,7 +117,8 @@
         "thank_you_input": "Thank you for your input.",
         "your_queue_number": "Your queue number is",
         "look_forward": "We look forward to serving you soon",
-        "print_ticket": "Print Ticket"
+        "print_ticket": "Print Ticket",
+        "clinic_close_notif": "Clinic is close. Open this clinic by clicking this button below."
     },
     "module_app": {
         "item_name": "Item Name",
@@ -154,6 +159,10 @@
         "all_medicines": "All Medicines",
         "add_medicine": "Add a Medicine",
         "settings_header": "SETTINGS",
-        "tax_and_administrations": "Tax and Administrations"
+        "tax_and_administrations": "Tax and Administrations",
+        "my_profile": "My Profile",
+        "dashboard": "Dashboard",
+        "queue_manager": "Queue Manager",
+        "patients_list": "Patients List"
     }
 }

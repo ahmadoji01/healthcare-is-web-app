@@ -14,7 +14,7 @@ const style = {
 
 interface DashboardModalProps {
     open: boolean,
-    handleClose: any,
+    handleClose?: any,
     children: React.ReactElement,
     title: string,
 }
@@ -36,6 +36,7 @@ const DashboardModal = ({ open, handleClose, children, title }: DashboardModalPr
                 style={ {zIndex: 99999999999} }
                 >
                 <>
+                    { handleClose && 
                     <motion.div 
                         onClick={handleClose}
                         whileHover={ { scale: 1.2, transition: { duration: 0.2 }} } 
@@ -48,7 +49,7 @@ const DashboardModal = ({ open, handleClose, children, title }: DashboardModalPr
                             >
                             X
                         </Link>
-                    </motion.div>
+                    </motion.div> }
                     <div 
                         className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-11/12 sm:w-11/12 md:w-5/6 lg:w-4/6 p-8 md:p-10 lg:p-12"
                         style={style}>

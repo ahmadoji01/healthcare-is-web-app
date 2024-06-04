@@ -1,6 +1,6 @@
 import { Organization, defaultOrganization, organizationMapper } from '@/modules/organizations/domain/organization';
 import { getOrganization } from '@/modules/organizations/domain/organizations.actions';
-import { User, defaultUser } from '@/modules/users/domain/user';
+import { User, defaultUser, userMapper } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
 import { directusClient } from '@/utils/request-handler';
 import { useRouter, usePathname } from 'next/navigation';
@@ -53,7 +53,9 @@ export const UserProvider = ({
             setAccessToken(token);
             setExpiry(expiry);
             getUserMe(token).then(res => {
-                setUser({ id: res.id, first_name: res.first_name, last_name: res.last_name, avatar: res.avatar, username: res.username, role: res.role.name, organizationID: res.organization.id });
+                let usr = defaultUser;
+                usr = userMapper(res);
+                setUser(usr);
             }).catch( () => {
                 if (location.pathname !== '/') {
                     router.push('/');

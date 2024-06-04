@@ -12,14 +12,27 @@ import { updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useVisitContext } from "@/contexts/visit-context";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
+import DashboardModal from "@/components/Modal/Modal";
+import Link from "next/link";
 
 const QueueManager = () => {
 
+    const [statusModalOpen, setStatusModalOpen] = useState(false);
     const {accessToken, user, organization} = useUserContext();
     const {activeVisit} = useVisitContext();
     const {openSnackbarNotification} = useAlertContext();
     const {handleModal} = useDataModalContext();
     const {t} = useTranslation();
+
+    useEffect( () => {
+        if (organization.status === ORG_STATUS.close) {
+            setStatusModalOpen(true);
+        } else {
+            setStatusModalOpen(false);
+        }
+    }, [organization])
 
     const handleSubmit = async (checkup:PhysicalCheckup) => {
         let checkupNoID = physicalCheckupNoIDMapper(checkup, organization.id, checkup.patient.id);
@@ -48,6 +61,21 @@ const QueueManager = () => {
 
     return (
         <div className="h-screen">
+            <DashboardModal 
+                open={statusModalOpen} 
+                children={
+                    <>
+                        <h5 className="text-xl mt-6 mb-3 font-semibold text-black dark:text-white">
+                            { t('front_desk.clinic_close_notif') }
+                        </h5>
+                        <Link
+                            href="/operational/front-desk"
+                            className="w-full inline-flex items-center justify-center gap-2.5 rounded-md bg-meta-3 py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
+                            <p className="text-5xl text-bold">{ t('front_desk.open_clinic') }</p>
+                        </Link>
+                    </>
+                } 
+                title={ t('clinic_close') } />
             <DataModalProvider>
                 <BoardSectionList handleSubmit={handleSubmit} />
             </DataModalProvider>

@@ -199,7 +199,7 @@ const MedicineCategoryPage = () => {
 
                 <input
                     type="search"
-                    placeholder="Type to search..."
+                    placeholder={ t("type_to_search") }
                     onChange={e => {handleChange(e.target.value) }}
                     className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
                     />
