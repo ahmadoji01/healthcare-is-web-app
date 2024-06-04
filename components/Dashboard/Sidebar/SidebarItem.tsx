@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { sidebarMenuItems } from "@/config/dashboard/menu";
+import { useTranslation } from "react-i18next";
 
 interface SidebarItemProps {
     sidebarExpanded: Boolean,
@@ -12,13 +13,14 @@ interface SidebarItemProps {
 
 const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
     const pathname = usePathname();
+    const {t} = useTranslation();
 
     return (
         <>
             { sidebarMenuItems.map((item, key) => (
                 <div key={key}>
                     <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-                        { item.headerTitle }
+                        { t(item.headerTitle) }
                     </h3>
 
                     <ul className="mb-6 flex flex-col gap-1.5">
@@ -49,7 +51,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                                         }}
                                         >
                                         <FontAwesomeIcon icon={subitem.icon} width={18} height={18} />
-                                            { subitem.title }
+                                            { t(subitem.title) }
                                         { subitem.subMenu.length >= 1 && (
                                             <svg
                                                 className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
@@ -85,7 +87,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                                                             pathname === "/dashboard/" + submenu.url && "text-white"
                                                             } `}
                                                             >
-                                                            { submenu.title }
+                                                            { t(submenu.title) }
                                                         </Link>
                                                     </li>
                                                 ))}

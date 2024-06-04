@@ -65,6 +65,13 @@
     "doctor_to_visit": "Dokter yang Dikunjungi",
     "visit_status": "Status Kunjungan",
     "search_your_data": "Cari Data Anda",
+    "doctors": "Dokter",
+    "staffs": "Staf",
+    "medicine_categories": "Kategori Obat",
+    "order_history": "Riwayat Pesanan",
+    "payment_methods": "Metode Pembayaran",
+    "satusehat_integration": "Integrasi Satusehat",
+    "bpjs_integration": "Integrasi BPJS",
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
         "no_active_order": "Saat ini belum ada pembayaran yang dapat diproses. Harap tunggu",
@@ -124,5 +131,29 @@
         "no_payment_selected": "Pilih salah satu metode pembayaran terlebih dahulu!",
         "payment_received": "Pembayaran telah diterima!",
         "clinic_is_close": "Klinik saat ini tutup. Harap tunggu sampai buka!"
+    },
+    "menu": {
+        "patient_header": "PASIEN",
+        "patient_data": "Data Pasien",
+        "all_patients": "Semua Pasien",
+        "add_patient": "Tambah Pasien",
+        "visits": "Kunjungan",
+        "record_header": "MANAJEMEN REKAM MEDIS",
+        "medical_records": "Rekam Medis",
+        "submit_to_satusehat": "Kirim Rekam Medis ke Satusehat",
+        "clinic_header": "MANAJEMEN KLINIK",
+        "account_management": "Manajemen Akun",
+        "all_users": "Semua Pengguna",
+        "add_user": "Tambah Pengguna",
+        "all_doctors": "Semua Dokter",
+        "add_doctor": "Tambah Dokter",
+        "all_staffs": "Semua Staf",
+        "add_staff": "Tambah Staf",
+        "all_treatments": "Semua Tindakan",
+        "add_treatment": "Tambah Tindakan",
+        "all_medicines": "Semua Obat",
+        "add_medicine": "Tambah Obat",
+        "settings_header": "PENGATURAN",
+        "tax_and_administrations": "Pajak dan Administrasi"
     }
 }

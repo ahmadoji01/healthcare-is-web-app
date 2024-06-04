@@ -1,6 +1,7 @@
 import { ROLES } from "@/modules/users/domain/users.constants";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faCashRegister, faCreditCard, faFileImport, faFileMedical, faHospitalUser, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faUser, faUserDoctor, faUserInjured } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
 
 interface SubMenuItem {
     title: string,
@@ -22,20 +23,20 @@ interface MenuGroup {
 
 export const sidebarMenuItems: MenuGroup[] = [
     {
-        headerTitle: "PATIENTS",
+        headerTitle: "menu.patient_header",
         menuItems: [
             {
-                title: "Patient Data",
+                title: "menu.patient_data",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faUserInjured,
                 url: "patients",
                 subMenu: [ 
-                    { title: "All Patients", url: "patients" }, 
-                    { title: "Add a Patient", url: "patients/create" } 
+                    { title: "menu.all_patients", url: "patients" }, 
+                    { title: "menu.add_patient", url: "patients/create" } 
                 ],
             },
             {
-                title: "Visits",
+                title: "menu.visits",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faHospitalUser,
                 url: "visits",
@@ -44,17 +45,17 @@ export const sidebarMenuItems: MenuGroup[] = [
         ],
     },
     {
-        headerTitle: "RECORD MANAGEMENT",
+        headerTitle: "menu.record_header",
         menuItems: [
             {
-                title: "Medical Records",
+                title: "menu.medical_records",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faFileMedical,
                 url: "medical-records",
                 subMenu: [],
             },
             {
-                title: "Submit Record to Satusehat",
+                title: "menu.submit_to_satusehat",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faFileImport,
                 url: "submit-record",
@@ -63,61 +64,61 @@ export const sidebarMenuItems: MenuGroup[] = [
         ],
     },
     {
-        headerTitle: "CLINIC MANAGEMENT",
+        headerTitle: "menu.clinic_header",
         menuItems: [
             {
-                title: "Account Management",
+                title: "menu.account_management",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faUser,
                 url: "accounts",
                 subMenu: [ 
-                    { title: "All Users", url: "accounts" }, 
-                    { title: "Add a User", url: "accounts/create" } 
+                    { title: "menu.all_users", url: "accounts" }, 
+                    { title: "menu.add_user", url: "accounts/create" } 
                 ],
             },
             {
-                title: "Doctors",
+                title: "doctors",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faUserDoctor,
                 url: "doctors",
                 subMenu: [ 
-                    { title: "All Doctors", url: "doctors" }, 
-                    { title: "Add a Doctor", url: "accounts/create?role=Doctor" } 
+                    { title: "menu.all_doctors", url: "doctors" }, 
+                    { title: "menu.add_doctor", url: "accounts/create?role=Doctor" } 
                 ],
             },
             {
-                title: "Staffs",
+                title: "staffs",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faPerson,
                 url: "staffs",
                 subMenu: [ 
-                    { title: "All Staffs", url: "staffs" }, 
-                    { title: "Add a Staff", url: "accounts/create?role=Staff" } 
+                    { title: "menu.all_staffs", url: "staffs" }, 
+                    { title: "menu.add_staff", url: "accounts/create?role=Staff" } 
                 ],
             },
             {
-                title: "Treatments",
+                title: "treatments",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faSyringe,
                 url: "treatments",
                 subMenu: [ 
-                    { title: "All Treatments", url: "treatments" }, 
-                    { title: "Create a Treatment", url: "treatments/create" } 
+                    { title: "menu.all_treatments", url: "treatments" }, 
+                    { title: "menu.add_treatment", url: "treatments/create" } 
                 ],
             },
             {
-                title: "Medicines",
+                title: "medicines",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faPills,
                 url: "medicines",
                 subMenu: [ 
-                    { title: "All Medicines", url: "medicines" }, 
-                    { title: "Add a Medicine", url: "medicines/create" }, 
-                    { title: "Medicine Categories", url: "medicines/category" } 
+                    { title: "menu.all_medicines", url: "medicines" }, 
+                    { title: "menu.add_medicines", url: "medicines/create" }, 
+                    { title: "medicine_categories", url: "medicines/category" } 
                 ],
             },
             {
-                title: "Order History",
+                title: "order_history",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faCashRegister,
                 url: "orders",
@@ -126,31 +127,31 @@ export const sidebarMenuItems: MenuGroup[] = [
         ],
     },
     {
-        headerTitle: "SETTINGS",
+        headerTitle: "menu.settings_header",
         menuItems: [
             {
-                title: "Tax and Administration",
+                title: "menu.tax_and_administrations",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faNoteSticky,
                 url: "administration",
                 subMenu: [],
             },
             {
-                title: "Payment Methods",
+                title: "payment_methods",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faCreditCard,
                 url: "payment-methods",
                 subMenu: [],
             },
             {
-                title: "Satusehat Integration",
+                title: "satusehat_integration",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faPrescription,
                 url: "satusehat-settings",
                 subMenu: [],
             },
             {
-                title: "BPJS Integration",
+                title: "bpjs_integration",
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faPrescriptionBottle,
                 url: "bpjs-settings",

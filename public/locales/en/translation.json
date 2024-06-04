@@ -65,6 +65,13 @@
     "doctor_to_visit": "Doctor to Visit",
     "visit_status": "Visit Status", 
     "search_your_data": "Search Your Data",
+    "doctors": "Doctors",
+    "staffs": "Staffs",
+    "medicine_categories": "Medicine Categories",
+    "order_history": "Order History",
+    "payment_methods": "Payment Methods",
+    "satusehat_integration": "Satusehat Integration",
+    "bpjs_integration": "BPJS Integration",
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
         "no_active_order": "No active order here. Please wait until an order appears",
@@ -124,5 +131,29 @@
         "no_payment_selected": "Choose the payment method first!",
         "payment_received": "Payment has been received!",
         "clinic_is_close": "Clinic is close now. Wait until it's open!"
+    },
+    "menu": {
+        "patient_header": "PATIENTS",
+        "patient_data": "Patient Data",
+        "all_patients": "All Patients",
+        "add_patient": "Add a Patient",
+        "visits": "Visits",
+        "record_header": "RECORD MANAGEMENT",
+        "medical_records": "Medical Records",
+        "submit_to_satusehat": "Submit Record to Satusehat",
+        "clinic_header": "CLINIC MANAGEMENT",
+        "account_management": "Account Management",
+        "all_users": "All Users",
+        "add_user": "Add a User",
+        "all_doctors": "All Doctors",
+        "add_doctor": "Add a Doctor",
+        "all_staffs": "All Staffs",
+        "add_staff": "Add a Staff",
+        "all_treatments": "All Treatments",
+        "add_treatment": "Add a Treatment",
+        "all_medicines": "All Medicines",
+        "add_medicine": "Add a Medicine",
+        "settings_header": "SETTINGS",
+        "tax_and_administrations": "Tax and Administrations"
     }
 }
