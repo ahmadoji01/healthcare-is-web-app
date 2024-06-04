@@ -203,5 +203,11 @@ export const userMenuItems: UserMenuItem[] = [
         icon: faUserInjured,
         url: "/operational/doctor/patients-list",
         role: [ROLES.administrator, ROLES.doctor]
+    },
+    {
+        title: "manage_cashier",
+        icon: faCashRegister,
+        url: "/cashier/order-summary",
+        role: [ROLES.administrator, ROLES.cashier]
     }
 ]

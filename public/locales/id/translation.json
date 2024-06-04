@@ -76,6 +76,7 @@
     "patient_registration": "Pendaftaran Pasien",
     "clinic_status": "Status Klinik",
     "clinic_close": "Klinik Tutup",
+    "manage_cashier": "Kelola Kasir",
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
         "no_active_order": "Saat ini belum ada pembayaran yang dapat diproses. Harap tunggu",

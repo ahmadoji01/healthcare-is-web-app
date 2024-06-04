@@ -76,6 +76,7 @@
     "patient_registration": "Patient Registration",
     "clinic_status": "Clinic Status",
     "clinic_close": "Clinic Closed",
+    "manage_cashier": "Manage Cashier",
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
         "no_active_order": "No active order here. Please wait until an order appears",
