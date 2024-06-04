@@ -173,7 +173,10 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
 
   const task = activeTaskId ? getVisitById(doctorVisits, activeTaskId) : null;
 
-  const boardTitle = BOARD_SECTIONS;
+  const boardTitle = {
+    waiting: t('front_desk.waiting'),
+    temporary_leave: t('front_desk.temporary_leave'),
+  };
 
   const { editModalOpen, deleteModalOpen, handleModal } = useDataModalContext();
   const { activeDoctor } = useFrontDeskContext();

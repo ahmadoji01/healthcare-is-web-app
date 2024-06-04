@@ -20,7 +20,7 @@ const Footer = () => {
                         href="/operational/front-desk"
                         className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
                         >
-                        Change Clinic Status
+                        { t('front_desk.change_clinic_status') }
                     </Link>
                 </div>
             </div>

@@ -7,6 +7,7 @@ import { Chip } from "@mui/material";
 import { useUserContext } from "@/contexts/user-context";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -18,15 +19,16 @@ interface HeaderProps {
 const Header = ({ sidebarOpen, setSidebarOpen }:HeaderProps) => {
 
   const {organization} = useUserContext();
+  const {t} = useTranslation();
 
   const handleStatusChip = () => {
     if (organization.status === ORG_STATUS.open) {
-      return <Link href="/operational/front-desk"><Chip label="Open" color="primary" /></Link>
+      return <Link href="/operational/front-desk"><Chip label={ t('open') } color="primary" /></Link>
     }
     if (organization.status === ORG_STATUS.close) {
-      return <Link href="/operational/front-desk"><Chip label="Close" color="error" /></Link>
+      return <Link href="/operational/front-desk"><Chip label={ t('close') } color="error" /></Link>
     }
-    return <Link href="/operational/front-desk"><Chip label="Loading..." color="warning" /></Link>
+    return <Link href="/operational/front-desk"><Chip label={ t('loading') } color="warning" /></Link>
   }
 
   return (
@@ -87,7 +89,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }:HeaderProps) => {
         <div className="hidden sm:block">
           <form action="https://formbold.com/s/unique_form_id" method="POST">
             <div className="relative">
-              <p className="text-black inline-block align-middle dark:text-white mr-3">Clinic is now</p>
+              <p className="text-black inline-block align-middle dark:text-white mr-3">{ t('front_desk.clinic_status_title') }</p>
               { handleStatusChip() }
             </div>
           </form>

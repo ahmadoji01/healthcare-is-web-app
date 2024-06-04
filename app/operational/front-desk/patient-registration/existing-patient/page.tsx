@@ -29,8 +29,9 @@ import { DOCTOR_PAID, ORDER_STATUS } from "@/modules/orders/domain/order.constan
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
 import { useTranslation } from "react-i18next";
+import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 
-const steps = ['Search Your Data', 'Doctor to Visit', 'Examination Time', 'Review Your Input'];
+const steps = ['search_your_data', 'doctor_to_visit', 'visit_status', 'review_input'];
 
 function getStepContent(step: number, handleNext: () => void, visitStatus: string, setVisitStatus: Dispatch<SetStateAction<string>>) {
     switch (step) {
@@ -67,6 +68,11 @@ const ExistingPatient = () => {
     };
 
     const handleSubmit = async () => {
+        if (organization.status === ORG_STATUS.close) {
+            openSnackbarNotification(t('alert_msg.clinic_is_close'), "error");
+            return;
+        }
+
         let physicalCheckup = defaultPhysicalCheckup;
         physicalCheckup.patient = activePatient;
         let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, organization.id, activePatient.id);
@@ -163,12 +169,12 @@ const ExistingPatient = () => {
     return (
         <div className="relative flex flex-1 flex-col">
             <h4 className="text-title-md font-bold text-black dark:text-white text-center align-middle">
-                Patient Registration
+                { t('front_desk.patient_registration') }
             </h4>
             <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }} alternativeLabel>
                 {steps.map((label) => (
                 <Step key={label}>
-                    <StepLabel><p className="text-black dark:text-white">{label}</p></StepLabel>
+                    <StepLabel><p className="text-black dark:text-white">{t(label)}</p></StepLabel>
                 </Step>
                 ))}
             </Stepper>
@@ -185,7 +191,7 @@ const ExistingPatient = () => {
                                         href="#"
                                         onClick={handleBack}
                                         className="flex flex-col items-center justify-center rounded-full bg-meta-3 py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                        Back
+                                        { t('back') }
                                     </Link>
                                 )}
                             </div>
@@ -195,7 +201,7 @@ const ExistingPatient = () => {
                                     href="#"
                                     onClick={() => {handleSubmit();}}
                                     className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                        Submit Registration
+                                        { t('submit_registration') }
                                     </Link>
                                 }
                             </div>

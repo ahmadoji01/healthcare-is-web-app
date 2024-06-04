@@ -31,8 +31,10 @@ import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.cons
 import { defaultPhysicalCheckup, physicalCheckupMapper, physicalCheckupNoIDMapper } from "@/modules/physical-checkups/domain/physical-checkup";
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
 import { useTranslation } from "react-i18next";
+import { useFrontDeskContext } from "@/contexts/front-desk-context";
+import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 
-const steps = ['Personal Data', 'Doctor to Visit', 'Examination Time', 'Review Your Input'];
+const steps = ['personal_information', 'doctor_to_visit', 'visit_status', 'review_input'];
 
 function getStepContent(step: number, handleNext: () => void, visitStatus: string, setVisitStatus: Dispatch<SetStateAction<string>>) {
   switch (step) {
@@ -56,7 +58,7 @@ const NewPatient = () => {
     const {accessToken, user, organization} = useUserContext();
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
-    const {activeDoctor} = useDoctorContext();
+    const {activeDoctor} = useFrontDeskContext();
     const {t} = useTranslation();
 
     const handleNext = () => {
@@ -68,6 +70,11 @@ const NewPatient = () => {
     };
 
     const handleSubmit = async () => {
+        if (organization.status === ORG_STATUS.close) {
+            openSnackbarNotification(t('alert_msg.clinic_is_close'), "error");
+            return;
+        }
+
         let patientNoID = patientNoIDMapper(activePatient, organization.id);
         let patient = defaultPatient;
         let isError = false;
@@ -121,6 +128,11 @@ const NewPatient = () => {
             return;
         });
 
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
+
         let visit = defaultVisit;
         visit.doctor = activeDoctor;
         visit.patient = patient;
@@ -167,7 +179,7 @@ const NewPatient = () => {
             <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }} alternativeLabel>
                 {steps.map((label) => (
                 <Step key={label}>
-                    <StepLabel><p className="text-black dark:text-white">{label}</p></StepLabel>
+                    <StepLabel><p className="text-black dark:text-white">{t(label)}</p></StepLabel>
                 </Step>
                 ))}
             </Stepper>
@@ -183,7 +195,7 @@ const NewPatient = () => {
                                     href="#"
                                     onClick={handleBack}
                                     className="flex flex-col items-center justify-center rounded-full bg-meta-3 py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                    Back
+                                    { t('back') }
                                 </Link>
                             )}
                         </div>
@@ -193,7 +205,7 @@ const NewPatient = () => {
                                 href="#"
                                 onClick={() => {handleSubmit();}}
                                 className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                    Submit Registration
+                                    { t('submit_registration') }
                                 </Link>
                             }
                         </div>
