@@ -174,7 +174,7 @@ const NewPatient = () => {
     return (
         <div className="relative flex flex-1 flex-col">
             <h4 className="text-title-md font-bold text-black dark:text-white text-center align-middle">
-                Patient Registration
+                { t('front_desk.patient_registration') }
             </h4>
             <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }} alternativeLabel>
                 {steps.map((label) => (
