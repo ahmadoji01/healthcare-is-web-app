@@ -32,7 +32,7 @@ export const getPresentDoctors = (token:string) =>
 	directusClient.request( withToken(token, readItems('doctors_organizations', 
 		{ fields: ['*.*'], filter: { status: { _eq: "present" } } 
 	})) )
-export const updateDoctorOrgsStatus = (token:string, ids:number[], data:object) =>
+export const updateDoctorOrgs = (token:string, ids:number[], data:object) =>
 	directusClient.request( withToken(token, updateItems('doctors_organizations', ids, data)) );
 
 export const searchDoctors = (token:string, query:string, page:number) => directusClient.request( withToken(token, readItems('doctors', { fields: ['*.*'], search: query, limit: LIMIT_PER_PAGE, page })));

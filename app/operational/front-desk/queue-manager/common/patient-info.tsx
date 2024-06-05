@@ -37,12 +37,17 @@ const PatientInfo = ({ patient }:PatientInfoProps) => {
                             {t("front_desk.not_this_patient")}
                         </label>
                         <div className="flex flex-row gap-2">
-                            <button className="top-0 z-50 mt-2 mb-2 w-1/2 justify-center rounded bg-[#30b70e] py-4 px-3 font-medium text-xl text-gray">
-                                {t("front_desk.search_for_a_patient")}
-                            </button>
                             <Link
                                 className="w-1/2"
-                                href="/operational/front-desk/patient-registration"
+                                href="/operational/front-desk/patient-registration/existing-patient?from=queue-manager"
+                                target="_blank">
+                                <button className="top-0 w-full z-50 mt-2 mb-2 justify-center rounded bg-[#30b70e] py-4 px-3 font-medium text-xl text-gray">
+                                    {t("front_desk.search_for_a_patient")}
+                                </button>
+                            </Link>
+                            <Link
+                                className="w-1/2"
+                                href="/operational/front-desk/patient-registration/new-patient?from=queue-manager"
                                 target="_blank">
                                 <button className="top-0 w-full z-50 mt-2 mb-2 justify-center rounded bg-[#50d71e] py-4 px-3 font-medium text-xl text-gray">
                                     {t("front_desk.new_patient")}

@@ -30,6 +30,8 @@ import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
 import { useTranslation } from "react-i18next";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
+import { getADoctorOrg, updateDoctorOrgs } from "@/modules/doctors/domain/doctors.actions";
+import { defaultDoctorOrganization, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
 
 const steps = ['search_your_data', 'doctor_to_visit', 'visit_status', 'review_input'];
 
@@ -80,14 +82,22 @@ const ExistingPatient = () => {
         let queueNum = "";
         let isError = false;
 
-        await getTotalQueueByDoctorID(accessToken, activeDoctor.id).then( res => {
-            let total = res[0].count? parseInt(res[0].count) + 1 : 1;
-            setQueueNumber(total.toString());
-            queueNum = total.toString();
+        let docOrg = defaultDoctorOrganization;
+        await getADoctorOrg(accessToken, { doctors_id: { _eq: activeDoctor.id } }).then( res => {
+            docOrg = res[0]? doctorOrgMapper(res[0]) : defaultDoctorOrganization;
+            let queue = docOrg.queue + 1;
+            setQueueNumber(queue.toString());
+            queueNum = queue.toString();
         }).catch( err => {
             isError = true;
             return;
         });
+
+        await updateDoctorOrgs(accessToken, [docOrg.id], { queue: parseInt(queueNum) })
+            .catch( err => {
+                isError = true;
+                return;
+            });
 
         if (isError) {
             openSnackbarNotification(t('alert_msg.server_error'), 'error');

@@ -11,9 +11,9 @@ import { useRouter } from "next/navigation";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 import { Button } from "@mui/material";
 import DoctorPresence from "@/modules/doctors/application/doctor.presence";
-import { DoctorOrganization, doctorMapper, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
+import { DoctorOrganization, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
 import DashboardModal from "@/components/Modal/Modal";
-import { getDoctorsInOrg, updateDoctorOrgsStatus } from "@/modules/doctors/domain/doctors.actions";
+import { getDoctorsInOrg, updateDoctorOrgs } from "@/modules/doctors/domain/doctors.actions";
 import { useAlertContext } from "@/contexts/alert-context";
 import Spinner from "@/components/Spinner";
 import { useTranslation } from "react-i18next";
@@ -63,7 +63,7 @@ const OpenCloseClinic = () => {
     const handleSubmit = async (selectedDoctorOrgIds:number[]) => {
         let isError = false;
 
-        await updateDoctorOrgsStatus(accessToken, selectedDoctorOrgIds, { status: "present" })
+        await updateDoctorOrgs(accessToken, selectedDoctorOrgIds, { status: "present" })
             .catch( () => {
                 isError = true;
                 openSnackbarNotification(t('alert_msg.server_error'), "error");

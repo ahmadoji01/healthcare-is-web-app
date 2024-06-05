@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 interface RegisterFinishedProps {
@@ -8,6 +10,14 @@ interface RegisterFinishedProps {
 const RegisterFinished = ({ queueNumber }:RegisterFinishedProps) => {
     
     const {t} = useTranslation();
+    const router = useRouter();
+    const params = useSearchParams();
+
+    useEffect( () => {
+        if (params.has("from")) {
+            router.push('/operational/front-desk/queue-manager');
+        }
+    })
 
     return (
         <>
