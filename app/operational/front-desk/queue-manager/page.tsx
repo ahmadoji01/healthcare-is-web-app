@@ -16,23 +16,71 @@ import { useEffect, useState } from "react";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 import DashboardModal from "@/components/Modal/Modal";
 import Link from "next/link";
+import { websocketClient } from "@/utils/request-handler";
+import { WebSocketClient } from "@directus/sdk";
+import { useFrontDeskContext } from "@/contexts/front-desk-context";
+import { subsOutputMapper } from "@/modules/websockets/domain/websocket";
+import { visitMapper } from "@/modules/visits/domain/visit";
+import { WS_EVENT_TYPE } from "@/modules/websockets/domain/websocket.constants";
 
 const QueueManager = () => {
 
+    const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
     const [statusModalOpen, setStatusModalOpen] = useState(false);
     const {accessToken, user, organization} = useUserContext();
     const {activeVisit} = useVisitContext();
     const {openSnackbarNotification} = useAlertContext();
     const {handleModal} = useDataModalContext();
+    const {notifyNewQueue} = useFrontDeskContext();
     const {t} = useTranslation();
 
+    async function subsToVisit() { 
+        if ( typeof(wsClient) === 'undefined')
+            return;
+
+        const { subscription } = await wsClient.subscribe('visits', {
+            event: 'create',
+            query: { fields: ['*.*'] },
+        });
+    
+        for await (const item of subscription) {
+            let output = subsOutputMapper(item);
+            if (output.event === WS_EVENT_TYPE.create && output.data.length > 0) {
+                let visit = visitMapper(output.data[0]);
+                notifyNewQueue(visit.doctor.id);
+            }
+        }
+    }
+
     useEffect( () => {
-        if (organization.status === ORG_STATUS.close) {
+        let interval = setInterval(async () => {
+            if (user.id !== "") {
+                let client = websocketClient(accessToken);
+                setWSClient(client);
+                client.connect();
+            }
+            clearInterval(interval);
+        }, 110);
+        return () => clearInterval(interval);
+    }, [user]);
+
+    useEffect( () => {
+        let interval = setInterval(async () => {
+            if (typeof(wsClient) !== "undefined") {
+                subsToVisit();
+            }
+            clearInterval(interval);
+        }, 110);
+        return () => clearInterval(interval);
+    }, [wsClient]);
+
+    useEffect( () => {
+        if (organization.status === ORG_STATUS.close && organization.id !== 0) {
             setStatusModalOpen(true);
         } else {
             setStatusModalOpen(false);
         }
-    }, [organization])
+    }, [organization]);
 
     const handleSubmit = async (checkup:PhysicalCheckup) => {
         let checkupNoID = physicalCheckupNoIDMapper(checkup, organization.id, checkup.patient.id);

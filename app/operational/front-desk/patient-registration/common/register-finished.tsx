@@ -29,6 +29,11 @@ const RegisterFinished = ({ queueNumber }:RegisterFinishedProps) => {
                 className="flex flex-1 flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
                     { t('front_desk.print_ticket') }
                 </Link>
+                <Link
+                href="/operational/front-desk/patient-registration"
+                className="flex flex-1 flex-col items-center justify-center rounded-full bg-meta-3 py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
+                    { t('front_desk.back_to_registration') }
+                </Link>
             </div>
         </>
     )

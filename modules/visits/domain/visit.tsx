@@ -33,7 +33,7 @@ export function visitMapper(res:Record<string,any>) {
     }
 
     visit = { 
-        id: res.id, 
+        id: parseInt(res.id), 
         date_created: res.date_created, 
         date_updated: res.date_updated,
         queue_number: res.queue_number,

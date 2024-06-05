@@ -130,7 +130,8 @@
         "your_queue_number": "Your queue number is",
         "look_forward": "We look forward to serving you soon",
         "print_ticket": "Print Ticket",
-        "clinic_close_notif": "Clinic is close. Open this clinic by clicking this button below."
+        "clinic_close_notif": "Clinic is close. Open this clinic by clicking this button below.",
+        "back_to_registration": "Back to Registration Page"
     },
 
     "module_app": {

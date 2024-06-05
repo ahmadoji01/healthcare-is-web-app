@@ -129,7 +129,8 @@
         "your_queue_number": "Nomor antrian Anda adalah",
         "look_forward": "Kami akan segera melayani Anda",
         "print_ticket": "Cetak Nomor Antrian",
-        "clinic_close_notif": "Klinik saat ini sedang tutup. Buka klinik dengan menekan tombol di bawah ini."
+        "clinic_close_notif": "Klinik saat ini sedang tutup. Buka klinik dengan menekan tombol di bawah ini.",
+        "back_to_registration": "Kembali ke laman pendaftaran"
     },
     "module_app": {
         "item_name": "Nama Item",
