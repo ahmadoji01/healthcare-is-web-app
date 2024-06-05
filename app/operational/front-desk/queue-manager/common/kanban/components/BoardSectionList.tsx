@@ -200,8 +200,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
         </div>
         <div>
           <Link
-            href="/operational/front-desk/patient-registration"
-            target="_blank"
+            href="/operational/front-desk/patient-registration?from=queue-manager"
             className="inline-flex items-center justify-center gap-2.5 rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
             <span>
               <FontAwesomeIcon icon={faPlus} width={20} height={20} />
