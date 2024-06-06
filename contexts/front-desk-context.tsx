@@ -33,7 +33,6 @@ export const FrontDeskProvider = ({
 }) => {
     const [presentDoctors, setPresentDoctors] = useState<Doctor[]>([]);
     const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
-    const [notifiedIndex, setNotifiedIndex] = useState<number>(0);
     const [newQueues, setNewQueues] = useState<boolean[]>([]);
     const [loading, setLoading] = useState(false);
     const {accessToken} = useUserContext();

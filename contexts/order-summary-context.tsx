@@ -187,7 +187,7 @@ export const OrderSummaryProvider = ({
 
         const { subscription } = await wsClient.subscribe('orders', {
             event: 'update',
-            query: { fields: ['*.*'] },
+            query: { fields: ['*.*.*'] },
         });
     
         for await (const item of subscription) {
@@ -195,10 +195,10 @@ export const OrderSummaryProvider = ({
             if (output.event === WS_EVENT_TYPE.update && output.data.length > 0) {
                 let order = orderMapper(output.data[0]);
                 if (order.status === ORDER_STATUS.waiting_to_pay) {
+                    playNotificationSound();
                     let newOrders = [...orders];
                     newOrders.push(order);
                     setOrders(newOrders);
-                    playNotificationSound();
                 }
             }
         }
