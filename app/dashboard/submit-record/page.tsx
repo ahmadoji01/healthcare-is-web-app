@@ -1,12 +1,6 @@
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
-
-import { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Settings Page | Next.js E-commerce Dashboard Template",
-  description: "This is Settings page for TailAdmin Next.js",
-  // other metadata
-};
+import { useTranslation } from "react-i18next";
 
 const SubmitRecord = () => {
   const {t} = useTranslation();
