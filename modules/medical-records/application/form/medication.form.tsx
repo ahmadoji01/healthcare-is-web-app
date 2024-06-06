@@ -12,6 +12,7 @@ import MedicationList from "./medication.list";
 import { useMedicalRecordContext } from "@/contexts/medical-record-context";
 import { defaultMedicineCategory } from "@/modules/medicines/domain/medicine-category";
 import { Treatment } from "@/modules/treatments/domain/treatment";
+import { useTranslation } from "react-i18next";
 
 interface MedicationFormProps {
     medicines: Medicine[],
@@ -22,6 +23,7 @@ interface MedicationFormProps {
 const MedicationForm = ({ medicines, medicineDoses, setMedicineDoses }:MedicationFormProps) => {
 
     const [medOptions, setMedOptions] = useState<SelectOption[]>([]);
+    const {t} = useTranslation();
 
     useEffect(() => {
         let options:SelectOption[] = [];
@@ -44,7 +46,7 @@ const MedicationForm = ({ medicines, medicineDoses, setMedicineDoses }:Medicatio
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                             <h3 className="font-medium text-black dark:text-white">
-                                Medication
+                                { t('medication') }
                             </h3>
                         </div>
                         <div className="flex flex-col gap-5.5 p-6.5">

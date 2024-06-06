@@ -146,8 +146,8 @@ const MedicalRecord = () => {
             <>
               <Box>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-                      <Tab label="Patient Overview" {...a11yProps(0)} />
-                      <Tab label="Diagnosis" {...a11yProps(1)} />
+                      <Tab label={ t('patient_overview') } {...a11yProps(0)} />
+                      <Tab label={ t('diagnosis') } {...a11yProps(1)} />
                   </Tabs>
               </Box>
               <CustomTabPanel value={value} index={0}>

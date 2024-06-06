@@ -1,6 +1,5 @@
 'use client';
 
-import Treatments from "@/constants/treatments";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
@@ -8,6 +7,8 @@ import { Illness, MedicalRecord } from "../../domain/medical-record";
 import SelectOption from "@/interfaces/select-option";
 import { Treatment } from "@/modules/treatments/domain/treatment";
 import Illnesses from "@/constants/illnesses";
+import { getI18n, useTranslation } from "react-i18next";
+import dataID from "@/constants/icd10_select_id.json";
 
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
@@ -18,12 +19,21 @@ interface MedicalRecordFormProps {
 const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:MedicalRecordFormProps) => {
     
     const [treatOptions, setTreatOptions] = useState<SelectOption[]>([]);
+    const {t} = useTranslation();
+    const i = getI18n();
+    const [illnesses, setIllnesses] = useState(Illnesses);
 
     useEffect(() => {
         let options:SelectOption[] = [];
         treatments?.map( (treatment) => { options.push({ value: treatment.id.toString(), label: treatment.name, value2: treatment.price.toString() }); });
         setTreatOptions(options);
     }, [treatments]);
+
+    useEffect(() => {
+        if (i.language === 'id-ID') {
+            setIllnesses(dataID);
+        }
+    }, [t])
 
     const treatmentsMapper = (choices: SelectOption[]) => {
         let treatments:Treatment[] = [];
@@ -48,13 +58,13 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                             <h3 className="font-medium text-black dark:text-white">
-                                Diagnosis
+                                { t('diagnosis') }
                             </h3>
                         </div>
                         <div className="flex flex-col gap-5.5 p-6.5">
                             <div>
                                 <label className="mb-3 block text-black dark:text-white">
-                                    Anamnesis
+                                    { t('anamnesis') }
                                 </label>
                                 <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
                                 <textarea
@@ -68,7 +78,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
                             </div>
                             <div>
                                 <label className="mb-3 block text-black dark:text-white">
-                                    Illnesses
+                                    { t('illnesses') }
                                 </label>
                                 <div className="relative bg-white dark:bg-form-input" style={{zIndex: 999999999, borderWidth: 0}}>
                                     <WindowedSelect
@@ -79,14 +89,14 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
                                         name="illnesses"
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         windowThreshold={5}
-                                        options={Illnesses}
+                                        options={illnesses}
                                         className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />
                                 </div>
                             </div>
                             <div>
                                 <label className="mb-3 block text-black dark:text-white">
-                                    Treatments
+                                    { t('treatments') }
                                 </label>
                                 <div className="relative z-20 bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
                                     <WindowedSelect

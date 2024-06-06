@@ -11,6 +11,7 @@ import { getTotalVisits, getVisitByStatus } from "@/modules/visits/domain/visits
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { Visit, visitMapper } from "@/modules/visits/domain/visit";
 import { useVisitContext } from "@/contexts/visit-context";
+import { useTranslation } from "react-i18next";
 
 const PatientsList = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
@@ -20,6 +21,7 @@ const PatientsList = () => {
     const {accessToken} = useUserContext();
     const {setActiveMedicalRecord} = useMedicalRecordContext();
     const {setActiveVisit} = useVisitContext();
+    const {t} = useTranslation();
 
     useEffect( () => {
         if (!dataLoaded || patients.length == 0) {
@@ -59,7 +61,7 @@ const PatientsList = () => {
       
     return (
         <>
-            <h2 className="text-3xl font-extrabold text-black dark:text-white mb-2">Patients to be Examined</h2>
+            <h2 className="text-3xl font-extrabold text-black dark:text-white mb-2">{ t('patients_to_be_examined') }</h2>
             <PatientToExamineListTable visits={visits} totalPages={totalPages} handlePageChange={handlePageChange} setActiveMedicalRecord={setActiveMedicalRecord} setActiveVisit={setActiveVisit} />
         </>
     )
