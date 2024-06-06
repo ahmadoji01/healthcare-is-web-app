@@ -1,6 +1,6 @@
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { directusClient } from "@/utils/request-handler"
-import { aggregate, createItem, deleteItem, readItems, updateItem, withToken } from "@directus/sdk";
+import { aggregate, createItem, deleteItem, readItems, updateItem, updateItems, withToken } from "@directus/sdk";
 import { MedicineCreator } from "./medicine";
 
 export const getAllMedicines = (token:string, page:number) => directusClient.request( withToken(token, readItems('medicines', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );

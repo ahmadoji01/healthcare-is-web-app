@@ -17,6 +17,8 @@ import { WebSocketClient } from '@directus/sdk';
 import { subsOutputMapper } from '@/modules/websockets/domain/websocket';
 import { WS_EVENT_TYPE } from '@/modules/websockets/domain/websocket.constants';
 import { websocketClient } from '@/utils/request-handler';
+import { Medicine } from '@/modules/medicines/domain/medicine';
+import { updateAMedicine } from '@/modules/medicines/domain/medicines.actions';
  
 interface OrderSummaryContextType {
     deleteModalOpen: boolean,
@@ -73,6 +75,8 @@ export const OrderSummaryProvider = ({
     const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>();
     const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order>();
+    const [selectedMedicines, setSelectedMedicines] = useState<Medicine[]>([]);
+    const [medsQtyOrdered, setMedsQtyOrdered] = useState<number[]>([]);
     const [selectedItem, setSelectedItem] = useState<OrderItem>(defaultOrderItem);
     const [total, setTotal] = useState<number>(1);
     const [cashReceived, setCashReceived] = useState<number>(0);
@@ -111,8 +115,19 @@ export const OrderSummaryProvider = ({
             if (res.length > 0)
                 doctorOrg = doctorOrgMapper(res[0]);
             setExamFee(doctorOrg.examination_fee);
-        })
-    }, [selectedOrder])
+        });
+
+        let meds:Medicine[] = [];
+        let medsQty:number[] = [];
+        selectedOrder?.order_items.map( (item) => {
+            if (item.medicine !== null) {
+                meds.push(item.medicine);
+                medsQty.push(item.quantity);
+            }
+            setSelectedMedicines(meds);
+            setMedsQtyOrdered(medsQty);
+        });
+    }, [selectedOrder]);
 
     const confirmPayment = () => {
         if (typeof(selectedPayment) === 'undefined') {
@@ -131,19 +146,37 @@ export const OrderSummaryProvider = ({
             return;
         }
 
+        let isError = false;
+        
         let orderPatcher = orderPatcherMapper(selectedOrder, organization.id)
         orderPatcher.status = ORDER_STATUS.paid;
         orderPatcher.total = total;
-        updateOrder(accessToken, selectedOrder.id, orderPatcher).then( () => {
-            setAlertStatus(ALERT_STATUS.success);
-            setAlertMessage(t("alert_msg.payment_received"));
-            setAlertAction("refresh");
-            setOpenAlertModal(true);
-            return;
-        }).catch( () => {
-            openSnackbarNotification(t("alert_msg.server_error"), "error");
+        updateOrder(accessToken, selectedOrder.id, orderPatcher).catch( () => {
+            isError = true;
             return;
         });
+
+        if (isError) {
+            openSnackbarNotification(t("alert_msg.server_error"), "error");
+            return;
+        }
+        
+        selectedMedicines.map( (med, key) => {
+            let data = { stock: med.stock - medsQtyOrdered[key] };
+            updateAMedicine(accessToken, med.id, data)
+                .catch( () => { isError = true; return; })
+        });
+
+        if (isError) {
+            openSnackbarNotification(t("alert_msg.server_error"), "error");
+            return;
+        }
+
+        setAlertStatus(ALERT_STATUS.success);
+        setAlertMessage(t("alert_msg.payment_received"));
+        setAlertAction("refresh");
+        setOpenAlertModal(true);
+        return;
     }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {

@@ -41,10 +41,11 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
         qty--;
 
       qtyRef.current.value = qty.toString();
+      setQuantity(qty);
       handleQtyChange(action, itemIndex, qty);
       return;
     }
-
+    
     if (parseInt(e.target.value) <= 0 || e.target.value === "") {
       qty = 1;
       e.target.value = qty.toString();
@@ -123,7 +124,7 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
                     <input 
                       ref={qtyRef}
                       required
-                      defaultValue={item.quantity}
+                      value={item.quantity}
                       min="1"
                       type="number" 
                       className="quantity-input text-center w-10 font-semibold bg-transparent" 

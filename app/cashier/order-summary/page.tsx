@@ -36,10 +36,11 @@ const OrderSummary = () => {
         if (typeof(selectedOrder) === 'undefined') {
             return;
         }
-        let newSelectedOrder = {...selectedOrder}
+        let newSelectedOrder = {...selectedOrder};
         let item = {...newSelectedOrder.order_items[itemIndex]};
         if (action === 'substract' && item.quantity === 1) {
             handleModal(true, false, false);
+            item.quantity = 1;
             return;
         }
         if (action === 'substract') {
