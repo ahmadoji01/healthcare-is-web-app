@@ -1,5 +1,6 @@
 import { OrderItem, orderItemCategory, orderItemName } from "../../domain/order-item";
 import Currency from "@/components/Currency";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface OrderItemReviewProps {
@@ -9,8 +10,13 @@ interface OrderItemReviewProps {
 }
 
 const OrderItemReview = ({ orderItems, total = 0, examFee = 0 }:OrderItemReviewProps) => {
-  
+  const [fee, setFee] = useState(0);
+
   const { t } = useTranslation();
+
+  useEffect( () => {
+    setFee(examFee);
+  }, [examFee])
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -37,18 +43,18 @@ const OrderItemReview = ({ orderItems, total = 0, examFee = 0 }:OrderItemReviewP
             </h5>
           </div>
         </div>
-        { (typeof(examFee) !== "undefined" || examFee !== 0) && 
+        { fee !== 0 && 
           <div className={`grid grid-cols-3 sm:grid-cols-4 border-b border-stroke dark:border-strokedark`}>
             <div className="flex items-center justify p-2.5 xl:p-5">
               <p className="text-black dark:text-white">{ t('examination_fee') }</p>
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3"><Currency value={examFee? examFee : 0} /></p>
+              <p className="text-meta-3"><Currency value={fee? fee : 0} /></p>
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-center text-black dark:text-white"><Currency value={examFee? examFee : 0} /></p>
+              <p className="text-center text-black dark:text-white"><Currency value={fee? fee : 0} /></p>
             </div>
           </div>
         }

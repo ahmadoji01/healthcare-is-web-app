@@ -115,7 +115,10 @@
         "item_already_added": "This item is already added",
         "add_item": "Add Item",
         "input_received_cash": "Input the Cash Received",
-        "change": "Change"
+        "change": "Change",
+        "add_order": "Add Order",
+        "add_guest": "Add Guest",
+        "or_register_as_guest": "Or register as a guest"
     },
 
     "front_desk": {

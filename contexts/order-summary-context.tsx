@@ -117,6 +117,9 @@ export const OrderSummaryProvider = ({
             setExamFee(doctorOrg.examination_fee);
         });
 
+        if (selectedOrder?.visit.id === 0)
+            setExamFee(0);
+
         let meds:Medicine[] = [];
         let medsQty:number[] = [];
         selectedOrder?.order_items.map( (item) => {

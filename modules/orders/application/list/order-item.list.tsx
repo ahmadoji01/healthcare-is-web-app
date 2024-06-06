@@ -17,6 +17,7 @@ interface OrderItemListProps {
 const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 }:OrderItemListProps) => {
 
   const [items, setItems] = useState<OrderItem[]|undefined>(orderItems);
+  const [fee, setFee] = useState<number>(0);
   const qtyRef = useRef<HTMLInputElement>(null)
   const [quantity, setQuantity] = useState(0);
   const { t } = useTranslation();
@@ -24,6 +25,10 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
   useEffect( () => {
     setItems(orderItems);
   }, [items]);
+
+  useEffect( () => {
+    setFee(examFee);
+  }, [examFee])
 
   const handleChange = (action:string, itemIndex:number, e: FocusEvent<HTMLInputElement,Element>|null) => {
     let qty = 0;
@@ -81,18 +86,18 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
             </h5>
           </div>
         </div>
-        { (typeof(examFee) !== "undefined" || examFee !== 0) && 
+        { fee !== 0 && 
           <div className={`grid grid-cols-3 sm:grid-cols-5 border-b border-stroke dark:border-strokedark`}>
             <div className="flex items-center justify p-2.5 xl:p-5">
               <p className="text-black dark:text-white">{ t('examination_fee') }</p>
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3"><Currency value={examFee? examFee : 0} /></p>
+              <p className="text-meta-3"><Currency value={fee? fee : 0} /></p>
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-center text-black dark:text-white"><Currency value={examFee? examFee : 0} /></p>
+              <p className="text-center text-black dark:text-white"><Currency value={fee? fee : 0} /></p>
             </div>
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
             </div>

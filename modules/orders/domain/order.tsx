@@ -41,8 +41,8 @@ type Organization = {
     organization: number,
 }
 
-export type OrderCreator = Omit<Order, 'id'|'patient'|'visit'> & Organization & { patient:number|null, visit: number };
-export function orderCreatorMapper(order:Order, visitID:number, orgID:number) {
+export type OrderCreator = Omit<Order, 'id'|'patient'|'visit'> & Organization & { patient:number|null, visit: number|null };
+export function orderCreatorMapper(order:Order, visitID:number|null, orgID:number) {
 
     let orderCreator: OrderCreator = { 
         patient: order.patient ? order.patient.id : null,
@@ -62,12 +62,17 @@ export function orderPatcherMapper(order:Order, orgID:number) {
     let items:OrderItemPatcher[] = [];
     order.order_items?.map( (item) => items.push(orderItemPatcherMapper(item, orgID)));
 
+    let visitID:number|null = null;
+    if (order.visit.id !== 0) {
+        visitID = order.visit.id;
+    }
+
     let orderPatcher: OrderPatcher = { 
         patient: order.patient ? order.patient.id : null,
         order_items: items,
         total: order.total,
         status: order.status,
-        visit: order.visit ? order.visit.id : null,
+        visit: visitID,
         doctor_paid: order.doctor_paid,
         organization: orgID,
     }
