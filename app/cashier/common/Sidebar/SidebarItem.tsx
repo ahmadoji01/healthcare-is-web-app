@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
+import { useTranslation } from "react-i18next";
+import { Order } from "@/modules/orders/domain/order";
 
 interface SidebarItemProps {
     sidebarExpanded: Boolean,
@@ -8,15 +10,22 @@ interface SidebarItemProps {
 }
 
 const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
+    const [orderList, setOrderList] = useState<Order[]>([]);
+    
     const { orders, selectedOrder, setSelectedOrder } = useOrderSummaryContext();
+    const {t} = useTranslation();
+
+    useEffect( () => {
+        setOrderList(orders);
+    }, [orders]);
 
     return (
         <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-                Patients on Queue
+                { t('patients_on_queue') }
             </h3>
             <ul className="mb-6 flex flex-col gap-1.5">
-                { orders?.map((order, key) => (
+                { orderList?.map((order, key) => (
                     <li>
                         <Link
                             href="#"
@@ -31,7 +40,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                                 : setSidebarExpanded(true);
                             }}
                             >
-                            { order.patient.name }
+                            { order.patient?.name }
                         </Link>
                     </li>
                 ))}

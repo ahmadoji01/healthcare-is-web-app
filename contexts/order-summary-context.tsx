@@ -13,6 +13,10 @@ import { useAlertContext } from './alert-context';
 import { useTranslation } from 'react-i18next';
 import { getADoctorOrg, getDoctorsInOrg } from '@/modules/doctors/domain/doctors.actions';
 import { defaultDoctorOrganization, doctorOrgMapper } from '@/modules/doctors/domain/doctor';
+import { WebSocketClient } from '@directus/sdk';
+import { subsOutputMapper } from '@/modules/websockets/domain/websocket';
+import { WS_EVENT_TYPE } from '@/modules/websockets/domain/websocket.constants';
+import { websocketClient } from '@/utils/request-handler';
  
 interface OrderSummaryContextType {
     deleteModalOpen: boolean,
@@ -73,6 +77,7 @@ export const OrderSummaryProvider = ({
     const [total, setTotal] = useState<number>(1);
     const [cashReceived, setCashReceived] = useState<number>(0);
     const [examFee, setExamFee] = useState<number>(0);
+    const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
 
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -81,9 +86,14 @@ export const OrderSummaryProvider = ({
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertAction, setAlertAction] = useState<string>("");
 
-    const {accessToken, organization} = useUserContext();
+    const {accessToken, organization, user} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const {t} = useTranslation();
+    const notifySound = new Audio('/sounds/notification-sound.mp3');
+
+    const playNotificationSound = () => {
+        notifySound.play();
+    }
 
     useEffect( () => {
         getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay), 1)
@@ -168,6 +178,53 @@ export const OrderSummaryProvider = ({
         setCheckoutModalOpen(false);
         return;
     }
+
+
+
+    async function subsToOrder() { 
+        if ( typeof(wsClient) === 'undefined')
+            return;
+
+        const { subscription } = await wsClient.subscribe('orders', {
+            event: 'update',
+            query: { fields: ['*.*'] },
+        });
+    
+        for await (const item of subscription) {
+            let output = subsOutputMapper(item);
+            if (output.event === WS_EVENT_TYPE.update && output.data.length > 0) {
+                let order = orderMapper(output.data[0]);
+                if (order.status === ORDER_STATUS.waiting_to_pay) {
+                    let newOrders = [...orders];
+                    newOrders.push(order);
+                    setOrders(newOrders);
+                    playNotificationSound();
+                }
+            }
+        }
+    }
+
+    useEffect( () => {
+        let interval = setInterval(async () => {
+            if (user.id !== "") {
+                let client = websocketClient(accessToken);
+                setWSClient(client);
+                client.connect();
+            }
+            clearInterval(interval);
+        }, 110);
+        return () => clearInterval(interval);
+    }, [user]);
+
+    useEffect( () => {
+        let interval = setInterval(async () => {
+            if (typeof(wsClient) !== "undefined") {
+                subsToOrder();
+            }
+            clearInterval(interval);
+        }, 110);
+        return () => clearInterval(interval);
+    }, [wsClient]);
 
     return (
         <OrderSummaryContext.Provider value={{ examFee, deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedItem, selectedPayment, cashReceived, setExamFee, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, setSelectedItem, confirmPayment }}>

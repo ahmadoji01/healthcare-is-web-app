@@ -15,17 +15,22 @@ import { OrderItem } from "@/modules/orders/domain/order-item";
 import { deleteAnOrderItem, updateOrder } from "@/modules/orders/domain/order.actions";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
-import { useState } from "react";
-import { orderPatcherMapper } from "@/modules/orders/domain/order";
+import { useEffect, useState } from "react";
+import { Order, orderMapper, orderPatcherMapper } from "@/modules/orders/domain/order";
 
 const OrderSummary = () => {
 
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [orderList, setOrderList] = useState<Order[]>([]);
 
     const { t } = useTranslation();
     const { accessToken, organization } = useUserContext();
     const { openSnackbarNotification } = useAlertContext();
     const { examFee, orders, selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, selectedItem, setSelectedOrder, setSelectedItem, handleModal } = useOrderSummaryContext();
+
+    useEffect( () => {
+        setOrderList(orders);
+    }, [orders])
 
     const handleQtyChange = (action:string, itemIndex:number, qty:number) => {
         if (typeof(selectedOrder) === 'undefined') {
@@ -97,7 +102,7 @@ const OrderSummary = () => {
 
     return (
         <>
-            { (orders.length > 0 && typeof(selectedOrder) !== 'undefined') && 
+            { (orderList.length > 0 && typeof(selectedOrder) !== 'undefined') && 
                 <>
                     <DashboardModal open={deleteModalOpen} handleClose={() => handleModal(false, false, false)} children={ <OrderItemDeleteConfirmation orderItem={selectedItem} handleDelete={deleteItem} handleClose={() => handleModal(false, false, false)} /> } title="" /> 
                     <DashboardModal open={itemModalOpen} handleClose={() => handleModal(false, false, false)} children={ <AddItem /> } title="" /> 
@@ -121,14 +126,14 @@ const OrderSummary = () => {
                     </div>
                 </>
             }
-            { (orders.length > 0 && typeof(selectedOrder) == 'undefined') && 
+            { (orderList.length > 0 && typeof(selectedOrder) == 'undefined') && 
                 <div className="flex p-6">
                     <h3 className="text-black dark:text-white font-extrabold text-center w-screen h-screen text-3xl items-center justify-center">
                         { t("cashier.select_patient") }
                     </h3>
                 </div>
             }
-            { orders.length <= 0 &&
+            { orderList.length <= 0 &&
                 <div className="flex p-6">
                     <h3 className="text-black dark:text-white font-extrabold text-center w-screen h-screen text-3xl items-center justify-center">
                         { t("cashier.no_active_order") }

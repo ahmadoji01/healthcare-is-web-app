@@ -101,6 +101,7 @@
     "no_medical_history_found": "No Medical History Found",
     "patients_name": "Patient's Name",
     "visit_date": "Visit Date",
+    "patients_on_queue": "Patients on Queue",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

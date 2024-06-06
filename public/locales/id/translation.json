@@ -101,6 +101,7 @@
     "no_medical_history_found": "Tidak Ada Riwayat Medis Ditemukan",
     "patients_name": "Nama Pasien",
     "visit_date": "Tanggal Kunjungan",
+    "patients_on_queue": "Pasien yang Mengantri",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
