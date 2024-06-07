@@ -14,8 +14,6 @@ const MedicalHistoryCard = ({ medicalRecord }:MedicalHistoryCardProps) => {
         <div className="mb-1 task rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="relative flex cursor-move justify-between">
                 <div>
-                    <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{ t('patients_name') }</h5>
-                    <p>{ medicalRecord.patient.name }</p>
                     <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{ t('visit_date') }</h5>
                     <p>{ moment(medicalRecord.date_updated).format("MMMM Do YYYY") }</p>
                     { medicalRecord.medicines?.length > 0 && <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{ t('medicines') }:</h5> }

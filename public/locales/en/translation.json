@@ -103,6 +103,7 @@
     "visit_date": "Visit Date",
     "patients_on_queue": "Patients on Queue",
     "call_patient": "Call Patient",
+    "no_patient_needs_to_be_examined_yet": "No patient needs to be examined yet. Any new patient to be examined will automatically appear here.",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
