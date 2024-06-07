@@ -29,7 +29,7 @@ const QueueModal = ({ open, handleClose, children, title, queueNumber, patientNa
         start,
         pause,
         stop, 
-    } = useSpeech({ text: "Nomor Antrian " + queueNumber + ". Atas nama" + patientName, lang: "id-ID", rate: 0.3 });
+    } = useSpeech({ text: "Nomor antrian " + queueNumber + ". Atas nama" + patientName, lang: "id-ID", rate: 0.3 });
 
     const callPatient = () => {
         if (!isInQueue) {
