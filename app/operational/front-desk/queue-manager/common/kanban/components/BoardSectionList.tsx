@@ -210,7 +210,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-7.5 grid-cols-2">
-        <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } title={t("front_desk.initial_checkup")}>
+        <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } title={t("front_desk.initial_checkup")} queueNumber={activeVisit.queue_number} patientName={activePatient.name}>
           <>
             <PatientInfo patient={activePatient} />
             <PhysicalCheckupForm patient={activePatient} initCheckup={defaultPhysicalCheckup} handleSubmit={handleSubmit} />

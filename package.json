@@ -37,6 +37,7 @@
     "react-i18next": "^14.0.0",
     "react-img-mapper": "^1.5.1",
     "react-jvectormap": "^0.0.16",
+    "react-text-to-speech": "^0.14.9",
     "reactjs-human-body": "^0.0.8",
     "swr": "^2.2.4",
     "uuid": "^9.0.1"
