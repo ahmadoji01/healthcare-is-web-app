@@ -95,26 +95,26 @@ const OpenCloseClinic = () => {
             <div className="h-full">
                 { organization.status == ORG_STATUS.close && 
                     <div className="flex justify-end mt-2 h-1/2 w-full">
-                        <Button
+                        <button
                             onClick={() => openOrCloseClinic(ORG_STATUS.open)}
                             className="w-full inline-flex items-center justify-center gap-2.5 rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
                             <span>
                                 <FontAwesomeIcon icon={faDoorOpen} size="2xl" width={20} height={20} />
                             </span>
                             <p className="text-5xl text-bold">{t("front_desk.open_clinic")}</p>
-                        </Button>
+                        </button>
                     </div>
                 }
                 { organization.status == ORG_STATUS.open && 
                     <div className="flex justify-end mt-2 h-1/2 w-full">
-                        <Button
+                        <button
                             onClick={() => openOrCloseClinic(ORG_STATUS.close)}
-                            className="w-full inline-flex items-center justify-center gap-2.5 rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-10 lg:px-8 xl:px-10">
+                            className="w-full inline-flex items-center justify-center gap-2.5 rounded-md bg-meta-1 py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
                             <span>
                                 <FontAwesomeIcon icon={faDoorClosed} size="2xl" width={20} height={20} />
                             </span>
                             <p className="text-5xl text-bold">{t("front_desk.close_clinic")}</p>
-                        </Button>
+                        </button>
                     </div>
                 }
             </div>
