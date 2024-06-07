@@ -11,6 +11,8 @@ export interface Order {
     status: string,
     doctor_paid: string,
     visit: Visit,
+    date_created: Date,
+    date_updated: Date,
 }
 
 export const defaultOrder: Order = {
@@ -21,6 +23,8 @@ export const defaultOrder: Order = {
     status: ORDER_STATUS.inactive,
     doctor_paid: DOCTOR_PAID.no_doctor,
     visit: defaultVisit,
+    date_created: new Date,
+    date_updated: new Date,
 }
 
 export function orderMapper(res:Record<string,any>) {
@@ -33,6 +37,8 @@ export function orderMapper(res:Record<string,any>) {
         status: res.status,
         doctor_paid: res.doctor_paid? res.doctor_paid : DOCTOR_PAID.no_doctor,
         visit: visitMapper(res.visit),
+        date_created: res.date_created,
+        date_updated: res.date_updated,
     }
     return order;
 }
@@ -41,7 +47,7 @@ type Organization = {
     organization: number,
 }
 
-export type OrderCreator = Omit<Order, 'id'|'patient'|'visit'> & Organization & { patient:number|null, visit: number|null };
+export type OrderCreator = Omit<Order, 'id'|'patient'|'visit'|'date_created'|'date_updated'> & Organization & { patient:number|null, visit: number|null };
 export function orderCreatorMapper(order:Order, visitID:number|null, orgID:number) {
 
     let orderCreator: OrderCreator = { 
@@ -56,7 +62,7 @@ export function orderCreatorMapper(order:Order, visitID:number|null, orgID:numbe
     return orderCreator;
 }
 
-export type OrderPatcher = Omit<Order, 'id'|'patient'|'visit'|'order_items'> & Organization & { order_items: OrderItemPatcher[], patient:number|null, visit:number|null };
+export type OrderPatcher = Omit<Order, 'id'|'patient'|'visit'|'order_items'|'date_created'|'date_updated'> & Organization & { order_items: OrderItemPatcher[], patient:number|null, visit:number|null };
 export function orderPatcherMapper(order:Order, orgID:number) {
 
     let items:OrderItemPatcher[] = [];
