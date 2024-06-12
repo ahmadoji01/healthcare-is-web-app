@@ -13,3 +13,14 @@ export function parentNameEquals(name:string) {
 export function superNameEquals(name:string) {
     return { "super_parent": { "name": { _eq: name }  } }
 }
+
+export const medicineCategoriesFilter = {
+    _or: [
+        {
+            "super_parent": { "name": { _eq: "Medicines" } }
+        },
+        {
+            "name": { _eq: "Medicines" } 
+        }
+    ]
+}

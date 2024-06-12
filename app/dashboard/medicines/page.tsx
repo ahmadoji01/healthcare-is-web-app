@@ -8,12 +8,12 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import { createACategory, getAllCategories, getAllCategoriesWithFilter, searchCategories } from "@/modules/categories/domain/categories.actions";
 import { Category, categoryCreatorMapper, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
-import { nameEquals, superNameEquals } from "@/modules/categories/domain/category.specifications";
+import { medicineCategoriesFilter, nameEquals, superNameEquals } from "@/modules/categories/domain/category.specifications";
 import ItemDeleteConfirmation from "@/modules/items/application/form/item.delete-confirmation";
 import ItemForm from "@/modules/items/application/form/item.form";
 import ItemListTable from "@/modules/items/application/list/item.list-table";
 import { Item, defaultItem, itemMapper, itemPatcherMapper } from "@/modules/items/domain/item";
-import { categoryNameEquals, parentNameEquals, superParentNameEquals } from "@/modules/items/domain/item.specifications";
+import { categoryNameEquals, medicineItemsFilter, parentNameEquals, superParentNameEquals } from "@/modules/items/domain/item.specifications";
 import { deleteAnItem, getItemsWithFilter, getTotalItems, getTotalItemsWithFilter, getTotalSearchItems, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
 import { Medicine, defaultMedicine, medicineMapper, medicinePatcherMapper } from "@/modules/medicines/domain/medicine";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -30,7 +30,6 @@ const MedicinesDashboardPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryName, setCategoryName] = useState("");
   const [superParent, setSuperParent] = useState(defaultCategory);
-  const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [activeItem, setActiveItem] = useState<Item>(defaultItem);
   const [totalPages, setTotalPages] = useState(0);
@@ -40,22 +39,16 @@ const MedicinesDashboardPage = () => {
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const {t} = useTranslation();
-  const filter = { _or: 
-    [ categoryNameEquals("Medicines"), superParentNameEquals("Medicines") ] 
-  };
-  const catFilter = { _or: 
-    [ nameEquals("Medicines"), superNameEquals("Medicines") ] 
-  };
   
   const fetchAllMedicines = () => {
-    getItemsWithFilter(accessToken, filter, 1)
+    getItemsWithFilter(accessToken, medicineItemsFilter, 1)
       .then( res => {
         let its:Item[] = [];
         res?.map( (item) => { its.push(itemMapper(item)); });
         setItems(its);
         setDataLoaded(true);
       });
-    getTotalItemsWithFilter(accessToken, filter)
+    getTotalItemsWithFilter(accessToken, medicineItemsFilter)
       .then( res => { 
         let total = res[0].count? parseInt(res[0].count) : 0;
         let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
@@ -71,7 +64,7 @@ const MedicinesDashboardPage = () => {
   }
 
   useEffect( () => {
-    getAllCategoriesWithFilter(accessToken, catFilter)
+    getAllCategoriesWithFilter(accessToken, medicineCategoriesFilter)
       .then(res => {
         let cats:Category[] = [];
         res?.map( category => { cats.push(categoryMapper(category)) });
@@ -80,7 +73,7 @@ const MedicinesDashboardPage = () => {
   }, []);
 
   useEffect( () => {
-    if (!dataLoaded && medicines.length == 0) {
+    if (!dataLoaded && items.length == 0) {
       fetchAllMedicines();
     }
   }, [items]);
@@ -103,7 +96,7 @@ const MedicinesDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    searchItemsWithFilter(accessToken, searchQuery, filter, value)
+    searchItemsWithFilter(accessToken, searchQuery, medicineItemsFilter, value)
       .then( res => {
         let its:Item[] = [];
         res?.map( (item) => { its.push(itemMapper(item)); });
@@ -140,7 +133,7 @@ const MedicinesDashboardPage = () => {
   const handleSearch = (query:string) => {
     if (query.length > 3) {
       setDataLoaded(false);
-      searchItemsWithFilter(accessToken, query, filter, 1).then( res => {
+      searchItemsWithFilter(accessToken, query, medicineItemsFilter, 1).then( res => {
         let its:Item[] = [];
         res?.map( (item) => { its.push(itemMapper(item)); });
         setItems(its);
