@@ -8,22 +8,22 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Pagination } from "@mui/material";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
-import { Medicine } from "../../domain/item";
+import { Item, defaultItem } from "../../domain/item";
 import Currency from "@/components/Currency";
 
-interface MedicineListTableProps {
+interface ItemListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
-  medicines: Medicine[],
+  items: Item[],
   totalPages: number,
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
-  setActiveMedicine: Dispatch<SetStateAction<Medicine>>,
-  handleQtyChange: (action:string, medicine:Medicine, index:number, qty:number) => void,
+  setActiveItem: Dispatch<SetStateAction<Item>>,
+  handleQtyChange: (action:string, item:Item, index:number, qty:number) => void,
 }
 
-const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChange, setActiveMedicine, handleQtyChange }: MedicineListTableProps) => {
+const ItemListTable = ({ handleModal, items, totalPages, handlePageChange, setActiveItem, handleQtyChange }: ItemListTableProps) => {
 
-  const handleChange = (action:string, medicine:Medicine, index:number, qty:number) => {
-    handleQtyChange(action, medicine, index, qty);
+  const handleChange = (action:string, item:Item, index:number, qty:number) => {
+    handleQtyChange(action, item, index, qty);
   }
 
   return (
@@ -57,42 +57,42 @@ const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChang
           </div>
         </div>
 
-        {typeof(medicines) !== "undefined" && medicines.map((medicine, key) => (
+        {typeof(items) !== "undefined" && items.map((item, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-5 ${
-              key === medicines.length - 1
+              key === items.length - 1
                 ? ""
                 : "border-b border-stroke dark:border-strokedark"
             }`}
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{medicine.name}</p>
+              <p className="text-black dark:text-white">{item.name}</p>
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{medicine.category?.name}</p>
+              <p className="text-black dark:text-white">{item.category?.name}</p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{<Currency value={medicine.price} />}</p>
+              <p className="text-meta-3">{<Currency value={item.price} />}</p>
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
               <div className="custom-number-input h-10">
                 <div className="flex flex-row h-10 w-full rounded-lg mt-1">
                   <button className="h-full w-10 rounded-l cursor-pointer outline-none">
-                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', medicine, key, 0)}>−</span>
+                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', item, key, 0)}>−</span>
                   </button>
                   <input 
-                    defaultValue={medicine.stock}
+                    defaultValue={item.stock}
                     type="number" 
                     className="quantity-input text-center w-10 font-semibold bg-transparent" 
                     name="custom-input-number"
                     min={0}
-                    onBlur={e => handleChange('input', medicine, key, parseInt(e.target.value)) } />
+                    onBlur={e => handleChange('input', item, key, parseInt(e.target.value)) } />
                   <button data-action="increment" className="h-full w-10">
-                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', medicine, key, 0)}>+</span>
+                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', item, key, 0)}>+</span>
                   </button>
                 </div>
               </div>
@@ -103,7 +103,7 @@ const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChang
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={() => { handleModal(false, true); setActiveMedicine(medicine) }}
+                    onClick={() => { handleModal(false, true); setActiveItem(item) }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
                     <FontAwesomeIcon width={18} height={18} icon={faPencil} />
@@ -112,7 +112,7 @@ const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChang
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={() => { handleModal(false, false); setActiveMedicine(medicine) }}
+                    onClick={() => { handleModal(false, false); setActiveItem(item) }}
                     style={{ background: "red" }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
@@ -131,4 +131,4 @@ const MedicineListTable = ({ handleModal, medicines, totalPages, handlePageChang
   );
 };
 
-export default MedicineListTable;
+export default ItemListTable;

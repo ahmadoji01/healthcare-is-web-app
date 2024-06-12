@@ -2,14 +2,14 @@
 
 import SubmitButton from '@/components/Dashboard/Submit';
 import { useState } from 'react';
-import MedicineCategory from '../../domain/medicine-category';
+import { Category } from '../../domain/category';
 
-interface MedicineCategoryFormProps {
-    initCategory: MedicineCategory,
-    handleSubmit: (category:MedicineCategory) => void,
+interface CategoryFormProps {
+    initCategory: Category,
+    handleSubmit: (category:Category) => void,
 }
 
-const MedicineCategoryForm = ({ initCategory, handleSubmit }:MedicineCategoryFormProps) => {
+const CategoryForm = ({ initCategory, handleSubmit }:CategoryFormProps) => {
     const [category, setCategory] = useState(initCategory);
 
     return (
@@ -42,4 +42,4 @@ const MedicineCategoryForm = ({ initCategory, handleSubmit }:MedicineCategoryFor
     )
 }
 
-export default MedicineCategoryForm;
+export default CategoryForm;

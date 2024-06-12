@@ -1,25 +1,35 @@
 'use client';
 
 import SubmitButton from '@/components/Dashboard/Submit';
-import { Medicine } from '../../domain/item';
-import { useState } from 'react';
+import { Item } from '../../domain/item';
+import { useEffect, useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
-import MedicineCategory from '../../domain/medicine-category';
+import { Category } from '@/modules/categories/domain/category';
+import { useTranslation } from 'react-i18next';
 
-interface MedicineFormProps {
-    initMedicine: Medicine,
-    categories: MedicineCategory[],
-    handleSubmit: (medicine:Medicine) => void,
+interface ItemFormProps {
+    initItem: Item,
+    categories: Category[],
+    handleSubmit: (item:Item) => void,
     setCategoryName: (categoryName:string) => void,
 }
 
-const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName }:MedicineFormProps) => {
-    const [medicine, setMedicine] = useState(initMedicine);
+const ItemForm = ({ initItem, categories, handleSubmit, setCategoryName }:ItemFormProps) => {
+    const [item, setItem] = useState(initItem);
+    const [cats, setCats] = useState<string[]>([]);
+
+    const {t} = useTranslation();
+
+    useEffect(() => {
+        let cas:string[] = [];
+        categories?.map( (cat) => cas.push(cat.name));
+        setCats(cas);
+    }, []);
 
     return (
         <>
             <div className="grid gap-9">
-                <form onSubmit={e => { e.preventDefault(); handleSubmit(medicine) } }>
+                <form onSubmit={e => { e.preventDefault(); handleSubmit(item) } }>
                     <div className="flex flex-col gap-9">
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <div className="flex flex-col gap-5.5 p-6.5">
@@ -29,9 +39,9 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                     </label>
                                     <input
                                         type="text" 
-                                        defaultValue={medicine.name}
+                                        defaultValue={item.name}
                                         required
-                                        onChange={ e => setMedicine({ ...medicine, name: e.target.value })}
+                                        onChange={ e => setItem({ ...item, name: e.target.value })}
                                         placeholder="Input the Medicine's Name"
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
@@ -42,21 +52,17 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                     </label>
                                     <div className="relative">
                                         <Autocomplete
+                                            defaultValue={item.category?.name}
+                                            onChange={(event: any, newValue: string | null) => {
+                                                setCategoryName(newValue? newValue:'');
+                                            }}
+                                            onInputChange={ (e:any, value:string) => {
+                                                setCategoryName(value? value:'');
+                                            }}
                                             freeSolo
-                                            id="free-solo-2-demo"
-                                            disableClearable
-                                            options={categories?.map((cat) => cat.name)}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    defaultValue={medicine.category?.name}
-                                                    {...params}
-                                                    InputProps={{
-                                                        ...params.InputProps,
-                                                        type: 'search',
-                                                    }}
-                                                    onChange={ e => setCategoryName(e.target.value)}
-                                                />
-                                            )}
+                                            options={cats}
+                                            disablePortal
+                                            renderInput={(params) => <TextField {...params} label="" />}
                                         />
                                     </div>
                                 </div>
@@ -67,9 +73,10 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                     <div className="relative">
                                     <input
                                         type="number"
-                                        defaultValue={medicine.stock}
+                                        defaultValue={item.stock}
+                                        min={0}
                                         required
-                                        onChange={ e => setMedicine({ ...medicine, stock: parseInt(e.target.value) })}
+                                        onChange={ e => setItem({ ...item, stock: parseInt(e.target.value) })}
                                         placeholder="Input the Stock"
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
@@ -82,9 +89,9 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                     <div className="relative">
                                     <input
                                         type="number"
-                                        defaultValue={medicine.price}
+                                        defaultValue={item.price}
                                         required
-                                        onChange={ e => setMedicine({ ...medicine, price: parseInt(e.target.value) })}
+                                        onChange={ e => setItem({ ...item, price: parseInt(e.target.value) })}
                                         placeholder="Input the Price"
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
@@ -100,4 +107,4 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
     )
 }
 
-export default MedicineForm;
+export default ItemForm;

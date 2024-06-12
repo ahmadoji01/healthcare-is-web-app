@@ -5,6 +5,8 @@ import { CategoryCreator } from "./category";
 
 export const getAllCategories = (token:string, page:number) => directusClient.request( withToken(token, readItems('categories', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
 export const getTotalCategories = (token:string) => directusClient.request( withToken(token, aggregate('_categories', { aggregate: { count: '*' } })) );
+export const getAllCategoriesWithFilter = (token:string, filter:object) => 
+	directusClient.request( withToken(token, readItems('categories', { fields: ['*.*'], filter: filter })) );
 
 export const createACategory = (token:string, category:CategoryCreator) => directusClient.request( withToken(token, createItem('categories', category)) );
 export const updateACategory = (token:string, id:number, data:object) => directusClient.request( withToken(token, updateItem('categories', id, data)) );

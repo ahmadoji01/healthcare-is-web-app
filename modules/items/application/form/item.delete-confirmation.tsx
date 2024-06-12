@@ -1,12 +1,12 @@
-import { Medicine } from "../../domain/item";
+import { Item } from "../../domain/item";
 
 interface DeleteConfirmationProps {
     handleClose: () => void,
     handleDelete: () => void,
-    medicine: Medicine,
+    item: Item,
 }
 
-const MedicineDeleteConfirmation = ({ handleClose, handleDelete, medicine }: DeleteConfirmationProps) => {
+const ItemDeleteConfirmation = ({ handleClose, handleDelete, item }: DeleteConfirmationProps) => {
     return (
         <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
             <span className="mx-auto inline-block">
@@ -15,7 +15,7 @@ const MedicineDeleteConfirmation = ({ handleClose, handleDelete, medicine }: Del
                 <path d="M30 27.2498V29.9998V27.2498ZM30 35.4999H30.0134H30ZM20.6914 41H39.3086C41.3778 41 42.6704 38.7078 41.6358 36.8749L32.3272 20.3747C31.2926 18.5418 28.7074 18.5418 27.6728 20.3747L18.3642 36.8749C17.3296 38.7078 18.6222 41 20.6914 41Z" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
             </span>
-            <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">Are you sure you want to delete { medicine.name }?</h3>
+            <h3 className="mt-5.5 pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">Are you sure you want to delete { item.name }?</h3>
             <p className="mb-10">This data and any related data to it will be deleted permanently.</p>
             <div className="-mx-3 flex flex-wrap gap-y-10">
                 <div className="w-full px-3 2xsm:w-1/2">
@@ -33,4 +33,4 @@ const MedicineDeleteConfirmation = ({ handleClose, handleDelete, medicine }: Del
     )
 }
 
-export default MedicineDeleteConfirmation;
+export default ItemDeleteConfirmation;

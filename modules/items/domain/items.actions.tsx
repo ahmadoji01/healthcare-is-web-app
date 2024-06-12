@@ -5,6 +5,16 @@ import { ItemCreator } from "./item";
 
 export const getAllItems = (token:string, page:number) => directusClient.request( withToken(token, readItems('items', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
 export const getTotalItems = (token:string) => directusClient.request( withToken(token, aggregate('items', { aggregate: { count: '*' } })) );
+export const getItemsWithFilter = (token:string, filter:object, page:number) =>
+	directusClient.request( 
+		withToken(token, readItems('items', { 
+			filter: filter,
+			fields: ['*.*'], limit: LIMIT_PER_PAGE, page
+		})) 
+	);
+export const getTotalItemsWithFilter = (token:string, filter:object) => 
+	directusClient.request( withToken(token, aggregate('items', { filter: filter, aggregate: { count: '*' } })) );
+
 export const itemExistChecker = (token:string, name = "") => 
 	directusClient.request( 
 		withToken(token, readItems('items', { 
@@ -26,3 +36,7 @@ export const searchItems = (token:string, query:string, page:number) =>
 		withToken(token, readItems('items', { fields: ['*.*'], search: query, limit: LIMIT_PER_PAGE, page }))
 	)
 export const getTotalSearchItems = (token:string, query:string) => directusClient.request( withToken(token, readItems('items', { search: query, aggregate: { count: '*' } })));
+export const searchItemsWithFilter = (token:string, query:string, filter:object, page:number) =>
+	directusClient.request(
+		withToken(token, readItems('items', { fields: ['*.*'], search: query, filter: filter, limit: LIMIT_PER_PAGE, page }))
+	)

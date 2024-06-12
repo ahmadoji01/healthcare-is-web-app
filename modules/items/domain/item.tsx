@@ -1,4 +1,4 @@
-import { Category } from "@/modules/categories/domain/category";
+import { Category, categoryMapper } from "@/modules/categories/domain/category";
 import { defaultCategory } from "@/modules/categories/domain/category";
 
 export interface Item {
@@ -27,7 +27,7 @@ export function itemMapper(res:Record<string,any>) {
         code: res.code,
         price: res.price,
         stock: res.stock,
-        category: res.category,
+        category: categoryMapper(res.category),
     }
     return item;
 }
@@ -46,14 +46,14 @@ export function itemCreatorMapper(item:Item, catID:number, orgID:number) {
     return itemCreator;
 }
 
-export type ItemPatcher = Omit<Item, 'id'>;
+export type ItemPatcher = Omit<Item, 'id'|'category'> & { category:number };
 export function itemPatcherMapper(item:Item) {
     let itemPatcher:ItemPatcher = {
         name: item.name, 
         code: item.code,
         price: item.price,
         stock: item.stock,
-        category: item.category,
+        category: item.category.id,
     }
     return itemPatcher;
 }

@@ -26,13 +26,13 @@ export const categoryMapper = (res:Record<string,any>) => {
     return category;
 }
 
-export type CategoryCreator = Omit<Category, 'id'> & { organization: number };
+export type CategoryCreator = Omit<Category, 'id'|'parent'|'super_parent'> & { parent:number|null, super_parent:number|null, organization: number };
 export const categoryCreatorMapper = (category:Category, orgID:number) => {
     let categoryCreator:CategoryCreator = {
         name: category.name,
         organization: orgID,
-        parent: category.parent,
-        super_parent: category.super_parent,
+        parent: category.parent? category.parent.id : null,
+        super_parent: category.super_parent? category.super_parent.id : null,
         children: category.children,
     }
     return categoryCreator;
