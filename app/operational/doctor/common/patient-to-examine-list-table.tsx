@@ -8,6 +8,7 @@ import { Pagination } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { MedicalRecord } from "@/modules/medical-records/domain/medical-record";
 import { Visit } from "@/modules/visits/domain/visit";
+import { useTranslation } from "react-i18next";
 
 interface PatientToExamineListTableProps {
     visits: Visit[],
@@ -18,33 +19,39 @@ interface PatientToExamineListTableProps {
   }
 
 const PatientToExamineListTable = ({ visits, totalPages, handlePageChange, setActiveMedicalRecord, setActiveVisit }: PatientToExamineListTableProps) => {
+    
+    const {t} = useTranslation();
+
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+          { visits.length <= 0 &&
+            <h4 className="text-2xl font-extrabold text-black dark:text-white mb-2">{ t('no_patient_needs_to_be_examined_yet') }</h4>
+          }
           <div className="flex flex-col">
             <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
               <div className="p-2.5 xl:p-5">
                 <h5 className="text-sm font-medium uppercase xsm:text-base">
-                  Full Name
+                  { t('full_name') }
                 </h5>
               </div>
               <div className="p-2.5 text-center xl:p-5">
                 <h5 className="text-sm font-medium uppercase xsm:text-base">
-                  NIK/KK
+                  { t('resident_number_or_family_id_number') }
                 </h5>
               </div>
               <div className="hidden p-2.5 text-center sm:block xl:p-5">
                 <h5 className="text-sm font-medium uppercase xsm:text-base">
-                  Birthday
+                  { t('birthday') }
                 </h5>
               </div>
               <div className="hidden p-2.5 text-center sm:block xl:p-5">
                 <h5 className="text-sm font-medium uppercase xsm:text-base">
-                  Address
+                  { t('address') }
                 </h5>
               </div>
               <div className="p-2.5 text-center xl:p-5">
                 <h5 className="text-sm font-medium uppercase xsm:text-base">
-                  Actions
+                  { t('actions') }
                 </h5>
               </div>
             </div>
@@ -85,7 +92,7 @@ const PatientToExamineListTable = ({ visits, totalPages, handlePageChange, setAc
                             <span>
                                 <FontAwesomeIcon icon={faStethoscope} />
                             </span>
-                            Examine
+                            { t('examine') }
                         </Link>
                     </motion.li>
                   </ul>

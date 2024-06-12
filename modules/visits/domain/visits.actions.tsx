@@ -11,7 +11,7 @@ export const getTotalVisits = (token:string) => directusClient.request( withToke
 
 export const getVisitByDoctorID = (token:string, doctorID = 0) => 
 	directusClient.request( 
-		withToken(token, readItems('visits', { fields: ['*.*.*'],
+		withToken(token, readItems('visits', { fields: ['*.*.*'], sort: [ 'sort', 'queue_number' ],
 			filter: {
 				doctor: { _eq: doctorID }
 			} 

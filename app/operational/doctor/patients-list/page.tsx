@@ -11,15 +11,74 @@ import { getTotalVisits, getVisitByStatus } from "@/modules/visits/domain/visits
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { Visit, visitMapper } from "@/modules/visits/domain/visit";
 import { useVisitContext } from "@/contexts/visit-context";
+import { useTranslation } from "react-i18next";
+import { WebSocketClient } from "@directus/sdk";
+import { subsOutputMapper } from "@/modules/websockets/domain/websocket";
+import { WS_EVENT_TYPE } from "@/modules/websockets/domain/websocket.constants";
+import { websocketClient } from "@/utils/request-handler";
 
 const PatientsList = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
+    const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
     const [patients, setPatients] = useState<Patient[]>([]);
     const [visits, setVisits] = useState<Visit[]>([]);
     const [totalPages, setTotalPages] = useState(0);
-    const {accessToken} = useUserContext();
+    const {accessToken, user} = useUserContext();
     const {setActiveMedicalRecord} = useMedicalRecordContext();
     const {setActiveVisit} = useVisitContext();
+    const {t} = useTranslation();
+    const notifySound = new Audio('/sounds/notification-sound.mp3');
+
+    const playNotificationSound = () => {
+        notifySound.play();
+    }
+
+    async function subsToVisit() { 
+        if ( typeof(wsClient) === 'undefined')
+            return;
+
+        const { subscription } = await wsClient.subscribe('visits', {
+            event: 'update',
+            query: { fields: ['*.*.*'] },
+        });
+    
+        for await (const item of subscription) {
+            let output = subsOutputMapper(item);
+            if (output.event === WS_EVENT_TYPE.update && output.data.length > 0) {
+                let visit = visitMapper(output.data[0]);
+                
+                if (visit.status !== VISIT_STATUS.to_be_examined)
+                    return;
+
+                let newVisits = [...visits];
+                newVisits.push(visit);
+                setVisits(newVisits);
+                playNotificationSound();
+            }
+        }
+    }
+
+    useEffect( () => {
+        let interval = setInterval(async () => {
+            if (user.id !== "") {
+                let client = websocketClient(accessToken);
+                setWSClient(client);
+                client.connect();
+            }
+            clearInterval(interval);
+        }, 110);
+        return () => clearInterval(interval);
+    }, [user]);
+
+    useEffect( () => {
+        let interval = setInterval(async () => {
+            if (typeof(wsClient) !== "undefined") {
+                subsToVisit();
+            }
+            clearInterval(interval);
+        }, 110);
+        return () => clearInterval(interval);
+    }, [wsClient]);
 
     useEffect( () => {
         if (!dataLoaded || patients.length == 0) {
@@ -59,7 +118,7 @@ const PatientsList = () => {
       
     return (
         <>
-            <h2 className="text-3xl font-extrabold text-black dark:text-white mb-2">Patients to be Examined</h2>
+            <h2 className="text-3xl font-extrabold text-black dark:text-white mb-2">{ t('patients_to_be_examined') }</h2>
             <PatientToExamineListTable visits={visits} totalPages={totalPages} handlePageChange={handlePageChange} setActiveMedicalRecord={setActiveMedicalRecord} setActiveVisit={setActiveVisit} />
         </>
     )

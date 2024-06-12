@@ -3,7 +3,6 @@
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
 import Spinner from "@/components/Spinner";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
@@ -17,6 +16,7 @@ import { deleteAMedicine, getAllMedicines, getTotalMedicines, getTotalSearchMedi
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -34,6 +34,7 @@ const MedicinesDashboardPage = () => {
 
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
   
   const fetchAllMedicines = () => {
     getAllMedicines(accessToken, 1)
@@ -96,10 +97,10 @@ const MedicinesDashboardPage = () => {
   const handleSubmit = (medicine:Medicine) => {
     updateAMedicine(accessToken, medicine.id, medicinePatcherMapper(medicine))
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   } 
 
@@ -139,19 +140,19 @@ const MedicinesDashboardPage = () => {
   const handleDelete = () => {
     deleteAMedicine(accessToken, activeMedicine.id)
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   }
 
   const handleSubmitQty = (medicine:Medicine) => {
     updateAMedicine(accessToken, medicine.id, { stock: medicine.stock })
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   } 
 
@@ -194,7 +195,7 @@ const MedicinesDashboardPage = () => {
 
         <input
           type="search"
-          placeholder="Type to search..."
+          placeholder={ t("type_to_search") }
           onChange={e => {handleChange(e.target.value) }}
           className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
           />

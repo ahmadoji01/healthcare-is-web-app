@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { Button, Checkbox } from "@mui/material";
 import { DoctorOrganization } from "../domain/doctor";
 import { DoctorName } from "@/modules/doctors/domain/doctor.specifications";
+import { useTranslation } from "react-i18next";
 
 interface DoctorListTableProps {
   doctorOrgs: DoctorOrganization[],
@@ -11,6 +12,7 @@ interface DoctorListTableProps {
 const DoctorPresence = ({ doctorOrgs, handleSubmit }: DoctorListTableProps) => {
   
     const [selectedDoctorOrgIds, setSelectedDoctorOrgIds] = useState<number[]>([]);
+    const {t} = useTranslation();
 
     const handleChecked = (e:ChangeEvent<HTMLInputElement>, index:number) => {
         let checked = e.target.checked;
@@ -50,7 +52,7 @@ const DoctorPresence = ({ doctorOrgs, handleSubmit }: DoctorListTableProps) => {
                     key={key}
                     >
                     <div className="flex items-center justify p-2.5 xl:p-5">
-                        <Checkbox onChange={ e => handleChecked(e, doctorOrg.id)} />
+                        <Checkbox size="medium" onChange={ e => handleChecked(e, doctorOrg.id)} />
                     </div>
 
                     <div className="flex items-center justify p-2.5 xl:p-5">
@@ -59,11 +61,11 @@ const DoctorPresence = ({ doctorOrgs, handleSubmit }: DoctorListTableProps) => {
                 </div>
                 ))}
             </div>
-            <Button
+            <button
                 onClick={() => handleSubmit(selectedDoctorOrgIds)}
-                className="inline-block align-middle w-full bg-meta-3 py-4 px-10 text-center text-white lg:px-8 xl:px-10">
-                <p className="text-3xl text-bold">Open Clinic</p>
-            </Button>
+                className="inline-block align-middle w-full bg-primary py-4 px-10 text-center text-white lg:px-8 xl:px-10 hover:bg-opacity-90">
+                <p className="text-3xl text-bold">{t("front_desk.open_clinic")}</p>
+            </button>
         </div>
     );
 };

@@ -9,6 +9,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import PageNav from "@/components/Dashboard/PageNav/PageNav";
 import Spinner from "@/components/Spinner";
 import { usePatientContext } from "@/contexts/patient-context";
+import { useTranslation } from "react-i18next";
 
 interface PatientSearchListTableProps {
     patients: Patient[],
@@ -19,18 +20,19 @@ interface PatientSearchListTableProps {
 const PatientSearchListTable = ({ patients, searched, loading, handleNext }:PatientSearchListTableProps) => {
     
     const {setActivePatient} = usePatientContext();
+    const {t} = useTranslation();
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             { loading && <Spinner /> }
-            { (patients.length === 0 && !searched && !loading) && <h3 className="mb-6">Type the patient's name above and press "Enter"</h3> }
+            { (patients.length === 0 && !searched && !loading) && <h3 className="mb-6">{ t('front_desk.type_your_name') }</h3> }
             { (patients.length === 0 && searched && !loading) && 
                 <div className="mb-6">
-                    <h3 className="text-center">No patient found. Try searching with another query</h3>
-                    <h3 className="text-center py-3">or register here if you are new.</h3>
+                    <h3 className="text-center">{ t('front_desk.no_patient') }</h3>
+                    <h3 className="text-center py-3">{ t('front_desk.or_register') }</h3>
                     <a href="new-patient">
                         <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-                            New Patient Registration
+                            { t('front_desk.new_patient_registration') }
                         </button>
                     </a>
                 </div>
@@ -40,27 +42,27 @@ const PatientSearchListTable = ({ patients, searched, loading, handleNext }:Pati
                     <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
                         <div className="p-2.5 xl:p-5">
                             <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Full Name
+                                { t('full_name') }
                             </h5>
                         </div>
                         <div className="hidden p-2.5 text-center sm:block xl:p-5">
                             <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Birthday
+                                { t('birthday') }
                             </h5>
                         </div>
                         <div className="hidden p-2.5 text-center sm:block xl:p-5">
                             <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Father's Name
+                                { t('fathers_name') }
                             </h5>
                         </div>
                         <div className="hidden p-2.5 text-center sm:block xl:p-5">
                             <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Mother's Name
+                                { t('mothers_name') }
                             </h5>
                         </div>
                         <div className="p-2.5 text-center xl:p-5">
                             <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Actions
+                                { t('actions') }
                             </h5>
                         </div>
                     </div>
@@ -73,7 +75,8 @@ const PatientSearchListTable = ({ patients, searched, loading, handleNext }:Pati
                                 : "border-b border-stroke dark:border-strokedark"
                             }`}
                             key={key}
-                        >
+                            onClick={() => {handleNext(); setActivePatient(patient);}}
+                            >
                             <div className="flex items-center justify p-2.5 xl:p-5">
                                 <p className="text-black dark:text-white">{patient.name}</p>
                             </div>

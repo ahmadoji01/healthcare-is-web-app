@@ -18,20 +18,22 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { usePatientContext } from "@/contexts/patient-context";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
-import { useDoctorContext } from "@/contexts/doctor-context";
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultVisit, visitCreatorMapper, visitMapper } from "@/modules/visits/domain/visit";
 import { createAVisit, getTotalQueueByDoctorID } from "@/modules/visits/domain/visits.actions";
 import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
-import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
+import { DOCTOR_PAID, ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
+import { useTranslation } from "react-i18next";
+import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
+import { getADoctorOrg, updateDoctorOrgs } from "@/modules/doctors/domain/doctors.actions";
+import { defaultDoctorOrganization, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
 
-const steps = ['Search Your Data', 'Doctor to Visit', 'Examination Time', 'Review Your Input'];
+const steps = ['search_your_data', 'doctor_to_visit', 'visit_status', 'review_input'];
 
 function getStepContent(step: number, handleNext: () => void, visitStatus: string, setVisitStatus: Dispatch<SetStateAction<string>>) {
     switch (step) {
@@ -56,6 +58,7 @@ const ExistingPatient = () => {
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
     const {activeDoctor} = useFrontDeskContext();
+    const {t} = useTranslation();
 
 
     const handleNext = () => {
@@ -67,27 +70,52 @@ const ExistingPatient = () => {
     };
 
     const handleSubmit = async () => {
+        if (organization.status === ORG_STATUS.close) {
+            openSnackbarNotification(t('alert_msg.clinic_is_close'), "error");
+            return;
+        }
+
         let physicalCheckup = defaultPhysicalCheckup;
         physicalCheckup.patient = activePatient;
         let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, organization.id, activePatient.id);
         
         let queueNum = "";
-        await getTotalQueueByDoctorID(accessToken, activeDoctor.id).then( res => {
-            let total = res[0].count? parseInt(res[0].count) + 1 : 1;
-            setQueueNumber(total.toString());
-            queueNum = total.toString();
+        let isError = false;
+
+        let docOrg = defaultDoctorOrganization;
+        await getADoctorOrg(accessToken, { doctors_id: { _eq: activeDoctor.id } }).then( res => {
+            docOrg = res[0]? doctorOrgMapper(res[0]) : defaultDoctorOrganization;
+            let queue = docOrg.queue + 1;
+            setQueueNumber(queue.toString());
+            queueNum = queue.toString();
         }).catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
+
+        await updateDoctorOrgs(accessToken, [docOrg.id], { queue: parseInt(queueNum) })
+            .catch( err => {
+                isError = true;
+                return;
+            });
+
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
         
         await createAPhysicalCheckup(accessToken, physicalCheckupNoID).then( res => {
             physicalCheckup = physicalCheckupMapper(res);
         }).catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
         
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
+
         let medicalRecord = defaultMedicalRecord;
         medicalRecord.care_type = CARE_TYPE.outpatient;
         medicalRecord.patient = activePatient;
@@ -97,10 +125,14 @@ const ExistingPatient = () => {
         await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
             medicalRecord = medicalRecordMapper(res);
         }).catch( err => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
 
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
 
         let visit = defaultVisit;
         visit.doctor = activeDoctor;
@@ -112,25 +144,34 @@ const ExistingPatient = () => {
         await createAVisit(accessToken, visitCreator).then( res => {
             visit = visitMapper(res);
         }).catch( err => {
-            console.log(err);
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
-        
+
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
+
         let order = defaultOrder;
         order.visit = visit;
         order.patient = activePatient;
+        order.doctor_paid = DOCTOR_PAID.unpaid;
         order.status = ORDER_STATUS.active;
         let orderCreator = orderCreatorMapper(order, visit.id, organization.id);
         await createAnOrder(accessToken, orderCreator).then( res => {
             order = orderMapper(res);
         }).catch( err => {
-            console.log(err);
-            openSnackbarNotification(ALERT_MESSAGE.server_error, 'error');
+            isError = true;
             return;
         });
 
-        openSnackbarNotification(ALERT_MESSAGE.success, 'success');
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
+
+        openSnackbarNotification(t('alert_msg.success'), 'success');
         setActiveStep(activeStep + 1);
         return;
     }
@@ -138,12 +179,12 @@ const ExistingPatient = () => {
     return (
         <div className="relative flex flex-1 flex-col">
             <h4 className="text-title-md font-bold text-black dark:text-white text-center align-middle">
-                Patient Registration
+                { t('front_desk.patient_registration') }
             </h4>
             <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }} alternativeLabel>
                 {steps.map((label) => (
                 <Step key={label}>
-                    <StepLabel><p className="text-black dark:text-white">{label}</p></StepLabel>
+                    <StepLabel><p className="text-black dark:text-white">{t(label)}</p></StepLabel>
                 </Step>
                 ))}
             </Stepper>
@@ -160,7 +201,7 @@ const ExistingPatient = () => {
                                         href="#"
                                         onClick={handleBack}
                                         className="flex flex-col items-center justify-center rounded-full bg-meta-3 py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                        Back
+                                        { t('back') }
                                     </Link>
                                 )}
                             </div>
@@ -170,7 +211,7 @@ const ExistingPatient = () => {
                                     href="#"
                                     onClick={() => {handleSubmit();}}
                                     className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                        Submit Registration
+                                        { t('submit_registration') }
                                     </Link>
                                 }
                             </div>

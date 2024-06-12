@@ -2,25 +2,62 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import OrderItem, { orderItemCategory, orderItemName } from "../../domain/order-item";
+import { OrderItem, orderItemCategory, orderItemName } from "../../domain/order-item";
 import Currency from "@/components/Currency";
-import { useEffect, useState } from "react";
+import { FocusEvent, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface OrderItemListProps {
   orderItems: OrderItem[]|undefined,
-  handleModal: () => void,
   handleQtyChange: (action:string, itemIndex:number, qty:number) => void,
+  handleDelete: (item:OrderItem, index:number) => void,
+  examFee?: number
 }
 
-const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemListProps) => {
+const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 }:OrderItemListProps) => {
 
   const [items, setItems] = useState<OrderItem[]|undefined>(orderItems);
+  const [fee, setFee] = useState<number>(0);
+  const qtyRef = useRef<HTMLInputElement>(null)
+  const [quantity, setQuantity] = useState(0);
+  const { t } = useTranslation();
 
   useEffect( () => {
     setItems(orderItems);
   }, [items]);
 
-  const handleChange = (action:string, itemIndex:number, qty:number) => {
+  useEffect( () => {
+    setFee(examFee);
+  }, [examFee])
+
+  const handleChange = (action:string, itemIndex:number, e: FocusEvent<HTMLInputElement,Element>|null) => {
+    let qty = 0;
+    
+    if (qtyRef.current === null) {
+      return;
+    }
+
+    qty = parseInt(qtyRef.current.value);
+
+    if (e === null) {
+      if (action === "add")
+        qty++;
+      if (action === "substract")
+        qty--;
+
+      qtyRef.current.value = qty.toString();
+      setQuantity(qty);
+      handleQtyChange(action, itemIndex, qty);
+      return;
+    }
+    
+    if (parseInt(e.target.value) <= 0 || e.target.value === "") {
+      qty = 1;
+      e.target.value = qty.toString();
+    } else {
+      qty = parseInt(e.target.value);
+    }
+    setQuantity(qty);
     handleQtyChange(action, itemIndex, qty);
   }
 
@@ -30,17 +67,17 @@ const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemLis
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
           <div className="p-2 xl:p-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Item Name
+              { t("module_app.item_name") }
             </h5>
           </div>
           <div className="hidden p-2 text-center sm:block xl:p-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Unit Price
+              { t("unit_price") }
             </h5>
           </div>
           <div className="hidden p-2 text-center sm:block xl:p-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Quantity
+              { t("quantity") }
             </h5>
           </div>
           <div className="p-2 text-center xl:p-4">
@@ -48,11 +85,24 @@ const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemLis
               Total
             </h5>
           </div>
-          <div className="p-1 text-center xl:p-2">
-            
-          </div>
         </div>
-
+        { fee !== 0 && 
+          <div className={`grid grid-cols-3 sm:grid-cols-5 border-b border-stroke dark:border-strokedark`}>
+            <div className="flex items-center justify p-2.5 xl:p-5">
+              <p className="text-black dark:text-white">{ t('examination_fee') }</p>
+            </div>
+            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+              <p className="text-meta-3"><Currency value={fee? fee : 0} /></p>
+            </div>
+            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+            </div>
+            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
+              <p className="text-center text-black dark:text-white"><Currency value={fee? fee : 0} /></p>
+            </div>
+            <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
+            </div>
+          </div>
+        }
         {typeof(items) !== "undefined" && items.map((item, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-5 ${
@@ -74,15 +124,19 @@ const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemLis
                 <div className="custom-number-input h-10">
                   <div className="flex flex-row h-10 w-full rounded-lg mt-1">
                     <button className="h-full w-10 rounded-l cursor-pointer outline-none">
-                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', key, 0)}>−</span>
+                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', key, null)}>−</span>
                     </button>
                     <input 
+                      ref={qtyRef}
+                      required
                       value={item.quantity}
+                      min="1"
                       type="number" 
                       className="quantity-input text-center w-10 font-semibold bg-transparent" 
-                      name="custom-input-number" />
+                      name="custom-input-number"
+                      onBlur={e => { handleChange('input', key, e)} } />
                     <button data-action="increment" className="h-full w-10">
-                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', key, 0)}>+</span>
+                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', key, null)}>+</span>
                     </button>
                   </div>
                 </div>
@@ -98,7 +152,7 @@ const OrderItemList = ({ orderItems, handleModal, handleQtyChange }:OrderItemLis
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={handleModal}
+                    onClick={ () => handleDelete(item, key)}
                     style={{ background: "red" }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >

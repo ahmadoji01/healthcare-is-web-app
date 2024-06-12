@@ -5,4 +5,5 @@ export const ROLES = {
     cashier: "Staff Cashier",
     doctor: "Doctor",
     administrator: "Staff Administrator",
+    front_desk: "Staff Front Desk"
 }

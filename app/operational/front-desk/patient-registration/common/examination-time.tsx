@@ -1,6 +1,7 @@
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import Link from "next/link"
 import { Dispatch, SetStateAction } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ExaminationTimeProps {
     handleNext: () => void,
@@ -8,6 +9,9 @@ interface ExaminationTimeProps {
 }
 
 const ExaminationTime = ({ handleNext, setVisitStatus }: ExaminationTimeProps) => {
+
+    const {t} = useTranslation();
+
     return (
         <>
             <div className="flex justify-end mt-2">
@@ -15,7 +19,7 @@ const ExaminationTime = ({ handleNext, setVisitStatus }: ExaminationTimeProps) =
                     href="#"
                     onClick={ () => {handleNext(); setVisitStatus(VISIT_STATUS.waiting); }}
                     className="flex-1 grow items-center justify-center rounded-full bg-meta-3 py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
-                    Wait Until Called
+                    { t('front_desk.wait') }
                 </Link>
             </div>
             <div className="flex justify-end mt-2">
@@ -23,7 +27,7 @@ const ExaminationTime = ({ handleNext, setVisitStatus }: ExaminationTimeProps) =
                     href="#"
                     onClick={ () => {handleNext(); setVisitStatus(VISIT_STATUS.temporary_leave); }}
                     className="flex-1 grow items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
-                    Leave Temporarily
+                    { t('front_desk.leave') }
                 </Link>
             </div>
         </>

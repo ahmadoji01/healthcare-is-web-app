@@ -1,9 +1,7 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
-import TableOne from "@/components/Dashboard/Tables/TableOne";
 import DashboardModal from "@/components/Modal/Modal";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
@@ -15,6 +13,7 @@ import { deleteADoctor, getAllDoctors, getTotalDoctors, getTotalSearchDoctors, s
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -29,6 +28,7 @@ const DoctorsDashboardPage = () => {
 
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
 
   const fetchAllDoctors = () => {
     getAllDoctors(accessToken, 1)
@@ -82,10 +82,10 @@ const DoctorsDashboardPage = () => {
   const handleSubmit = (doctor:Doctor) => {
     updateADoctor(accessToken, doctor.id, doctorPatcherMapper(doctor))
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   } 
 
@@ -125,10 +125,10 @@ const DoctorsDashboardPage = () => {
   const handleDelete = () => {
     deleteADoctor(accessToken, activeDoctor.id)
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   }
 
@@ -145,7 +145,7 @@ const DoctorsDashboardPage = () => {
 
         <input
           type="search"
-          placeholder="Type to search..."
+          placeholder={ t("type_to_search") }
           onChange={e => {handleChange(e.target.value) }}
           className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
           />

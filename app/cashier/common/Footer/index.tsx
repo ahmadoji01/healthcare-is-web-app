@@ -1,4 +1,4 @@
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
@@ -7,22 +7,24 @@ import { useState } from "react";
 import Currency from "@/components/Currency";
 import AlertModal from "@/components/Modal/AlertModal";
 import { ALERT_STATUS } from "@/constants/alert";
+import { useAlertContext } from "@/contexts/alert-context";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
 
     const { selectedOrder, total, selectedPayment, handleModal } = useOrderSummaryContext();
+    const {openSnackbarNotification} = useAlertContext();
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
+    const {t} = useTranslation();
 
     const handleClick = () => {
         if (typeof(selectedOrder) === 'undefined') {
-            setOpenSnackbar(true);
-            setSnackbarMsg("Choose the patient first!")
+            openSnackbarNotification(t("alert_msg.no_order_selected"), "error");
             return;
         }
         if (typeof(selectedPayment) === 'undefined') {
-            setOpenSnackbar(true);
-            setSnackbarMsg("Choose the right payment method first!")
+            openSnackbarNotification(t("alert_msg.no_payment_selected"), "error");
             return;
         }
         handleModal(false,false,true);
@@ -46,16 +48,30 @@ const Footer = () => {
                 </div>
 
                 <div className="flex items-center gap-3 2xsm:gap-7">
-                    <Link
-                        href={ typeof(selectedOrder) === 'undefined' ? "" : "#payment_method" }
-                        onClick={handleClick}
-                        className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-                        >
-                        <span>
-                            <FontAwesomeIcon icon={faCartShopping} />
-                        </span>
-                        Checkout
-                    </Link>
+                    { typeof(selectedOrder) !== 'undefined' && 
+                    <>
+                        <Link
+                            href={ typeof(selectedOrder) === 'undefined' ? "" : "#payment_method" }
+                            onClick={() => handleModal(false, true, false)}
+                            className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+                            >
+                            <span>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </span>
+                            {t('cashier.add_item')}
+                        </Link>
+                        <Link
+                            href={ typeof(selectedOrder) === 'undefined' ? "" : "#payment_method" }
+                            onClick={handleClick}
+                            className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+                            >
+                            <span>
+                                <FontAwesomeIcon icon={faCartShopping} />
+                            </span>
+                            Checkout
+                        </Link>
+                    </>
+                    }
                     <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSnackbar} autoHideDuration={6000} onClose={handleClose} style={{ zIndex: 99999999999 }}>
                         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                             { snackbarMsg }

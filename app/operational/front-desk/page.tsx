@@ -11,12 +11,14 @@ import { useRouter } from "next/navigation";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 import { Button } from "@mui/material";
 import DoctorPresence from "@/modules/doctors/application/doctor.presence";
-import { Doctor, DoctorOrganization, doctorMapper, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
+import { DoctorOrganization, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
 import DashboardModal from "@/components/Modal/Modal";
-import { getAllDoctors, getDoctorsInOrg, updateDoctorOrgsStatus } from "@/modules/doctors/domain/doctors.actions";
+import { getDoctorsInOrg, updateDoctorOrgs } from "@/modules/doctors/domain/doctors.actions";
 import { useAlertContext } from "@/contexts/alert-context";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import Spinner from "@/components/Spinner";
+import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDoorClosed, faDoorOpen } from "@fortawesome/free-solid-svg-icons";
 
 const OpenCloseClinic = () => {
 
@@ -26,6 +28,7 @@ const OpenCloseClinic = () => {
 
     const {accessToken, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
+    const {t} = useTranslation();
     const router = useRouter();
 
     const fetchDoctors = () => {
@@ -36,7 +39,7 @@ const OpenCloseClinic = () => {
             setDoctors(docOrgs);
             setLoading(false);
         }).catch( () => {
-            openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+            openSnackbarNotification(t('alert_msg.server_error'), "error");
             setLoading(false);
         })
     }
@@ -60,17 +63,17 @@ const OpenCloseClinic = () => {
     const handleSubmit = async (selectedDoctorOrgIds:number[]) => {
         let isError = false;
 
-        await updateDoctorOrgsStatus(accessToken, selectedDoctorOrgIds, { status: "present" })
+        await updateDoctorOrgs(accessToken, selectedDoctorOrgIds, { status: "present" })
             .catch( () => {
                 isError = true;
-                openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+                openSnackbarNotification(t('alert_msg.server_error'), "error");
             })
         
         if (isError)
             return;
 
         updateOrganization(accessToken, organization.id, { status: ORG_STATUS.open }).then( res => {
-            openSnackbarNotification(ALERT_MESSAGE.success, "success");
+            openSnackbarNotification(t('alert_msg.success'), "success");
             router.push("front-desk/queue-manager");
         });
     }
@@ -81,31 +84,37 @@ const OpenCloseClinic = () => {
                 children={ loading ? <Spinner /> :
                     <>
                         <h4 className="text-title-md mb-3 font-bold text-black dark:text-white text-center h-fit">
-                            Select the following doctors that are present
+                            {t("front_desk.select_present_doctor")}
                         </h4>
                         <DoctorPresence doctorOrgs={doctors} handleSubmit={handleSubmit} />
                     </>
                 } title="" /> 
             <h4 className="text-title-md font-bold text-black dark:text-white text-center h-fit">
-                Welcome, click the button below to open the clinic
+                {t("front_desk.welcome")}
             </h4>
             <div className="h-full">
                 { organization.status == ORG_STATUS.close && 
-                    <div className="flex justify-end mt-2 h-1/2">
-                        <Button
+                    <div className="flex justify-end mt-2 h-1/2 w-full">
+                        <button
                             onClick={() => openOrCloseClinic(ORG_STATUS.open)}
-                            className="inline-block align-middle w-full bg-meta-3 py-4 px-10 text-center text-white lg:px-8 xl:px-10">
-                            <p className="text-3xl text-bold">Open Clinic</p>
-                        </Button>
+                            className="w-full inline-flex items-center justify-center gap-2.5 rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
+                            <span>
+                                <FontAwesomeIcon icon={faDoorOpen} size="2xl" width={20} height={20} />
+                            </span>
+                            <p className="text-5xl text-bold">{t("front_desk.open_clinic")}</p>
+                        </button>
                     </div>
                 }
                 { organization.status == ORG_STATUS.open && 
-                    <div className="flex justify-end mt-2 h-1/2">
-                        <Button
+                    <div className="flex justify-end mt-2 h-1/2 w-full">
+                        <button
                             onClick={() => openOrCloseClinic(ORG_STATUS.close)}
-                            className="flex-1 grow bg-primary py-4 px-10 text-center text-white lg:px-8 xl:px-10">
-                            <p className="text-3xl text-bold">Close Clinic</p>
-                        </Button>
+                            className="w-full inline-flex items-center justify-center gap-2.5 rounded-md bg-meta-1 py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
+                            <span>
+                                <FontAwesomeIcon icon={faDoorClosed} size="2xl" width={20} height={20} />
+                            </span>
+                            <p className="text-5xl text-bold">{t("front_desk.close_clinic")}</p>
+                        </button>
                     </div>
                 }
             </div>

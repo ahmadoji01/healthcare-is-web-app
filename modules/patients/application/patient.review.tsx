@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Patient } from "../domain/patient";
 import moment from "moment";
 import SubmitButton from "@/components/Dashboard/Submit";
+import { useTranslation } from "react-i18next";
 
 interface PatientReviewProps {
     patient: Patient,
@@ -11,20 +12,22 @@ interface PatientReviewProps {
 
 const PatientReview = ({ patient }:PatientReviewProps) => {
 
+    const {t} = useTranslation();
+
     return (
         <>
             <div className="grid gap-9">
                 <div className="flex flex-col gap-9">
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-                            <h3 className="font-medium">
-                                Personal Information
+                            <h3 className="font-medium text-black dark:text-white">
+                                { t('personal_information') }
                             </h3>
                         </div>
-                        <div className="flex flex-col gap-5.5 p-6.5 text-black dark:text-white">
+                        <div className="flex flex-col gap-5.5 p-6.5">
                             <div>
-                                <label className="mb-3 block">
-                                    Full Name
+                                <label className="mb-3 block text-black dark:text-white">
+                                    { t('full_name') }
                                 </label>
                                 <div className="relative font-bold">
                                     { patient.name }
@@ -32,7 +35,7 @@ const PatientReview = ({ patient }:PatientReviewProps) => {
                             </div>
                             <div>
                                 <label className="mb-3 block">
-                                    Birthday
+                                    { t('birthday') }
                                 </label>
                                 <div className="relative font-bold">
                                     { moment(patient.birthday).format("l") }
@@ -40,18 +43,18 @@ const PatientReview = ({ patient }:PatientReviewProps) => {
                             </div>
                             <div>
                                 <label className="mb-3 block">
-                                    Gender
+                                    { t('gender') }
                                 </label>
                                 <div className="relative font-bold">
-                                    { patient.gender }
+                                    { t(patient.gender) }
                                 </div>
                             </div>
                             <div>
                                 <label className="mb-3 block">
-                                    Marrital Status
+                                    { t('marrital_status') }
                                 </label>
                                 <div className="relative font-bold">
-                                    { patient.marrital_status }
+                                    { t(patient.marrital_status) }
                                 </div>
                             </div>
                         </div>
@@ -60,13 +63,13 @@ const PatientReview = ({ patient }:PatientReviewProps) => {
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                             <h3 className="font-medium">
-                                Family Information
+                                { t('family_information') }
                             </h3>
                         </div>
                         <div className="flex flex-col gap-5.5 p-6.5 text-black dark:text-white">
                             <div>
                                 <label className="mb-3 block">
-                                    KK
+                                    { t('family_id') }
                                 </label>
                                 <div className="relative font-bold">
                                     { patient.family_id_number }
@@ -74,7 +77,7 @@ const PatientReview = ({ patient }:PatientReviewProps) => {
                             </div>
                             <div>
                                 <label className="mb-3 block">
-                                    Father's Name
+                                    { t('fathers_name') }
                                 </label>
                                 <div className="relative font-bold">
                                     { patient.fathers_name }
@@ -82,7 +85,7 @@ const PatientReview = ({ patient }:PatientReviewProps) => {
                             </div>
                             <div>
                                 <label className="mb-3 block">
-                                    Mother's Name
+                                    { t('mothers_name') }
                                 </label>
                                 <div className="relative font-bold">
                                     { patient.mothers_name }
@@ -94,13 +97,13 @@ const PatientReview = ({ patient }:PatientReviewProps) => {
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                             <h3 className="font-medium">
-                                Professional Information
+                                { t('professional_information') }
                             </h3>
                         </div>
                         <div className="flex flex-col gap-5.5 p-6.5 text-black dark:text-white">
                             <div>
                                 <label className="mb-3 block">
-                                    Occupation
+                                    { t('occupation') }
                                 </label>
                                 <div className="relative font-bold">
                                     { patient.job }
@@ -108,10 +111,10 @@ const PatientReview = ({ patient }:PatientReviewProps) => {
                             </div>
                             <div>
                                 <label className="mb-3 block">
-                                    Education
+                                    { t('education') }
                                 </label>
                                 <div className="relative font-bold">
-                                    { patient.education }
+                                    { patient.education === 'uneducated' ? t('uneducated') : patient.education }
                                 </div>
                             </div>
                         </div>
@@ -120,13 +123,13 @@ const PatientReview = ({ patient }:PatientReviewProps) => {
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                             <h3 className="font-medium">
-                                Resident Information
+                                { t('resident_information') }
                             </h3>
                         </div>
                         <div className="flex flex-col gap-5.5 p-6.5 text-black dark:text-white">
                             <div>
                                 <label className="mb-3 block">
-                                    NIK
+                                    { t('resident_number') }
                                 </label>
                                 <div className="relative font-bold">
                                     { patient.id_card_number }
@@ -134,7 +137,7 @@ const PatientReview = ({ patient }:PatientReviewProps) => {
                             </div>
                             <div>
                                 <label className="mb-3 block">
-                                    Address
+                                    { t('address') }
                                 </label>
                                 <div className="relative font-bold">
                                     { patient.address }

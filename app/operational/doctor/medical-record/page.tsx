@@ -14,7 +14,6 @@ import Footer from '../common/Footer';
 import { getCompleteMedicalRecords, updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
 import { useUserContext } from '@/contexts/user-context';
 import { useAlertContext } from '@/contexts/alert-context';
-import { ALERT_MESSAGE } from '@/constants/alert';
 import { Medicine, medicineMapper } from '@/modules/medicines/domain/medicine';
 import { getAllMedicines } from '@/modules/medicines/domain/medicines.actions';
 import { getAllTreatments } from '@/modules/treatments/domain/treatments.actions';
@@ -28,6 +27,7 @@ import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
 import { OrderItemCreator, orderItemCreatorMapper } from '@/modules/orders/domain/order-item';
 import { visitFilter } from '@/modules/orders/domain/order.specifications';
 import { MR_STATUS } from '@/modules/medical-records/domain/medical-records.constants';
+import { useTranslation } from 'react-i18next';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -71,6 +71,7 @@ const MedicalRecord = () => {
     const {activeVisit} = useVisitContext();
     const {organization, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
+    const {t} = useTranslation();
     
     useEffect( () => {
       getAllMedicines(accessToken, 1).then( res => {
@@ -123,19 +124,19 @@ const MedicalRecord = () => {
       
       let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, illnessPatchers, medicineDosesPatchers, treatmentPatchers, organization.id, MR_STATUS.complete);
       await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
-        .catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
+        .catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
 
       let visit = { status: VISIT_STATUS.examined };
       updateVisit(accessToken, activeVisit.id, visit).then( () => {
-      }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
+      }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
 
       let orderUpdate = { order_items: orderItems, status: ORDER_STATUS.waiting_to_pay };
       updateOrder(accessToken, order.id, orderUpdate).then( () => {
         location.reload();
-        openSnackbarNotification(ALERT_MESSAGE.success, 'success');
+        openSnackbarNotification(t('alert_msg.success'), 'success');
         window.location.href = "/operational/doctor/patients-list";
         return;
-      }).catch( err => { openSnackbarNotification(ALERT_MESSAGE.server_error, 'error'); console.log(err); return; });
+      }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
     }
 
     return (
@@ -145,17 +146,18 @@ const MedicalRecord = () => {
             <>
               <Box>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-                      <Tab label="Patient Overview" {...a11yProps(0)} />
-                      <Tab label="Diagnosis" {...a11yProps(1)} />
+                      <Tab label={ t('patient_overview') } {...a11yProps(0)} />
+                      <Tab label={ t('diagnosis') } {...a11yProps(1)} />
                   </Tabs>
               </Box>
               <CustomTabPanel value={value} index={0}>
                 <PatientOverview medicalRecord={activeMedicalRecord} medicalHistories={medHistories} />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
-                <div className="flex flex-col md:flex-row">
-                  <div className="w-full p-2 h-[calc(100vh-12rem)] overflow-y-scroll overscroll-contain">
+                <div className="flex flex-col md:flex-row mb-8">
+                  <div className="w-full p-2 mb-8">
                     <MedicalRecordForm treatments={treatments} medicalRecord={activeMedicalRecord} setMedicalRecord={setActiveMedicalRecord} />
+                    <span className="mb-8" />
                   </div>
                   <div className="w-full p-2">
                     <MedicationForm medicines={medicines} medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />    

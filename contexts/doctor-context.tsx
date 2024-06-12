@@ -2,8 +2,6 @@ import { Doctor, defaultDoctor, doctorMapper } from '@/modules/doctors/domain/do
 import { getAllDoctors } from '@/modules/doctors/domain/doctors.actions';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import { useUserContext } from './user-context';
-import { useAlertContext } from './alert-context';
-import { ALERT_MESSAGE } from '@/constants/alert';
 import { useVisitContext } from './visit-context';
  
 interface DoctorContextType {

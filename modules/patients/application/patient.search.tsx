@@ -1,18 +1,21 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface PatientSearchProps {
     handleChange: (name:string) => void,
 }
 
 const PatientSearch = ({ handleChange }:PatientSearchProps) => {
-        
+    
+    const {t} = useTranslation();
+
     return (
         <div className="relative mb-4">
             <input
                 type="text"
-                placeholder="Search for a patient..."
+                placeholder={ t("front_desk.search_for_a_patient") }
                 onChange={e => handleChange(e.target.value)}
                 className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
                 />

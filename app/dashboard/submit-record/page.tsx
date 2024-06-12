@@ -1,14 +1,9 @@
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
-
-import { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Settings Page | Next.js E-commerce Dashboard Template",
-  description: "This is Settings page for TailAdmin Next.js",
-  // other metadata
-};
+import { useTranslation } from "react-i18next";
 
 const SubmitRecord = () => {
+  const {t} = useTranslation();
   return (
     <>
       <div className="mx-auto max-w-270">
@@ -30,7 +25,7 @@ const SubmitRecord = () => {
                         className="mb-3 block text-sm font-medium text-black dark:text-white"
                         htmlFor="fullName"
                       >
-                        Full Name
+                        { t('full_name') }
                       </label>
                       <div className="relative">
                         <span className="absolute left-4.5 top-4">

@@ -61,7 +61,7 @@ const AlertModal = ({ message, alertStatus, action, open, setOpen }:AlertModalPr
                     <h2 className="text-title-md2 font-semibold text-black dark:text-white mb-4">
                         <AlertTitle alertStatus={alertStatus} />
                     </h2>
-                    { message }
+                    <h4 className="text-black dark:text-white text-xl font-extrabold text-center">{ message }</h4>
                 </div>
             </>
         </Modal>

@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import WindowedSelect, { createFilter } from "react-windowed-select";
 import { MedicineDoses } from "../../domain/medical-record";
+import { useTranslation } from "react-i18next";
 
 interface MedicationListProps {
     medicineDoses: MedicineDoses[],
@@ -9,23 +10,12 @@ interface MedicationListProps {
 
 const MedicationList = ({ medicineDoses, setMedicineDoses }:MedicationListProps) => {
 
-    const [times, setTimes] = useState<string>("");
-    const [period, setPeriod] = useState<string>("");
+    const {t} = useTranslation();
 
-    const dosesChange = (newTimes="", newPeriod="", i=0) => {
-        let doses = "";
-        if (newTimes !== "") {
-            setTimes(newTimes);
-            doses = newTimes + " per " + period;
-        }
-        if (newPeriod !== "") {
-            setPeriod(newPeriod);
-            doses = times + " per " + newPeriod;
-        }
-        
+    const dosesChange = (doses:string, i:number) => {
         let newDoses = [...medicineDoses];
         newDoses[i].doses = doses;
-        setMedicineDoses(newDoses); 
+        setMedicineDoses(newDoses);
     }
 
     const qtyChange = (quantity=0, i=0) => {
@@ -42,35 +32,19 @@ const MedicationList = ({ medicineDoses, setMedicineDoses }:MedicationListProps)
                         <h3 className="text-black font-extrabold dark:text-white text-xl">
                             { medication.medicine.name }
                         </h3>
-                        <p>Doses:</p>
+                        <p>{ t('doses') }:</p>
                         <div className="flex flex-row">
                             <div className="flex-auto w-full h-full">
-                                <WindowedSelect
-                                    name="times"
-                                    filterOption={createFilter({ ignoreAccents: false })}
-                                    windowThreshold={5}
-                                    isSearchable={true}
-                                    required
-                                    options={[ {value: '1', label: '1'}, {value: '2', label: '2'}, {value: '3', label: '3'}, {value: '4', label: '4'}, ]}
-                                    onChange={choice => dosesChange(choice.value, "", i)}
-                                    className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-1.5 px-2 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                    classNamePrefix="select" />
-                            </div>
-                            <div className="flex-auto p-4"><p className="items-center text-center">per</p></div>
-                            <div className="flex-auto w-full h-full">
-                                <WindowedSelect
-                                    name="period"
-                                    filterOption={createFilter({ ignoreAccents: false })}
-                                    windowThreshold={5}
-                                    isSearchable={true}
-                                    required
-                                    options={[ {value: 'one day', label: 'one day'}, {value: 'two days', label: 'two days'}, {value: 'three days', label: 'three days'} ]}
-                                    onChange={choice => dosesChange("", choice.value, i)}
-                                    className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-1.5 px-2 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                    classNamePrefix="select" />
+                            <input
+                                onChange={ e => dosesChange(e.target.value, i)}
+                                required
+                                name="doses"
+                                placeholder={ t("input_doses_example") }
+                                className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                />
                             </div>
                         </div>
-                        <p>Quantity:</p>
+                        <p>{ t('quantity') }:</p>
                         <input
                             onChange={ e => qtyChange(parseInt(e.target.value), i)}
                             required

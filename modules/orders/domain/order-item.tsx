@@ -1,9 +1,8 @@
 import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine";
 import { Treatment, defaultTreatment } from "@/modules/treatments/domain/treatment";
-import { Order, defaultOrder } from "./order";
 import { MedicineDoses } from "@/modules/medical-records/domain/medical-record";
 
-interface OrderItem {
+export interface OrderItem {
     id: number,
     medicine: Medicine | null,
     treatment: Treatment | null,
@@ -103,4 +102,17 @@ export const orderItemCreatorMapper = (medicineDoses:MedicineDoses|null, treatme
 
 }
 
-export default OrderItem;
+export type OrderItemPatcher = Omit<OrderItem, 'id'|'medicine'|'treatment'|'name'|'description'> & { medicine:number|null, treatment:number|null, organization: number };
+export const orderItemPatcherMapper = (orderItem:OrderItem, orgID:number) => {
+
+  let orderItemPatcher:OrderItemPatcher = {
+    medicine: orderItem.medicine ? orderItem.medicine.id : null,
+    treatment: orderItem.treatment ? orderItem.treatment.id : null,
+    price: orderItem.price,
+    quantity: orderItem.quantity,
+    total: orderItem.total,
+    organization: orgID,
+  }
+  return orderItemPatcher;
+
+}

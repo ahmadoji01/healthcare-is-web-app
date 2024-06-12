@@ -13,8 +13,8 @@ import { deleteAStaff, getAllStaffs, getTotalSearchStaffs, getTotalStaffs, searc
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAlertContext } from "@/contexts/alert-context";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -29,6 +29,7 @@ const StaffsDashboardPage = () => {
 
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
 
   const fetchAllStaffs = () => {
     getAllStaffs(accessToken, 1)
@@ -83,10 +84,10 @@ const StaffsDashboardPage = () => {
     console.log(staffPatcherMapper(staff));
     updateAStaff(accessToken, staff.id, staffPatcherMapper(staff))
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t('alert_msg.success'), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t('alert_msg.error'), "error");
       })
   } 
 
@@ -126,10 +127,10 @@ const StaffsDashboardPage = () => {
   const handleDelete = () => {
     deleteAStaff(accessToken, activeStaff.id)
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t('alert_msg.success'), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t('alert_msg.server_error'), "error");
       })
   }
 
@@ -146,7 +147,7 @@ const StaffsDashboardPage = () => {
 
         <input
           type="search"
-          placeholder="Type to search..."
+          placeholder={ t("type_to_search") }
           onChange={e => {handleChange(e.target.value) }}
           className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
           />

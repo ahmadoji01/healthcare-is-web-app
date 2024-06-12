@@ -7,14 +7,15 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useUserContext } from "@/contexts/user-context";
 import { imageHandler } from "@/utils/request-handler";
 import { updateUserMe, uploadAvatar } from "@/modules/users/domain/users.actions";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
 
   const [avatar, setAvatar] = useState(defaultAvatar.src);
   const {accessToken, user, setUser} = useUserContext();
-  const {setOpen, setMessage, setStatus} = useAlertContext();
+  const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (user.avatar !== null) {
@@ -34,21 +35,15 @@ const Profile = () => {
     await uploadAvatar(accessToken, data)
       .then( res => avatar = res)
       .catch( err => {
-        setOpen(true);
-        setMessage(ALERT_MESSAGE.server_error);
-        setStatus("error");
+        openSnackbarNotification(t('alert_msg.server_error'), "error");
       });
     await updateUserMe(accessToken, { avatar: avatar })
       .then( res => { 
-        setOpen(true);
-        setMessage(ALERT_MESSAGE.success);
-        setStatus("success"); 
+        openSnackbarNotification(t('alert_msg.success'), "success");
         setUser({ ...user, avatar: { id: avatar.id, filename_download: avatar.filename_download } })
       })
       .catch( err => {
-        setOpen(true);
-        setMessage(ALERT_MESSAGE.server_error);
-        setStatus("error"); 
+        openSnackbarNotification(t('alert_msg.server_error'), "success");
       });
   };
 
@@ -141,7 +136,7 @@ const Profile = () => {
             <h3 className="mb-1.5 text-2xl font-semibold text-black dark:text-white">
               {user.first_name + " " + user.last_name}
             </h3>
-            <p className="font-medium">{user.role}</p>
+            <p className="font-medium">{user.role_name}</p>
             <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
               <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
                 <span className="font-semibold text-black dark:text-white">

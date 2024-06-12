@@ -5,6 +5,7 @@ import VisitReview from '@/modules/visits/application/visit.review';
 import { defaultVisit } from '@/modules/visits/domain/visit';
 import { useEffect, useState } from 'react';
 import { useFrontDeskContext } from '@/contexts/front-desk-context';
+import { useTranslation } from 'react-i18next';
 
 interface ReviewProps {
   status: string,
@@ -16,6 +17,7 @@ export default function Review({ status }:ReviewProps) {
 
   const {activePatient} = usePatientContext();
   const {activeDoctor} = useFrontDeskContext();
+  const {t} = useTranslation();
 
   useEffect( () => { 
     let visit = defaultVisit; 
@@ -26,7 +28,7 @@ export default function Review({ status }:ReviewProps) {
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Patient summary
+        { t('patient_summary') }
       </Typography>
       <VisitReview visit={visit} doctor={activeDoctor} />
       <span className="mb-6" />

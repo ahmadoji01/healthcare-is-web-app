@@ -2,7 +2,6 @@
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
@@ -15,6 +14,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -29,6 +29,7 @@ const TreatmentsDashboardPage = () => {
 
   const {openSnackbarNotification} = useAlertContext();
   const {accessToken} = useUserContext();
+  const {t} = useTranslation();
 
   const fetchAllTreatments = () => {
     getAllTreatments(accessToken, 1)
@@ -82,10 +83,10 @@ const TreatmentsDashboardPage = () => {
   const handleSubmit = (treatment:Treatment) => {
     updateATreatment(accessToken, treatment.id, treatmentPatcherMapper(treatment))
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t('alert_msg.success'), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t('alert_msg.server_error'), "error");
       })
   } 
 
@@ -125,10 +126,10 @@ const TreatmentsDashboardPage = () => {
   const handleDelete = () => {
     deleteATreatment(accessToken, activeTreatment.id)
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t('alert_msg.success'), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t('alert_msg.server_error'), "error");
       })
   }
 
@@ -145,7 +146,7 @@ const TreatmentsDashboardPage = () => {
 
         <input
           type="search"
-          placeholder="Type to search..."
+          placeholder={ t("type_to_search") }
           onChange={e => {handleChange(e.target.value) }}
           className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
           />

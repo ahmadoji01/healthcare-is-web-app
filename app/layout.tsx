@@ -5,6 +5,7 @@ import './globals.css'
 import { UserProvider, useUserContext } from '@/contexts/user-context'
 import { AlertProvider } from '@/contexts/alert-context';
 import Loader from '@/components/Loader';
+import './i18n';
 
 const inter = Inter({ subsets: ['latin'] })
 

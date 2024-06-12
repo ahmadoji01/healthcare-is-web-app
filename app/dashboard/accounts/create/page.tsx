@@ -1,13 +1,11 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import { Doctor, doctorNoIDMapper } from "@/modules/doctors/domain/doctor";
 import { createADoctor } from "@/modules/doctors/domain/doctors.actions";
 import { errorMapper } from "@/modules/errors/domains/error";
-import { ERROR_CODE } from "@/modules/errors/domains/errors.constants";
 import { errorMessage } from "@/modules/errors/domains/errors.specifications";
 import { Staff, staffNoIDMapper } from "@/modules/staffs/domain/staff";
 import { createAStaff } from "@/modules/staffs/domain/staffs.actions";
@@ -17,6 +15,7 @@ import { createAUser, getAllRoles } from "@/modules/users/domain/users.actions";
 import { ROLES } from "@/modules/users/domain/users.constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 
 const AccountCreatePage = () => {
@@ -28,6 +27,7 @@ const AccountCreatePage = () => {
   const [roles, setRoles] = useState<UserRole[]>([]);
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
 
   useEffect( () => {
     getAllRoles(accessToken).then( res => {
@@ -59,7 +59,7 @@ const AccountCreatePage = () => {
     
     await createAUser(usr).then( res => {
       newUser = userMapper(res);
-      openSnackbarNotification(ALERT_MESSAGE.success, "success");
+      openSnackbarNotification(t("alert_msg.success"), "success");
       router.push(redirectPath);
     }).catch( err => {
       let error = errorMapper(err.errors[0]);
@@ -74,18 +74,18 @@ const AccountCreatePage = () => {
 
     if (staff.name === "") {
       await createADoctor(accessToken, doctorNoIDMapper(doctor, organization.id, newUser.id)).then( res => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         router.push(redirectPath);
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       });
     } else {
       redirectPath = "/dashboard/staffs";
       await createAStaff(accessToken, staffNoIDMapper(staff, organization.id, newUser.id)).then( res => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         router.push(redirectPath);
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
     }
   }

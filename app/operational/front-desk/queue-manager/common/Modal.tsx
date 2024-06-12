@@ -2,6 +2,8 @@ import { Modal } from "@mui/material";
 import React from "react";
 import { motion } from 'framer-motion';
 import Link from "next/link";
+import { useSpeech } from "react-text-to-speech";
+import { useTranslation } from "react-i18next";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -17,9 +19,26 @@ interface DashboardModalProps {
     handleClose: any,
     children: React.ReactElement,
     title: string,
+    queueNumber: string,
+    patientName: string,
 }
 
-const QueueModal = ({ open, handleClose, children, title }: DashboardModalProps) => {
+const QueueModal = ({ open, handleClose, children, title, queueNumber, patientName = "" }: DashboardModalProps) => {
+    
+    const {
+        isInQueue,
+        start,
+        pause,
+        stop, 
+    } = useSpeech({ text: "Nomor antrian " + queueNumber + ". Atas nama" + patientName, lang: "id-ID", rate: 0.3 });
+    const {t} = useTranslation();
+
+    const callPatient = () => {
+        if (!isInQueue) {
+            start();
+        }
+    }
+
     return (
         <motion.div
             animate={{ x: 100 }}
@@ -55,8 +74,10 @@ const QueueModal = ({ open, handleClose, children, title }: DashboardModalProps)
                         <h2 className="text-title-md2 font-semibold text-black dark:text-white mb-4">
                             { title }
                         </h2>
-                        <button className="top-0 z-50 mt-2 mb-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray">
-                            Call Patient
+                        <button 
+                            className="top-0 z-50 mt-2 mb-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray"
+                            onClick={callPatient}>
+                            { t("call_patient") }
                         </button>
                         { children }
                     </div>

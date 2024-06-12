@@ -2,19 +2,18 @@
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import DashboardModal from "@/components/Modal/Modal";
-import { ALERT_MESSAGE } from "@/constants/alert";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
-import { useVisitContext } from "@/contexts/visit-context";
 import VisitDeleteConfirmation from "@/modules/visits/application/form/visit.delete-confirmation";
 import VisitForm from "@/modules/visits/application/form/visit.form";
 import VisitList from "@/modules/visits/application/visit.list";
-import { Visit, defaultVisit, visitCreatorMapper, visitMapper } from "@/modules/visits/domain/visit";
+import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { statusNotEqual } from "@/modules/visits/domain/visit.specifications";
-import { deleteAVisit, getAllVisits, getTotalVisits, getVisitsWithFilter, updateVisit } from "@/modules/visits/domain/visits.actions";
+import { deleteAVisit, getTotalVisits, getVisitsWithFilter, updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const VisitsDashboardPage = () => {
 
@@ -22,6 +21,7 @@ const VisitsDashboardPage = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
+  const {t} = useTranslation();
   const [activeVisit, setActiveVisit] = useState(defaultVisit);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -77,20 +77,20 @@ const VisitsDashboardPage = () => {
   const handleSubmit = (visit:Visit) => {
     updateVisit(accessToken, visit.id, { status: visit.status })
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t('alert_msg.success'), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t('alert_msg.server_error'), "error");
       });
   }
 
   const handleDelete = () => {
     deleteAVisit(accessToken, activeVisit.id)
       .then( () => {
-        openSnackbarNotification(ALERT_MESSAGE.success, "success");
+        openSnackbarNotification(t('alert_msg.success'), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(ALERT_MESSAGE.server_error, "error");
+        openSnackbarNotification(t('alert_msg.server_error'), "error");
       })
   }
 

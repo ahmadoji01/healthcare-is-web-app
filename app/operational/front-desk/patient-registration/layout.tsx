@@ -44,7 +44,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <ThemeProvider theme={theme}>
                   <CssBaseline />
                   <main>
-                    <div className="min-h-screen mx-auto max-w-screen-md p-4 md:p-6 2xl:p-10">
+                    <div className="relative flex flex-1 flex-col h-dvh p-6">
                       {children}
                     </div>
                   </main>
