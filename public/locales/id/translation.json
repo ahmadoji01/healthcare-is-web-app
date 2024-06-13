@@ -105,6 +105,10 @@
     "call_patient": "Panggil Pasien",
     "no_patient_needs_to_be_examined_yet": "Belum ada pasien yang perlu diperiksa. Jika ada pasien baru yang perlu diperiksa, akan muncul otomatis di sini.",
     "new_category_will_be_added": "Kategori baru akan ditambahkan sesuai input di atas",
+    "input_medicines_name": "Masukkan nama obat",
+    "category": "Kategori",
+    "stock": "Persediaan",
+    "price": "Harga",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

@@ -3,7 +3,7 @@ import { defaultCategory } from "@/modules/categories/domain/category";
 
 export interface Item {
     id: number,
-    code: string,
+    sku: string,
     name: string,
     stock: number,
     category: Category,
@@ -12,7 +12,7 @@ export interface Item {
 
 export const defaultItem: Item = {
     id: 0,
-    code: "",
+    sku: "",
     name: "",
     stock: 0,
     category: defaultCategory,
@@ -24,7 +24,7 @@ export function itemMapper(res:Record<string,any>) {
     item = { 
         id: res.id,
         name: res.name, 
-        code: res.code,
+        sku: res.sku? res.sku : "",
         price: res.price,
         stock: res.stock,
         category: categoryMapper(res.category),
@@ -37,7 +37,7 @@ export function itemCreatorMapper(item:Item, catID:number, orgID:number) {
 
     let itemCreator: ItemCreator = { 
         name: item.name, 
-        code: item.code,
+        sku: item.sku,
         price: item.price,
         stock: item.stock,
         category: catID,
@@ -50,7 +50,7 @@ export type ItemPatcher = Omit<Item, 'id'|'category'> & { category:number };
 export function itemPatcherMapper(item:Item) {
     let itemPatcher:ItemPatcher = {
         name: item.name, 
-        code: item.code,
+        sku: item.sku,
         price: item.price,
         stock: item.stock,
         category: item.category.id,
