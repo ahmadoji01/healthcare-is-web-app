@@ -1,13 +1,12 @@
-import { Medicine } from "../../domain/category";
-import MedicineCategory from "../../domain/medicine-category";
+import { Category } from "../../domain/category";
 
 interface DeleteConfirmationProps {
     handleClose: () => void,
     handleDelete: () => void,
-    category: MedicineCategory,
+    category: Category,
 }
 
-const MedicineCategoryDeleteConfirmation = ({ handleClose, handleDelete, category }: DeleteConfirmationProps) => {
+const CategoryDeleteConfirmation = ({ handleClose, handleDelete, category }: DeleteConfirmationProps) => {
     return (
         <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
             <span className="mx-auto inline-block">
@@ -34,4 +33,4 @@ const MedicineCategoryDeleteConfirmation = ({ handleClose, handleDelete, categor
     )
 }
 
-export default MedicineCategoryDeleteConfirmation;
+export default CategoryDeleteConfirmation;

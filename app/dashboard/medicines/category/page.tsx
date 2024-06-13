@@ -6,6 +6,12 @@ import Spinner from "@/components/Spinner";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
+import CategoryDeleteConfirmation from "@/modules/categories/application/form/category.delete-confirmation";
+import CategoryForm from "@/modules/categories/application/form/category.form";
+import CategoryListTable from "@/modules/categories/application/list/category.list-table";
+import { createACategory, deleteACategory, getAllCategoriesWithFilterPage, getTotalCategoriesWithFilter, getTotalSearchCategoriesWithFilter, searchCategories, searchCategoriesWithFilter, updateACategory } from "@/modules/categories/domain/categories.actions";
+import { Category, categoryCreatorMapper, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
+import { medicineCategoriesFilter } from "@/modules/categories/domain/category.specifications";
 import MedicineCategoryDeleteConfirmation from "@/modules/medicines/application/form/medicine-category.delete-confirmation";
 import MedicineCategoryForm from "@/modules/medicines/application/form/medicine-category.form";
 import MedicineCategoryListTable from "@/modules/medicines/application/list/medicine-category.list-table";
@@ -24,42 +30,40 @@ const MedicineCategoryPage = () => {
     const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
     const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
-    const [categories, setCategories] = useState([defaultMedicineCategory]);
+    const [categories, setCategories] = useState([defaultCategory]);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
-    const [activeCategory, setActiveCategory] = useState(defaultMedicineCategory);
+    const [activeCategory, setActiveCategory] = useState(defaultCategory);
     const [searchQuery, setSearchQuery] = useState("");
+    const [superParent, setSuperParent] = useState(defaultCategory);
     
-    const {accessToken, user, organization} = useUserContext();
+    const {accessToken, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const {t} = useTranslation();
 
     const fetchAllCategories = () => {
-        getAllMedicineCategories(accessToken, 1).then( res => {
-            let cats:MedicineCategory[] = [];
-            res?.map( (category) => { cats.push(medicineCategoryMapper(category)); });
+        getAllCategoriesWithFilterPage(accessToken, medicineCategoriesFilter, 1).then( res => {
+            let cats:Category[] = [];
+            res?.map( (category) => { cats.push(categoryMapper(category)); });
             setCategories(cats);
             setDataLoaded(true);
         });
-        getTotalMedicineCategories(accessToken).then( res => { 
+        getTotalCategoriesWithFilter(accessToken, medicineCategoriesFilter).then( res => { 
             let total = res[0].count? parseInt(res[0].count) : 0;
             let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
             setTotalPages(pages);
         })
+        searchCategories(accessToken, "Medicines", 1)
+            .then( res => { 
+                if (res.length <= 0)
+                    return;
+                let cat = categoryMapper(res[0]);
+                setSuperParent(cat);
+            });
     }
 
     useEffect( () => {
-        getAllMedicineCategories(accessToken, 1).then( res => {
-            let cats:MedicineCategory[] = [];
-            res?.map( (category) => { cats.push(medicineCategoryMapper(category)); });
-            setCategories(cats);
-            setDataLoaded(true);
-        });
-        getTotalMedicineCategories(accessToken).then( res => { 
-            let total = res[0].count? parseInt(res[0].count) : 0;
-            let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
-            setTotalPages(pages);
-        })
+        fetchAllCategories();
     }, []);
 
     const handleModal = (closeModal:boolean, whichModal: boolean) => {
@@ -88,7 +92,7 @@ const MedicineCategoryPage = () => {
     }
 
     const handleDelete = () => {
-        deleteAMedicineCategory(accessToken, activeCategory.id)
+        deleteACategory(accessToken, activeCategory.id)
           .then( () => {
             openSnackbarNotification(t("alert_msg.success"), "success");
             window.location.reload();
@@ -100,13 +104,13 @@ const MedicineCategoryPage = () => {
     const handleSearch = (query:string) => {
         if (query.length > 3) {
           setDataLoaded(false);
-          searchMedicineCategories(accessToken, query, 1).then( res => {
-            let cats:MedicineCategory[] = [];
-            res?.map( (category) => { cats.push(medicineCategoryMapper(category)); });
+          searchCategoriesWithFilter(accessToken, query, medicineCategoriesFilter, 1).then( res => {
+            let cats:Category[] = [];
+            res?.map( (category) => { cats.push(categoryMapper(category)); });
             setCategories(cats);
             setDataLoaded(true);
           });
-          getTotalSearchMedicineCategories(accessToken, query)
+          getTotalSearchCategoriesWithFilter(accessToken, query, medicineCategoriesFilter)
             .then( res => {
               let total = res[0].count? parseInt(res[0].count) : 0;
               let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
@@ -132,18 +136,20 @@ const MedicineCategoryPage = () => {
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setDataLoaded(false);
-        searchMedicineCategories(accessToken, searchQuery, value)
-          .then( res => {
-            let cats:MedicineCategory[] = [];
-            res?.map( (category) => { cats.push(medicineCategoryMapper(category)); });
+        searchCategoriesWithFilter(accessToken, searchQuery, medicineCategoriesFilter, 1).then( res => {
+            let cats:Category[] = [];
+            res?.map( (category) => { cats.push(categoryMapper(category)); });
             setCategories(cats);
             setDataLoaded(true);
           });
     }
 
-    const handleSubmit = async (category:MedicineCategory) => {
+    const handleSubmit = async (category:Category) => {
         let categoryExists = false;
-        await searchMedicineCategories(accessToken, category.name, 1).then( res => {
+        category.parent = superParent;
+        category.super_parent = superParent;
+        category.children = [];
+        await searchCategories(accessToken, category.name, 1).then( res => {
             if (res.length !== 0) {
                 categoryExists = true;
             }
@@ -154,7 +160,7 @@ const MedicineCategoryPage = () => {
             return;
         }
 
-        updateAMedicineCategory(accessToken, category.id, {name: category.name}).then( res => {
+        updateACategory(accessToken, category.id, {name: category.name}).then( res => {
             openSnackbarNotification(t("alert_msg.success"), "success");
             window.location.reload();
         }).catch( err => {
@@ -162,11 +168,14 @@ const MedicineCategoryPage = () => {
         });
     }
 
-    const handleCreateSubmit = async (category:MedicineCategory) => {
-        let categoryCreator = medicineCategoryCreatorMapper(category.name, organization.id);
+    const handleCreateSubmit = async (category:Category) => {
+        category.parent = superParent;
+        category.super_parent = superParent;
+        category.children = [];
+        let categoryCreator = categoryCreatorMapper(category, organization.id);
 
         let categoryExists = false;
-        await searchMedicineCategories(accessToken, category.name, 1).then( res => {
+        await searchCategories(accessToken, category.name, 1).then( res => {
             if (res.length !== 0) {
                 categoryExists = true;
             }
@@ -177,7 +186,7 @@ const MedicineCategoryPage = () => {
             return;
         }
 
-        createAMedicineCategory(accessToken, categoryCreator).then( res => {
+        createACategory(accessToken, categoryCreator).then( res => {
             openSnackbarNotification(t("alert_msg.success"), "success");
             window.location.reload();
         }).catch( err => {
@@ -187,9 +196,9 @@ const MedicineCategoryPage = () => {
 
     return (
         <>
-            <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <MedicineCategoryForm initCategory={activeCategory} handleSubmit={handleSubmit} /> } title="Edit a Medicine Category" />
-            <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <MedicineCategoryDeleteConfirmation category={activeCategory} handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
-            <DashboardModal open={createModalOpen} handleClose={ () => handleModal(true, false) } children={ <MedicineCategoryForm initCategory={defaultMedicineCategory} handleSubmit={handleCreateSubmit} /> } title="Create a Medicine Category" />
+            <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <CategoryForm initCategory={activeCategory} handleSubmit={handleSubmit} /> } title="Edit a Medicine Category" />
+            <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <CategoryDeleteConfirmation category={activeCategory} handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
+            <DashboardModal open={createModalOpen} handleClose={ () => handleModal(true, false) } children={ <CategoryForm initCategory={defaultCategory} handleSubmit={handleCreateSubmit} /> } title="Create a Medicine Category" />
             <Breadcrumb pageName="Medicine Categories" />
 
             <div className="relative mb-4">
@@ -219,7 +228,7 @@ const MedicineCategoryPage = () => {
                             </span>
                             Add a Category
                         </Link>
-                        <MedicineCategoryListTable handleModal={handleModal} handlePageChange={handlePageChange} setActiveCategory={setActiveCategory} categories={categories} totalPages={totalPages} /> 
+                        <CategoryListTable handleModal={handleModal} handlePageChange={handlePageChange} setActiveCategory={setActiveCategory} categories={categories} totalPages={totalPages} /> 
                     </>}
             </div>
         </>

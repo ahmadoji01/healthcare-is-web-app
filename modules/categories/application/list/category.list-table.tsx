@@ -7,20 +7,17 @@ import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Pagination } from "@mui/material";
-import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
-import { Medicine } from "../../domain/category";
-import Currency from "@/components/Currency";
-import MedicineCategory from "../../domain/medicine-category";
+import { Category } from "../../domain/category";
 
-interface MedicineCategoryListTableProps {
+interface CategoryListTableProprs {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
-  categories: MedicineCategory[],
+  categories: Category[],
   totalPages: number,
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
-  setActiveCategory: Dispatch<SetStateAction<MedicineCategory>>,
+  setActiveCategory: Dispatch<SetStateAction<Category>>,
 }
 
-const MedicineCategoryListTable = ({ handleModal, categories, totalPages, handlePageChange, setActiveCategory }: MedicineCategoryListTableProps) => {
+const CategoryListTable = ({ handleModal, categories, totalPages, handlePageChange, setActiveCategory }: CategoryListTableProprs) => {
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -84,4 +81,4 @@ const MedicineCategoryListTable = ({ handleModal, categories, totalPages, handle
   );
 };
 
-export default MedicineCategoryListTable;
+export default CategoryListTable;
