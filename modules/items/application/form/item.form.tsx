@@ -48,6 +48,19 @@ const ItemForm = ({ initItem, categories, handleSubmit, setCategoryName }:ItemFo
                                 </div>
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
+                                        { t("code") }
+                                    </label>
+                                    <input
+                                        type="text" 
+                                        defaultValue={item.sku}
+                                        required
+                                        onChange={ e => setItem({ ...item, sku: e.target.value })}
+                                        placeholder={ t("input_medicines_code") }
+                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        />
+                                </div>
+                                <div>
+                                    <label className="mb-3 block text-black dark:text-white">
                                         { t("category") }
                                     </label>
                                     <div className="relative">

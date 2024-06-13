@@ -109,6 +109,8 @@
     "category": "Kategori",
     "stock": "Persediaan",
     "price": "Harga",
+    "code": "Kode",
+    "input_medicines_code": "Masukkan kode obat",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

@@ -109,6 +109,8 @@
     "category": "Category",
     "stock": "Stock",
     "price": "Price",
+    "code": "Code",
+    "input_medicines_code": "Input the medicine's code",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
