@@ -1,36 +1,36 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import WindowedSelect, { createFilter } from "react-windowed-select";
-import { MedicineDoses } from "../../domain/medical-record";
+import { MedicalRecordItem, MedicineDoses } from "../../domain/medical-record";
 import { useTranslation } from "react-i18next";
 
 interface MedicationListProps {
-    medicineDoses: MedicineDoses[],
-    setMedicineDoses: Dispatch<SetStateAction<MedicineDoses[]>>,
+    mrMedicines: MedicalRecordItem[],
+    setMRMedicines: Dispatch<SetStateAction<MedicalRecordItem[]>>,
 }
 
-const MedicationList = ({ medicineDoses, setMedicineDoses }:MedicationListProps) => {
+const MedicationList = ({ mrMedicines, setMRMedicines }:MedicationListProps) => {
 
     const {t} = useTranslation();
 
     const dosesChange = (doses:string, i:number) => {
-        let newDoses = [...medicineDoses];
-        newDoses[i].doses = doses;
-        setMedicineDoses(newDoses);
+        let newDoses = [...mrMedicines];
+        newDoses[i].notes = doses;
+        setMRMedicines(newDoses);
     }
 
     const qtyChange = (quantity=0, i=0) => {
-        let newDoses = [...medicineDoses];
+        let newDoses = [...mrMedicines];
         newDoses[i].quantity = quantity;
-        setMedicineDoses(newDoses);
+        setMRMedicines(newDoses);
     }
 
     return (
         <>
-            { medicineDoses?.map( (medication, i) => 
+            { mrMedicines?.map( (mrMed, i) => 
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                         <h3 className="text-black font-extrabold dark:text-white text-xl">
-                            { medication.medicine.name }
+                            { mrMed.items_id.name }
                         </h3>
                         <p>{ t('doses') }:</p>
                         <div className="flex flex-row">

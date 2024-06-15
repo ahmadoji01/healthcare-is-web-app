@@ -7,7 +7,7 @@ import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physi
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
-import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
+import { defaultMedicalRecord, defaultMedicalRecordItem, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
 import { updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useVisitContext } from "@/contexts/visit-context";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
@@ -89,7 +89,7 @@ const QueueManager = () => {
             checkupRes = physicalCheckupMapper(res);
         }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
 
-        let medicalRecordCreator = medicalRecordCreatorMapper(defaultMedicalRecord, organization.id);
+        let medicalRecordCreator = medicalRecordCreatorMapper(defaultMedicalRecord, [], organization.id);
         let medicalRecordRes = defaultMedicalRecord;
         medicalRecordCreator.doctor = activeVisit.doctor.id;
         medicalRecordCreator.patient = checkup.patient.id;

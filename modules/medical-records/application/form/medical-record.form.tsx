@@ -3,20 +3,25 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter, components } from "react-windowed-select";
-import { Illness, MedicalRecord } from "../../domain/medical-record";
+import { Illness, MedicalRecord, MedicalRecordItem } from "../../domain/medical-record";
 import SelectOption from "@/interfaces/select-option";
 import { Treatment } from "@/modules/treatments/domain/treatment";
 import Illnesses from "@/constants/illnesses";
 import { getI18n, useTranslation } from "react-i18next";
 import dataID from "@/constants/icd10_select_id.json";
+import { Item, defaultItem } from "@/modules/items/domain/item";
+import { MR_ITEM_TYPES } from "../../domain/medical-records.constants";
+import { defaultCategory } from "@/modules/categories/domain/category";
 
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
-    treatments: Treatment[],
+    treatments: Item[],
+    mrTreatments: MedicalRecordItem[],
     setMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>,
+    setMRTreatments: Dispatch<SetStateAction<MedicalRecordItem[]>>,
 }
 
-const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:MedicalRecordFormProps) => {
+const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRTreatments }:MedicalRecordFormProps) => {
     
     const [treatOptions, setTreatOptions] = useState<SelectOption[]>([]);
     const {t} = useTranslation();
@@ -36,11 +41,11 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord }:Medic
     }, [t])
 
     const treatmentsMapper = (choices: SelectOption[]) => {
-        let treatments:Treatment[] = [];
-        choices?.map( (choice) => { 
-            treatments.push({ id: parseInt(choice.value), name: choice.label, code: '', price: parseInt(choice.value2) }); 
+        let items:MedicalRecordItem[] = [];
+        choices?.map( (choice) => {
+            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0 }, notes: '', type: MR_ITEM_TYPES.treatment, quantity: 1 }); 
         });
-        setMedicalRecord({ ...medicalRecord, treatments: treatments });
+        setMRTreatments([...items]);
     }
 
     const illnessesMapper = (choices: SelectOption[]) => {

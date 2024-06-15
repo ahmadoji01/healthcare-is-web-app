@@ -3,6 +3,7 @@ import { Patient, defaultPatient } from "@/modules/patients/domain/patient"
 import { PhysicalCheckup, defaultPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup"
 import { Treatment, TreatmentOrg, treatmentMapper } from "@/modules/treatments/domain/treatment"
 import { Doctor, defaultDoctor } from "@/modules/doctors/domain/doctor"
+import { Item, defaultItem, itemMapper } from "@/modules/items/domain/item"
 
 interface Signature {
 	id: string,
@@ -21,6 +22,13 @@ export interface MedicineDoses {
     quantity: number,
 }
 
+export interface MedicalRecordItem {
+    items_id: Item,
+    notes: string,
+    type: string,
+    quantity: number,
+}
+
 export interface MedicalRecord {
     id: number,
     code: string,
@@ -33,6 +41,7 @@ export interface MedicalRecord {
     illnesses: Illness[],
     medicines: MedicineDoses[],
     treatments: Treatment[],
+    items: MedicalRecordItem[],
     physical_checkup: PhysicalCheckup,
     date_created: Date,
     date_updated: Date,
@@ -56,9 +65,17 @@ export const defaultMedicalRecord: MedicalRecord = {
     illnesses: [],
     medicines: [],
     treatments: [],
+    items: [],
     physical_checkup: defaultPhysicalCheckup,
     date_created: new Date,
     date_updated: new Date,
+}
+
+export const defaultMedicalRecordItem: MedicalRecordItem = {
+    items_id: defaultItem,
+    notes: "",
+    type: "",
+    quantity: 0,
 }
 
 export function medicalRecordMapper(res:Record<string,any>) {
@@ -75,6 +92,7 @@ export function medicalRecordMapper(res:Record<string,any>) {
         illnesses: res.illnesses,
         medicines: mrMedicinesMapper(res.medicines),
         treatments: mrTreatmentsMapper(res.treatments),
+        items: mrItemsMapper(res.items),
         physical_checkup: res.physical_checkup,
         date_created: res.date_created,
         date_updated: res.date_updated,
@@ -108,12 +126,36 @@ export function mrTreatmentsMapper(res:Record<string,any>) {
     return treatments;
 }
 
+export function mrItemsMapper(res:Record<string,any>) {
+    let items:MedicalRecordItem[] = [];
+    res?.map( (item) => {
+        let mrItem = defaultMedicalRecordItem;
+        mrItem.items_id = itemMapper(item.items_id);
+        mrItem.notes = item.notes;
+        mrItem.type = item.type;
+        items.push(mrItem);
+    })
+    return items;
+}
+
 type Organization = {
     organization: number,
 }
 
-export type MedicalRecordNoID = Omit<MedicalRecord, 'id'> & Organization;
-export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, orgID:number) {
+export type MRItemCreator = Omit<MedicalRecordItem, 'items_id'> & { items_id: number, organization: number } 
+export function mrItemCreatorMapper(mrItem:MedicalRecordItem, orgID:number) {
+    let item:MRItemCreator = {
+        items_id: mrItem.items_id.id,
+        notes: mrItem.notes,
+        type: mrItem.type,
+        quantity: mrItem.quantity,
+        organization: orgID,
+    };
+    return item;
+}
+
+export type MedicalRecordNoID = Omit<MedicalRecord, 'id'|'items'> & Organization & { items: MRItemCreator[] };
+export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, items:MRItemCreator[], orgID:number) {
 
     let medicalRecordNoID: MedicalRecordNoID = { 
         code: medicalRecord.code,
@@ -126,6 +168,7 @@ export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, orgID:numbe
         illnesses: medicalRecord.illnesses,
         medicines: medicalRecord.medicines,
         treatments: medicalRecord.treatments,
+        items: items,
         physical_checkup: medicalRecord.physical_checkup,
         date_created: medicalRecord.date_created,
         date_updated: medicalRecord.date_updated,
@@ -134,8 +177,8 @@ export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, orgID:numbe
     return medicalRecordNoID;
 }
 
-export type MedicalRecordCreator = Omit<MedicalRecord, 'id'|'patient'|'doctor'|'physical_checkup'> & { patient:number, doctor:number, physical_checkup:number } & Organization;
-export function medicalRecordCreatorMapper(medicalRecord:MedicalRecord, orgID:number) {
+export type MedicalRecordCreator = Omit<MedicalRecord, 'id'|'items'|'patient'|'doctor'|'physical_checkup'> & { patient:number, items: MRItemCreator[], doctor:number, physical_checkup:number } & Organization;
+export function medicalRecordCreatorMapper(medicalRecord:MedicalRecord, items:MRItemCreator[], orgID:number) {
 
     let medicalRecordNoID: MedicalRecordCreator = { 
         code: medicalRecord.code,
@@ -148,6 +191,7 @@ export function medicalRecordCreatorMapper(medicalRecord:MedicalRecord, orgID:nu
         illnesses: medicalRecord.illnesses,
         medicines: medicalRecord.medicines,
         treatments: medicalRecord.treatments,
+        items: items,
         physical_checkup: medicalRecord.physical_checkup.id,
         date_created: medicalRecord.date_created,
         date_updated: medicalRecord.date_updated,
@@ -187,8 +231,8 @@ type MedicineDosesPatchers = {
     medicines: MedicineDosesPatcher[],
 }
 
-export type MedicalRecordPatcher = Omit<MedicalRecord, 'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'> & IllnessPatchers & TreatmentPatchers & MedicineDosesPatchers & { organization:number, status:string };
-export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, illnesses: IllnessPatcher[], meds: MedicineDosesPatcher[], treatments:TreatmentOrg[], orgID:number, status:string) {
+export type MedicalRecordPatcher = Omit<MedicalRecord, 'items'|'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'> & IllnessPatchers & TreatmentPatchers & MedicineDosesPatchers & { items:MRItemCreator[], organization:number, status:string };
+export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, items: MRItemCreator[], illnesses: IllnessPatcher[], meds: MedicineDosesPatcher[], treatments:TreatmentOrg[], orgID:number, status:string) {
 
     let medicalRecordPatcher: MedicalRecordPatcher = { 
         id: medicalRecord.id,
@@ -200,6 +244,7 @@ export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, illnesse
         illnesses: illnesses,
         medicines: meds,
         treatments: treatments,
+        items: items,
         physical_checkup: medicalRecord.physical_checkup,
         date_updated: medicalRecord.date_updated,
         status: status,
