@@ -111,6 +111,10 @@
     "price": "Price",
     "code": "Code",
     "input_medicines_code": "Input the medicine's code",
+    "input_items_name": "Input the item's name",
+    "input_items_code": "Input the item's code",
+    "input_stock": "Input the item's stock",
+    "input_price": "Input the item's price",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

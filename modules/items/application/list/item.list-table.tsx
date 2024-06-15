@@ -18,9 +18,10 @@ interface ItemListTableProps {
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
   setActiveItem: Dispatch<SetStateAction<Item>>,
   handleQtyChange: (action:string, item:Item, index:number, qty:number) => void,
+  showStock?: boolean,
 }
 
-const ItemListTable = ({ handleModal, items, totalPages, handlePageChange, setActiveItem, handleQtyChange }: ItemListTableProps) => {
+const ItemListTable = ({ handleModal, showStock=true, items, totalPages, handlePageChange, setActiveItem, handleQtyChange }: ItemListTableProps) => {
 
   const handleChange = (action:string, item:Item, index:number, qty:number) => {
     handleQtyChange(action, item, index, qty);
@@ -45,11 +46,13 @@ const ItemListTable = ({ handleModal, items, totalPages, handlePageChange, setAc
               Price
             </h5>
           </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Stock
-            </h5>
-          </div>
+          { showStock &&
+            <div className="p-2.5 text-center xl:p-5">
+              <h5 className="text-sm font-medium uppercase xsm:text-base">
+                Stock
+              </h5>
+            </div>
+          }
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
               Actions
@@ -78,25 +81,27 @@ const ItemListTable = ({ handleModal, items, totalPages, handlePageChange, setAc
               <p className="text-meta-3">{<Currency value={item.price} />}</p>
             </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <div className="custom-number-input h-10">
-                <div className="flex flex-row h-10 w-full rounded-lg mt-1">
-                  <button className="h-full w-10 rounded-l cursor-pointer outline-none">
-                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', item, key, 0)}>−</span>
-                  </button>
-                  <input 
-                    defaultValue={item.stock}
-                    type="number" 
-                    className="quantity-input text-center w-10 font-semibold bg-transparent" 
-                    name="custom-input-number"
-                    min={0}
-                    onBlur={e => handleChange('input', item, key, parseInt(e.target.value)) } />
-                  <button data-action="increment" className="h-full w-10">
-                    <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', item, key, 0)}>+</span>
-                  </button>
+            { showStock && 
+              <div className="flex items-center justify-center p-2.5 xl:p-5">
+                <div className="custom-number-input h-10">
+                  <div className="flex flex-row h-10 w-full rounded-lg mt-1">
+                    <button className="h-full w-10 rounded-l cursor-pointer outline-none">
+                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', item, key, 0)}>−</span>
+                    </button>
+                    <input 
+                      defaultValue={item.stock}
+                      type="number" 
+                      className="quantity-input text-center w-10 font-semibold bg-transparent" 
+                      name="custom-input-number"
+                      min={0}
+                      onBlur={e => handleChange('input', item, key, parseInt(e.target.value)) } />
+                    <button data-action="increment" className="h-full w-10">
+                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', item, key, 0)}>+</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
             <ul className="flex items-center gap-2 2xsm:gap-4">

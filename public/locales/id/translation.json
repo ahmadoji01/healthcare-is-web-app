@@ -111,6 +111,10 @@
     "price": "Harga",
     "code": "Kode",
     "input_medicines_code": "Masukkan kode obat",
+    "input_items_name": "Masukkan nama barang",
+    "input_items_code": "Masukkan kode barang",
+    "input_stock": "Masukkan jumlah persediaan barang",
+    "input_price": "Masukkan harga barang",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

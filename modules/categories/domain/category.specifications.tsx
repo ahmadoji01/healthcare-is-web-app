@@ -24,3 +24,14 @@ export const medicineCategoriesFilter = {
         }
     ]
 }
+
+export const treatmentCategoriesFilter = {
+    _or: [
+        {
+            "super_parent": { "name": { _eq: "Treatments" } }
+        },
+        {
+            "name": { _eq: "Treatments" } 
+        }
+    ]
+}

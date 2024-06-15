@@ -30,3 +30,14 @@ export const medicineItemsFilter = {
         }
     ]
 }
+
+export const treatmentItemsFilter = {
+    _or: [
+        {
+            "category": { "super_parent": { "name": { _eq: "Treatments" } } }
+        },
+        {
+            "category": { "name": { _eq: "Treatments" } } 
+        }
+    ]
+}

@@ -9,21 +9,25 @@ import { useTranslation } from 'react-i18next';
 
 interface ItemFormProps {
     initItem: Item,
-    categories: Category[],
+    categories?: Category[],
     handleSubmit: (item:Item) => void,
-    setCategoryName: (categoryName:string) => void,
+    setCategoryName?: (categoryName:string) => void,
+    showCategory?: boolean,
+    showStock?: boolean,
 }
 
-const ItemForm = ({ initItem, categories, handleSubmit, setCategoryName }:ItemFormProps) => {
+const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, handleSubmit, setCategoryName }:ItemFormProps) => {
     const [item, setItem] = useState(initItem);
     const [cats, setCats] = useState<string[]>([]);
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        let cas:string[] = [];
-        categories?.map( (cat) => cas.push(cat.name));
-        setCats(cas);
+        if (typeof(categories) !== 'undefined') {
+            let cas:string[] = [];
+            categories?.map( (cat) => cas.push(cat.name));
+            setCats(cas);
+        }
     }, [categories]);
 
     return (
@@ -42,7 +46,7 @@ const ItemForm = ({ initItem, categories, handleSubmit, setCategoryName }:ItemFo
                                         defaultValue={item.name}
                                         required
                                         onChange={ e => setItem({ ...item, name: e.target.value })}
-                                        placeholder={ t("input_medicines_name") }
+                                        placeholder={ t("input_items_name") }
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
@@ -55,46 +59,50 @@ const ItemForm = ({ initItem, categories, handleSubmit, setCategoryName }:ItemFo
                                         defaultValue={item.sku}
                                         required
                                         onChange={ e => setItem({ ...item, sku: e.target.value })}
-                                        placeholder={ t("input_medicines_code") }
+                                        placeholder={ t("input_items_code") }
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
-                                <div>
-                                    <label className="mb-3 block text-black dark:text-white">
-                                        { t("category") }
-                                    </label>
-                                    <div className="relative">
-                                        <Autocomplete
-                                            defaultValue={item.category?.name}
-                                            onChange={(event: any, newValue: string | null) => {
-                                                setCategoryName(newValue? newValue:'');
-                                            }}
-                                            onInputChange={ (e:any, value:string) => {
-                                                setCategoryName(value? value:'');
-                                            }}
-                                            freeSolo
-                                            options={cats}
-                                            disablePortal
-                                            renderInput={(params) => <TextField {...params} label="" />}
-                                        />
+                                { (showCategory && typeof(setCategoryName) !== 'undefined') && 
+                                    <div>
+                                        <label className="mb-3 block text-black dark:text-white">
+                                            { t("category") }
+                                        </label>
+                                        <div className="relative">
+                                            <Autocomplete
+                                                defaultValue={item.category?.name}
+                                                onChange={(event: any, newValue: string | null) => {
+                                                    setCategoryName(newValue? newValue:'');
+                                                }}
+                                                onInputChange={ (e:any, value:string) => {
+                                                    setCategoryName(value? value:'');
+                                                }}
+                                                freeSolo
+                                                options={cats}
+                                                disablePortal
+                                                renderInput={(params) => <TextField {...params} label="" />}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <label className="mb-3 block text-black dark:text-white">
-                                        { t("stock") }
-                                    </label>
-                                    <div className="relative">
-                                    <input
-                                        type="number"
-                                        defaultValue={item.stock}
-                                        min={0}
-                                        required
-                                        onChange={ e => setItem({ ...item, stock: parseInt(e.target.value) })}
-                                        placeholder="Input the Stock"
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                        />
+                                }
+                                { showStock &&
+                                    <div>
+                                        <label className="mb-3 block text-black dark:text-white">
+                                            { t("stock") }
+                                        </label>
+                                        <div className="relative">
+                                        <input
+                                            type="number"
+                                            defaultValue={item.stock}
+                                            min={0}
+                                            required
+                                            onChange={ e => setItem({ ...item, stock: parseInt(e.target.value) })}
+                                            placeholder={ t("input_stock") }
+                                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
+                                }
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
                                         { t("price") }
@@ -105,7 +113,7 @@ const ItemForm = ({ initItem, categories, handleSubmit, setCategoryName }:ItemFo
                                         defaultValue={item.price}
                                         required
                                         onChange={ e => setItem({ ...item, price: parseInt(e.target.value) })}
-                                        placeholder="Input the Price"
+                                        placeholder={ t("input_price") }
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                     </div>

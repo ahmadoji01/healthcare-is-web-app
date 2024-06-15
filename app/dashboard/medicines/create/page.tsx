@@ -9,6 +9,7 @@ import { medicineCategoriesFilter } from "@/modules/categories/domain/category.s
 import ItemForm from "@/modules/items/application/form/item.form";
 import { Item, defaultItem, itemCreatorMapper } from "@/modules/items/domain/item";
 import { createAnItem, itemExistsChecker } from "@/modules/items/domain/items.actions";
+import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,6 +22,7 @@ const MedicineCreatePage = () => {
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const {t} = useTranslation();
+  const router = useRouter();
 
   useEffect( () => {
     getAllCategoriesWithFilter(accessToken, medicineCategoriesFilter)
@@ -70,7 +72,7 @@ const MedicineCreatePage = () => {
     createAnItem(accessToken, itemCreatorMapper(item, cat.id, organization.id))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        window.location.reload();
+        router.push("/dashboard/medicines");
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
