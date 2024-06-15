@@ -66,7 +66,7 @@ export type OrderPatcher = Omit<Order, 'id'|'patient'|'visit'|'order_items'|'dat
 export function orderPatcherMapper(order:Order, orgID:number) {
 
     let items:OrderItemPatcher[] = [];
-    order.order_items?.map( (item) => items.push(orderItemCreatorMapper(item, orgID)));
+    order.order_items?.map( (item) => items.push(orderItemPatcherMapper(item, orgID)));
 
     let visitID:number|null = null;
     if (order.visit.id !== 0) {

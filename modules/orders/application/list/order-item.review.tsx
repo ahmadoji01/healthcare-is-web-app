@@ -58,7 +58,7 @@ const OrderItemReview = ({ orderItems, total = 0, examFee = 0 }:OrderItemReviewP
             </div>
           </div>
         }
-        {typeof(orderItems) !== "undefined" && orderItems.map((item, key) => (
+        {typeof(orderItems) !== "undefined" && orderItems.map((orderItem, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-4 ${
               key === orderItems.length - 1
@@ -68,18 +68,18 @@ const OrderItemReview = ({ orderItems, total = 0, examFee = 0 }:OrderItemReviewP
             key={key}
             >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{orderItemCategory(item)}: {orderItemName(item)}</p>
+              <p className="text-black dark:text-white">{orderItem.item.name}</p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3"><Currency value={item.price} /></p>
+              <p className="text-meta-3"><Currency value={orderItem.item.price} /></p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{item.quantity}</p>
+              <p className="text-meta-3">{orderItem.quantity}</p>
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-center text-black dark:text-white"><Currency value={item.price * item.quantity} /></p>
+              <p className="text-center text-black dark:text-white"><Currency value={orderItem.item.price * orderItem.quantity} /></p>
             </div>
           </div>
         ))}

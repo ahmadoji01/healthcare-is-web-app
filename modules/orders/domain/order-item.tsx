@@ -10,6 +10,7 @@ export interface OrderItem {
     description: string,
     price: number,
     quantity: number,
+    type: string,
     total: number,
 }
 
@@ -20,6 +21,7 @@ export const defaultOrderItem:OrderItem = {
   description: "",
   price: 0,
   quantity: 0,
+  type: "",
   total: 0,
 }
 
@@ -32,6 +34,7 @@ export const orderItemMapper = (res:Record<string,any>) => {
     description: res.description,
     price: res.price,
     quantity: res.quantity,
+    type: res.type,
     total: res.total,
   }
   return orderItem;
@@ -57,6 +60,24 @@ export const orderItemCreatorMapper = (mrItem:MedicalRecordItem, orgID:number) =
     quantity: quantity,
     total: total,
     item: mrItem.items_id.id,
+    type: mrItem.type,
+    organization: orgID,
+  }
+  return orderItemCreator;
+}
+
+export const orderItemPatcherMapper = (orderItem:OrderItem, orgID:number) => {
+  
+  let price = orderItem.item.price;
+  let quantity = orderItem.quantity;
+  let total = price * quantity;
+
+  let orderItemCreator:OrderItemCreator = {
+    price: price,
+    quantity: quantity,
+    total: total,
+    item: orderItem.item.id,
+    type: orderItem.type,
     organization: orgID,
   }
   return orderItemCreator;

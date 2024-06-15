@@ -1,13 +1,13 @@
 import AlertModal from '@/components/Modal/AlertModal';
 import { ALERT_MESSAGE, ALERT_STATUS } from '@/constants/alert';
 import { Order, defaultOrder, orderMapper, orderPatcherMapper } from '@/modules/orders/domain/order';
-import { getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.actions';
+import { getAnOrder, getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.actions';
 import { PaymentMethod, defaultPaymentMethod } from '@/modules/payment-methods/domain/payment-method';
 import { Alert, Snackbar } from '@mui/material';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import { useUserContext } from './user-context';
 import { statusFilter } from '@/modules/orders/domain/order.specifications';
-import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
+import { ORDER_ITEM_TYPE, ORDER_STATUS } from '@/modules/orders/domain/order.constants';
 import { OrderItem, defaultOrderItem } from '@/modules/orders/domain/order-item';
 import { useAlertContext } from './alert-context';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ import { WS_EVENT_TYPE } from '@/modules/websockets/domain/websocket.constants';
 import { websocketClient } from '@/utils/request-handler';
 import { Medicine } from '@/modules/medicines/domain/medicine';
 import { updateAMedicine } from '@/modules/medicines/domain/medicines.actions';
+import { Item } from '@/modules/items/domain/item';
  
 interface OrderSummaryContextType {
     deleteModalOpen: boolean,
@@ -31,6 +32,7 @@ interface OrderSummaryContextType {
     total: number,
     cashReceived: number,
     examFee: number,
+    orderLoaded: boolean,
     setTotal: Dispatch<SetStateAction<number>>,
     handleModal: (deleteModalOpen: boolean, itemModalOpen: boolean, checkoutModalOpen: boolean) => void,
     setSelectedPayment: Dispatch<SetStateAction<PaymentMethod|undefined>>,
@@ -40,6 +42,7 @@ interface OrderSummaryContextType {
     setCashReceived: Dispatch<SetStateAction<number>>,
     setExamFee: Dispatch<SetStateAction<number>>,
     confirmPayment: () => void,
+    loadAnOrder: (order:Order) => void,
 }
 
 export const OrderSummaryContext = createContext<OrderSummaryContextType | null>({
@@ -53,6 +56,7 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     total: 0,
     cashReceived: 0,
     examFee: 0,
+    orderLoaded: true,
     setTotal: () => {},
     handleModal: () => {},
     setSelectedPayment: () => {},
@@ -62,6 +66,7 @@ export const OrderSummaryContext = createContext<OrderSummaryContextType | null>
     setCashReceived: () => {},
     setExamFee: () => {},
     confirmPayment: () => {},
+    loadAnOrder: () => {},
 });
  
 export const OrderSummaryProvider = ({
@@ -75,13 +80,14 @@ export const OrderSummaryProvider = ({
     const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>();
     const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order>();
-    const [selectedMedicines, setSelectedMedicines] = useState<Medicine[]>([]);
+    const [selectedMedicines, setSelectedMedicines] = useState<Item[]>([]);
     const [medsQtyOrdered, setMedsQtyOrdered] = useState<number[]>([]);
     const [selectedItem, setSelectedItem] = useState<OrderItem>(defaultOrderItem);
     const [total, setTotal] = useState<number>(1);
     const [cashReceived, setCashReceived] = useState<number>(0);
     const [examFee, setExamFee] = useState<number>(0);
     const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
+    const [orderLoaded, setOrderLoaded] = useState(true);
 
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -99,13 +105,25 @@ export const OrderSummaryProvider = ({
         notifySound.play();
     }
 
+    const loadAnOrder = async (order:Order) => {
+        setOrderLoaded(false);
+        await getAnOrder(accessToken, order.id)
+            .then( (res) => {
+                let ord = defaultOrder;
+                ord = orderMapper(res);
+                setSelectedOrder(ord);
+            })
+            .catch( () => openSnackbarNotification(ALERT_MESSAGE.server_error, "error") )
+        setOrderLoaded(true);
+    }
+
     useEffect( () => {
         getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay), 1)
-        .then( (res) => {
-            let ords:Order[] = [];
-            res?.map( (order) => { ords.push(orderMapper(order)) });
-            setOrders(ords);
-        })
+            .then( (res) => {
+                let ords:Order[] = [];
+                res?.map( (order) => { ords.push(orderMapper(order)) });
+                setOrders(ords);
+            })
     }, []);
 
     useEffect( () => {
@@ -120,11 +138,11 @@ export const OrderSummaryProvider = ({
         if (selectedOrder?.visit.id === 0)
             setExamFee(0);
 
-        let meds:Medicine[] = [];
+        let meds:Item[] = [];
         let medsQty:number[] = [];
         selectedOrder?.order_items.map( (item) => {
-            if (item.medicine !== null) {
-                meds.push(item.medicine);
+            if (item.item.type === ORDER_ITEM_TYPE.medicine) {
+                meds.push(item.item);
                 medsQty.push(item.quantity);
             }
             setSelectedMedicines(meds);
@@ -166,7 +184,7 @@ export const OrderSummaryProvider = ({
         
         selectedMedicines.map( (med, key) => {
             let data = { stock: med.stock - medsQtyOrdered[key] };
-            updateAMedicine(accessToken, med.id, data)
+            updateAnItem(accessToken, med.id, data)
                 .catch( () => { isError = true; return; })
         });
 
@@ -263,7 +281,7 @@ export const OrderSummaryProvider = ({
     }, [wsClient]);
 
     return (
-        <OrderSummaryContext.Provider value={{ examFee, deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedItem, selectedPayment, cashReceived, setExamFee, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, setSelectedItem, confirmPayment }}>
+        <OrderSummaryContext.Provider value={{ orderLoaded, examFee, deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedItem, selectedPayment, cashReceived, loadAnOrder, setExamFee, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, setSelectedItem, confirmPayment }}>
             {children}
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSnackbar} autoHideDuration={6000} onClose={handleClose} sx={{ zIndex: 2147483647 }}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>

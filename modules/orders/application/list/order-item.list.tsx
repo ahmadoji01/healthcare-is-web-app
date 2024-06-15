@@ -2,10 +2,13 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import { OrderItem, orderItemCategory, orderItemName } from "../../domain/order-item";
+import { OrderItem } from "../../domain/order-item";
 import Currency from "@/components/Currency";
 import { FocusEvent, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { MAIN_CATEGORY } from "@/modules/categories/domain/category.constants";
+import { isTreatment } from "@/modules/categories/domain/category.specifications";
+import { ORDER_ITEM_TYPE } from "../../domain/order.constants";
 
 interface OrderItemListProps {
   orderItems: OrderItem[]|undefined,
@@ -103,7 +106,7 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
             </div>
           </div>
         }
-        {typeof(items) !== "undefined" && items.map((item, key) => (
+        {typeof(items) !== "undefined" && items.map((orderItem, key) => (
           <div
             className={`grid grid-cols-3 sm:grid-cols-5 ${
               key === items.length - 1
@@ -113,14 +116,14 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{orderItemCategory(item)}: {orderItemName(item)}</p>
+              <p className="text-black dark:text-white">{ orderItem.item.name }</p>
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3"><Currency value={item.price} /></p>
+              <p className="text-meta-3"><Currency value={ orderItem.item.price } /></p>
             </div>
             
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              { item.treatment === null && 
+              { orderItem.type !== ORDER_ITEM_TYPE.treatment && 
                 <div className="custom-number-input h-10">
                   <div className="flex flex-row h-10 w-full rounded-lg mt-1">
                     <button className="h-full w-10 rounded-l cursor-pointer outline-none">
@@ -129,7 +132,7 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
                     <input 
                       ref={qtyRef}
                       required
-                      value={item.quantity}
+                      value={orderItem.quantity}
                       min="1"
                       type="number" 
                       className="quantity-input text-center w-10 font-semibold bg-transparent" 
@@ -144,7 +147,7 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-center text-black dark:text-white"><Currency value={item.price * item.quantity} /></p>
+              <p className="text-center text-black dark:text-white"><Currency value={orderItem.item.price * orderItem.quantity} /></p>
             </div>
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
@@ -152,7 +155,7 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"
-                    onClick={ () => handleDelete(item, key)}
+                    onClick={ () => handleDelete(orderItem, key)}
                     style={{ background: "red" }}
                     className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     >
