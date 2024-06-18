@@ -8,6 +8,7 @@ export interface Item {
     stock: number,
     category: Category,
     price: number,
+    unit: string,
 }
 
 export const defaultItem: Item = {
@@ -17,6 +18,7 @@ export const defaultItem: Item = {
     stock: 0,
     category: defaultCategory,
     price: 0,
+    unit: "",
 }
 
 export function itemMapper(res:Record<string,any>) {
@@ -27,7 +29,8 @@ export function itemMapper(res:Record<string,any>) {
         sku: res.sku? res.sku : "",
         price: res.price,
         stock: res.stock,
-        category: categoryMapper(res.category),
+        category: res.category? categoryMapper(res.category) : defaultCategory,
+        unit: res.unit? res.unit : "",
     }
     return item;
 }
@@ -40,6 +43,7 @@ export function itemCreatorMapper(item:Item, catID:number, orgID:number) {
         sku: item.sku,
         price: item.price,
         stock: item.stock,
+        unit: item.unit? item.unit : "",
         category: catID,
         organization: orgID,
     }
@@ -53,6 +57,7 @@ export function itemPatcherMapper(item:Item) {
         sku: item.sku,
         price: item.price,
         stock: item.stock,
+        unit: item.unit? item.unit : "",
         category: item.category.id,
     }
     return itemPatcher;

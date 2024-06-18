@@ -86,6 +86,7 @@ const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, han
                                     </div>
                                 }
                                 { showStock &&
+                                <>
                                     <div>
                                         <label className="mb-3 block text-black dark:text-white">
                                             { t("stock") }
@@ -102,6 +103,22 @@ const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, han
                                             />
                                         </div>
                                     </div>
+                                    <div>
+                                        <label className="mb-3 block text-black dark:text-white">
+                                            { t("unit") }
+                                        </label>
+                                        <div className="relative">
+                                        <input
+                                            type="text"
+                                            defaultValue={item.unit}
+                                            required
+                                            onChange={ e => setItem({ ...item, unit: e.target.value })}
+                                            placeholder={ t("input_unit") }
+                                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                            />
+                                        </div>
+                                    </div>
+                                </>
                                 }
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">

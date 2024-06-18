@@ -17,9 +17,8 @@ import { WebSocketClient } from '@directus/sdk';
 import { subsOutputMapper } from '@/modules/websockets/domain/websocket';
 import { WS_EVENT_TYPE } from '@/modules/websockets/domain/websocket.constants';
 import { websocketClient } from '@/utils/request-handler';
-import { Medicine } from '@/modules/medicines/domain/medicine';
-import { updateAMedicine } from '@/modules/medicines/domain/medicines.actions';
 import { Item } from '@/modules/items/domain/item';
+import { updateAnItem } from '@/modules/items/domain/items.actions';
  
 interface OrderSummaryContextType {
     deleteModalOpen: boolean,

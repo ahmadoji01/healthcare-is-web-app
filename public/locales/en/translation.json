@@ -115,6 +115,8 @@
     "input_items_code": "Input the item's code",
     "input_stock": "Input the item's stock",
     "input_price": "Input the item's price",
+    "input_unit": "Input the item's unit (e.g. tablet, strip)",
+    "unit": "Unit",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

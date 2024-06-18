@@ -115,6 +115,8 @@
     "input_items_code": "Masukkan kode barang",
     "input_stock": "Masukkan jumlah persediaan barang",
     "input_price": "Masukkan harga barang",
+    "input_unit": "Masukkan satuan barang (mis. tablet, strip)",
+    "unit": "Satuan Ukur",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

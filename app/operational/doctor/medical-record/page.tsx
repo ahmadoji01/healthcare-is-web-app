@@ -96,6 +96,7 @@ const MedicalRecord = () => {
         }
       });
       getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id).then( res => {
+        console.log(res);
         let mrs:MedicalRecord[] = [];
         res?.map( (mr) => { mrs.push(medicalRecordMapper(mr)); });
         setMedHistories(mrs);
@@ -126,8 +127,6 @@ const MedicalRecord = () => {
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
       
       let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, itemsCreator, illnessPatchers, [], [], organization.id, MR_STATUS.complete);
-      console.log(medicalRecordPatcher);
-      console.log(orderItems);
       
       await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
         .catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
