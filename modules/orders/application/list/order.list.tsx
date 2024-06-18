@@ -69,13 +69,7 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handlePageChange, 
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
               <ul>
-                { order.order_items?.map( (item) => 
-                    <li>
-                        { item.treatment != null && <p className="text-black dark:text-white">{ item.treatment?.name }</p> }
-                        { item.medicine != null && <p className="text-black dark:text-white">{ item.medicine?.name }</p> }
-                        { item.name != "" && <p className="text-black dark:text-white">{ item.name }</p> }
-                    </li>
-                )}
+                {order.order_items?.map( (item) => <li>- {item.item.name}</li> )}
               </ul>
             </div>
 

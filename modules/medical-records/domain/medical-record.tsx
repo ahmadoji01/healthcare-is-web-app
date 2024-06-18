@@ -128,12 +128,14 @@ export function mrTreatmentsMapper(res:Record<string,any>) {
 
 export function mrItemsMapper(res:Record<string,any>) {
     let items:MedicalRecordItem[] = [];
+    let mrItem = defaultMedicalRecordItem;
     res?.map( (item) => {
-        let mrItem = defaultMedicalRecordItem;
-        mrItem.items_id = itemMapper(item.items_id);
-        mrItem.notes = item.notes;
-        mrItem.type = item.type;
-        items.push(mrItem);
+        items.push({
+            items_id: itemMapper(item.items_id),
+            notes: item.notes,
+            type: item.type,
+            quantity: item.quantity,
+        })
     })
     return items;
 }

@@ -1,7 +1,7 @@
 import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine";
 import { Treatment, defaultTreatment } from "@/modules/treatments/domain/treatment";
 import { MedicalRecordItem, MedicineDoses } from "@/modules/medical-records/domain/medical-record";
-import { Item, defaultItem } from "@/modules/items/domain/item";
+import { Item, defaultItem, itemMapper } from "@/modules/items/domain/item";
 
 export interface OrderItem {
     id: number,
@@ -29,7 +29,7 @@ export const orderItemMapper = (res:Record<string,any>) => {
   let orderItem = defaultOrderItem;
   orderItem = { 
     id: res.id, 
-    item: res.item,
+    item: res.item? itemMapper(res.item):defaultItem,
     name: res.name,
     description: res.description,
     price: res.price,

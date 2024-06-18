@@ -69,10 +69,9 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
               <p className="text-meta-3">{moment(record.date_updated).format("MMMM Do YYYY")}</p>
             </div>
 
-            <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
+            <div className="hidden items-center justify p-2.5 sm:flex xl:p-5 text-black dark:text-white w-full">
               <ul>
-              { record.treatments?.length > 0 && <li className="mb-2"><p className="text-black dark:text-white w-full">Treatment(s): <ul>{record.treatments?.map( (treatment) => <li>{treatment.name}</li> )}</ul></p></li> }
-              { record.medicines?.length > 0 && <li className="mb-2"><p className="text-black dark:text-white w-full">Medicine(s): <ul>{record.medicines?.map( (medicine) => <li>{medicine.medicine.name}</li>)}</ul></p></li> }
+                {record.items?.map( (item) => <li>- {item.items_id.name}</li> )}
               </ul>
             </div>
             

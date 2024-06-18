@@ -1,5 +1,5 @@
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient";
-import OrderItem, { OrderItemCreator, OrderItemPatcher, orderItemCreatorMapper, orderItemPatcherMapper, orderItemsMapper } from "./order-item";
+import { OrderItem, OrderItemCreator, OrderItemPatcher, orderItemPatcherMapper, orderItemsMapper } from "./order-item";
 import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
 import { DOCTOR_PAID, ORDER_STATUS } from "./order.constants";
 
