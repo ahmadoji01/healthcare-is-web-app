@@ -118,6 +118,7 @@
     "input_unit": "Masukkan satuan barang (mis. tablet, strip)",
     "unit": "Satuan Ukur",
     "no_order_items": "Item yang akan dipesan akan tampil di sini",
+    "out_of_stock": "Habis",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

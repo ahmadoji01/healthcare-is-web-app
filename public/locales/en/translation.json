@@ -118,7 +118,7 @@
     "input_unit": "Input the item's unit (e.g. tablet, strip)",
     "unit": "Unit",
     "no_order_items": "Any items ordered will appear here",
-    
+    "out_of_stock": "Out of Stock",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

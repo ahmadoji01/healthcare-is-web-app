@@ -7,8 +7,7 @@ import WindowedSelect, { createFilter } from "react-windowed-select";
 import { MedicalRecordItem, MedicineDoses, defaultMedicineDoses } from "@/modules/medical-records/domain/medical-record";
 import MedicationList from "./medication.list";
 import { useTranslation } from "react-i18next";
-import { MR_ITEM_TYPES } from "../../domain/medical-records.constants";
-import { Item, defaultItem } from "@/modules/items/domain/item";
+import { Item } from "@/modules/items/domain/item";
 import { defaultCategory } from "@/modules/categories/domain/category";
 import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 
@@ -25,14 +24,22 @@ const MedicationForm = ({ medicines, mrMedicines, setMRMedicines }:MedicationFor
 
     useEffect(() => {
         let options:SelectOption[] = [];
-        medicines?.map( (medicine) => { options.push({ value: medicine.id.toString(), label: medicine.name, value2: medicine.price.toString() }); });
+        medicines?.map( (medicine) => {
+            let name = medicine.name;
+            
+            if (medicine.stock === 0) {
+                name = name + " (" + t("out_of_stock") + ")"
+            }
+            
+            options.push({ value: medicine.id.toString(), label: name, value2: medicine.unit }); 
+        });
         setMedOptions(options);
     }, [medicines]);
 
     const handleChange = (choices: SelectOption[]) => {
         let items:MedicalRecordItem[] = [];
         choices?.map( (choice) => {
-            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0, unit: "", type: ITEM_TYPE.medicine }, type: ITEM_TYPE.medicine, notes: "", quantity: 1 }); 
+            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0, unit: choice.value2, type: ITEM_TYPE.medicine }, type: ITEM_TYPE.medicine, notes: "", quantity: 1 }); 
         });
         setMRMedicines([...items]);
     }
