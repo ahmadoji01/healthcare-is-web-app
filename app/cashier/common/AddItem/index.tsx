@@ -29,7 +29,7 @@ const AddItem = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
-    const [item, setItems] = useState<Item[]>([]);
+    const [items, setItems] = useState<Item[]>([]);
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [treatments, setTreatments] = useState<Treatment[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -99,7 +99,7 @@ const AddItem = () => {
         let newSelectedOrder = {...selectedOrder};
         let items = [...newSelectedOrder.order_items];
 
-        let orderItem:OrderItem = { id: items.length, item: item, name: item.name, price: item.price, description: "", quantity: 1, total: item.price, type: item.type } 
+        let orderItem:OrderItem = { id: items.length, item: item, name: item.name, price: item.price, description: "", quantity, total: item.price, type: item.type } 
         newSelectedOrder.order_items[items.length] = orderItem;
         setSelectedOrder(newSelectedOrder);
         openSnackbarNotification(t("alert_msg.item_added"), "success");
@@ -133,25 +133,11 @@ const AddItem = () => {
                         aria-controls="panel1-content"
                         id="panel1-header"
                         >
-                        <h4 className="font-extrabold">{ t("medicines") }</h4>
+                        <h4 className="font-extrabold">{ t("order_items") }</h4>
                     </AccordionSummary>
                     <AccordionDetails>
-                        { medicines?.map( (medicine) => (
-                            <ItemCard item={medicine} showQtyHandler={true} handleAddItem={handleAddItem} />
-                        )) }
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion defaultExpanded sx={{ backgroundColor: 'transparent', boxShadow: 0 }}>
-                    <AccordionSummary
-                        expandIcon={<FontAwesomeIcon icon={faArrowAltCircleUp} />}
-                        aria-controls="panel1-content"
-                        id="panel1-header"
-                        >
-                        <h4 className="font-extrabold">{ t("treatments") }</h4>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        { treatments?.map( (treatment) => (
-                            <ItemCard item={treatment} showQtyHandler={false} handleAddItem={handleAddItem} />
+                        { items?.map( (item) => (
+                            <ItemCard item={item} handleAddItem={handleAddItem} />
                         )) }
                     </AccordionDetails>
                 </Accordion>

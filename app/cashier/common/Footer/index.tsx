@@ -23,6 +23,10 @@ const Footer = () => {
             openSnackbarNotification(t("alert_msg.no_order_selected"), "error");
             return;
         }
+        if (selectedOrder.order_items.length <= 0) {
+            openSnackbarNotification("Add an item first to check this order out!", "error");
+            return;
+        }
         if (typeof(selectedPayment) === 'undefined') {
             openSnackbarNotification(t("alert_msg.no_payment_selected"), "error");
             return;

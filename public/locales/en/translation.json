@@ -117,6 +117,8 @@
     "input_price": "Input the item's price",
     "input_unit": "Input the item's unit (e.g. tablet, strip)",
     "unit": "Unit",
+    "no_order_items": "Any items ordered will appear here",
+    
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
@@ -184,7 +186,8 @@
         "amount_not_enough": "Received amount is not enough.",
         "no_payment_selected": "Choose the payment method first!",
         "payment_received": "Payment has been received!",
-        "clinic_is_close": "Clinic is close now. Wait until it's open!"
+        "clinic_is_close": "Clinic is close now. Wait until it's open!",
+        "add_item_first": "Add an item first to check this order out!"
     },
 
     "menu": {

@@ -120,6 +120,9 @@ const OrderSummary = () => {
                     <div className="mt-6 text-black dark:text-white">
                         <h3 className="text-3xl font-extrabold mb-2">{ t("order_items") }</h3>
                         <OrderItemList examFee={examFee} orderItems={selectedOrder?.order_items} handleDelete={handleDeleteItem} handleQtyChange={handleQtyChange} />
+                        { selectedOrder.order_items.length <= 0 &&  
+                            <h4 className="text-center text-xl font-bold">{ t("no_order_items") }</h4>
+                        }
                     </div>
                     <div className="flex mt-6">
                         <div className="w-full gap-2">

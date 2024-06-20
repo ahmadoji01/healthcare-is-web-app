@@ -117,6 +117,7 @@
     "input_price": "Masukkan harga barang",
     "input_unit": "Masukkan satuan barang (mis. tablet, strip)",
     "unit": "Satuan Ukur",
+    "no_order_items": "Item yang akan dipesan akan tampil di sini",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
@@ -181,7 +182,8 @@
         "amount_not_enough": "Jumlah pembayaran tidak cukup!",
         "no_payment_selected": "Pilih salah satu metode pembayaran terlebih dahulu!",
         "payment_received": "Pembayaran telah diterima!",
-        "clinic_is_close": "Klinik saat ini tutup. Harap tunggu sampai buka!"
+        "clinic_is_close": "Klinik saat ini tutup. Harap tunggu sampai buka!",
+        "add_item_first": "Tambahkan minimal satu item dulu untuk menyelesaikan pesanan ini!"
     },
     "menu": {
         "patient_header": "PASIEN",
