@@ -21,23 +21,9 @@ export function superParentNameEquals(name:string) {
 }
 
 export const medicineItemsFilter = {
-    _or: [
-        {
-            "category": { "super_parent": { "name": { _eq: "Medicines" } } }
-        },
-        {
-            "category": { "name": { _eq: "Medicines" } } 
-        }
-    ]
+    "type": { _eq: "medicine" }
 }
 
 export const treatmentItemsFilter = {
-    _or: [
-        {
-            "category": { "super_parent": { "name": { _eq: "Treatments" } } }
-        },
-        {
-            "category": { "name": { _eq: "Treatments" } } 
-        }
-    ]
+    "type": { _eq: "treatment" }
 }

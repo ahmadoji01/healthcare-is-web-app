@@ -13,9 +13,9 @@ import ItemDeleteConfirmation from "@/modules/items/application/form/item.delete
 import ItemForm from "@/modules/items/application/form/item.form";
 import ItemListTable from "@/modules/items/application/list/item.list-table";
 import { Item, defaultItem, itemMapper, itemPatcherMapper } from "@/modules/items/domain/item";
-import { categoryNameEquals, medicineItemsFilter, parentNameEquals, superParentNameEquals } from "@/modules/items/domain/item.specifications";
-import { deleteAnItem, getItemsWithFilter, getTotalItems, getTotalItemsWithFilter, getTotalSearchItems, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
-import { Medicine, defaultMedicine, medicineMapper, medicinePatcherMapper } from "@/modules/medicines/domain/medicine";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
+import { medicineItemsFilter } from "@/modules/items/domain/item.specifications";
+import { deleteAnItem, getItemsWithFilter, getTotalItems, getTotalItemsWithFilter, getTotalSearchItems, getTotalSearchItemsWithFilter, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -121,6 +121,7 @@ const MedicinesDashboardPage = () => {
     }
 
     item.category = cat;
+    item.type = ITEM_TYPE.medicine;
     updateAnItem(accessToken, item.id, itemPatcherMapper(item))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
@@ -139,7 +140,7 @@ const MedicinesDashboardPage = () => {
         setItems(its);
         setDataLoaded(true);
       });
-      getTotalSearchItems(accessToken, query)
+      getTotalSearchItemsWithFilter(accessToken, query, medicineItemsFilter)
         .then( res => {
           let total = res[0].count? parseInt(res[0].count) : 0;
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
@@ -189,6 +190,7 @@ const MedicinesDashboardPage = () => {
     let newItems = [...items];
     let itm = {...items[index]};
     let stock = itm.stock;
+    let oldStock = itm.stock;
     if (action === 'substract' && stock === 1) {
       return;
     }
@@ -204,7 +206,10 @@ const MedicinesDashboardPage = () => {
     itm.stock = stock;
     newItems[index] = itm;
     setItems(newItems);
-    handleSubmitQty(itm);
+
+    if (oldStock !== qty)
+      handleSubmitQty(itm);
+
     return;
   }
   

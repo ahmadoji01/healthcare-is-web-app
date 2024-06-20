@@ -31,7 +31,7 @@ const MedicationForm = ({ medicines, mrMedicines, setMRMedicines }:MedicationFor
     const handleChange = (choices: SelectOption[]) => {
         let items:MedicalRecordItem[] = [];
         choices?.map( (choice) => {
-            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0 }, type: MR_ITEM_TYPES.medicine, notes: "", quantity: 1 }); 
+            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0, unit: "", type: ITEM_TYPE.medicine }, type: ITEM_TYPE.medicine, notes: "", quantity: 1 }); 
         });
         setMRMedicines([...items]);
     }

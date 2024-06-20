@@ -43,7 +43,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
     const treatmentsMapper = (choices: SelectOption[]) => {
         let items:MedicalRecordItem[] = [];
         choices?.map( (choice) => {
-            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0 }, notes: '', type: MR_ITEM_TYPES.treatment, quantity: 1 }); 
+            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0, unit: "", type: ITEM_TYPE.treatment }, notes: '', type: ITEM_TYPE.treatment, quantity: 1 }); 
         });
         setMRTreatments([...items]);
     }

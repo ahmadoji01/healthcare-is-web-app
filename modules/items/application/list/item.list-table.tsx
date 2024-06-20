@@ -85,9 +85,6 @@ const ItemListTable = ({ handleModal, showStock=true, items, totalPages, handleP
               <div className="flex items-center justify-center p-2.5 xl:p-5">
                 <div className="custom-number-input h-10">
                   <div className="flex flex-row h-10 w-full rounded-lg mt-1">
-                    <button className="h-full w-10 rounded-l cursor-pointer outline-none">
-                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('substract', item, key, 0)}>−</span>
-                    </button>
                     <input 
                       defaultValue={item.stock}
                       type="number" 
@@ -95,9 +92,6 @@ const ItemListTable = ({ handleModal, showStock=true, items, totalPages, handleP
                       name="custom-input-number"
                       min={0}
                       onBlur={e => handleChange('input', item, key, parseInt(e.target.value)) } />
-                    <button data-action="increment" className="h-full w-10">
-                      <span className="m-auto text-2xl font-thin" onClick={() => handleChange('add', item, key, 0)}>+</span>
-                    </button>
                   </div>
                 </div>
               </div>
