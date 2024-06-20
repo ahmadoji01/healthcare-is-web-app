@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { MR_ITEM_TYPES } from "../../domain/medical-records.constants";
 import { Item, defaultItem } from "@/modules/items/domain/item";
 import { defaultCategory } from "@/modules/categories/domain/category";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 
 interface MedicationFormProps {
     medicines: Item[],

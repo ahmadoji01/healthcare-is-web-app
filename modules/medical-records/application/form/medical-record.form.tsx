@@ -2,16 +2,15 @@
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-import WindowedSelect, { createFilter, components } from "react-windowed-select";
+import WindowedSelect, { createFilter } from "react-windowed-select";
 import { Illness, MedicalRecord, MedicalRecordItem } from "../../domain/medical-record";
 import SelectOption from "@/interfaces/select-option";
-import { Treatment } from "@/modules/treatments/domain/treatment";
 import Illnesses from "@/constants/illnesses";
 import { getI18n, useTranslation } from "react-i18next";
 import dataID from "@/constants/icd10_select_id.json";
 import { Item, defaultItem } from "@/modules/items/domain/item";
-import { MR_ITEM_TYPES } from "../../domain/medical-records.constants";
 import { defaultCategory } from "@/modules/categories/domain/category";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
