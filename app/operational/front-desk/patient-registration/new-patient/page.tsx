@@ -120,7 +120,7 @@ const NewPatient = () => {
         medicalRecord.patient = patient;
         medicalRecord.doctor = activeDoctor;
         medicalRecord.physical_checkup = physicalCheckup;
-        let medicalRecordCreator = medicalRecordCreatorMapper(medicalRecord, organization.id);
+        let medicalRecordCreator = medicalRecordCreatorMapper(medicalRecord, [], organization.id);
         await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
             medicalRecord = medicalRecordMapper(res);
         }).catch( err => {

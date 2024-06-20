@@ -1,26 +1,23 @@
 'use client';
 
 import SelectOption from "@/interfaces/select-option";
-import { medicinesFakeData } from "@/modules/medicines/infrastructure/medicines.fakes";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import WindowedSelect, { createFilter } from "react-windowed-select";
-import { MedicineDoses, defaultMedicineDoses } from "@/modules/medical-records/domain/medical-record";
-import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine";
-import { SelectChangeEvent } from "@mui/material";
+import { MedicalRecordItem, MedicineDoses, defaultMedicineDoses } from "@/modules/medical-records/domain/medical-record";
 import MedicationList from "./medication.list";
-import { useMedicalRecordContext } from "@/contexts/medical-record-context";
-import { defaultMedicineCategory } from "@/modules/medicines/domain/medicine-category";
-import { Treatment } from "@/modules/treatments/domain/treatment";
 import { useTranslation } from "react-i18next";
+import { MR_ITEM_TYPES } from "../../domain/medical-records.constants";
+import { Item, defaultItem } from "@/modules/items/domain/item";
+import { defaultCategory } from "@/modules/categories/domain/category";
 
 interface MedicationFormProps {
-    medicines: Medicine[],
-    medicineDoses: MedicineDoses[],
-    setMedicineDoses: Dispatch<SetStateAction<MedicineDoses[]>> 
+    medicines: Item[],
+    mrMedicines: MedicalRecordItem[],
+    setMRMedicines: Dispatch<SetStateAction<MedicalRecordItem[]>> 
 }
 
-const MedicationForm = ({ medicines, medicineDoses, setMedicineDoses }:MedicationFormProps) => {
+const MedicationForm = ({ medicines, mrMedicines, setMRMedicines }:MedicationFormProps) => {
 
     const [medOptions, setMedOptions] = useState<SelectOption[]>([]);
     const {t} = useTranslation();
@@ -32,11 +29,11 @@ const MedicationForm = ({ medicines, medicineDoses, setMedicineDoses }:Medicatio
     }, [medicines]);
 
     const handleChange = (choices: SelectOption[]) => {
-        let medDoses:MedicineDoses[] = [];
-        choices?.map( (choice) => { 
-            medDoses.push({ medicine: { id: parseInt(choice.value), name: choice.label, code: "", stock: 0, category: defaultMedicineCategory, price: parseInt(choice.value2) }, doses: "", quantity: 0 }); 
+        let items:MedicalRecordItem[] = [];
+        choices?.map( (choice) => {
+            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0 }, type: MR_ITEM_TYPES.medicine, notes: "", quantity: 1 }); 
         });
-        setMedicineDoses(medDoses);
+        setMRMedicines([...items]);
     }
 
     return (
@@ -53,7 +50,7 @@ const MedicationForm = ({ medicines, medicineDoses, setMedicineDoses }:Medicatio
                             <div>
                                 <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
                                     <WindowedSelect
-                                        defaultValue={medicineDoses}
+                                        defaultValue={mrMedicines}
                                         isMulti
                                         name="medications"
                                         filterOption={createFilter({ ignoreAccents: false })}
@@ -65,7 +62,7 @@ const MedicationForm = ({ medicines, medicineDoses, setMedicineDoses }:Medicatio
                                         classNamePrefix="select" />
                                 </div>
                             </div>
-                            <MedicationList medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />  
+                            <MedicationList mrMedicines={mrMedicines} setMRMedicines={setMRMedicines} />  
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,8 @@ import Currency from "@/components/Currency";
 import { TAX_RATE } from "@/config/tax";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { useUserContext } from "@/contexts/user-context";
+import { isMedicine, isTreatment } from "@/modules/categories/domain/category.specifications";
+import { ORDER_ITEM_TYPE } from "@/modules/orders/domain/order.constants";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -20,12 +22,12 @@ const OrderTotals = () => {
             let treatFee = 0, medFee = 0;
             selectedOrder.order_items.map( (item) => 
             {
-                if (item.medicine !== null) {
-                    medFee += item.medicine.price * item.quantity;
+                if (item.type === ORDER_ITEM_TYPE.medicine) {
+                    medFee += item.item.price * item.quantity;
                     return; 
                 }
-                if (item.treatment !== null) {
-                    treatFee += item.treatment.price;
+                if (item.type === ORDER_ITEM_TYPE.treatment) {
+                    treatFee += item.item.price;
                     return;
                 }
             });

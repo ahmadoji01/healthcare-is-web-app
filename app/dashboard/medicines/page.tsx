@@ -6,13 +6,16 @@ import Spinner from "@/components/Spinner";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
-import MedicineDeleteConfirmation from "@/modules/medicines/application/form/medicine.delete-confirmation";
-import MedicineForm from "@/modules/medicines/application/form/medicine.form";
-import MedicineListTable from "@/modules/medicines/application/list/medicine.list-table";
+import { createACategory, getAllCategories, getAllCategoriesWithFilter, searchCategories } from "@/modules/categories/domain/categories.actions";
+import { Category, categoryCreatorMapper, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
+import { medicineCategoriesFilter, nameEquals, superNameEquals } from "@/modules/categories/domain/category.specifications";
+import ItemDeleteConfirmation from "@/modules/items/application/form/item.delete-confirmation";
+import ItemForm from "@/modules/items/application/form/item.form";
+import ItemListTable from "@/modules/items/application/list/item.list-table";
+import { Item, defaultItem, itemMapper, itemPatcherMapper } from "@/modules/items/domain/item";
+import { categoryNameEquals, medicineItemsFilter, parentNameEquals, superParentNameEquals } from "@/modules/items/domain/item.specifications";
+import { deleteAnItem, getItemsWithFilter, getTotalItems, getTotalItemsWithFilter, getTotalSearchItems, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
 import { Medicine, defaultMedicine, medicineMapper, medicinePatcherMapper } from "@/modules/medicines/domain/medicine";
-import { getAllMedicineCategories } from "@/modules/medicines/domain/medicine-categories.actions";
-import MedicineCategory, { medicineCategoryMapper } from "@/modules/medicines/domain/medicine-category";
-import { deleteAMedicine, getAllMedicines, getTotalMedicines, getTotalSearchMedicines, searchMedicines, updateAMedicine } from "@/modules/medicines/domain/medicines.actions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -24,48 +27,56 @@ const MedicinesDashboardPage = () => {
   
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [categories, setCategories] = useState<MedicineCategory[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [categoryName, setCategoryName] = useState("");
-  const [activeMedicine, setActiveMedicine] = useState<Medicine>(defaultMedicine);
-  const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [superParent, setSuperParent] = useState(defaultCategory);
+  const [items, setItems] = useState<Item[]>([]);
+  const [activeItem, setActiveItem] = useState<Item>(defaultItem);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const {accessToken} = useUserContext();
+  const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const {t} = useTranslation();
   
   const fetchAllMedicines = () => {
-    getAllMedicines(accessToken, 1)
+    getItemsWithFilter(accessToken, medicineItemsFilter, 1)
       .then( res => {
-        let meds:Medicine[] = [];
-        res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
-        setMedicines(meds);
+        let its:Item[] = [];
+        res?.map( (item) => { its.push(itemMapper(item)); });
+        setItems(its);
         setDataLoaded(true);
       });
-    getTotalMedicines(accessToken)
+    getTotalItemsWithFilter(accessToken, medicineItemsFilter)
       .then( res => { 
         let total = res[0].count? parseInt(res[0].count) : 0;
         let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
         setTotalPages(pages);
       });
+    searchCategories(accessToken, "Medicines", 1)
+      .then( res => { 
+        if (res.length <= 0)
+          return;
+        let cat = categoryMapper(res[0]);
+        setSuperParent(cat);
+      });
   }
 
   useEffect( () => {
-    getAllMedicineCategories(accessToken, 1)
+    getAllCategoriesWithFilter(accessToken, medicineCategoriesFilter)
       .then(res => {
-        let cats:MedicineCategory[] = [];
-        res?.map( category => { cats.push(medicineCategoryMapper(category)) });
+        let cats:Category[] = [];
+        res?.map( category => { cats.push(categoryMapper(category)) });
         setCategories(cats);
       })
   }, []);
 
   useEffect( () => {
-    if (!dataLoaded || medicines.length == 0) {
+    if (!dataLoaded && items.length == 0) {
       fetchAllMedicines();
     }
-  }, [medicines]);
+  }, [items]);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {
@@ -85,17 +96,32 @@ const MedicinesDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    searchMedicines(accessToken, searchQuery, value)
+    searchItemsWithFilter(accessToken, searchQuery, medicineItemsFilter, value)
       .then( res => {
-        let meds:Medicine[] = [];
-        res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
-        setMedicines(meds);
+        let its:Item[] = [];
+        res?.map( (item) => { its.push(itemMapper(item)); });
+        setItems(its);
         setDataLoaded(true);
       });
   }
 
-  const handleSubmit = (medicine:Medicine) => {
-    updateAMedicine(accessToken, medicine.id, medicinePatcherMapper(medicine))
+  const handleSubmit = async (item:Item) => {
+    let cats = categories.find(c => c.name === categoryName);
+    let cat = defaultCategory;
+    cat.name = categoryName;
+    cat.children = [];
+    cat.parent = superParent;
+    cat.super_parent = superParent;
+    if (typeof(cats) === 'undefined') {
+      await createACategory(accessToken, categoryCreatorMapper(cat, organization.id)).then( res => {
+        cat = categoryMapper(res);
+      })
+    } else {
+      cat = cats;
+    }
+
+    item.category = cat;
+    updateAnItem(accessToken, item.id, itemPatcherMapper(item))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
@@ -107,13 +133,13 @@ const MedicinesDashboardPage = () => {
   const handleSearch = (query:string) => {
     if (query.length > 3) {
       setDataLoaded(false);
-      searchMedicines(accessToken, query, 1).then( res => {
-        let meds:Medicine[] = [];
-        res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
-        setMedicines(meds);
+      searchItemsWithFilter(accessToken, query, medicineItemsFilter, 1).then( res => {
+        let its:Item[] = [];
+        res?.map( (item) => { its.push(itemMapper(item)); });
+        setItems(its);
         setDataLoaded(true);
       });
-      getTotalSearchMedicines(accessToken, query)
+      getTotalSearchItems(accessToken, query)
         .then( res => {
           let total = res[0].count? parseInt(res[0].count) : 0;
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
@@ -138,7 +164,7 @@ const MedicinesDashboardPage = () => {
   }
 
   const handleDelete = () => {
-    deleteAMedicine(accessToken, activeMedicine.id)
+    deleteAnItem(accessToken, activeItem.id)
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
@@ -147,8 +173,8 @@ const MedicinesDashboardPage = () => {
       })
   }
 
-  const handleSubmitQty = (medicine:Medicine) => {
-    updateAMedicine(accessToken, medicine.id, { stock: medicine.stock })
+  const handleSubmitQty = (item:Item) => {
+    updateAnItem(accessToken, item.id, { stock: item.stock })
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
       }).catch( () => {
@@ -156,13 +182,13 @@ const MedicinesDashboardPage = () => {
       })
   } 
 
-  const handleQtyChange = (action:string, medicine:Medicine, index:number, qty:number) => {
-    if (typeof(medicine) === 'undefined') {
+  const handleQtyChange = (action:string, item:Item, index:number, qty:number) => {
+    if (typeof(item) === 'undefined') {
         return;
     }
-    let newMeds = [...medicines];
-    let med = {...medicines[index]};
-    let stock = med.stock;
+    let newItems = [...items];
+    let itm = {...items[index]};
+    let stock = itm.stock;
     if (action === 'substract' && stock === 1) {
       return;
     }
@@ -175,17 +201,17 @@ const MedicinesDashboardPage = () => {
     if (action === 'input') {
       stock = qty;
     }
-    med.stock = stock;
-    newMeds[index] = med;
-    setMedicines(newMeds);
-    handleSubmitQty(med);
+    itm.stock = stock;
+    newItems[index] = itm;
+    setItems(newItems);
+    handleSubmitQty(itm);
     return;
   }
   
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <MedicineForm setCategoryName={setCategoryName} categories={categories} initMedicine={activeMedicine} handleSubmit={handleSubmit} /> } title="Doctor's Detail" />
-      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <MedicineDeleteConfirmation medicine={activeMedicine} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <ItemForm setCategoryName={setCategoryName} categories={categories} initItem={activeItem} handleSubmit={handleSubmit} /> } title="Medicine's Detail" />
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <ItemDeleteConfirmation item={activeItem} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Medicines" />
 
       <div className="relative mb-4">
@@ -203,7 +229,7 @@ const MedicinesDashboardPage = () => {
 
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><Spinner /></div> }    
-        { dataLoaded && <MedicineListTable handleQtyChange={handleQtyChange} medicines={medicines} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveMedicine={setActiveMedicine} /> }
+        { dataLoaded && <ItemListTable handleQtyChange={handleQtyChange} items={items} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveItem={setActiveItem} /> }
       </div>
     </>
   );

@@ -1,48 +1,27 @@
 import { Medicine, defaultMedicine } from "@/modules/medicines/domain/medicine";
 import { Treatment, defaultTreatment } from "@/modules/treatments/domain/treatment";
-import { MedicineDoses } from "@/modules/medical-records/domain/medical-record";
+import { MedicalRecordItem, MedicineDoses } from "@/modules/medical-records/domain/medical-record";
+import { Item, defaultItem, itemMapper } from "@/modules/items/domain/item";
 
 export interface OrderItem {
     id: number,
-    medicine: Medicine | null,
-    treatment: Treatment | null,
+    item: Item,
     name: string,
     description: string,
     price: number,
     quantity: number,
+    type: string,
     total: number,
-}
-
-export const orderItemCategory = (item:OrderItem) => {
-  if (item.medicine !== null) {
-    return "Medicine";
-  }
-
-  if (item.treatment !== null) {
-    return "Treatment";
-  }
-
-  return "Other";
-}
-
-export const orderItemName = (item:OrderItem) => {
-  if (item.medicine !== null) {
-    return item.medicine.name;
-  }
-  if (item.treatment !== null) {
-    return item.treatment.name;
-  }
-  return item.name;
 }
 
 export const defaultOrderItem:OrderItem = {
   id: 0,
-  medicine: defaultMedicine,
-  treatment: defaultTreatment,
+  item: defaultItem,
   name: "",
   description: "",
   price: 0,
   quantity: 0,
+  type: "",
   total: 0,
 }
 
@@ -50,12 +29,12 @@ export const orderItemMapper = (res:Record<string,any>) => {
   let orderItem = defaultOrderItem;
   orderItem = { 
     id: res.id, 
-    medicine: res.medicine,
-    treatment: res.treatment,
+    item: res.item? itemMapper(res.item):defaultItem,
     name: res.name,
     description: res.description,
     price: res.price,
     quantity: res.quantity,
+    type: res.type,
     total: res.total,
   }
   return orderItem;
@@ -69,50 +48,37 @@ export const orderItemsMapper = (order_items:Record<string, any>) => {
   return results;
 }
 
-export type OrderItemCreator = Omit<OrderItem, 'id'|'medicine'|'treatment'|'name'|'description'> & { medicine:number|null, treatment:number|null, organization: number };
-export const orderItemCreatorMapper = (medicineDoses:MedicineDoses|null, treatment:Treatment|null, orgID:number) => {
+export type OrderItemCreator = Omit<OrderItem, 'id'|'name'|'description'|'item'> & { item:number, organization: number };
+export const orderItemCreatorMapper = (mrItem:MedicalRecordItem, orgID:number) => {
   
-  let price = 0;
-  let total = 0;
-  let quantity = 1;
-  let medicineID:number|null = null;
-  let treatmentID:number|null = null;
-  if (medicineDoses !== null) {
-    medicineID = medicineDoses.medicine.id;
-    price = medicineDoses.medicine.price;
-    quantity = medicineDoses.quantity;
-    total = price * quantity;
-  }
-
-  if (treatment !== null) {
-    treatmentID = treatment.id;
-    price = treatment.price;
-    total = treatment.price;
-  }
+  let price = mrItem.items_id.price;
+  let total = mrItem.items_id.price * mrItem.quantity;
+  let quantity = mrItem.quantity;
 
   let orderItemCreator:OrderItemCreator = {
-    medicine: medicineID,
-    treatment: treatmentID,
     price: price,
     quantity: quantity,
     total: total,
+    item: mrItem.items_id.id,
+    type: mrItem.type,
     organization: orgID,
   }
   return orderItemCreator;
-
 }
 
-export type OrderItemPatcher = Omit<OrderItem, 'id'|'medicine'|'treatment'|'name'|'description'> & { medicine:number|null, treatment:number|null, organization: number };
 export const orderItemPatcherMapper = (orderItem:OrderItem, orgID:number) => {
+  
+  let price = orderItem.item.price;
+  let quantity = orderItem.quantity;
+  let total = price * quantity;
 
-  let orderItemPatcher:OrderItemPatcher = {
-    medicine: orderItem.medicine ? orderItem.medicine.id : null,
-    treatment: orderItem.treatment ? orderItem.treatment.id : null,
-    price: orderItem.price,
-    quantity: orderItem.quantity,
-    total: orderItem.total,
+  let orderItemCreator:OrderItemCreator = {
+    price: price,
+    quantity: quantity,
+    total: total,
+    item: orderItem.item.id,
+    type: orderItem.type,
     organization: orgID,
   }
-  return orderItemPatcher;
-
+  return orderItemCreator;
 }

@@ -5,6 +5,15 @@ import DashboardModal from "@/components/Modal/Modal";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
+import { getAllCategories, getAllCategoriesWithFilter, searchCategories } from "@/modules/categories/domain/categories.actions";
+import { Category, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
+import { treatmentCategoriesFilter } from "@/modules/categories/domain/category.specifications";
+import ItemDeleteConfirmation from "@/modules/items/application/form/item.delete-confirmation";
+import ItemForm from "@/modules/items/application/form/item.form";
+import ItemListTable from "@/modules/items/application/list/item.list-table";
+import { Item, defaultItem, itemMapper, itemPatcherMapper } from "@/modules/items/domain/item";
+import { treatmentItemsFilter } from "@/modules/items/domain/item.specifications";
+import { deleteAnItem, getItemsWithFilter, getTotalItemsWithFilter, getTotalSearchItems, searchItems, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
 import TreatmentDeleteConfirmation from "@/modules/treatments/application/form/treatment.delete-confirmation";
 import TreatmentForm from "@/modules/treatments/application/form/treatment.form";
 import TreatmentListTable from "@/modules/treatments/application/list/treatment.list-table";
@@ -21,34 +30,53 @@ let activeTimeout = null;
 const TreatmentsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
-  const [activeTreatment, setActiveTreatment] = useState<Treatment>(defaultTreatment);
+  const [items, setItems] = useState<Item[]>([]);
+  const [activeItem, setActiveItem] = useState<Item>(defaultItem);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [superParent, setSuperParent] = useState(defaultCategory);
 
   const {openSnackbarNotification} = useAlertContext();
   const {accessToken} = useUserContext();
   const {t} = useTranslation();
 
   const fetchAllTreatments = () => {
-    getAllTreatments(accessToken, 1)
+    getItemsWithFilter(accessToken, treatmentItemsFilter, 1)
       .then( res => {
-        let treats:Treatment[] = [];
-        res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
-        setTreatments(treats);
+        let its:Item[] = [];
+        res?.map( (item) => { its.push(itemMapper(item)); });
+        setItems(its);
         setDataLoaded(true);
       });
-    getTotalTreatments(accessToken)
+    getTotalItemsWithFilter(accessToken, treatmentItemsFilter)
       .then( res => { 
         let total = res[0].count? parseInt(res[0].count) : 0;
         let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
         setTotalPages(pages);
-      })
+      });
+    searchCategories(accessToken, "Treatments", 1)
+      .then( res => { 
+        if (res.length <= 0)
+          return;
+        let cat = categoryMapper(res[0]);
+        setSuperParent(cat);
+      });
   }
 
   useEffect( () => {
-    if (!dataLoaded || treatments.length == 0) {
+    getAllCategoriesWithFilter(accessToken, treatmentCategoriesFilter)
+      .then(res => {
+        let cats:Category[] = [];
+        res?.map( category => { cats.push(categoryMapper(category)) });
+        setCategories(cats);
+      })
+  }, []);
+
+  useEffect( () => {
+    if (!dataLoaded && items.length == 0) {
       fetchAllTreatments();
     }
   }, [treatments]);
@@ -71,35 +99,36 @@ const TreatmentsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    searchTreatments(accessToken, searchQuery, value)
+    searchItems(accessToken, searchQuery, treatmentItemsFilter, value)
       .then( res => {
-        let treats:Treatment[] = [];
-        res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
-        setTreatments(treats);
+        let its:Item[] = [];
+        res?.map( (item) => { its.push(itemMapper(item)); });
+        setItems(its);
         setDataLoaded(true);
       });
   }
 
-  const handleSubmit = (treatment:Treatment) => {
-    updateATreatment(accessToken, treatment.id, treatmentPatcherMapper(treatment))
+  const handleSubmit = async (item:Item) => {
+    item.category = superParent;
+    updateAnItem(accessToken, item.id, itemPatcherMapper(item))
       .then( () => {
-        openSnackbarNotification(t('alert_msg.success'), "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(t('alert_msg.server_error'), "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   } 
 
   const handleSearch = (query:string) => {
     if (query.length > 3) {
       setDataLoaded(false);
-      searchTreatments(accessToken, query, 1).then( res => {
-        let treats:Treatment[] = [];
-        res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
-        setTreatments(treats);
+      searchItemsWithFilter(accessToken, query, treatmentItemsFilter, 1).then( res => {
+        let its:Item[] = [];
+        res?.map( (item) => { its.push(itemMapper(item)); });
+        setItems(its);
         setDataLoaded(true);
       });
-      getTotalSearchTreatments(accessToken, query)
+      getTotalSearchItems(accessToken, query)
         .then( res => {
           let total = res[0].count? parseInt(res[0].count) : 0;
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
@@ -110,6 +139,10 @@ const TreatmentsDashboardPage = () => {
       setDataLoaded(false);
       fetchAllTreatments();
     }
+  }
+
+  const handleQtyChange = (action:string, item:Item, index:number, qty:number) => {
+
   }
 
   const handleChange = (query:string) => {
@@ -124,19 +157,19 @@ const TreatmentsDashboardPage = () => {
   }
 
   const handleDelete = () => {
-    deleteATreatment(accessToken, activeTreatment.id)
+    deleteAnItem(accessToken, activeItem.id)
       .then( () => {
-        openSnackbarNotification(t('alert_msg.success'), "success");
+        openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
-        openSnackbarNotification(t('alert_msg.server_error'), "error");
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   }
 
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <TreatmentForm initTreatment={activeTreatment} handleSubmit={handleSubmit} /> } title="Treatment's Detail" />
-      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <TreatmentDeleteConfirmation treatment={activeTreatment} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <ItemForm showStock={false} showCategory={false} initItem={activeItem} categories={categories} handleSubmit={handleSubmit} /> } title="Treatment's Detail" />
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <ItemDeleteConfirmation item={activeItem} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Treatments" />
 
       <div className="relative mb-4">
@@ -154,7 +187,7 @@ const TreatmentsDashboardPage = () => {
       
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-        { dataLoaded && <TreatmentListTable totalPages={totalPages} treatments={treatments} setActiveTreatment={setActiveTreatment} handlePageChange={handlePageChange} handleModal={handleModal} /> }
+        { dataLoaded && <ItemListTable handleQtyChange={handleQtyChange} showStock={false} totalPages={totalPages} items={items} setActiveItem={setActiveItem} handlePageChange={handlePageChange} handleModal={handleModal} /> }
       </div>
     </>
   );

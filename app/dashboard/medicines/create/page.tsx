@@ -3,78 +3,85 @@
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
-import MedicineForm from "@/modules/medicines/application/form/medicine.form";
-import { Medicine, defaultMedicine, medicineCreatorMapper } from "@/modules/medicines/domain/medicine";
-import { createAMedicineCategory, getAllMedicineCategories } from "@/modules/medicines/domain/medicine-categories.actions";
-import MedicineCategory, { defaultMedicineCategory, medicineCategoryCreatorMapper, medicineCategoryMapper } from "@/modules/medicines/domain/medicine-category";
-import { createAMedicine, medicineExistChecker } from "@/modules/medicines/domain/medicines.actions";
+import { createACategory, getAllCategoriesWithFilter, searchCategories } from "@/modules/categories/domain/categories.actions";
+import { Category, categoryCreatorMapper, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
+import { medicineCategoriesFilter } from "@/modules/categories/domain/category.specifications";
+import ItemForm from "@/modules/items/application/form/item.form";
+import { Item, defaultItem, itemCreatorMapper } from "@/modules/items/domain/item";
+import { createAnItem, itemExistsChecker } from "@/modules/items/domain/items.actions";
+import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const MedicineCreatePage = () => {
-  const [medicine, setMedicine] = useState(defaultMedicine);
-  const [categories, setCategories] = useState<MedicineCategory[]>([]);
+  const [item, setItem] = useState(defaultItem);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [superParent, setSuperParent] = useState(defaultCategory);
   const [categoryName, setCategoryName] = useState("");
   const {accessToken, organization} = useUserContext();
-  const {setOpen, setMessage, setStatus} = useAlertContext();
+  const {openSnackbarNotification} = useAlertContext();
   const {t} = useTranslation();
+  const router = useRouter();
 
   useEffect( () => {
-    getAllMedicineCategories(accessToken, 1)
+    getAllCategoriesWithFilter(accessToken, medicineCategoriesFilter)
       .then(res => {
-        let cats:MedicineCategory[] = [];
-        res?.map( category => { cats.push(medicineCategoryMapper(category)) });
+        let cats:Category[] = [];
+        res?.map( category => { cats.push(categoryMapper(category)) });
         setCategories(cats);
       })
+    searchCategories(accessToken, "Medicines", 1)
+      .then( res => { 
+        if (res.length <= 0)
+          return;
+        let cat = categoryMapper(res[0]);
+        setSuperParent(cat);
+      });
   }, []);
 
-  const handleSubmit = async (medicine:Medicine) => {
-    let medicineExists = false;
-    await medicineExistChecker(accessToken, medicine.name)
+  const handleSubmit = async (item:Item) => {
+    let itemExists = false;
+    await itemExistsChecker(accessToken, item.name)
       .then( res => {
         if (res.length != 0) {
-          medicineExists = true;
+          itemExists = true;
           return;
         }
       });
     
-    if (medicineExists) { 
-      setOpen(true);
-      setMessage(t("alert_msg.data_exists"));
-      setStatus("error");
+    if (itemExists) { 
+      openSnackbarNotification(t("alert_msg.data_exists"), "error");
       return;
     }
 
     let cats = categories.find(c => c.name === categoryName);
-    let cat = defaultMedicineCategory;
+    let cat = defaultCategory;
+    cat.name = categoryName;
+    cat.children = [];
+    cat.parent = superParent;
+    cat.super_parent = superParent;
     if (typeof(cats) === 'undefined') {
-      await createAMedicineCategory(accessToken, medicineCategoryCreatorMapper(categoryName, organization.id)).then( res => {
-        cat = medicineCategoryMapper(res);
+      await createACategory(accessToken, categoryCreatorMapper(cat, organization.id)).then( res => {
+        cat = categoryMapper(res);
       })
     } else {
       cat = cats;
     }
     
-    let medicineCreator = medicineCreatorMapper(medicine, cat.id, organization.id);
-    await createAMedicine(accessToken, medicineCreator).then( () => {
-      setOpen(true);
-      setMessage("Success! Medicine has been created!");
-      setStatus("success");
-      window.location.href = '/dashboard/medicines';
-      return;
-    }).catch( err => {
-      setOpen(true);
-      setMessage(t("alert_msg.server_error"));
-      setStatus("error");
-      return;
-    })
+    createAnItem(accessToken, itemCreatorMapper(item, cat.id, organization.id))
+      .then( () => {
+        openSnackbarNotification(t("alert_msg.success"), "success");
+        router.push("/dashboard/medicines");
+      }).catch( () => {
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
+      })
   }
 
   return (
     <>
       <Breadcrumb pageName="Add Medicine" />
-      <MedicineForm setCategoryName={setCategoryName} categories={categories} handleSubmit={handleSubmit} initMedicine={medicine} />
+      <ItemForm setCategoryName={setCategoryName} categories={categories} handleSubmit={handleSubmit} initItem={item} />
     </>
   );
 };

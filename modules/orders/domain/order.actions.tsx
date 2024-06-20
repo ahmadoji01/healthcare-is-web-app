@@ -1,4 +1,4 @@
-import { createItem, deleteItem, readItems, updateItem, withToken } from "@directus/sdk";
+import { createItem, deleteItem, readItem, readItems, updateItem, withToken } from "@directus/sdk";
 import { directusClient } from "@/utils/request-handler";
 import { OrderCreator } from "./order";
 import { LIMIT_PER_PAGE } from "@/constants/request";
@@ -12,6 +12,11 @@ export const getOrdersWithFilter = (token:string, filter:object, page:number) =>
 		withToken(token, readItems('orders', { fields: ['*.*.*'], limit: LIMIT_PER_PAGE, page,
 			filter: filter
 		})) 
+	)
+
+export const getAnOrder = (token:string, id:number) => 
+	directusClient.request( 
+		withToken(token, readItem('orders', id, { fields: ['*.*.*'] }))
 	)
 
 export const updateOrder = (token:string, id:number, data:object) => directusClient.request( withToken(token, updateItem('orders', id, data)));

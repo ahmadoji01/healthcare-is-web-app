@@ -11,3 +11,8 @@ export const DOCTOR_PAID = {
     unpaid: 'unpaid',
     no_doctor: 'no_doctor',
 }
+
+export const ORDER_ITEM_TYPE = {
+    medicine: "medicine",
+    treatment: "treatment",
+}

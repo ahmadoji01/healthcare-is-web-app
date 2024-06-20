@@ -38,3 +38,8 @@ export const MR_STATUS = {
     created: 'created',
     complete: 'complete',
 }
+
+export const MR_ITEM_TYPES = {
+    medicine: 'medicine',
+    treatment: 'treatment',
+}

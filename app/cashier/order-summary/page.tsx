@@ -17,6 +17,7 @@ import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useEffect, useState } from "react";
 import { Order, orderMapper, orderPatcherMapper } from "@/modules/orders/domain/order";
+import Spinner from "@/components/Spinner";
 
 const OrderSummary = () => {
 
@@ -26,7 +27,7 @@ const OrderSummary = () => {
     const { t } = useTranslation();
     const { accessToken, organization } = useUserContext();
     const { openSnackbarNotification } = useAlertContext();
-    const { examFee, orders, selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, selectedItem, setSelectedOrder, setSelectedItem, handleModal } = useOrderSummaryContext();
+    const { orderLoaded, examFee, orders, selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, selectedItem, setSelectedOrder, setSelectedItem, handleModal } = useOrderSummaryContext();
 
     useEffect( () => {
         setOrderList(orders);
@@ -103,6 +104,7 @@ const OrderSummary = () => {
 
     return (
         <>
+            { !orderLoaded && <Spinner /> }
             { (orderList.length > 0 && typeof(selectedOrder) !== 'undefined') && 
                 <>
                     <DashboardModal open={deleteModalOpen} handleClose={() => handleModal(false, false, false)} children={ <OrderItemDeleteConfirmation orderItem={selectedItem} handleDelete={deleteItem} handleClose={() => handleModal(false, false, false)} /> } title="" /> 
@@ -127,7 +129,7 @@ const OrderSummary = () => {
                     </div>
                 </>
             }
-            { (orderList.length > 0 && typeof(selectedOrder) == 'undefined') && 
+            { (orderLoaded && orderList.length > 0 && typeof(selectedOrder) == 'undefined') && 
                 <div className="flex p-6">
                     <h3 className="text-black dark:text-white font-extrabold text-center w-screen h-screen text-3xl items-center justify-center">
                         { t("cashier.select_patient") }

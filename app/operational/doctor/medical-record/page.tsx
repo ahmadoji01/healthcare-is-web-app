@@ -9,7 +9,7 @@ import MedicalRecordForm from '@/modules/medical-records/application/form/medica
 import MedicationForm from '@/modules/medical-records/application/form/medication.form';
 import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
-import { IllnessPatcher, MedicalRecord, MedicineDosesPatcher, illnessPatcherMapper, medicalRecordMapper, medicalRecordPatcherMapper, medicineDosesPatcherMapper } from '@/modules/medical-records/domain/medical-record';
+import { IllnessPatcher, MRItemCreator, MedicalRecord, MedicalRecordItem, MedicineDosesPatcher, illnessPatcherMapper, medicalRecordMapper, medicalRecordPatcherMapper, medicineDosesPatcherMapper, mrItemCreatorMapper } from '@/modules/medical-records/domain/medical-record';
 import Footer from '../common/Footer';
 import { getCompleteMedicalRecords, updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
 import { useUserContext } from '@/contexts/user-context';
@@ -28,6 +28,9 @@ import { OrderItemCreator, orderItemCreatorMapper } from '@/modules/orders/domai
 import { visitFilter } from '@/modules/orders/domain/order.specifications';
 import { MR_STATUS } from '@/modules/medical-records/domain/medical-records.constants';
 import { useTranslation } from 'react-i18next';
+import { getItemsWithFilter } from '@/modules/items/domain/items.actions';
+import { medicineItemsFilter, treatmentItemsFilter } from '@/modules/items/domain/item.specifications';
+import { Item, itemMapper } from '@/modules/items/domain/item';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -62,8 +65,10 @@ interface TabPanelProps {
 
 const MedicalRecord = () => {
     const [value, setValue] = useState(0);
-    const [medicines, setMedicines] = useState<Medicine[]>([]);
-    const [treatments, setTreatments] = useState<Treatment[]>([]);
+    const [medicines, setMedicines] = useState<Item[]>([]);
+    const [mrMedicines, setMRMedicines] = useState<MedicalRecordItem[]>([]);
+    const [treatments, setTreatments] = useState<Item[]>([]);
+    const [mrTreatments, setMRTreatments] = useState<MedicalRecordItem[]>([]);
     const [order, setOrder] = useState(defaultOrder);
     const [medHistories, setMedHistories] = useState<MedicalRecord[]>([]);
     
@@ -74,15 +79,15 @@ const MedicalRecord = () => {
     const {t} = useTranslation();
     
     useEffect( () => {
-      getAllMedicines(accessToken, 1).then( res => {
-        let meds:Medicine[] = [];
-        res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
-        setMedicines(meds);
+      getItemsWithFilter(accessToken, medicineItemsFilter, 1).then( res => {
+        let items:Item[] = [];
+        res?.map( (item) => { items.push(itemMapper(item)); });
+        setMedicines(items);
       });
-      getAllTreatments(accessToken, 1).then( res => {
-        let treats:Treatment[] = [];
-        res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
-        setTreatments(treats);
+      getItemsWithFilter(accessToken, treatmentItemsFilter, 1).then( res => {
+        let items:Item[] = [];
+        res?.map( (item) => { items.push(itemMapper(item)); });
+        setTreatments(items);
       });
       getOrdersWithFilter(accessToken, visitFilter(activeVisit.id), 1).then( res => {
         if (res.length > 0) {
@@ -91,11 +96,12 @@ const MedicalRecord = () => {
         }
       });
       getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id).then( res => {
+        console.log(res);
         let mrs:MedicalRecord[] = [];
         res?.map( (mr) => { mrs.push(medicalRecordMapper(mr)); });
         setMedHistories(mrs);
       })
-    }, [])
+    }, []);
 
     if (activeMedicalRecord.id === 0) {
       window.location.href = '/operational/doctor/patients-list';
@@ -106,31 +112,31 @@ const MedicalRecord = () => {
     };
 
     const handleSubmit = async () => {
-      let treatmentPatchers:TreatmentOrg[] = [];
-      let medicineDosesPatchers:MedicineDosesPatcher[] = [];
       let illnessPatchers:IllnessPatcher[] = [];
+      let itemsCreator:MRItemCreator[] = [];
       let orderItems:OrderItemCreator[] = [];
 
-      activeMedicalRecord.treatments?.map( (treatment) => { 
-        treatmentPatchers.push(treatmentOrgMapper(treatment, organization.id));
-        orderItems.push(orderItemCreatorMapper(null, treatment, organization.id));
-      })
-      medicineDoses.map( (med) => { 
-        medicineDosesPatchers.push(medicineDosesPatcherMapper(med, organization.id));
-        orderItems.push(orderItemCreatorMapper(med, null, organization.id));
+      mrTreatments?.map( (treatment) => {
+        itemsCreator.push(mrItemCreatorMapper(treatment, organization.id));
+        orderItems.push(orderItemCreatorMapper(treatment, organization.id));
       });
+      mrMedicines?.map( (medicine) => {
+        itemsCreator.push(mrItemCreatorMapper(medicine, organization.id));
+        orderItems.push(orderItemCreatorMapper(medicine, organization.id));
+      })
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
       
+      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, itemsCreator, illnessPatchers, [], [], organization.id, MR_STATUS.complete);
       
-      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, illnessPatchers, medicineDosesPatchers, treatmentPatchers, organization.id, MR_STATUS.complete);
       await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
         .catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
-
+      
       let visit = { status: VISIT_STATUS.examined };
       updateVisit(accessToken, activeVisit.id, visit).then( () => {
       }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
 
       let orderUpdate = { order_items: orderItems, status: ORDER_STATUS.waiting_to_pay };
+      
       updateOrder(accessToken, order.id, orderUpdate).then( () => {
         location.reload();
         openSnackbarNotification(t('alert_msg.success'), 'success');
@@ -156,11 +162,11 @@ const MedicalRecord = () => {
               <CustomTabPanel value={value} index={1}>
                 <div className="flex flex-col md:flex-row mb-8">
                   <div className="w-full p-2 mb-8">
-                    <MedicalRecordForm treatments={treatments} medicalRecord={activeMedicalRecord} setMedicalRecord={setActiveMedicalRecord} />
+                    <MedicalRecordForm treatments={treatments} medicalRecord={activeMedicalRecord} setMRTreatments={setMRTreatments} setMedicalRecord={setActiveMedicalRecord} />
                     <span className="mb-8" />
                   </div>
                   <div className="w-full p-2">
-                    <MedicationForm medicines={medicines} medicineDoses={medicineDoses} setMedicineDoses={setMedicineDoses} />    
+                    <MedicationForm medicines={medicines} mrMedicines={mrMedicines} setMRMedicines={setMRMedicines} />    
                   </div>
                 </div>
               </CustomTabPanel>

@@ -30,7 +30,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
     const [openAddOrderModal, setOpenAddOrderModal] = useState(false);
     const [patient, setPatient] = useState(defaultPatient);
     
-    const { orders, selectedOrder, setSelectedOrder } = useOrderSummaryContext();
+    const { orders, selectedOrder, setSelectedOrder, loadAnOrder } = useOrderSummaryContext();
     const {accessToken, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const {t} = useTranslation();
@@ -121,7 +121,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                                 onClick={(e) => {
                                     e.preventDefault();
                                     sidebarExpanded
-                                    ? setSelectedOrder(order)
+                                    ? loadAnOrder(order)
                                     : setSidebarExpanded(true);
                                 }}
                                 >
