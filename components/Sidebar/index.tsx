@@ -1,25 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import SidebarLinkGroup from "./SidebarLinkGroup";
 import Image from "next/image";
-import SidebarMenu from "./SidebarItem";
 
 interface SidebarProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: (arg: boolean) => void;
+  sidebarOpen: boolean,
+  setSidebarOpen: (arg: boolean) => void,
+  children: ReactNode,
 }
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen, children }: SidebarProps) => {
   const pathname = usePathname();
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-
-  let storedSidebarExpanded = "true";
-  const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
-  );
 
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
@@ -44,17 +38,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
-
-  useEffect(() => {
-    if ( typeof(sidebarExpanded) !== 'undefined' )
-      localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
-    
-    if (sidebarExpanded) {
-      document.querySelector("body")?.classList.add("sidebar-expanded");
-    } else {
-      document.querySelector("body")?.classList.remove("sidebar-expanded");
-    }
-  }, [sidebarExpanded]);
 
   return (
     <aside
@@ -97,7 +80,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       </div>
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         <nav className="py-4 px-4 lg:px-6">
-          <SidebarMenu sidebarExpanded={sidebarExpanded} setSidebarExpanded={setSidebarExpanded}  />
+          {children}
         </nav>
       </div>
     </aside>

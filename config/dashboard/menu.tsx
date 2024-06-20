@@ -207,7 +207,7 @@ export const userMenuItems: UserMenuItem[] = [
     {
         title: "manage_cashier",
         icon: faCashRegister,
-        url: "/cashier/order-summary",
+        url: "/cashier",
         role: [ROLES.administrator, ROLES.cashier]
     }
 ]

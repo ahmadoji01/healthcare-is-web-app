@@ -19,7 +19,7 @@ interface DashboardModalProps {
     title: string,
 }
 
-const DashboardModal = ({ open, handleClose, children, title }: DashboardModalProps) => {
+const GenericModal = ({ open, handleClose, children, title }: DashboardModalProps) => {
     return (
         <motion.div
             animate={{ x: 100 }}
@@ -64,4 +64,4 @@ const DashboardModal = ({ open, handleClose, children, title }: DashboardModalPr
     )
 }
 
-export default DashboardModal;
+export default GenericModal;

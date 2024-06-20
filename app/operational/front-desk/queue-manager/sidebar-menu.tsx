@@ -2,24 +2,19 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserDoctor } from "@fortawesome/free-solid-svg-icons";
-import { useDoctorContext } from "@/contexts/doctor-context";
-import Loader from "@/components/Loader";
 import Spinner from "@/components/Spinner";
 import { Doctor } from "@/modules/doctors/domain/doctor";
-import { getVisitByDoctorID } from "@/modules/visits/domain/visits.actions";
-import { useUserContext } from "@/contexts/user-context";
 import { useVisitContext } from "@/contexts/visit-context";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
 import { useTranslation } from "react-i18next";
 import { DoctorName } from "@/utils/doctor-name-format";
-import { Badge } from "@mui/material";
 
-interface SidebarItemProps {
+interface SidebarMenuProps {
     sidebarExpanded: Boolean,
     setSidebarExpanded: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const SidebarItem = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
+const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarMenuProps) => {
     const { loading, presentDoctors, activeDoctor, setActiveDoctor, newQueues, setNewQueues } = useFrontDeskContext();
     const {handleDoctorVisits} = useVisitContext();
     const [showBadges, setShowBadges] = useState<boolean[]>([]);
@@ -81,4 +76,4 @@ const SidebarItem = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
     )
 }
 
-export default SidebarItem;
+export default SidebarMenu;

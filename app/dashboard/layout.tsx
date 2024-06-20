@@ -5,10 +5,11 @@ import "@/styles/satoshi.css";
 import { useState, useEffect } from "react";
 import Loader from "@/components/Loader";
 
-import Sidebar from "@/components/Dashboard/Sidebar";
+import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { useUserContext } from "@/contexts/user-context";
+import SidebarMenu from "./sidebar-menu";
 
 export default function RootLayout({
   children,
@@ -19,6 +20,11 @@ export default function RootLayout({
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
   const {loading} = useUserContext();
 
+  let storedSidebarExpanded = "true";
+  const [sidebarExpanded, setSidebarExpanded] = useState(
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
+  );
+
   useEffect(() => {
     const onStorageChange = () => {
       const item = localStorage.getItem("color-theme");
@@ -27,6 +33,17 @@ export default function RootLayout({
     }
     window.addEventListener('storage', onStorageChange);
   }, []);
+
+  useEffect(() => {
+    if ( typeof(sidebarExpanded) !== 'undefined' )
+      localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
+    
+    if (sidebarExpanded) {
+      document.querySelector("body")?.classList.add("sidebar-expanded");
+    } else {
+      document.querySelector("body")?.classList.remove("sidebar-expanded");
+    }
+  }, [sidebarExpanded]);
 
   return (
     <html lang="en">
@@ -39,7 +56,9 @@ export default function RootLayout({
               <Sidebar
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
-              />
+                >
+                <SidebarMenu sidebarExpanded={sidebarExpanded} setSidebarExpanded={setSidebarExpanded}  />
+              </Sidebar>
               <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                 <Header
                   sidebarOpen={sidebarOpen}

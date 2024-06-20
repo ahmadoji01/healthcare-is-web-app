@@ -1,14 +1,13 @@
 'use client';
 
 import OrderItemList from "@/modules/orders/application/list/order-item.list";
-import PaymentMethods from "../common/PaymentMethods";
-import OrderTotals from "../common/order-totals";
-import PatientOverview from "../common/patient-overview";
+import PaymentMethods from "./common/PaymentMethods";
+import OrderTotals from "./common/order-totals";
+import PatientOverview from "./common/patient-overview";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import DashboardModal from "@/components/Modal/Modal";
-import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
-import Checkout from "../common/Checkout";
-import AddItem from "../common/AddItem";
+import Checkout from "./common/Checkout";
+import AddItem from "./common/AddItem";
 import { useTranslation } from "react-i18next";
 import OrderItemDeleteConfirmation from "@/modules/orders/application/form/order-item.delete-confirmation";
 import { OrderItem } from "@/modules/orders/domain/order-item";
@@ -16,7 +15,7 @@ import { deleteAnOrderItem, updateOrder } from "@/modules/orders/domain/order.ac
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useEffect, useState } from "react";
-import { Order, orderMapper, orderPatcherMapper } from "@/modules/orders/domain/order";
+import { Order, orderPatcherMapper } from "@/modules/orders/domain/order";
 import Spinner from "@/components/Spinner";
 
 const OrderSummary = () => {
