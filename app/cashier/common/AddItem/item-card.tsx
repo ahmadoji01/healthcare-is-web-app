@@ -50,7 +50,7 @@ const ItemCard = ({ item, handleAddItem }:ItemCardProps) => {
         <div className={`flex rounded-sm border border-stroke p-4 mb-1 bg-white shadow-default dark:border-strokedark dark:bg-boxdark`}>
             <div className="grid grid-cols-8 gap-4 w-full">
                 <div className={`col-span-2 my-auto 'text-black dark:text-white font-bold'`}>
-                    { item.name }
+                    { item.name } { item.type !== ITEM_TYPE.treatment && " (" + item.stock.toString() + ")" }
                 </div>
                 <div className={`col-span-2 my-auto text-black dark:text-white font-bold`}>
                     <Currency value={item.price} />
