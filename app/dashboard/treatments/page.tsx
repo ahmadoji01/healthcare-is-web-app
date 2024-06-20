@@ -12,8 +12,9 @@ import ItemDeleteConfirmation from "@/modules/items/application/form/item.delete
 import ItemForm from "@/modules/items/application/form/item.form";
 import ItemListTable from "@/modules/items/application/list/item.list-table";
 import { Item, defaultItem, itemMapper, itemPatcherMapper } from "@/modules/items/domain/item";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { treatmentItemsFilter } from "@/modules/items/domain/item.specifications";
-import { deleteAnItem, getItemsWithFilter, getTotalItemsWithFilter, getTotalSearchItems, searchItems, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
+import { deleteAnItem, getItemsWithFilter, getTotalItemsWithFilter, getTotalSearchItems, getTotalSearchItemsWithFilter, searchItems, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
 import TreatmentDeleteConfirmation from "@/modules/treatments/application/form/treatment.delete-confirmation";
 import TreatmentForm from "@/modules/treatments/application/form/treatment.form";
 import TreatmentListTable from "@/modules/treatments/application/list/treatment.list-table";
@@ -99,7 +100,7 @@ const TreatmentsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    searchItems(accessToken, searchQuery, treatmentItemsFilter, value)
+    searchItemsWithFilter(accessToken, searchQuery, treatmentItemsFilter, value)
       .then( res => {
         let its:Item[] = [];
         res?.map( (item) => { its.push(itemMapper(item)); });
@@ -110,6 +111,7 @@ const TreatmentsDashboardPage = () => {
 
   const handleSubmit = async (item:Item) => {
     item.category = superParent;
+    item.type = ITEM_TYPE.treatment;
     updateAnItem(accessToken, item.id, itemPatcherMapper(item))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
@@ -128,7 +130,7 @@ const TreatmentsDashboardPage = () => {
         setItems(its);
         setDataLoaded(true);
       });
-      getTotalSearchItems(accessToken, query)
+      getTotalSearchItemsWithFilter(accessToken, query, treatmentItemsFilter)
         .then( res => {
           let total = res[0].count? parseInt(res[0].count) : 0;
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
@@ -139,10 +141,6 @@ const TreatmentsDashboardPage = () => {
       setDataLoaded(false);
       fetchAllTreatments();
     }
-  }
-
-  const handleQtyChange = (action:string, item:Item, index:number, qty:number) => {
-
   }
 
   const handleChange = (query:string) => {
@@ -187,7 +185,7 @@ const TreatmentsDashboardPage = () => {
       
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-        { dataLoaded && <ItemListTable handleQtyChange={handleQtyChange} showStock={false} totalPages={totalPages} items={items} setActiveItem={setActiveItem} handlePageChange={handlePageChange} handleModal={handleModal} /> }
+        { dataLoaded && <ItemListTable handleQtyChange={() => {}} showStock={false} totalPages={totalPages} items={items} setActiveItem={setActiveItem} handlePageChange={handlePageChange} handleModal={handleModal} /> }
       </div>
     </>
   );
