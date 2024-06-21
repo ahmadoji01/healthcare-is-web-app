@@ -7,6 +7,9 @@ import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { Order } from "../../domain/order";
 import Currency from "@/components/Currency";
 import moment from "moment";
+import { Pagination } from "@mui/material";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
+import { orderItemDisplayName } from "../../domain/order.specifications";
 
 interface OrderListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -68,8 +71,8 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handlePageChange, 
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
-              <ul>
-                {order.order_items?.map( (item) => <li>- {item.item.name}</li> )}
+              <ul className="list-outside" style={{ listStyle: "auto" }}>
+                {order.order_items?.map( (orderItem) => <li>{orderItemDisplayName(orderItem)}</li> )}
               </ul>
             </div>
 
@@ -103,7 +106,7 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handlePageChange, 
           </div>
         ))}
         <div className="py-3">
-          <PageNav count={totalPages} />
+          <Pagination count={totalPages} />
         </div>
       </div>
     </div>

@@ -70,8 +70,8 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5 text-black dark:text-white w-full">
-              <ul>
-                {record.items?.map( (item) => <li>- {item.items_id.name}</li> )}
+              <ul className="list-outside" style={{ listStyle: "auto" }}>
+                {record.items?.map( (item) => <li>{item.items_id.name}</li> )}
               </ul>
             </div>
             

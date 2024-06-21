@@ -39,7 +39,7 @@ export const getVisitByStatus = (token:string, status = "") =>
 	)
 export const getVisitsWithFilter = (token:string, filter:object, page:number) => 
 	directusClient.request( 
-		withToken(token, readItems('visits', { fields: ['*.*.*'],
+		withToken(token, readItems('visits', { fields: ['*.*.*'], sort: ['sort', '-date_updated'],
 			filter: filter,
 		limit: LIMIT_PER_PAGE, page})) 
 	)
