@@ -119,6 +119,8 @@
     "unit": "Unit",
     "no_order_items": "Any items ordered will appear here",
     "out_of_stock": "Out of Stock",
+    "month": "Month",
+    "year": "Year",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

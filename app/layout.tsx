@@ -1,9 +1,11 @@
 'use client';
 
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { UserProvider, useUserContext } from '@/contexts/user-context'
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { UserProvider, useUserContext } from '@/contexts/user-context';
 import { AlertProvider } from '@/contexts/alert-context';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import Loader from '@/components/Loader';
 import './i18n';
 
@@ -19,17 +21,19 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <UserProvider>
-        <body className={inter.className}>
-          {loading ? (
-            <Loader />
-          ) : (
-            <AlertProvider>
-              {children}
-            </AlertProvider>
-          )}
-        </body>
-      </UserProvider>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <UserProvider>
+          <body className={inter.className}>
+            {loading ? (
+              <Loader />
+            ) : (
+              <AlertProvider>
+                {children}
+              </AlertProvider>
+            )}
+          </body>
+        </UserProvider>
+      </LocalizationProvider>
     </html>
   )
 }

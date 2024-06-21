@@ -10,8 +10,9 @@ import VisitForm from "@/modules/visits/application/form/visit.form";
 import VisitList from "@/modules/visits/application/visit.list";
 import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
-import { statusNotEqual } from "@/modules/visits/domain/visit.specifications";
+import { monthFilter, statusNotEqual, yearFilter } from "@/modules/visits/domain/visit.specifications";
 import { deleteAVisit, getTotalVisits, getVisitsWithFilter, updateVisit } from "@/modules/visits/domain/visits.actions";
+import { DatePicker, MonthCalendar, YearCalendar } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -24,13 +25,26 @@ const VisitsDashboardPage = () => {
   const {t} = useTranslation();
   const [activeVisit, setActiveVisit] = useState(defaultVisit);
   const [visits, setVisits] = useState<Visit[]>([]);
+  const [month, setMonth] = useState(0);
+  const [year, setYear] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const [filter, setFilter] = useState({ _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] })
+  const [filter, setFilter] = useState<object>({ _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] })
+
+  const fetchVisits = (newFilter:object) => {
+    getVisitsWithFilter(accessToken, newFilter, 1)
+      .then( res => {
+        let vits:Visit[] = [];
+        res?.map( (visit) => { vits.push(visitMapper(visit)); });
+        setVisits(vits);
+        setDataLoaded(true);
+      })
+    setFilter(newFilter);
+  }
 
   useEffect( () => {
-    if (!dataLoaded || visits.length == 0) {
+    if (!dataLoaded && visits.length == 0) {
       getVisitsWithFilter(accessToken, filter, 1)
         .then( res => {
           let vits:Visit[] = [];
@@ -94,12 +108,60 @@ const VisitsDashboardPage = () => {
       })
   }
 
+  const onMonthChange = (val:number|undefined) => {
+    let value = 0;
+    if (typeof(val) === "undefined") {
+      value = 0;
+    } else {
+      value = val+1;
+    }
+    setMonth(value);
+    
+    let newFilter:object = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] }
+    if (year !== 0 && value !== 0) {
+      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), monthFilter(value), yearFilter(year) ] }
+    } else if (value === 0 && year !== 0) {
+      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), yearFilter(year) ] }
+    } else if (value !== 0 && year === 0) {
+      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), monthFilter(value) ] }
+    }
+    setDataLoaded(false);
+    fetchVisits(newFilter);
+  }
+
+  const onYearChange = (val:number|undefined) => {
+    let value = 0;
+    if (typeof(val) === "undefined") {
+      value = 0;
+    } else {
+      value = val;
+    }
+
+    setYear(value);
+    
+    let newFilter:object = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] }
+    if (value !== 0 && month !== 0) {
+      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), monthFilter(month), yearFilter(value) ] }
+    } else if (value === 0 && month !== 0) {
+      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), monthFilter(month) ] }
+    } else if (value !== 0 && month === 0) {
+      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), yearFilter(value) ] }
+    }
+    setDataLoaded(false);
+    fetchVisits(newFilter);
+  }
+
   return (
     <>
       <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <VisitForm initVisit={activeVisit} handleSubmit={handleSubmit} /> } title="Visit's Detail" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
       <Breadcrumb pageName="Visits" />
-
+      
+      <div className="flex flex-row gap-3 mb-3">
+        <DatePicker label={t('month')} views={['month']} onChange={ e => onMonthChange(e?.toDate().getMonth()) } />
+        <DatePicker label={t('year')} views={['year']} onChange={ e => onYearChange(e?.toDate().getFullYear()) } />
+      </div>
+      
       <div className="flex flex-col gap-10">
       { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
       { dataLoaded && <VisitList visits={visits} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveVisit={setActiveVisit} /> }
