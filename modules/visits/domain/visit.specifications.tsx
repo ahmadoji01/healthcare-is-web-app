@@ -1,4 +1,5 @@
-import { VISIT_STATUS } from "./visit.constants"
+import { VISIT_STATUS } from "./visit.constants";
+import moment from "moment";
 
 export function statusEquals(status:string) {
     return { status: { _eq: status }  }
@@ -37,4 +38,8 @@ export function monthFilter(month:number):object {
 
 export function yearFilter(year:number):object {
     return { "year(date_updated)": { _eq: year } }
+}
+
+export function dateRangeFilter(from:Date, to:Date) {
+    return { "date_updated": { _between: [moment(from).format("YYYY-MM-DD"), moment(to).format("YYYY-MM-DD")]  } }
 }

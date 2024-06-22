@@ -121,6 +121,8 @@
     "out_of_stock": "Habis",
     "month": "Bulan",
     "year": "Tahun",
+    "from": "Dari",
+    "to": "Sampai",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

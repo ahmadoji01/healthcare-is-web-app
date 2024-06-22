@@ -10,10 +10,11 @@ import OrderListTable from "@/modules/orders/application/list/order.list";
 import { Order, orderMapper } from "@/modules/orders/domain/order";
 import { getAllOrders, getOrdersWithFilter } from "@/modules/orders/domain/order.actions";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
-import { monthFilter, statusFilter, yearFilter } from "@/modules/orders/domain/order.specifications";
+import { dateRangeFilter, monthFilter, statusFilter, yearFilter } from "@/modules/orders/domain/order.specifications";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 
 const OrdersDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -25,12 +26,13 @@ const OrdersDashboardPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [month, setMonth] = useState(0);
-  const [year, setYear] = useState(0);
+  const [fromDate, setFromDate] = useState<Date|null>(null);
+  const [toDate, setToDate] = useState<Date|null>(null);
 
   const [filter, setFilter] = useState<object>({ _and: [ statusFilter(ORDER_STATUS.paid) ] })
 
   const fetchOrders = (newFilter:object) => {
+    setDataLoaded(false);
     getOrdersWithFilter(accessToken, newFilter, 1)
       .then( res => {
         let ords:Order[] = [];
@@ -81,46 +83,29 @@ const OrdersDashboardPage = () => {
       });
   }
 
-  const onMonthChange = (val:number|undefined) => {
-    let value = 0;
+  const onFromChange = (val:Date|undefined) => {
     if (typeof(val) === "undefined") {
-      value = 0;
-    } else {
-      value = val+1;
+      return;
     }
-    setMonth(value);
-    
-    let newFilter:object = { _and: [ statusFilter(ORDER_STATUS.paid) ] };
-    if (year !== 0 && value !== 0) {
-      newFilter = { _and: [ statusFilter(ORDER_STATUS.paid), monthFilter(value), yearFilter(year) ] }
-    } else if (value === 0 && year !== 0) {
-      newFilter = { _and: [ statusFilter(ORDER_STATUS.paid), yearFilter(year) ] }
-    } else if (value !== 0 && year === 0) {
-      newFilter = { _and: [ statusFilter(ORDER_STATUS.paid), monthFilter(value) ] }
+    setFromDate(val);
+
+    if (toDate === null) {
+      return;
     }
-    setDataLoaded(false);
+    let newFilter:object = { _and: [ statusFilter(ORDER_STATUS.paid), dateRangeFilter(val, toDate) ] };
     fetchOrders(newFilter);
   }
 
-  const onYearChange = (val:number|undefined) => {
-    let value = 0;
+  const onToChange = (val:Date|undefined) => {
     if (typeof(val) === "undefined") {
-      value = 0;
-    } else {
-      value = val;
+      return;
     }
-
-    setYear(value);
+    setToDate(val);
     
-    let newFilter:object = { _and: [ statusFilter(ORDER_STATUS.paid) ] };
-    if (value !== 0 && month !== 0) {
-      newFilter = { _and: [ statusFilter(ORDER_STATUS.paid), monthFilter(month), yearFilter(value) ] }
-    } else if (value === 0 && month !== 0) {
-      newFilter = { _and: [ statusFilter(ORDER_STATUS.paid), monthFilter(month) ] }
-    } else if (value !== 0 && month === 0) {
-      newFilter = { _and: [ statusFilter(ORDER_STATUS.paid), yearFilter(value) ] }
+    if (fromDate === null) {
+      return;
     }
-    setDataLoaded(false);
+    let newFilter:object = { _and: [ statusFilter(ORDER_STATUS.paid), dateRangeFilter(fromDate, val) ] };
     fetchOrders(newFilter);
   }
   
@@ -130,8 +115,8 @@ const OrdersDashboardPage = () => {
       <Breadcrumb pageName="Orders" />
       
       <div className="flex flex-row gap-3 mb-3">
-        <DatePicker label={t('month')} views={['month']} onChange={ e => onMonthChange(e?.toDate().getMonth()) } />
-        <DatePicker label={t('year')} views={['year']} onChange={ e => onYearChange(e?.toDate().getFullYear()) } />
+        <DatePicker label={t('from')} onChange={ e => onFromChange(e?.toDate()) } maxDate={moment(toDate)} />
+        <DatePicker label={t('to')} onChange={ e => onToChange(e?.toDate()) } minDate={moment(fromDate)} />
       </div>
 
       <div className="flex flex-col gap-10">

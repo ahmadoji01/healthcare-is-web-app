@@ -121,6 +121,8 @@
     "out_of_stock": "Out of Stock",
     "month": "Month",
     "year": "Year",
+    "from": "From",
+    "to": "To",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

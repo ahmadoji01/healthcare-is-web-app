@@ -5,6 +5,7 @@ import DashboardModal from "@/components/Modal/Modal";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
+import { dateRangeFilter } from "@/modules/orders/domain/order.specifications";
 import VisitDeleteConfirmation from "@/modules/visits/application/form/visit.delete-confirmation";
 import VisitForm from "@/modules/visits/application/form/visit.form";
 import VisitList from "@/modules/visits/application/visit.list";
@@ -15,6 +16,7 @@ import { deleteAVisit, getTotalVisits, getVisitsWithFilter, updateVisit } from "
 import { DatePicker, MonthCalendar, YearCalendar } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 
 const VisitsDashboardPage = () => {
 
@@ -29,6 +31,8 @@ const VisitsDashboardPage = () => {
   const [year, setYear] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [fromDate, setFromDate] = useState<Date|null>(null);
+  const [toDate, setToDate] = useState<Date|null>(null);
 
   const [filter, setFilter] = useState<object>({ _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] })
 
@@ -151,6 +155,32 @@ const VisitsDashboardPage = () => {
     fetchVisits(newFilter);
   }
 
+  const onFromChange = (val:Date|undefined) => {
+    if (typeof(val) === "undefined") {
+      return;
+    }
+    setFromDate(val);
+
+    if (toDate === null) {
+      return;
+    }
+    let newFilter:object = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), dateRangeFilter(val, toDate) ] }
+    fetchVisits(newFilter);
+  }
+
+  const onToChange = (val:Date|undefined) => {
+    if (typeof(val) === "undefined") {
+      return;
+    }
+    setToDate(val);
+    
+    if (fromDate === null) {
+      return;
+    }
+    let newFilter:object = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), dateRangeFilter(fromDate, val) ] }
+    fetchVisits(newFilter);
+  }
+
   return (
     <>
       <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <VisitForm initVisit={activeVisit} handleSubmit={handleSubmit} /> } title="Visit's Detail" />
@@ -158,8 +188,8 @@ const VisitsDashboardPage = () => {
       <Breadcrumb pageName="Visits" />
       
       <div className="flex flex-row gap-3 mb-3">
-        <DatePicker label={t('month')} views={['month']} onChange={ e => onMonthChange(e?.toDate().getMonth()) } />
-        <DatePicker label={t('year')} views={['year']} onChange={ e => onYearChange(e?.toDate().getFullYear()) } />
+        <DatePicker label={t('from')} onChange={ e => onFromChange(e?.toDate()) } maxDate={moment(toDate)} />
+        <DatePicker label={t('to')} onChange={ e => onToChange(e?.toDate()) } minDate={moment(fromDate)} />
       </div>
       
       <div className="flex flex-col gap-10">
