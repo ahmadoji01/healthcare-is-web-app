@@ -123,6 +123,9 @@
     "year": "Year",
     "from": "From",
     "to": "To",
+    "doctor_visited": "Doctor Visited",
+    "visits_date": "Visit's Date",
+    "medicine_treatment": "Medicine/Treatment",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

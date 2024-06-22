@@ -123,6 +123,9 @@
     "year": "Tahun",
     "from": "Dari",
     "to": "Sampai",
+    "doctor_visited": "Dokter yang Dikunjungi",
+    "visits_date": "Tanggal Kunjungan",
+    "medicine_treatment": "Obat/Tindakan",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MedicalRecord } from "../../domain/medical-record";
 import { Pagination } from "@mui/material";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 interface MedicalRecordListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -17,33 +18,35 @@ interface MedicalRecordListTableProps {
 
 const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalPages, handlePageChange, handleModal }: MedicalRecordListTableProps) => {
 
+  const {t} = useTranslation();
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
-          <div className="p-2.5 xl:p-5">
+          <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Patient's Name
+              { t("patients_name") }
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Doctor Visited
+              { t("doctor_visited") }
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Visit Date
+              { t("visits_date") }
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Medicine/Treatment
+              { t("medicine_treatment") }
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Actions
+              { t("actions") }
             </h5>
           </div>
         </div>
@@ -57,19 +60,19 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
             }`}
             key={key}
           >
-            <div className="flex items-center justify p-2.5 xl:p-5">
+            <div className="flex justify p-2.5 xl:p-5">
               <p className="text-black dark:text-white">{record.patient?.name}</p>
             </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
+            <div className="flex justify p-2.5 xl:p-5">
               <p className="text-black dark:text-white">{record.doctor?.name}</p>
             </div>
 
-            <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{moment(record.date_updated).format("MMMM Do YYYY")}</p>
+            <div className="hidden justify-center sm:flex p-2.5 xl:p-5">
+              <p className="text-black dark:text-white">{moment(record.date_updated).format("MMMM Do YYYY")}</p>
             </div>
 
-            <div className="hidden items-center justify p-2.5 sm:flex xl:p-5 text-black dark:text-white w-full">
+            <div className="hidden justify p-2.5 sm:flex xl:p-5 text-black dark:text-white w-full">
               <ul className="list-outside" style={{ listStyle: "auto" }}>
                 {record.items?.map( (item) => <li>{item.items_id.name}</li> )}
               </ul>
@@ -77,7 +80,7 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
             
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
-              <ul className="flex items-center gap-2 2xsm:gap-4">
+              <ul className="flex gap-2 2xsm:gap-4">
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"

@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { statusEquals } from "@/modules/visits/domain/visit.specifications";
 import { dateRangeFilter } from "@/modules/medical-records/domain/medical-record.specifications";
 import { DatePicker } from "@mui/x-date-pickers";
+import MedicalRecordView from "@/modules/medical-records/application/medical-record.view";
 
 const MedicalRecordsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -128,9 +129,9 @@ const MedicalRecordsDashboardPage = () => {
   
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <MedicalRecordForm treatments={activeMedicalRecord.treatments} medicalRecord={activeMedicalRecord} setMedicalRecord={setActiveMedicalRecord} /> } title="Medical Record Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <MedicalRecordView medicalRecord={activeMedicalRecord} /> } title="Medical Record Detail" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <MedicalRecordDeleteConfirmation handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
-      <Breadcrumb pageName="Medical Records" />
+      <Breadcrumb pageName={t("menu.medical_records")} />
 
       <div className="flex flex-row gap-3 mb-3">
         <DatePicker label={t('from')} onChange={ e => onFromChange(e?.toDate()) } maxDate={moment(toDate)} />
