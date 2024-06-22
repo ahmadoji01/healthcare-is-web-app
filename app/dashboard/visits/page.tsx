@@ -27,8 +27,6 @@ const VisitsDashboardPage = () => {
   const {t} = useTranslation();
   const [activeVisit, setActiveVisit] = useState(defaultVisit);
   const [visits, setVisits] = useState<Visit[]>([]);
-  const [month, setMonth] = useState(0);
-  const [year, setYear] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [fromDate, setFromDate] = useState<Date|null>(null);
@@ -37,6 +35,7 @@ const VisitsDashboardPage = () => {
   const [filter, setFilter] = useState<object>({ _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] })
 
   const fetchVisits = (newFilter:object) => {
+    setDataLoaded(false);
     getVisitsWithFilter(accessToken, newFilter, 1)
       .then( res => {
         let vits:Visit[] = [];
@@ -110,49 +109,6 @@ const VisitsDashboardPage = () => {
       }).catch( () => {
         openSnackbarNotification(t('alert_msg.server_error'), "error");
       })
-  }
-
-  const onMonthChange = (val:number|undefined) => {
-    let value = 0;
-    if (typeof(val) === "undefined") {
-      value = 0;
-    } else {
-      value = val+1;
-    }
-    setMonth(value);
-    
-    let newFilter:object = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] }
-    if (year !== 0 && value !== 0) {
-      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), monthFilter(value), yearFilter(year) ] }
-    } else if (value === 0 && year !== 0) {
-      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), yearFilter(year) ] }
-    } else if (value !== 0 && year === 0) {
-      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), monthFilter(value) ] }
-    }
-    setDataLoaded(false);
-    fetchVisits(newFilter);
-  }
-
-  const onYearChange = (val:number|undefined) => {
-    let value = 0;
-    if (typeof(val) === "undefined") {
-      value = 0;
-    } else {
-      value = val;
-    }
-
-    setYear(value);
-    
-    let newFilter:object = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] }
-    if (value !== 0 && month !== 0) {
-      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), monthFilter(month), yearFilter(value) ] }
-    } else if (value === 0 && month !== 0) {
-      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), monthFilter(month) ] }
-    } else if (value !== 0 && month === 0) {
-      newFilter = { _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active), yearFilter(value) ] }
-    }
-    setDataLoaded(false);
-    fetchVisits(newFilter);
   }
 
   const onFromChange = (val:Date|undefined) => {
