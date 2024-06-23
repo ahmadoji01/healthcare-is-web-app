@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MedicalRecord } from "../../domain/medical-record";
 import { Pagination } from "@mui/material";
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 import { useTranslation } from "react-i18next";
+import { DoctorName } from "@/utils/doctor-name-format";
 
 interface MedicalRecordListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -61,15 +62,15 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
             key={key}
           >
             <div className="flex justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{record.patient?.name}</p>
+              <p className="text-meta-3">{record.patient?.name}</p>
             </div>
 
             <div className="flex justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{record.doctor?.name}</p>
+              <p className="text-black dark:text-white">{DoctorName(record.doctor?.name, record.doctor?.specialization)}</p>
             </div>
 
             <div className="hidden justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{moment(record.date_updated).format("MMMM Do YYYY")}</p>
+              <p className="text-black dark:text-white">{moment(record.date_updated).locale("id").format("MMMM Do YYYY")}</p>
             </div>
 
             <div className="hidden justify p-2.5 sm:flex xl:p-5 text-black dark:text-white w-full">

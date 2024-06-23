@@ -179,15 +179,15 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                             className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                                             >
                                             <option value=""></option>
-                                            <option value="uneducated">{ t('uneducated') }</option>
-                                            <option value="elementary">SD</option>
-                                            <option value="junior_secondary">SMP</option>
-                                            <option value="senior_secondary">SMA</option>
-                                            <option value="associate">D3/equivalent</option>
-                                            <option value="bachelor">S1</option>
-                                            <option value="master">S2</option>
-                                            <option value="doctorate">S3</option>
-                                            <option value="postdoctorate">Postdoctorate</option>
+                                            <option value="uneducated">{t('education_levels.uneducated')}</option>
+                                            <option value="elementary">{t('education_levels.elementary')}</option>
+                                            <option value="junior_secondary">{t('education_levels.junior_secondary')}</option>
+                                            <option value="senior_secondary">{t('education_levels.senior_secondary')}</option>
+                                            <option value="associate">{t('education_levels.associate')}</option>
+                                            <option value="bachelor">{t('education_levels.bachelor')}</option>
+                                            <option value="master">{t('education_levels.master')}</option>
+                                            <option value="doctorate">{t('education_levels.doctorate')}</option>
+                                            <option value="postdoctorate">{t('education_levels.postdoctorate')}</option>
                                         </select>
                                     </div>
                                 </div>

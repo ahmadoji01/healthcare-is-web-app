@@ -1,4 +1,5 @@
 export const EDUCATION = {
+    uneducated: 'uneducated',
     elementary: 'elementary',
     junior_secondary: 'junior_secondary',
     senior_secondary: 'senior_secondary',
@@ -6,6 +7,7 @@ export const EDUCATION = {
     bachelor: 'bachelor',
     master: 'master',
     doctorate: 'doctorate',
+    postdoctorate: 'postdoctorate',
 }
 
 export const RELIGION = {

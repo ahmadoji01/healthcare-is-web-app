@@ -11,8 +11,10 @@ interface UserContextType {
     user: User,
     loading: boolean,
     organization: Organization,
+    fontSize: string,
     setUser: Dispatch<SetStateAction<User>>,
     setOrganization: Dispatch<SetStateAction<Organization>>,
+    setFontSize: Dispatch<SetStateAction<string>>,
     fetchOrganization: () => void,
 }
 
@@ -23,8 +25,10 @@ export const UserContext = createContext<UserContextType | null>({
     user: defaultUser,
     loading: false,
     organization: defaultOrganization,
+    fontSize: "100%",
     setUser: () => {},
     setOrganization: () => {},
+    setFontSize: () => {},
     fetchOrganization: () => {},
 });
  
@@ -40,6 +44,7 @@ export const UserProvider = ({
     const [expiry, setExpiry] = useState(50);
     const [user, setUser] = useState(defaultUser);
     const [loading, setLoading] = useState(true);
+    const [fontSize, setFontSize] = useState("100%");
     const [organization, setOrganization] = useState(defaultOrganization);
 
     const refreshToken = async (interval:NodeJS.Timeout, isLooping:boolean) => {
@@ -111,11 +116,18 @@ export const UserProvider = ({
     }, []);
 
     useEffect(() => {
+        let localFontSize = localStorage.getItem("font-size");
+        if (localFontSize !== null) {
+            setFontSize(localFontSize);
+        }
+    }, []);
+    
+    useEffect(() => {
         fetchOrganization();
     }, [pathname])
 
     return (
-        <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading, fetchOrganization }}>
+        <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
             {children}
         </UserContext.Provider>
     );

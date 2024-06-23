@@ -243,5 +243,17 @@
         "active": "Aktif",
         "cancelled": "Dibatalkan",
         "inactive": "Tidak Aktif"
+    },
+    
+    "education_levels": {
+        "uneducated": "Uneducated",
+        "elementary": "SD",
+        "junior_secondary": "SMP",
+        "senior_secondary": "SMA",
+        "associate": "D3/equivalent",
+        "bachelor": "S1",
+        "master": "S2",
+        "doctorate": "S3",
+        "postdoctorate": "Postdoctorate"
     }
 }

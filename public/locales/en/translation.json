@@ -247,5 +247,17 @@
         "active": "Active",
         "cancelled": "Cancelled",
         "inactive": "Inactive"
+    },
+
+    "education_levels": {
+        "uneducated": "Uneducated",
+        "elementary": "Elementary",
+        "junior_secondary": "Junior Secondary",
+        "senior_secondary": "Senior Secondary",
+        "associate": "Associate",
+        "bachelor": "Bachelor",
+        "master": "Master",
+        "doctorate": "Doctor",
+        "postdoctorate": "Postdoctorate"
     }
 }
