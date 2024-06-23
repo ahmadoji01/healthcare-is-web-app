@@ -126,6 +126,12 @@
     "doctor_visited": "Dokter yang Dikunjungi",
     "visits_date": "Tanggal Kunjungan",
     "medicine_treatment": "Obat/Tindakan",
+    "delete": "Hapus",
+    "cancel": "Batal",
+    "this_order": "pesanan ini",
+    "items": "Item",
+    "total": "Total",
+    "ordered_items": "Item yang Dipesan",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
@@ -177,7 +183,7 @@
     },
     "module_app": {
         "item_name": "Nama Item",
-        "delete_confirmation": "Yakin ingin menghapus data ini?",
+        "delete_confirmation": "Yakin ingin menghapus",
         "delete_subtitle": "Data yang berkaitan dengan item ini akan dihapus"
     },
     "alert_msg": {

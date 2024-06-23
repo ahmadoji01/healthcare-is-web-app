@@ -10,6 +10,7 @@ import moment from "moment";
 import { Pagination } from "@mui/material";
 import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { orderItemDisplayName } from "../../domain/order.specifications";
+import { useTranslation } from "react-i18next";
 
 interface OrderListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -19,35 +20,37 @@ interface OrderListTableProps {
   setActiveOrder: Dispatch<SetStateAction<Order|undefined>>
 }
 
-const OrderListTable = ({ orders, setActiveOrder, totalPages, handlePageChange, handleModal }: OrderListTableProps) => {
+const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal }: OrderListTableProps) => {
   
+  const {t} = useTranslation();
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Date
+              { t("date") }
             </h5>
           </div>
-          <div className="p-2.5 xl:p-5">
+          <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm text-center font-medium uppercase xsm:text-base">
-              Name
+              { t("name") }
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Order Items
+              { t("ordered_items") }
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Total
+              { t("total") }
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Actions
+              { t("actions") }
             </h5>
           </div>
         </div>

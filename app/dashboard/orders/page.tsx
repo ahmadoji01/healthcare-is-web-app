@@ -7,21 +7,23 @@ import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { useUserContext } from "@/contexts/user-context";
 import OrderDeleteConfirmation from "@/modules/orders/application/form/order.delete-confirmation";
 import OrderListTable from "@/modules/orders/application/list/order.list";
-import { Order, orderMapper } from "@/modules/orders/domain/order";
-import { getAllOrders, getOrdersWithFilter } from "@/modules/orders/domain/order.actions";
+import { Order, defaultOrder, orderMapper } from "@/modules/orders/domain/order";
+import { deleteAnOrder, getAllOrders, getOrdersWithFilter } from "@/modules/orders/domain/order.actions";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { dateRangeFilter, monthFilter, statusFilter, yearFilter } from "@/modules/orders/domain/order.specifications";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
+import OrderView from "@/modules/orders/application/order.view";
+import DeleteModal from "@/components/Modal/DeleteModal";
 
 const OrdersDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {setSelectedOrder} = useOrderSummaryContext();
+  const {selectedOrder, setSelectedOrder} = useOrderSummaryContext();
   const {t} = useTranslation();
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -83,6 +85,20 @@ const OrdersDashboardPage = () => {
       });
   }
 
+  const handleDelete = () => {
+    if (typeof(selectedOrder) === 'undefined') {
+      return;
+    }
+
+    deleteAnOrder(accessToken, selectedOrder.id)
+      .then( () => {
+        openSnackbarNotification(t('alert_msg.success'), "success");
+        window.location.reload();
+      }).catch( () => {
+        openSnackbarNotification(t('alert_msg.server_error'), "error");
+      })
+  }
+
   const onFromChange = (val:Date|undefined) => {
     if (typeof(val) === "undefined") {
       return;
@@ -111,7 +127,8 @@ const OrdersDashboardPage = () => {
   
   return (
     <>
-      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <OrderDeleteConfirmation handleClose={ () => handleModal(true, false)} /> } title="" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, false) } children={ <OrderView order={selectedOrder ? selectedOrder : defaultOrder} />} title="" />
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DeleteModal name={t("this_order")} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName="Orders" />
       
       <div className="flex flex-row gap-3 mb-3">

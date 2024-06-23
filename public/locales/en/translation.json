@@ -126,6 +126,12 @@
     "doctor_visited": "Doctor Visited",
     "visits_date": "Visit's Date",
     "medicine_treatment": "Medicine/Treatment",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "this_order": "this order",
+    "items": "Items",
+    "total": "Total",
+    "ordered_items": "Ordered Items",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
@@ -179,7 +185,7 @@
 
     "module_app": {
         "item_name": "Item Name",
-        "delete_confirmation": "Are you sure you want to delete this data?",
+        "delete_confirmation": "Are you sure you want to delete",
         "delete_subtitle": "Any related data to this item will be deleted"
     },
 
