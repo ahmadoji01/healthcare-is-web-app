@@ -231,7 +231,8 @@
         "my_profile": "Profil Saya",
         "dashboard": "Dasbor",
         "queue_manager": "Pengelola Antrian",
-        "patients_list": "Daftar Pasien"
+        "patients_list": "Daftar Pasien",
+        "subscription": "Langganan"
     },
 
     "visits_status": {

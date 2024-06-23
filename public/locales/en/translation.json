@@ -235,7 +235,8 @@
         "my_profile": "My Profile",
         "dashboard": "Dashboard",
         "queue_manager": "Queue Manager",
-        "patients_list": "Patients List"
+        "patients_list": "Patients List",
+        "subscription": "Subscription"
     },
 
     "visits_status": {

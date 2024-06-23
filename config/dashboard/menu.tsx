@@ -1,6 +1,6 @@
 import { ROLES } from "@/modules/users/domain/users.constants";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faCashRegister, faClinicMedical, faClipboard, faClock, faCreditCard, faDashboard, faFileImport, faFileMedical, faHospitalUser, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faTimes, faUser, faUserDoctor, faUserInjured, faUsers, faUsersBetweenLines } from "@fortawesome/free-solid-svg-icons";
+import { faCashRegister, faClinicMedical, faClipboard, faClock, faCreditCard, faDashboard, faFileImport, faFileMedical, faHospitalUser, faNewspaper, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faTimes, faUser, faUserDoctor, faUserInjured, faUsers, faUsersBetweenLines } from "@fortawesome/free-solid-svg-icons";
 
 interface SubMenuItem {
     title: string,
@@ -140,6 +140,13 @@ export const sidebarMenuItems: MenuGroup[] = [
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faNoteSticky,
                 url: "administration",
+                subMenu: [],
+            },
+            {
+                title: "menu.subscription",
+                allowedRole: [ROLES.administrator, ROLES.staff],
+                icon: faNewspaper,
+                url: "subscription",
                 subMenu: [],
             },
             {
