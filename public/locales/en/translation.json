@@ -130,11 +130,14 @@
     "cancel": "Cancel",
     "this_order": "this order",
     "this_patient": "this patient",
+    "this_visit": "this visit",
     "items": "Items",
     "total": "Total",
     "ordered_items": "Ordered Items",
     "patients": "Patients",
     "patients_detail": "Patient's Detail",
+    "patients_information": "Patient's Information",
+    "visits_detail": "Visit's Detail",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
@@ -233,5 +236,16 @@
         "dashboard": "Dashboard",
         "queue_manager": "Queue Manager",
         "patients_list": "Patients List"
+    },
+
+    "visits_status": {
+        "waiting": "Waiting",
+        "temporary_leave": "Temporary Leave",
+        "examining": "Examining",
+        "examined": "Examined",
+        "to_be_examined": "To be Examined",
+        "active": "Active",
+        "cancelled": "Cancelled",
+        "inactive": "Inactive"
     }
 }

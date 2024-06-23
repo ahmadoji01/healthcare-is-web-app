@@ -12,7 +12,7 @@ interface VisitFormProps {
 }
 
 const VisitForm = ({ initVisit, handleSubmit }:VisitFormProps) => {
-    const [visit, setVisit] = useState(initVisit);console.log(initVisit);
+    const [visit, setVisit] = useState(initVisit);
 
     return (
         <>

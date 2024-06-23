@@ -20,7 +20,7 @@ interface OrderListTableProps {
   setActiveOrder: Dispatch<SetStateAction<Order|undefined>>
 }
 
-const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal }: OrderListTableProps) => {
+const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal, handlePageChange }: OrderListTableProps) => {
   
   const {t} = useTranslation();
 
@@ -109,7 +109,7 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal }: Ord
           </div>
         ))}
         <div className="py-3">
-          <Pagination count={totalPages} />
+          <Pagination count={totalPages} onChange={handlePageChange} />
         </div>
       </div>
     </div>

@@ -130,11 +130,14 @@
     "cancel": "Batal",
     "this_order": "pesanan ini",
     "this_patient": "pasien ini",
+    "this_visit": "kunjungan ini",
     "items": "Item",
     "total": "Total",
     "ordered_items": "Item yang Dipesan",
     "patients": "Pasien",
     "patients_detail": "Detail Pasien",
+    "patients_information": "Informasi Pasien",
+    "visits_detail": "Detail Kunjungan",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
@@ -229,5 +232,16 @@
         "dashboard": "Dasbor",
         "queue_manager": "Pengelola Antrian",
         "patients_list": "Daftar Pasien"
+    },
+
+    "visits_status": {
+        "waiting": "Menunggu",
+        "temporary_leave": "Keluar Sementara",
+        "examining": "Sedang Diperiksa",
+        "examined": "Sudah Diperiksa",
+        "to_be_examined": "Akan Diperiksa",
+        "active": "Aktif",
+        "cancelled": "Dibatalkan",
+        "inactive": "Tidak Aktif"
     }
 }

@@ -17,6 +17,8 @@ import { DatePicker, MonthCalendar, YearCalendar } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
+import VisitView from "@/modules/visits/application/form/visit.view";
+import DeleteModal from "@/components/Modal/DeleteModal";
 
 const VisitsDashboardPage = () => {
 
@@ -139,8 +141,8 @@ const VisitsDashboardPage = () => {
 
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <VisitForm initVisit={activeVisit} handleSubmit={handleSubmit} /> } title="Visit's Detail" />
-      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <VisitView visit={activeVisit} /> } title={t("visits_detail")} />
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DeleteModal name={t("this_visit")} handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
       <Breadcrumb pageName="Visits" />
       
       <div className="flex flex-row gap-3 mb-3">
