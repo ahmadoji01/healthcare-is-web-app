@@ -42,6 +42,7 @@ import { useTranslation } from 'react-i18next';
 import { DoctorName } from '@/utils/doctor-name-format';
 import { defaultDoctor } from '@/modules/doctors/domain/doctor';
 import { useFrontDeskContext } from '@/contexts/front-desk-context';
+import DeleteModal from '@/components/Modal/DeleteModal';
 
 interface BoardSectionListProps {
   handleSubmit: (checkup:PhysicalCheckup) => void,
@@ -216,7 +217,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
             <PhysicalCheckupForm patient={activePatient} initCheckup={defaultPhysicalCheckup} handleSubmit={handleSubmit} />
           </>
         </QueueModal>
-        <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <VisitDeleteConfirmation handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
+        <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DeleteModal name={t("this_visit")} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
