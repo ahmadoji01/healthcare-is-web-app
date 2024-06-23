@@ -129,9 +129,12 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "this_order": "this order",
+    "this_patient": "this patient",
     "items": "Items",
     "total": "Total",
     "ordered_items": "Ordered Items",
+    "patients": "Patients",
+    "patients_detail": "Patient's Detail",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

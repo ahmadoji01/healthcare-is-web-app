@@ -129,9 +129,12 @@
     "delete": "Hapus",
     "cancel": "Batal",
     "this_order": "pesanan ini",
+    "this_patient": "pasien ini",
     "items": "Item",
     "total": "Total",
     "ordered_items": "Item yang Dipesan",
+    "patients": "Pasien",
+    "patients_detail": "Detail Pasien",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

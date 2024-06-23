@@ -1,6 +1,7 @@
 'use client';
 
 import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
+import DeleteModal from "@/components/Modal/DeleteModal";
 import DashboardModal from "@/components/Modal/Modal";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
@@ -128,9 +129,9 @@ const PatientsDashboardPage = () => {
 
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm initPatient={activePatient} handleSubmit={handleSubmit} /> } title="Patient's Detail" />
-      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <PatientDeleteConfirmation patient={activePatient} handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
-      <Breadcrumb pageName="Patients" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <PatientForm initPatient={activePatient} handleSubmit={handleSubmit} /> } title={ t("patients_detail") } />
+      <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DeleteModal name={t("this_patient")} handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
+      <Breadcrumb pageName={t("patients")} />
       
       <div className="relative mb-4">
         <button className="absolute left-0 top-1/2 -translate-y-1/2" onClick={() => handleChange(searchQuery)}>

@@ -1,11 +1,12 @@
 import { Patient } from "@/modules/patients/domain/patient";
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Pagination } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
+import { useTranslation } from "react-i18next";
 
 interface PatientListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -17,33 +18,35 @@ interface PatientListTableProps {
 
 const PatientListTable = ({ handleModal, patients, totalPages, handlePageChange, setActivePatient }: PatientListTableProps) => {
 
+  const {t} = useTranslation();
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
-          <div className="p-2.5 xl:p-5">
+          <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Full Name
+              { t("full_name") }
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              NIK/KK
+              { t("resident_number_or_family_id_number") }
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Birthday
+              { t("birthday") }
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Address
+              { t("address") }
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Actions
+              { t("actions") }
             </h5>
           </div>
         </div>
@@ -66,7 +69,7 @@ const PatientListTable = ({ handleModal, patients, totalPages, handlePageChange,
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{moment(patient.birthday).format("MMMM Do YYYY")}</p>
+              <p className="text-meta-3">{moment(patient.birthday).locale("id").format("MMMM Do YYYY")}</p>
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
