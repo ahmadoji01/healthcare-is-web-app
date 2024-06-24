@@ -4,10 +4,8 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { Task } from '../types';
 import TaskItem from './TaskItem';
 import SortableTaskItem from './SortableTaskItem';
-import { useVisitContext } from '@/contexts/visit-context';
 import { Visit } from '@/modules/visits/domain/visit';
 
 type BoardSectionProps = {

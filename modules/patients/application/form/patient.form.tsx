@@ -38,7 +38,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         name="name"
                                         onChange={ e => setPatient({ ...patient, name: e.target.value })}
                                         placeholder={ t('input_full_name') }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
@@ -52,7 +52,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                             defaultValue={moment(patient.birthday).format("YYYY-MM-DD")}
                                             onChange={ e => setPatient({ ...patient, birthday: new Date(e.target.value) })}
                                             required
-                                            className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                            className="text-black dark:text-white custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                             />
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                             name="gender"
                                             onChange={ e => setPatient({ ...patient, gender: e.target.value })} 
                                             required 
-                                            className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
+                                            className="text-black dark:text-white relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                                             >
                                             <option value=""></option>
                                             <option value="male">{ t('male') }</option>
@@ -84,7 +84,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                             name="marrital_status"
                                             onChange={ e => setPatient({ ...patient, marrital_status: e.target.value }) }
                                             required 
-                                            className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
+                                            className="text-black dark:text-white relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                                             >
                                             <option value=""></option>
                                             <option value="single">{ t('single') }</option>
@@ -113,7 +113,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         onChange={ e => setPatient({ ...patient, family_id_number: e.target.value }) }
                                         type="text"
                                         placeholder={ t('input_family_id') }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
@@ -126,7 +126,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         onChange={ e => setPatient({ ...patient, fathers_name: e.target.value }) }
                                         type="text"
                                         placeholder={ t('input_fathers_name') }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
@@ -139,7 +139,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         onChange={ e => setPatient({ ...patient, mothers_name: e.target.value }) }
                                         type="text"
                                         placeholder={ t('input_mothers_name') }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                             </div>
@@ -163,7 +163,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         type="text"
                                         required
                                         placeholder={ t('input_occupation') }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
@@ -176,7 +176,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                             required
                                             defaultValue={patient.education}
                                             onChange={ e => setPatient({ ...patient, education: e.target.value }) }
-                                            className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
+                                            className="text-black dark:text-white text-black dark:text-white relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                                             >
                                             <option value=""></option>
                                             <option value="uneducated">{t('education_levels.uneducated')}</option>
@@ -212,7 +212,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         onChange={ e => setPatient({ ...patient, id_card_number: e.target.value }) }
                                         required
                                         placeholder={ t('input_resident_number') }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
@@ -226,7 +226,7 @@ const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
                                         onChange={ e => setPatient({ ...patient, address: e.target.value }) }
                                         required
                                         placeholder={ t('input_address') }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                             </div>

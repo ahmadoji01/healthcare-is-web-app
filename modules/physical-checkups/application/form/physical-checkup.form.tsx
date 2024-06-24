@@ -39,9 +39,9 @@ const PhysicalCheckupForm = ({ patient, initCheckup, handleSubmit }:PhysicalChec
                                     required
                                     onChange={ e => setCheckup({ ...checkup, height: e.target.valueAsNumber })}
                                     placeholder={t("height_placeholder")}
-                                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                    className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                     />
-                                <p className="w-11/12 py-3 px-3">Cms</p>
+                                <p className="text-black dark:text-white w-11/12 py-3 px-3">{t("cms")}</p>
                             </div>
                         </div>
                         <div>
@@ -55,9 +55,9 @@ const PhysicalCheckupForm = ({ patient, initCheckup, handleSubmit }:PhysicalChec
                                     required
                                     onChange={ e => setCheckup({ ...checkup, weight: e.target.valueAsNumber })}
                                     placeholder={t("weight_placeholder")}
-                                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                    className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                     />
-                                <p className="w-11/12 py-3 px-3">Kgs</p>
+                                <p className="text-black dark:text-white w-11/12 py-3 px-3">{t("kgs")}</p>
                             </div>
                         </div>
                         <div>
@@ -72,9 +72,9 @@ const PhysicalCheckupForm = ({ patient, initCheckup, handleSubmit }:PhysicalChec
                                     onChange={ e => setCheckup({ ...checkup, tension: e.target.value })}
                                     pattern="[0-9/]*"
                                     placeholder={t("tension_placeholder")}
-                                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                    className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                     />
-                                <p className="w-11/12 py-3 px-3">mmHg</p>
+                                <p className="text-black dark:text-white w-11/12 py-3 px-3">mmHg</p>
                             </div>
                         </div>
                         <div>
@@ -87,7 +87,7 @@ const PhysicalCheckupForm = ({ patient, initCheckup, handleSubmit }:PhysicalChec
                                 required
                                 onChange={ e => setCheckup({ ...checkup, complaint: e.target.value })}
                                 placeholder={t("brief_complaint_placeholder")}
-                                className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 />
                         </div>
                     </div>

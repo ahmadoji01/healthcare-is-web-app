@@ -43,6 +43,8 @@ import { DoctorName } from '@/utils/doctor-name-format';
 import { defaultDoctor } from '@/modules/doctors/domain/doctor';
 import { useFrontDeskContext } from '@/contexts/front-desk-context';
 import DeleteModal from '@/components/Modal/DeleteModal';
+import { Visit } from '@/modules/visits/domain/visit';
+import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
 
 interface BoardSectionListProps {
   handleSubmit: (checkup:PhysicalCheckup) => void,
@@ -60,6 +62,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
 
   const [activeTaskId, setActiveTaskId] = useState<null | number>(null);
   const [prevContainer, setPrevContainer] = useState("");
+  const [visitsOnQueue, setVisitsOnQueue] = useState(true);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -70,6 +73,13 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
 
   useEffect( () => {
     setBoardSections(initializeBoard(doctorVisits));
+    let visits = doctorVisits.find( visit => (visit.status === VISIT_STATUS.waiting || visit.status === VISIT_STATUS.temporary_leave));
+    console.log(visits);
+    if (typeof(visits) === 'undefined') {
+      setVisitsOnQueue(false);
+    } else {
+      setVisitsOnQueue(true);
+    }
   }, [doctorVisits])
 
   const handleDragStart = ({ active }: DragStartEvent) => {
@@ -181,7 +191,6 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
 
   const { editModalOpen, deleteModalOpen, handleModal } = useDataModalContext();
   const { activeDoctor } = useFrontDeskContext();
-  const [doctor, setDoctor] = useState(defaultDoctor);
 
   const handleDelete = () => {
     deleteAVisit(accessToken, activeVisit.id)
@@ -210,6 +219,16 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
           </Link>
         </div>
       </div>
+      {
+        !visitsOnQueue &&
+          <div className="mt-2 flex flex-col gap-y-4 rounded-sm p-3 shadow-default sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h3 className="pl-2 text-title-lg font-semibold text-black dark:text-white">
+                {t("no_visit_for_this_doctor_yet")}
+              </h3>
+            </div>
+          </div>
+      }
       <div className="grid grid-cols-1 gap-7.5 grid-cols-2">
         <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } title={t("front_desk.initial_checkup")} queueNumber={activeVisit.queue_number} patientName={activePatient.name}>
           <>

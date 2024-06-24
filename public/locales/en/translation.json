@@ -145,6 +145,10 @@
     "with_exam_fee_and_tax": "With Exam Fee and Tax",
     "print_order_document": "Print Order Document",
     "orders": "Orders",
+    "doctors_detail": "Doctor's Detail",
+    "cms": "Centimeters",
+    "kgs": "Kilograms",
+    "no_visit_for_this_doctor_yet": "No incoming visit for this doctor yet. Please wait for a while",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

@@ -134,9 +134,9 @@ const DoctorsDashboardPage = () => {
 
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <DoctorForm initDoctor={activeDoctor} handleSubmit={handleSubmit} /> } title="Doctor's Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <DoctorForm initDoctor={activeDoctor} handleSubmit={handleSubmit} /> } title={t("doctors_detail")} />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DoctorDeleteConfirmation doctor={activeDoctor} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
-      <Breadcrumb pageName="Doctors" />
+      <Breadcrumb pageName={t("doctors")} />
 
       <div className="relative mb-4">
         <button className="absolute left-0 top-1/2 -translate-y-1/2" onClick={() => handleChange(searchQuery)}>

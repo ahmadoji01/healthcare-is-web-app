@@ -23,7 +23,7 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                                 <h3 className="font-medium text-black dark:text-white">
-                                    Personal Information
+                                    {t('personal_information')}
                                 </h3>
                             </div>
                             <div className="flex flex-col gap-5.5 p-6.5">
@@ -37,7 +37,7 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                                         required
                                         onChange={ e => setDoctor({ ...doctor, name: e.target.value })}
                                         placeholder={ t("input_doctors_name") }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
@@ -50,7 +50,7 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                                             defaultValue={moment(doctor.birthday).format('YYYY-MM-DD')}
                                             required
                                             onChange={ e => setDoctor({ ...doctor, birthday: new Date(e.target.value) })}
-                                            className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                            className="text-black dark:text-white custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                             />
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                                             defaultValue={doctor.gender}
                                             required
                                             onChange={ e => setDoctor({ ...doctor, gender: e.target.value })}    
-                                            className="celative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
+                                            className="text-black dark:text-white relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
                                             <option value="male">{ t("male") }</option>
                                             <option value="female">{ t("female") }</option>
                                         </select>
@@ -78,7 +78,7 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                                             defaultValue={doctor.marrital_status}
                                             required
                                             onChange={ e => setDoctor({ ...doctor, marrital_status: e.target.value })}     
-                                            className="celative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
+                                            className="text-black dark:text-white relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
                                             <option value="single">{ t("single") }</option>
                                             <option value="married">{ t("married") }</option>
                                             <option value="divorced">{ t("divorced") }</option>
@@ -95,7 +95,7 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                                         onChange={ e => setDoctor({ ...doctor, address: e.target.value }) }
                                         required
                                         placeholder={ t("input_doctors_address") }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                             </div>
@@ -118,7 +118,7 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                                         onChange={ e => setDoctor({ ...doctor, license_number: e.target.value }) }
                                         required
                                         placeholder={ t("input_doctors_license_number") }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
@@ -130,7 +130,7 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                                             defaultValue={doctor.education}
                                             required
                                             onChange={ e => setDoctor({ ...doctor, education: e.target.value })}     
-                                            className="celative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
+                                            className="text-black dark:text-white relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
                                             <option value="general">{ t("general") }</option>
                                             <option value="specialist">{ t("specialist") }</option>
                                         </select>
@@ -146,7 +146,7 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                                         onChange={ e => setDoctor({ ...doctor, specialization: e.target.value }) }
                                         required
                                         placeholder={ t("input_doctors_specialization") }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                             </div>

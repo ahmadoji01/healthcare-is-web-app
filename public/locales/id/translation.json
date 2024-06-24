@@ -145,6 +145,10 @@
     "with_exam_fee_and_tax": "Dengan Pemeriksaan dan Pajak",
     "print_order_document": "Cetak Dokumen Pesanan",
     "orders": "Pesanan",
+    "doctors_detail": "Detail Dokter",
+    "cms": "Sentimeter",
+    "kgs": "Kilogram",
+    "no_visit_for_this_doctor_yet": "Belum ada kunjungan untuk dokter ini. Harap tunggu sebentar",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
