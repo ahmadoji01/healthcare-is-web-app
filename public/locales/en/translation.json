@@ -143,6 +143,7 @@
     "item_name": "Item Name",
     "subtotal": "Subtotal",
     "with_exam_fee_and_tax": "With Exam Fee and Tax",
+    "print_order_document": "Print Order Document",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
@@ -211,7 +212,8 @@
         "no_payment_selected": "Choose the payment method first!",
         "payment_received": "Payment has been received!",
         "clinic_is_close": "Clinic is close now. Wait until it's open!",
-        "add_item_first": "Add an item first to check this order out!"
+        "add_item_first": "Add an item first to check this order out!",
+        "choose_date_first": "Choose the correct date range first"
     },
 
     "menu": {

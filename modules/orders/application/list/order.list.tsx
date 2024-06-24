@@ -8,7 +8,6 @@ import { Order } from "../../domain/order";
 import Currency from "@/components/Currency";
 import moment from "moment";
 import { Pagination } from "@mui/material";
-import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { orderItemDisplayName } from "../../domain/order.specifications";
 import { useTranslation } from "react-i18next";
 

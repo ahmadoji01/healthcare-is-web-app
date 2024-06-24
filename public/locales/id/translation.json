@@ -143,6 +143,7 @@
     "item_name": "Nama Item",
     "subtotal": "Subtotal",
     "with_exam_fee_and_tax": "Dengan Pemeriksaan dan Pajak",
+    "print_order_document": "Cetak Dokumen Pesanan",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
@@ -208,7 +209,8 @@
         "no_payment_selected": "Pilih salah satu metode pembayaran terlebih dahulu!",
         "payment_received": "Pembayaran telah diterima!",
         "clinic_is_close": "Klinik saat ini tutup. Harap tunggu sampai buka!",
-        "add_item_first": "Tambahkan minimal satu item dulu untuk menyelesaikan pesanan ini!"
+        "add_item_first": "Tambahkan minimal satu item dulu untuk menyelesaikan pesanan ini!",
+        "choose_date_first": "Pilih rentang tanggal pemesanan dulu!"
     },
     "menu": {
         "patient_header": "PASIEN",

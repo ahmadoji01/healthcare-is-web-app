@@ -7,20 +7,32 @@ import { Dispatch, SetStateAction, createContext, useContext, useState } from 'r
 
 interface DocumentContextType {
     orderDocument: Order,
-    visit: Visit,
+    ordersDocument: Order[],
+    visitDocument: Visit,
     orderItemsDocument: OrderItem[],
+    from: string,
+    to: string,
     setOrderDocument: Dispatch<SetStateAction<Order>>,
-    setVisit: Dispatch<SetStateAction<Visit>>,
+    setOrdersDocument: Dispatch<SetStateAction<Order[]>>,
+    setVisitDocument: Dispatch<SetStateAction<Visit>>,
     setOrderItemsDocument: Dispatch<SetStateAction<OrderItem[]>>,
+    setFrom: Dispatch<SetStateAction<string>>,
+    setTo: Dispatch<SetStateAction<string>>,
 }
 
 export const DocumentContext = createContext<DocumentContextType | null>({
     orderDocument: defaultOrder,
-    visit: defaultVisit,
+    ordersDocument: [],
+    visitDocument: defaultVisit,
     orderItemsDocument: [],
+    from: "",
+    to: "",
     setOrderDocument: () => {},
-    setVisit: () => {},
+    setOrdersDocument: () => {},
+    setVisitDocument: () => {},
     setOrderItemsDocument: () => {},
+    setFrom: () => {},
+    setTo: () => {},
 });
 
 export const DocumentProvider = ({
@@ -29,18 +41,27 @@ export const DocumentProvider = ({
     children: React.ReactNode;
 }) => {
   const [orderDocument, setOrderDocument] = useState(defaultOrder);
-  const [visit, setVisit] = useState(defaultVisit);
+  const [ordersDocument, setOrdersDocument] = useState<Order[]>([]);
+  const [visitDocument, setVisitDocument] = useState(defaultVisit);
   const [orderItemsDocument, setOrderItemsDocument] = useState([defaultOrderItem]);
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   return (
     <DocumentContext.Provider
       value={{
         orderDocument,
-        visit,
+        ordersDocument,
+        visitDocument,
         orderItemsDocument,
+        from,
+        to,
         setOrderDocument,
-        setVisit,
+        setOrdersDocument,
+        setVisitDocument,
         setOrderItemsDocument,
+        setFrom,
+        setTo,
       }}
     >
       {children}

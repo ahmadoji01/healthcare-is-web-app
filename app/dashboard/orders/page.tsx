@@ -8,17 +8,22 @@ import { useUserContext } from "@/contexts/user-context";
 import OrderDeleteConfirmation from "@/modules/orders/application/form/order.delete-confirmation";
 import OrderListTable from "@/modules/orders/application/list/order.list";
 import { Order, defaultOrder, orderMapper } from "@/modules/orders/domain/order";
-import { deleteAnOrder, getAllOrders, getOrdersWithFilter } from "@/modules/orders/domain/order.actions";
+import { deleteAnOrder, getAllOrders, getAllOrdersWithFilter, getOrdersWithFilter } from "@/modules/orders/domain/order.actions";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { dateRangeFilter, monthFilter, statusFilter, yearFilter } from "@/modules/orders/domain/order.specifications";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 import OrderView from "@/modules/orders/application/order.view";
 import DeleteModal from "@/components/Modal/DeleteModal";
 import { useDocumentContext } from "@/contexts/document-context";
 import { useRouter } from "next/navigation";
+import SubmitButton from "@/components/Dashboard/Submit";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPrint } from "@fortawesome/free-solid-svg-icons";
+import Spinner from "@/components/Spinner";
+import MiniSpinner from "@/components/MiniSpinner";
 
 const OrdersDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -28,10 +33,11 @@ const OrdersDashboardPage = () => {
   const router = useRouter();
   const {selectedOrder, setSelectedOrder} = useOrderSummaryContext();
   const {t} = useTranslation();
-  const {setOrderDocument} = useDocumentContext();
+  const {setOrderDocument, setOrdersDocument, setFrom, setTo} = useDocumentContext();
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [printLoading, setPrintLoading] = useState(false);
   const [fromDate, setFromDate] = useState<Date|null>(null);
   const [toDate, setToDate] = useState<Date|null>(null);
 
@@ -130,9 +136,35 @@ const OrdersDashboardPage = () => {
   }
 
   const handleDocument = (order:Order) => {
-    console.log(order);
     setOrderDocument(order);
     router.push("/documents/order");
+  }
+  
+  const handlePrintDocument = async () => {
+    if (fromDate === null || toDate === null) {
+      openSnackbarNotification(t('alert_msg.choose_date_first'), 'error');
+      return;
+    }
+
+    let isError = false;
+    let ords:Order[] = [];
+    let filter:object = { _and: [ statusFilter(ORDER_STATUS.paid), dateRangeFilter(fromDate, toDate) ] };
+    setPrintLoading(true);
+    await getAllOrdersWithFilter(accessToken, filter)
+      .then( res => {
+        res?.map( (order) => { ords.push(orderMapper(order)); });
+      })
+      .catch( () => isError = true)
+
+    if (isError) {
+      openSnackbarNotification(t('alert_msg.server_error'), 'error'); 
+      return;
+    }
+
+    setOrdersDocument(ords);
+    setFrom(moment(fromDate).locale('id').format("Do MMMM YYYY"));
+    setTo(moment(toDate).locale('id').format("Do MMMM YYYY"));
+    router.push('/documents/orders');
   }
   
   return (
@@ -144,6 +176,13 @@ const OrdersDashboardPage = () => {
       <div className="flex flex-row gap-3 mb-3">
         <DatePicker label={t('from')} onChange={ e => onFromChange(e?.toDate()) } maxDate={moment(toDate)} />
         <DatePicker label={t('to')} onChange={ e => onToChange(e?.toDate()) } minDate={moment(fromDate)} />
+        <button 
+          onClick={handlePrintDocument}
+          className="sticky bottom-0 z-50 w-100 justify-center rounded bg-primary py-3 px-1 font-medium text-xl text-gray">
+          { printLoading && <MiniSpinner size={8} /> }
+          <FontAwesomeIcon width={18} height={18} icon={faPrint} className="mr-2" />
+          {t('print_order_document')}
+        </button>
       </div>
 
       <div className="flex flex-col gap-10">
