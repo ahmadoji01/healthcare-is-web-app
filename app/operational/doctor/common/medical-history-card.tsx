@@ -15,7 +15,7 @@ const MedicalHistoryCard = ({ medicalRecord }:MedicalHistoryCardProps) => {
             <div className="relative flex cursor-move justify-between">
                 <div>
                     <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{ t('visit_date') }</h5>
-                    <p>{ moment(medicalRecord.date_updated).format("MMMM Do YYYY") }</p>
+                    <p>{ moment(medicalRecord.date_updated).format("Do MMMM YYYY") }</p>
                     { medicalRecord.medicines?.length > 0 && <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{ t('medicines') }:</h5> }
                     <p>
                         <ul>

@@ -64,7 +64,7 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
           >
             <div className="flex items-center gap-3 p-2.5 xl:p-5">
               <p className="hidden text-black dark:text-white sm:block">
-                { moment(visit.date_created).locale('id').format("MMMM Do YYYY") }
+                { moment(visit.date_created).locale('id').format("Do MMMM YYYY") }
               </p>
             </div>
 

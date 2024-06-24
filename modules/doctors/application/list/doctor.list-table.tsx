@@ -70,7 +70,7 @@ const DoctorListTable = ({ handleModal, doctors, totalPages, handlePageChange, s
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{moment(doctor.birthday).format("MMMM Do YYYY")}</p>
+              <p className="text-meta-3">{moment(doctor.birthday).format("Do MMMM YYYY")}</p>
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">

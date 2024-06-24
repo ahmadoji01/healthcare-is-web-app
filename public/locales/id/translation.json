@@ -138,6 +138,11 @@
     "patients_detail": "Detail Pasien",
     "patients_information": "Informasi Pasien",
     "visits_detail": "Detail Kunjungan",
+    "order_detail": "Detail Pesanan",
+    "order_date": "Tanggal Pesanan",
+    "item_name": "Nama Item",
+    "subtotal": "Subtotal",
+    "with_exam_fee_and_tax": "Dengan Pemeriksaan dan Pajak",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

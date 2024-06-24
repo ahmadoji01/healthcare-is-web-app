@@ -138,6 +138,11 @@
     "patients_detail": "Patient's Detail",
     "patients_information": "Patient's Information",
     "visits_detail": "Visit's Detail",
+    "order_detail": "Order Detail",
+    "order_date": "Order Date",
+    "item_name": "Item Name",
+    "subtotal": "Subtotal",
+    "with_exam_fee_and_tax": "With Exam Fee and Tax",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

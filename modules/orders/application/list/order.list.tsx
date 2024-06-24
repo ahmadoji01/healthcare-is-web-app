@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPencil, faPrint, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
@@ -17,10 +17,11 @@ interface OrderListTableProps {
   orders: Order[],
   totalPages: number,
   handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void,
-  setActiveOrder: Dispatch<SetStateAction<Order|undefined>>
+  setActiveOrder: Dispatch<SetStateAction<Order|undefined>>,
+  handleDocument?: (order:Order) => void,
 }
 
-const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal, handlePageChange }: OrderListTableProps) => {
+const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal, handlePageChange, handleDocument }: OrderListTableProps) => {
   
   const {t} = useTranslation();
 
@@ -66,7 +67,7 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal, handl
           >
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{ moment(order.date_updated).format("MMMM Do YYYY") }</p>
+              <p className="text-black dark:text-white">{ moment(order.date_updated).format("Do MMMM YYYY") }</p>
             </div>
 
             <div className="flex items-center justify p-2.5 xl:p-5">
@@ -94,6 +95,18 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal, handl
                     <FontAwesomeIcon width={18} height={18} icon={faPencil} />
                   </Link>
                 </motion.li>
+                { handleDocument &&
+                  <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
+                    <Link
+                      href="/documents/order"
+                      onClick={() => { handleDocument(order) }}
+                      style={{ background: "blue" }}
+                      className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                      >
+                      <FontAwesomeIcon width={18} height={18} icon={faPrint} style={{ color: 'white' }} />
+                    </Link>
+                  </motion.li>
+                }
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"

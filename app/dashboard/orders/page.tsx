@@ -17,14 +17,18 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import OrderView from "@/modules/orders/application/order.view";
 import DeleteModal from "@/components/Modal/DeleteModal";
+import { useDocumentContext } from "@/contexts/document-context";
+import { useRouter } from "next/navigation";
 
 const OrdersDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
+  const router = useRouter();
   const {selectedOrder, setSelectedOrder} = useOrderSummaryContext();
   const {t} = useTranslation();
+  const {setOrderDocument} = useDocumentContext();
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -124,6 +128,12 @@ const OrdersDashboardPage = () => {
     let newFilter:object = { _and: [ statusFilter(ORDER_STATUS.paid), dateRangeFilter(fromDate, val) ] };
     fetchOrders(newFilter);
   }
+
+  const handleDocument = (order:Order) => {
+    console.log(order);
+    setOrderDocument(order);
+    router.push("/documents/order");
+  }
   
   return (
     <>
@@ -137,7 +147,7 @@ const OrdersDashboardPage = () => {
       </div>
 
       <div className="flex flex-col gap-10">
-        <OrderListTable orders={orders} handleModal={handleModal} totalPages={totalPages} handlePageChange={handlePageChange} setActiveOrder={setSelectedOrder} />
+        <OrderListTable handleDocument={handleDocument} orders={orders} handleModal={handleModal} totalPages={totalPages} handlePageChange={handlePageChange} setActiveOrder={setSelectedOrder} />
       </div>
     </>
   );

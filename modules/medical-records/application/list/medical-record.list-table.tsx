@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { MedicalRecord } from "../../domain/medical-record";
 import { Pagination } from "@mui/material";
 import moment from 'moment/min/moment-with-locales';
@@ -70,7 +70,7 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
             </div>
 
             <div className="hidden justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{moment(record.date_updated).locale("id").format("MMMM Do YYYY")}</p>
+              <p className="text-black dark:text-white">{moment(record.date_updated).locale("id").format("Do MMMM YYYY")}</p>
             </div>
 
             <div className="hidden justify p-2.5 sm:flex xl:p-5 text-black dark:text-white w-full">

@@ -8,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import './i18n';
 import { useEffect, useState } from 'react';
+import { DocumentProvider } from '@/contexts/document-context';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,11 +35,13 @@ export default function RootLayout({
     <html lang="en">
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <UserProvider>
-          <body className={inter.className}>
-            <AlertProvider>
-              {children}
-            </AlertProvider>
-          </body>
+          <DocumentProvider>
+            <body className={inter.className}>
+              <AlertProvider>
+                {children}
+              </AlertProvider>
+            </body>
+          </DocumentProvider>
         </UserProvider>
       </LocalizationProvider>
     </html>

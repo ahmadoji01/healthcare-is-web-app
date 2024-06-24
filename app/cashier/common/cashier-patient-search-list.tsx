@@ -77,7 +77,7 @@ const CashierPatientSearchList = ({ patients, searched, loading, handleSubmit }:
                             </div>
 
                             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-                                <p className="text-meta-3">{moment(patient.birthday).format("MMMM Do YYYY")}</p>
+                                <p className="text-meta-3">{moment(patient.birthday).format("Do MMMM YYYY")}</p>
                             </div>
 
                             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
