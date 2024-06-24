@@ -144,6 +144,7 @@
     "subtotal": "Subtotal",
     "with_exam_fee_and_tax": "Dengan Pemeriksaan dan Pajak",
     "print_order_document": "Cetak Dokumen Pesanan",
+    "orders": "Pesanan",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

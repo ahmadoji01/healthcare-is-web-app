@@ -144,6 +144,7 @@
     "subtotal": "Subtotal",
     "with_exam_fee_and_tax": "With Exam Fee and Tax",
     "print_order_document": "Print Order Document",
+    "orders": "Orders",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

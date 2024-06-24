@@ -12,7 +12,7 @@ import VisitList from "@/modules/visits/application/visit.list";
 import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { monthFilter, statusNotEqual, yearFilter } from "@/modules/visits/domain/visit.specifications";
-import { deleteAVisit, getTotalVisits, getVisitsWithFilter, updateVisit } from "@/modules/visits/domain/visits.actions";
+import { deleteAVisit, getTotalVisits, getTotalVisitsWithFilter, getVisitsWithFilter, updateVisit } from "@/modules/visits/domain/visits.actions";
 import { DatePicker, MonthCalendar, YearCalendar } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -44,7 +44,13 @@ const VisitsDashboardPage = () => {
         res?.map( (visit) => { vits.push(visitMapper(visit)); });
         setVisits(vits);
         setDataLoaded(true);
-      })
+      });
+    getTotalVisitsWithFilter(accessToken, newFilter)
+      .then( res => { 
+        let total = res[0].count? parseInt(res[0].count) : 0;
+        let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+        setTotalPages(pages);
+      });
     setFilter(newFilter);
   }
 
@@ -57,7 +63,7 @@ const VisitsDashboardPage = () => {
           setVisits(vits);
           setDataLoaded(true);
         });
-      getTotalVisits(accessToken)
+      getTotalVisitsWithFilter(accessToken, filter)
         .then( res => { 
           let total = res[0].count? parseInt(res[0].count) : 0;
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
@@ -92,16 +98,6 @@ const VisitsDashboardPage = () => {
         setDataLoaded(true);
       });
   };
-
-  const handleSubmit = (visit:Visit) => {
-    updateVisit(accessToken, visit.id, { status: visit.status })
-      .then( () => {
-        openSnackbarNotification(t('alert_msg.success'), "success");
-        window.location.reload();
-      }).catch( () => {
-        openSnackbarNotification(t('alert_msg.server_error'), "error");
-      });
-  }
 
   const handleDelete = () => {
     deleteAVisit(accessToken, activeVisit.id)

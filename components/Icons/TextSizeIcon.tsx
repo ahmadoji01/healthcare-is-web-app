@@ -1,14 +1,17 @@
+import { motion } from "framer-motion";
+
 interface TextSizeIconProps {
     color?: string,
     size?: string,
     onClick?: () => void,
 }
 
-const TextSizeIcon = ({ color = "#000000", size = "25px", onClick }:TextSizeIconProps) => (
+const TextSizeIcon = ({ size = "25px", onClick }:TextSizeIconProps) => (
+
+  <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >
     <svg
-      fill={color}
       version="1.1"
-      id="Capa_1"
+      className="fill-black dark:fill-white"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       width={size}
@@ -31,6 +34,7 @@ const TextSizeIcon = ({ color = "#000000", size = "25px", onClick }:TextSizeIcon
         </g>
       </g>
     </svg>
+  </motion.div>
 );
 
 export default TextSizeIcon;

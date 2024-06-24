@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Page, Text, View, Document, StyleSheet, PDFViewer } from '@react-pdf/renderer';
 import moment from 'moment/min/moment-with-locales';
 import Currency from '@/components/Currency';
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useDocumentContext } from '@/contexts/document-context';
 import { DoctorName } from '@/utils/doctor-name-format';
 import { useUserContext } from '@/contexts/user-context';
+import { useRouter } from 'next/navigation';
 
 const styles = StyleSheet.create({
   page: {
@@ -69,6 +70,13 @@ const OrderDocument = () => {
   const {orderDocument} = useDocumentContext();
   const {organization} = useUserContext();
   const {t} = useTranslation();
+  const router = useRouter();
+
+  useEffect( () => {
+    if (orderDocument.id === 0) {
+      router.push('/dashboard/orders');
+    }
+  }, []);
 
   return (
     <PDFViewer className="w-screen h-screen">

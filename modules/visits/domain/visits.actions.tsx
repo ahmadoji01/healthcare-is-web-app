@@ -43,6 +43,10 @@ export const getVisitsWithFilter = (token:string, filter:object, page:number) =>
 			filter: filter,
 		limit: LIMIT_PER_PAGE, page})) 
 	)
+export const getTotalVisitsWithFilter = (token:string, filter:object) => 
+	directusClient.request( 
+		withToken(token, aggregate('visits', { aggregate: { count: '*' }, filter })) 
+	)
 
 export const updateVisit = (token:string, id:number, data:object) => directusClient.request( withToken(token, updateItem('visits', id, data)));
 export const deleteAVisit = (token:string, id:number) => directusClient.request( withToken(token, deleteItem('visits', id)));

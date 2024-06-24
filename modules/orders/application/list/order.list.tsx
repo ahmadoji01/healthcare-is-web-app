@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { Order } from "../../domain/order";
 import Currency from "@/components/Currency";
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 import { Pagination } from "@mui/material";
 import { orderItemDisplayName } from "../../domain/order.specifications";
 import { useTranslation } from "react-i18next";
@@ -66,15 +66,15 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal, handl
           >
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{ moment(order.date_updated).format("Do MMMM YYYY") }</p>
+              <p className="text-black dark:text-white">{ moment(order.date_updated).locale('id').format("Do MMMM YYYY") }</p>
             </div>
 
             <div className="flex items-center justify p-2.5 xl:p-5">
-                <p className="text-black dark:text-white">{order.patient?.name}</p>
+                <p className="text-meta-3">{order.patient?.name}</p>
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
-              <ul className="list-outside" style={{ listStyle: "auto" }}>
+              <ul className="list-outside text-black dark:text-white" style={{ listStyle: "auto" }}>
                 {order.order_items?.map( (orderItem) => <li>{orderItemDisplayName(orderItem)}</li> )}
               </ul>
             </div>
@@ -85,15 +85,6 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal, handl
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
               <ul className="flex items-center gap-2 2xsm:gap-4">
-                <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
-                  <Link
-                    href="#"
-                    onClick={() => { handleModal(false, true); setActiveOrder(order) }}
-                    className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
-                    >
-                    <FontAwesomeIcon width={18} height={18} icon={faPencil} />
-                  </Link>
-                </motion.li>
                 { handleDocument &&
                   <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                     <Link

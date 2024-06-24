@@ -5,10 +5,9 @@ import DashboardModal from "@/components/Modal/Modal";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { useUserContext } from "@/contexts/user-context";
-import OrderDeleteConfirmation from "@/modules/orders/application/form/order.delete-confirmation";
 import OrderListTable from "@/modules/orders/application/list/order.list";
 import { Order, defaultOrder, orderMapper } from "@/modules/orders/domain/order";
-import { deleteAnOrder, getAllOrders, getAllOrdersWithFilter, getOrdersWithFilter } from "@/modules/orders/domain/order.actions";
+import { deleteAnOrder, getAllOrders, getAllOrdersWithFilter, getOrdersWithFilter, getTotalOrdersWithFilter } from "@/modules/orders/domain/order.actions";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { dateRangeFilter, monthFilter, statusFilter, yearFilter } from "@/modules/orders/domain/order.specifications";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -19,11 +18,10 @@ import OrderView from "@/modules/orders/application/order.view";
 import DeleteModal from "@/components/Modal/DeleteModal";
 import { useDocumentContext } from "@/contexts/document-context";
 import { useRouter } from "next/navigation";
-import SubmitButton from "@/components/Dashboard/Submit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
-import Spinner from "@/components/Spinner";
 import MiniSpinner from "@/components/MiniSpinner";
+import { LIMIT_PER_PAGE } from "@/constants/request";
 
 const OrdersDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -52,18 +50,29 @@ const OrdersDashboardPage = () => {
         setOrders(ords);
         setDataLoaded(true);
       })
+    getTotalOrdersWithFilter(accessToken, newFilter)
+      .then( res => { 
+        let total = res[0].count? parseInt(res[0].count) : 0;
+        let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+        setTotalPages(pages);
+      });
     setFilter(newFilter);
   }
 
   useEffect( () => {
     if (!dataLoaded && orders.length == 0) {
-      
       getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.paid), 1)
         .then( res => {
           let ords:Order[] = [];
           res?.map( (order) => { ords.push(orderMapper(order)); });
           setOrders(ords);
           setDataLoaded(true);
+        });
+      getTotalOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.paid))
+        .then( res => { 
+          let total = res[0].count? parseInt(res[0].count) : 0;
+          let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+          setTotalPages(pages);
         });
     }
   });
@@ -169,9 +178,8 @@ const OrdersDashboardPage = () => {
   
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, false) } children={ <OrderView order={selectedOrder ? selectedOrder : defaultOrder} />} title="" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DeleteModal name={t("this_order")} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
-      <Breadcrumb pageName="Orders" />
+      <Breadcrumb pageName={t("orders")} />
       
       <div className="flex flex-row gap-3 mb-3">
         <DatePicker label={t('from')} onChange={ e => onFromChange(e?.toDate()) } maxDate={moment(toDate)} />
