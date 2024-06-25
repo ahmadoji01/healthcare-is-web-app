@@ -66,7 +66,7 @@ const MedicationForm = ({ medicines, mrMedicines, setMRMedicines }:MedicationFor
                                         isSearchable={true}
                                         options={medOptions}
                                         onChange={choices => handleChange(choices)}
-                                        className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />
                                 </div>
                             </div>

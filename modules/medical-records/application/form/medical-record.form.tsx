@@ -76,7 +76,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                     onChange={e => setMedicalRecord({ ...medicalRecord, anamnesis: e.target.value })}
                                     rows={4}
                                     placeholder="Anamnesis"
-                                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-2 px-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                    className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-2 px-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                     ></textarea>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         windowThreshold={5}
                                         options={illnesses}
-                                        className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />
                                 </div>
                             </div>
@@ -112,7 +112,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         windowThreshold={5}
                                         options={treatOptions}
-                                        className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />
                                 </div>
                             </div>
