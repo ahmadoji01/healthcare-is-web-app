@@ -74,7 +74,6 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
   useEffect( () => {
     setBoardSections(initializeBoard(doctorVisits));
     let visits = doctorVisits.find( visit => (visit.status === VISIT_STATUS.waiting || visit.status === VISIT_STATUS.temporary_leave));
-    console.log(visits);
     if (typeof(visits) === 'undefined') {
       setVisitsOnQueue(false);
     } else {

@@ -1,11 +1,13 @@
 import { Visit, defaultVisit, visitMapper } from '@/modules/visits/domain/visit';
-import { getAllVisits, getVisitByDoctorID } from '@/modules/visits/domain/visits.actions';
+import { getAllVisits, getVisitByDoctorID, getVisitsWithFilter } from '@/modules/visits/domain/visits.actions';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import { useUserContext } from './user-context';
 import { useAlertContext } from './alert-context';
 import { ALERT_MESSAGE } from '@/constants/alert';
 import { Patient, defaultPatient } from '@/modules/patients/domain/patient';
 import { PhysicalCheckup } from '@/modules/physical-checkups/domain/physical-checkup';
+import { doctorIDEquals, statusEquals } from '@/modules/visits/domain/visit.specifications';
+import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
  
 interface VisitContextType {
     visits: Visit[],
@@ -15,6 +17,7 @@ interface VisitContextType {
     loading: boolean,
     setActivePatient: Dispatch<SetStateAction<Patient>>,
     setActiveVisit: Dispatch<SetStateAction<Visit>>,
+    setDoctorVisits: Dispatch<SetStateAction<Visit[]>>,
     handleDoctorVisits: (doctorID:number) => void,
 }
 
@@ -26,6 +29,7 @@ export const VisitContext = createContext<VisitContextType | null>({
     loading: false,
     setActivePatient: () => {},
     setActiveVisit: () => {},
+    setDoctorVisits: () => {},
     handleDoctorVisits: () => {},
 });
  
@@ -43,7 +47,8 @@ export const VisitProvider = ({
 
     const handleDoctorVisits = (doctorID:number) => {
         setLoading(true);
-        getVisitByDoctorID(accessToken, doctorID).then( res => {
+        let filter = { _and: [ doctorIDEquals(doctorID), { _or: [statusEquals(VISIT_STATUS.waiting), statusEquals(VISIT_STATUS.temporary_leave)] } ] }
+        getVisitsWithFilter(accessToken, filter, '-queue_number', 1).then( res => {
             let vits:Visit[] = [];
             res?.map( (visit) => { vits.push(visitMapper(visit)); });
             setDoctorVisits(vits);
@@ -72,7 +77,7 @@ export const VisitProvider = ({
     }, [])
 
     return (
-        <VisitContext.Provider value={{ visits, activeVisit, loading, doctorVisits, activePatient, setActivePatient, setActiveVisit, handleDoctorVisits }}>
+        <VisitContext.Provider value={{ visits, activeVisit, loading, doctorVisits, activePatient, setActivePatient, setActiveVisit, setDoctorVisits, handleDoctorVisits }}>
             {children}
         </VisitContext.Provider>
     );

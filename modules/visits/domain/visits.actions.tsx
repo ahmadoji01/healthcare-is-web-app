@@ -17,6 +17,7 @@ export const getVisitByDoctorID = (token:string, doctorID = 0) =>
 			} 
 		})) 
 	)
+
 export const getTotalQueueByDoctorID = (token:string, doctorID = 0) => 
 	directusClient.request( 
 		withToken(token, readItems('visits', {
@@ -37,9 +38,9 @@ export const getVisitByStatus = (token:string, status = "") =>
 			} 
 		})) 
 	)
-export const getVisitsWithFilter = (token:string, filter:object, page:number) => 
+export const getVisitsWithFilter = (token:string, filter:object, sort:string, page:number) => 
 	directusClient.request( 
-		withToken(token, readItems('visits', { fields: ['*.*.*'], sort: ['sort', '-date_updated'],
+		withToken(token, readItems('visits', { fields: ['*.*.*'], sort: ['sort', sort],
 			filter: filter,
 		limit: LIMIT_PER_PAGE, page})) 
 	)

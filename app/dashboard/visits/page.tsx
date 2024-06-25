@@ -38,7 +38,7 @@ const VisitsDashboardPage = () => {
 
   const fetchVisits = (newFilter:object) => {
     setDataLoaded(false);
-    getVisitsWithFilter(accessToken, newFilter, 1)
+    getVisitsWithFilter(accessToken, newFilter, '-date_updated', 1)
       .then( res => {
         let vits:Visit[] = [];
         res?.map( (visit) => { vits.push(visitMapper(visit)); });
@@ -56,7 +56,7 @@ const VisitsDashboardPage = () => {
 
   useEffect( () => {
     if (!dataLoaded && visits.length == 0) {
-      getVisitsWithFilter(accessToken, filter, 1)
+      getVisitsWithFilter(accessToken, filter, '-date_updated', 1)
         .then( res => {
           let vits:Visit[] = [];
           res?.map( (visit) => { vits.push(visitMapper(visit)); });
@@ -90,7 +90,7 @@ const VisitsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getVisitsWithFilter(accessToken, filter, value)
+    getVisitsWithFilter(accessToken, filter, '-date_updated', value)
       .then( res => {
         let vits:Visit[] = [];
         res?.map( (visit) => { vits.push(visitMapper(visit)); });

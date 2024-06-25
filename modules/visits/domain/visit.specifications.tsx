@@ -11,6 +11,10 @@ export function statusNotEqual(status:string) {
     return { status: { _neq: status }  }
 }
 
+export function doctorIDEquals(docId:number) {
+    return { doctor: { _eq: docId } }
+}
+
 export function statusDisplay(status:string) {
     
     const {t} = useTranslation();

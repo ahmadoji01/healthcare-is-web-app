@@ -22,6 +22,7 @@ import { useFrontDeskContext } from "@/contexts/front-desk-context";
 import { subsOutputMapper } from "@/modules/websockets/domain/websocket";
 import { visitMapper } from "@/modules/visits/domain/visit";
 import { WS_EVENT_TYPE } from "@/modules/websockets/domain/websocket.constants";
+import { defaultDoctor } from "@/modules/doctors/domain/doctor";
 
 const QueueManager = () => {
 
@@ -31,10 +32,10 @@ const QueueManager = () => {
     const {activeVisit} = useVisitContext();
     const {openSnackbarNotification} = useAlertContext();
     const {handleModal} = useDataModalContext();
-    const {notifyNewQueue} = useFrontDeskContext();
+    const {notifyNewQueue, activeDoctor} = useFrontDeskContext();
     const {t} = useTranslation();
 
-    async function subsToVisit() { 
+    async function subsToVisit() {
         if ( typeof(wsClient) === 'undefined')
             return;
 
