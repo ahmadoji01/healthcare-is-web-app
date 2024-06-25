@@ -15,7 +15,6 @@ import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
     treatments: Item[],
-    mrTreatments: MedicalRecordItem[],
     setMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>,
     setMRTreatments: Dispatch<SetStateAction<MedicalRecordItem[]>>,
 }

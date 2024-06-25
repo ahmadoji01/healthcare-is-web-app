@@ -72,7 +72,7 @@ const MedicalRecord = () => {
     const [order, setOrder] = useState(defaultOrder);
     const [medHistories, setMedHistories] = useState<MedicalRecord[]>([]);
     
-    const {activeMedicalRecord, setActiveMedicalRecord, medicineDoses, setMedicineDoses} = useMedicalRecordContext();
+    const {activeMedicalRecord, setActiveMedicalRecord} = useMedicalRecordContext();
     const {activeVisit} = useVisitContext();
     const {organization, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
@@ -96,11 +96,10 @@ const MedicalRecord = () => {
         }
       });
       getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id).then( res => {
-        console.log(res);
         let mrs:MedicalRecord[] = [];
         res?.map( (mr) => { mrs.push(medicalRecordMapper(mr)); });
         setMedHistories(mrs);
-      })
+      });
     }, []);
 
     if (activeMedicalRecord.id === 0) {
