@@ -3,6 +3,7 @@
     "queue_number": "Nomor Antrian",
     "medicines": "Obat",
     "treatments": "Tindakan",
+    "treatments_detail": "Detail Tindakan",
     "tax": "Pajak",
     "order_items": "Daftar Item",
     "quantity": "Jumlah",

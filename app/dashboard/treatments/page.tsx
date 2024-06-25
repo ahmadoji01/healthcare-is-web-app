@@ -14,12 +14,7 @@ import ItemListTable from "@/modules/items/application/list/item.list-table";
 import { Item, defaultItem, itemMapper, itemPatcherMapper } from "@/modules/items/domain/item";
 import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { treatmentItemsFilter } from "@/modules/items/domain/item.specifications";
-import { deleteAnItem, getItemsWithFilter, getTotalItemsWithFilter, getTotalSearchItems, getTotalSearchItemsWithFilter, searchItems, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
-import TreatmentDeleteConfirmation from "@/modules/treatments/application/form/treatment.delete-confirmation";
-import TreatmentForm from "@/modules/treatments/application/form/treatment.form";
-import TreatmentListTable from "@/modules/treatments/application/list/treatment.list-table";
-import { Treatment, defaultTreatment, treatmentMapper, treatmentOrgMapper, treatmentPatcherMapper } from "@/modules/treatments/domain/treatment";
-import { deleteATreatment, getAllTreatments, getTotalSearchTreatments, getTotalTreatments, searchTreatments, updateATreatment } from "@/modules/treatments/domain/treatments.actions";
+import { deleteAnItem, getItemsWithFilter, getTotalItemsWithFilter, getTotalSearchItemsWithFilter, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -32,7 +27,6 @@ const TreatmentsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [treatments, setTreatments] = useState<Treatment[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [activeItem, setActiveItem] = useState<Item>(defaultItem);
   const [totalPages, setTotalPages] = useState(0);
@@ -80,7 +74,7 @@ const TreatmentsDashboardPage = () => {
     if (!dataLoaded && items.length == 0) {
       fetchAllTreatments();
     }
-  }, [treatments]);
+  }, [items]);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {
@@ -166,9 +160,9 @@ const TreatmentsDashboardPage = () => {
 
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <ItemForm showStock={false} showCategory={false} initItem={activeItem} categories={categories} handleSubmit={handleSubmit} /> } title="Treatment's Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <ItemForm showStock={false} showCategory={false} initItem={activeItem} categories={categories} handleSubmit={handleSubmit} /> } title={t('treatments_detail')} />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <ItemDeleteConfirmation item={activeItem} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
-      <Breadcrumb pageName="Treatments" />
+      <Breadcrumb pageName={t('treatments')} />
 
       <div className="relative mb-4">
         <button className="absolute left-0 top-1/2 -translate-y-1/2" onClick={() => handleChange(searchQuery)}>
@@ -185,7 +179,7 @@ const TreatmentsDashboardPage = () => {
       
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-        { dataLoaded && <ItemListTable handleQtyChange={() => {}} showStock={false} totalPages={totalPages} items={items} setActiveItem={setActiveItem} handlePageChange={handlePageChange} handleModal={handleModal} /> }
+        { dataLoaded && <ItemListTable showCategory={false} handleQtyChange={() => {}} showStock={false} totalPages={totalPages} items={items} setActiveItem={setActiveItem} handlePageChange={handlePageChange} handleModal={handleModal} /> }
       </div>
     </>
   );

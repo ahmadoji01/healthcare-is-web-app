@@ -10,6 +10,7 @@ import { Pagination } from "@mui/material";
 import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { Item, defaultItem } from "../../domain/item";
 import Currency from "@/components/Currency";
+import { useTranslation } from "react-i18next";
 
 interface ItemListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -19,9 +20,12 @@ interface ItemListTableProps {
   setActiveItem: Dispatch<SetStateAction<Item>>,
   handleQtyChange: (action:string, item:Item, index:number, qty:number) => void,
   showStock?: boolean,
+  showCategory?: boolean,
 }
 
-const ItemListTable = ({ handleModal, showStock=true, items, totalPages, handlePageChange, setActiveItem, handleQtyChange }: ItemListTableProps) => {
+const ItemListTable = ({ handleModal, showCategory=true, showStock=true, items, totalPages, handlePageChange, setActiveItem, handleQtyChange }: ItemListTableProps) => {
+
+  const {t} = useTranslation();
 
   const handleChange = (action:string, item:Item, index:number, qty:number) => {
     handleQtyChange(action, item, index, qty);
@@ -33,29 +37,35 @@ const ItemListTable = ({ handleModal, showStock=true, items, totalPages, handleP
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Name
+              {t('name')}
             </h5>
           </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Category
-            </h5>
-          </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Price
-            </h5>
-          </div>
-          { showStock &&
+
+          { showCategory &&
             <div className="p-2.5 text-center xl:p-5">
               <h5 className="text-sm font-medium uppercase xsm:text-base">
-                Stock
+                {t('category')}
               </h5>
             </div>
           }
+
+          <div className="hidden p-2.5 text-center sm:block xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              {t('price')}
+            </h5>
+          </div>
+
+          { showStock &&
+            <div className="p-2.5 text-center xl:p-5">
+              <h5 className="text-sm font-medium uppercase xsm:text-base">
+                {t('stock')}
+              </h5>
+            </div>
+          }
+
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Actions
+              {t('actions')}
             </h5>
           </div>
         </div>
@@ -70,15 +80,17 @@ const ItemListTable = ({ handleModal, showStock=true, items, totalPages, handleP
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{item.name}</p>
+              <p className="text-meta-3">{item.name}</p>
             </div>
 
-            <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{item.category?.name}</p>
-            </div>
+            { showCategory && 
+              <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
+                <p className="text-black dark:text-white">{item.category?.name}</p>
+              </div>
+            }
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{<Currency value={item.price} />}</p>
+              <p className="text-black dark:text-white">{<Currency value={item.price} />}</p>
             </div>
 
             { showStock && 
@@ -88,7 +100,7 @@ const ItemListTable = ({ handleModal, showStock=true, items, totalPages, handleP
                     <input 
                       defaultValue={item.stock}
                       type="number" 
-                      className="quantity-input text-center w-10 font-semibold bg-transparent" 
+                      className="text-black dark:text-white quantity-input text-center w-10 font-semibold bg-transparent" 
                       name="custom-input-number"
                       min={0}
                       onBlur={e => handleChange('input', item, key, parseInt(e.target.value)) } />

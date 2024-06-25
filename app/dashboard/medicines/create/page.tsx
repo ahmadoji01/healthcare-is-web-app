@@ -8,6 +8,7 @@ import { Category, categoryCreatorMapper, categoryMapper, defaultCategory } from
 import { medicineCategoriesFilter } from "@/modules/categories/domain/category.specifications";
 import ItemForm from "@/modules/items/application/form/item.form";
 import { Item, defaultItem, itemCreatorMapper } from "@/modules/items/domain/item";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { createAnItem, itemExistsChecker } from "@/modules/items/domain/items.actions";
 import { useRouter } from "next/navigation";
 
@@ -69,6 +70,7 @@ const MedicineCreatePage = () => {
       cat = cats;
     }
     
+    item.type = ITEM_TYPE.medicine;
     createAnItem(accessToken, itemCreatorMapper(item, cat.id, organization.id))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
@@ -80,7 +82,7 @@ const MedicineCreatePage = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Add Medicine" />
+      <Breadcrumb pageName={t('menu.add_medicine')} />
       <ItemForm setCategoryName={setCategoryName} categories={categories} handleSubmit={handleSubmit} initItem={item} />
     </>
   );
