@@ -48,7 +48,7 @@ export const VisitProvider = ({
     const handleDoctorVisits = (doctorID:number) => {
         setLoading(true);
         let filter = { _and: [ doctorIDEquals(doctorID), { _or: [statusEquals(VISIT_STATUS.waiting), statusEquals(VISIT_STATUS.temporary_leave)] } ] }
-        getVisitsWithFilter(accessToken, filter, '-queue_number', 1).then( res => {
+        getVisitsWithFilter(accessToken, filter, 'date_created', 1).then( res => {
             let vits:Visit[] = [];
             res?.map( (visit) => { vits.push(visitMapper(visit)); });
             setDoctorVisits(vits);
