@@ -5,6 +5,7 @@ import { Medicine } from '../../domain/medicine';
 import { useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import MedicineCategory from '../../domain/medicine-category';
+import { useTranslation } from 'react-i18next';
 
 interface MedicineFormProps {
     initMedicine: Medicine,
@@ -15,6 +16,7 @@ interface MedicineFormProps {
 
 const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName }:MedicineFormProps) => {
     const [medicine, setMedicine] = useState(initMedicine);
+    const {t} = useTranslation();
 
     return (
         <>
@@ -25,20 +27,20 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                             <div className="flex flex-col gap-5.5 p-6.5">
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
-                                        Name
+                                        {t('medicine_name')}
                                     </label>
                                     <input
                                         type="text" 
                                         defaultValue={medicine.name}
                                         required
                                         onChange={ e => setMedicine({ ...medicine, name: e.target.value })}
-                                        placeholder="Input the Medicine's Name"
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        placeholder={t('input_medicines_name')}
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
-                                        Category
+                                        {t('category')}
                                     </label>
                                     <div className="relative">
                                         <Autocomplete
@@ -54,6 +56,7 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                                         ...params.InputProps,
                                                         type: 'search',
                                                     }}
+                                                    className="text-black dark:text-white"
                                                     onChange={ e => setCategoryName(e.target.value)}
                                                 />
                                             )}
@@ -62,7 +65,7 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                 </div>
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
-                                        Stock
+                                        {t('stock')}
                                     </label>
                                     <div className="relative">
                                     <input
@@ -70,14 +73,14 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                         defaultValue={medicine.stock}
                                         required
                                         onChange={ e => setMedicine({ ...medicine, stock: parseInt(e.target.value) })}
-                                        placeholder="Input the Stock"
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        placeholder={t('input_stock')}
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                     </div>
                                 </div>
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
-                                        Price
+                                        {t('price')}
                                     </label>
                                     <div className="relative">
                                     <input
@@ -85,8 +88,8 @@ const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName 
                                         defaultValue={medicine.price}
                                         required
                                         onChange={ e => setMedicine({ ...medicine, price: parseInt(e.target.value) })}
-                                        placeholder="Input the Price"
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        placeholder={t('input_price')}
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                     </div>
                                 </div>

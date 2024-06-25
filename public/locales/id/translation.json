@@ -149,6 +149,9 @@
     "cms": "Sentimeter",
     "kgs": "Kilogram",
     "no_visit_for_this_doctor_yet": "Belum ada kunjungan untuk dokter ini. Harap tunggu sebentar",
+    "category_name": "Nama Kategori",
+    "input_category_name": "Masukkan Nama Kategori",
+    "medicine_name": "Nama Obat",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

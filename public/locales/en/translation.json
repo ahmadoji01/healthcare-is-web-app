@@ -149,6 +149,9 @@
     "cms": "Centimeters",
     "kgs": "Kilograms",
     "no_visit_for_this_doctor_yet": "No incoming visit for this doctor yet. Please wait for a while",
+    "category_name": "Category Name",
+    "input_category_name": "Input Category Name",
+    "medicine_name": "Medicine Name",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
