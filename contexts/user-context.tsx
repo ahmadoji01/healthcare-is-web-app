@@ -2,6 +2,7 @@ import { Organization, defaultOrganization, organizationMapper } from '@/modules
 import { getOrganization } from '@/modules/organizations/domain/organizations.actions';
 import { User, defaultUser, userMapper } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
+import { isURLAllowed, redirectURL } from '@/modules/users/domain/users.specifications';
 import { directusClient } from '@/utils/request-handler';
 import { useRouter, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
@@ -124,7 +125,25 @@ export const UserProvider = ({
     
     useEffect(() => {
         fetchOrganization();
-    }, [pathname])
+
+        if (user.role_name === "") {
+            return;
+        }
+
+        if (!isURLAllowed(pathname, user.role_name)) {
+            router.push(redirectURL(user.role_name));
+        }
+    }, [pathname]);
+
+    useEffect(() => {
+        if (user.role_name === "") {
+            return;
+        }
+
+        if (!isURLAllowed(pathname, user.role_name)) {
+            router.push(redirectURL(user.role_name));
+        }
+    }, [user.role_name])
 
     return (
         <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>

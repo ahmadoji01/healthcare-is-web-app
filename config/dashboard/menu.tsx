@@ -178,7 +178,7 @@ export const userMenuItems: UserMenuItem[] = [
     {
         title: "menu.my_profile",
         icon: faUser,
-        url: "/dashboard/profile",
+        url: "/profile",
         role: [ROLES.administrator, ROLES.apothecary, ROLES.cashier, ROLES.doctor, ROLES.receptionist, ROLES.staff, ROLES.front_desk]
     },
     {
