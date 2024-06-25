@@ -28,7 +28,7 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
 
   useEffect( () => {
     setItems(orderItems);
-  }, [items]);
+  }, [orderItems]);
 
   useEffect( () => {
     setFee(examFee);

@@ -1,7 +1,7 @@
 import AlertModal from '@/components/Modal/AlertModal';
 import { ALERT_MESSAGE, ALERT_STATUS } from '@/constants/alert';
 import { Order, defaultOrder, orderMapper, orderPatcherMapper } from '@/modules/orders/domain/order';
-import { getAnOrder, getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.actions';
+import { getAllOrdersWithFilter, getAnOrder, getOrdersWithFilter, updateOrder } from '@/modules/orders/domain/order.actions';
 import { PaymentMethod, defaultPaymentMethod } from '@/modules/payment-methods/domain/payment-method';
 import { Alert, Snackbar } from '@mui/material';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
@@ -117,7 +117,7 @@ export const OrderSummaryProvider = ({
     }
 
     useEffect( () => {
-        getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay), 1)
+        getAllOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay))
             .then( (res) => {
                 let ords:Order[] = [];
                 res?.map( (order) => { ords.push(orderMapper(order)) });
@@ -247,7 +247,7 @@ export const OrderSummaryProvider = ({
             let output = subsOutputMapper(item);
             if (output.event === WS_EVENT_TYPE.update && output.data.length > 0) {
                 let order = orderMapper(output.data[0]);
-                if (order.status === ORDER_STATUS.waiting_to_pay) {
+                if (order.status === ORDER_STATUS.waiting_to_pay && !orders.some( ord => ord.id === order.id )) {
                     playNotificationSound();
                     let newOrders = [...orders];
                     newOrders.push(order);

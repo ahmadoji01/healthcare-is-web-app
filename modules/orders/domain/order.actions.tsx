@@ -8,7 +8,7 @@ export const createAnOrder = (token:string, order:OrderCreator) =>
 	directusClient.request( withToken(token, createItem('orders', order)) );
 
 export const getAllOrdersWithFilter = (token:string, filter:object) => 
-	directusClient.request( withToken(token, readItems('orders', { fields: ['*.*.*'], sort: ['sort', '-date_updated'], filter })) );
+	directusClient.request( withToken(token, readItems('orders', { fields: ['*.*.*'], sort: ['sort', 'date_updated'], filter })) );
 
 export const getOrdersWithFilter = (token:string, filter:object, page:number) => 
 	directusClient.request( 

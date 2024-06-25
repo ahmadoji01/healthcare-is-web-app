@@ -40,15 +40,22 @@ const OrderSummary = () => {
     }, [orders]);
 
     useEffect( () => {
-        if (typeof(selectedOrder) !== 'undefined') {
-            getAMedicalRecord(accessToken, selectedOrder?.visit.medical_record.id)
-                .then( res => {
-                    let mr = defaultMedicalRecord;
-                    mr = medicalRecordMapper(res);
-                    setMedicalRecord(mr);
-                })
-                .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
+        if (typeof(selectedOrder) === 'undefined') {
+            return;
         }
+
+        if (selectedOrder.visit.id === 0) {
+            setMedicalRecord(defaultMedicalRecord);
+            return;
+        }
+        
+        getAMedicalRecord(accessToken, selectedOrder?.visit.medical_record.id)
+            .then( res => {
+                let mr = defaultMedicalRecord;
+                mr = medicalRecordMapper(res);
+                setMedicalRecord(mr);
+            })
+            .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
     }, [selectedOrder])
 
     const handleQtyChange = (action:string, itemIndex:number, qty:number) => {
@@ -137,14 +144,16 @@ const OrderSummary = () => {
                             <OrderTotals />
                         </div>
                     </div>
-                    <div>
-                        <button 
-                            className="top-0 z-50 mt-2 mb-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray"
-                            onClick={() => setPresModalOpen(true)}>
-                            <FontAwesomeIcon width={18} height={18} icon={faPrint} className="mr-2" />
-                            { t("print_prescription") }
-                        </button>
-                    </div>
+                    { medicalRecord.id !== 0 && 
+                        <div>
+                            <button 
+                                className="top-0 z-50 mt-2 mb-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray"
+                                onClick={() => setPresModalOpen(true)}>
+                                <FontAwesomeIcon width={18} height={18} icon={faPrint} className="mr-2" />
+                                { t("print_prescription") }
+                            </button>
+                        </div>
+                    }
                     <div className="mt-6 text-black dark:text-white">
                         <h3 className="text-3xl font-extrabold mb-2">{ t("order_items") }</h3>
                         <OrderItemList examFee={examFee} orderItems={selectedOrder?.order_items} handleDelete={handleDeleteItem} handleQtyChange={handleQtyChange} />
