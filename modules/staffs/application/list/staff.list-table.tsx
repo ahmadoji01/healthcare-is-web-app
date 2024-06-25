@@ -1,5 +1,4 @@
-import { Patient } from "@/modules/patients/domain/patient";
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +6,8 @@ import { motion } from "framer-motion";
 import { Pagination } from "@mui/material";
 import { Staff } from "../../domain/staff";
 import { Dispatch, SetStateAction } from "react";
+import { useTranslation } from "react-i18next";
+import { educationDisplay } from "@/utils/status-display";
 
 interface StaffListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -18,33 +19,35 @@ interface StaffListTableProps {
 
 const StaffListTable = ({ handleModal, staffs, totalPages, handlePageChange, setActiveStaff }: StaffListTableProps) => {
 
+  const {t} = useTranslation();
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Full Name
+              {t("full_name")}
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Birthday
+              {t("birthday")}
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Education
+              {t("education")}
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Address
+              {t("address")}
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Actions
+              {t("actions")}
             </h5>
           </div>
         </div>
@@ -59,15 +62,15 @@ const StaffListTable = ({ handleModal, staffs, totalPages, handlePageChange, set
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{staff.name}</p>
+              <p className="text-meta-3">{staff.name}</p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{moment(staff.birthday).format("Do MMMM YYYY")}</p>
+              <p className="text-black dark:text-white">{moment(staff.birthday).locale('id').format("Do MMMM YYYY")}</p>
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{staff.education}</p>
+              <p className="text-black dark:text-white">{educationDisplay(staff.education)}</p>
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">

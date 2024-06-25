@@ -152,6 +152,8 @@
     "category_name": "Nama Kategori",
     "input_category_name": "Masukkan Nama Kategori",
     "medicine_name": "Nama Obat",
+    "staffs_detail": "Detail Staf",
+    "input_staffs_full_name": "Masukkan Nama Lengkap Staf",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
@@ -262,7 +264,7 @@
     },
     
     "education_levels": {
-        "uneducated": "Uneducated",
+        "uneducated": "Tidak Berpendidikan",
         "elementary": "SD",
         "junior_secondary": "SMP",
         "senior_secondary": "SMA",

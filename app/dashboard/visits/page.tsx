@@ -139,7 +139,7 @@ const VisitsDashboardPage = () => {
     <>
       <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <VisitView visit={activeVisit} /> } title={t("visits_detail")} />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DeleteModal name={t("this_visit")} handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
-      <Breadcrumb pageName="Visits" />
+      <Breadcrumb pageName={t('menu.visits')} />
       
       <div className="flex flex-row gap-3 mb-3">
         <DatePicker label={t('from')} onChange={ e => onFromChange(e?.toDate()) } maxDate={moment(toDate)} />

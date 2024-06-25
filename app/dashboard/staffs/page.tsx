@@ -136,9 +136,9 @@ const StaffsDashboardPage = () => {
 
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <StaffForm initStaff={activeStaff} handleSubmit={handleSubmit} /> } title="Staff's Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <StaffForm initStaff={activeStaff} handleSubmit={handleSubmit} /> } title={t('staffs_detail')} />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <StaffDeleteConfirmation handleDelete={handleDelete} staff={activeStaff} handleClose={ () => handleModal(true, false)} /> } title="" />
-      <Breadcrumb pageName="Staffs" />
+      <Breadcrumb pageName={t('staffs')} />
 
       <div className="relative mb-4">
         <button className="absolute left-0 top-1/2 -translate-y-1/2" onClick={() => handleChange(searchQuery)}>

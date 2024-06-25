@@ -152,6 +152,8 @@
     "category_name": "Category Name",
     "input_category_name": "Input Category Name",
     "medicine_name": "Medicine Name",
+    "staffs_detail": "Staff's Detail",
+    "input_staffs_full_name": "Input the Staff's Full Name",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
