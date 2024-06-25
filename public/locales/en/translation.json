@@ -155,6 +155,8 @@
     "medicine_name": "Medicine Name",
     "staffs_detail": "Staff's Detail",
     "input_staffs_full_name": "Input the Staff's Full Name",
+    "prescription": "Medicines Prescription",
+    "print_prescription": "Print Prescription",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

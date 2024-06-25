@@ -1,4 +1,4 @@
-import { aggregate, createItem, deleteItem, readItems, updateItem, withToken } from "@directus/sdk";
+import { aggregate, createItem, deleteItem, readItem, readItems, updateItem, withToken } from "@directus/sdk";
 import { directusClient } from "@/utils/request-handler";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { VisitCreator } from "./visit";
@@ -48,5 +48,6 @@ export const getTotalVisitsWithFilter = (token:string, filter:object) =>
 		withToken(token, aggregate('visits', { aggregate: { count: '*' }, filter })) 
 	)
 
+export const getAVisit = (token:string, id:number) => directusClient.request( withToken(token, readItem('visits', id, { fields: ['*.*.*'] })));
 export const updateVisit = (token:string, id:number, data:object) => directusClient.request( withToken(token, updateItem('visits', id, data)));
 export const deleteAVisit = (token:string, id:number) => directusClient.request( withToken(token, deleteItem('visits', id)));

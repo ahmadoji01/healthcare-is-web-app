@@ -155,6 +155,8 @@
     "medicine_name": "Nama Obat",
     "staffs_detail": "Detail Staf",
     "input_staffs_full_name": "Masukkan Nama Lengkap Staf",
+    "prescription": "Resep Obat",
+    "print_prescription": "Cetak Resep",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

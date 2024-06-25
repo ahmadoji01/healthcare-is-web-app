@@ -17,11 +17,18 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { useEffect, useState } from "react";
 import { Order, orderPatcherMapper } from "@/modules/orders/domain/order";
 import Spinner from "@/components/Spinner";
+import Prescription from "./prescription/page";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPrint } from "@fortawesome/free-solid-svg-icons";
+import { getAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
+import { defaultMedicalRecord, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
 
 const OrderSummary = () => {
 
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [orderList, setOrderList] = useState<Order[]>([]);
+    const [presModalOpen, setPresModalOpen] = useState<boolean>(false);
+    const [medicalRecord, setMedicalRecord] = useState(defaultMedicalRecord);
 
     const { t } = useTranslation();
     const { accessToken, organization } = useUserContext();
@@ -30,7 +37,19 @@ const OrderSummary = () => {
 
     useEffect( () => {
         setOrderList(orders);
-    }, [orders])
+    }, [orders]);
+
+    useEffect( () => {
+        if (typeof(selectedOrder) !== 'undefined') {
+            getAMedicalRecord(accessToken, selectedOrder?.visit.medical_record.id)
+                .then( res => {
+                    let mr = defaultMedicalRecord;
+                    mr = medicalRecordMapper(res);
+                    setMedicalRecord(mr);
+                })
+                .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
+        }
+    }, [selectedOrder])
 
     const handleQtyChange = (action:string, itemIndex:number, qty:number) => {
         if (typeof(selectedOrder) === 'undefined') {
@@ -106,6 +125,7 @@ const OrderSummary = () => {
             { !orderLoaded && <Spinner /> }
             { (orderList.length > 0 && typeof(selectedOrder) !== 'undefined') && 
                 <>
+                    <DashboardModal open={presModalOpen} handleClose={() => setPresModalOpen(false)} children={ <Prescription medicalRecord={medicalRecord} /> } title={t('prescription')} />
                     <DashboardModal open={deleteModalOpen} handleClose={() => handleModal(false, false, false)} children={ <OrderItemDeleteConfirmation orderItem={selectedItem} handleDelete={deleteItem} handleClose={() => handleModal(false, false, false)} /> } title="" /> 
                     <DashboardModal open={itemModalOpen} handleClose={() => handleModal(false, false, false)} children={ <AddItem /> } title="" /> 
                     <DashboardModal open={checkoutModalOpen} handleClose={() => handleModal(false, false, false)} children={ <Checkout /> } title="" /> 
@@ -116,6 +136,14 @@ const OrderSummary = () => {
                         <div className="w-full gap-2">
                             <OrderTotals />
                         </div>
+                    </div>
+                    <div>
+                        <button 
+                            className="top-0 z-50 mt-2 mb-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray"
+                            onClick={() => setPresModalOpen(true)}>
+                            <FontAwesomeIcon width={18} height={18} icon={faPrint} className="mr-2" />
+                            { t("print_prescription") }
+                        </button>
                     </div>
                     <div className="mt-6 text-black dark:text-white">
                         <h3 className="text-3xl font-extrabold mb-2">{ t("order_items") }</h3>

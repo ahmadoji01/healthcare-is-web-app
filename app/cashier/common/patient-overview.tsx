@@ -34,7 +34,7 @@ const PatientOverview = () => {
             setPatient(selectedOrder.patient? selectedOrder.patient : undefined);
             setOrder(selectedOrder);
         }
-    }, [patient]);
+    }, [selectedOrder]);
 
     return (
         <>
