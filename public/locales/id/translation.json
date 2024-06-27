@@ -157,6 +157,7 @@
     "input_staffs_full_name": "Masukkan Nama Lengkap Staf",
     "prescription": "Resep Obat",
     "print_prescription": "Cetak Resep",
+    "vacant": "Kosong",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
@@ -251,6 +252,7 @@
         "my_profile": "Profil Saya",
         "dashboard": "Dasbor",
         "queue_manager": "Pengelola Antrian",
+        "queue_display": "Tampilan Antrian",
         "patients_list": "Daftar Pasien",
         "subscription": "Langganan"
     },

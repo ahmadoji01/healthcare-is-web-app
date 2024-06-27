@@ -1,6 +1,6 @@
 import { ROLES } from "@/modules/users/domain/users.constants";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faCashRegister, faClinicMedical, faClipboard, faClock, faCreditCard, faDashboard, faFileImport, faFileMedical, faHospitalUser, faNewspaper, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faTimes, faUser, faUserDoctor, faUserInjured, faUsers, faUsersBetweenLines } from "@fortawesome/free-solid-svg-icons";
+import { faCashRegister, faClinicMedical, faClipboard, faClock, faCreditCard, faDashboard, faFileImport, faFileMedical, faHospitalUser, faLinesLeaning, faNewspaper, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faTimes, faUser, faUserDoctor, faUserInjured, faUsers, faUsersBetweenLines } from "@fortawesome/free-solid-svg-icons";
 
 interface SubMenuItem {
     title: string,
@@ -192,6 +192,12 @@ export const userMenuItems: UserMenuItem[] = [
         icon: faUsersBetweenLines,
         url: "/operational/front-desk/queue-manager",
         role: [ROLES.administrator, ROLES.front_desk]
+    },
+    {
+        title: "menu.queue_display",
+        icon: faLinesLeaning,
+        url: "/operational/front-desk/queue-display",
+        role: [ROLES.administrator, ROLES.cashier]
     },
     {
         title: "patient_registration",

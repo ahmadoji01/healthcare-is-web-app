@@ -5,9 +5,10 @@ import "@/styles/satoshi.css";
 import { useState, useEffect } from "react";
 import Loader from "@/components/Loader";
 
-import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { useUserContext } from "@/contexts/user-context";
+import { VisitProvider } from "@/contexts/visit-context";
+import { FrontDeskProvider } from "@/contexts/front-desk-context";
 
 export default function RootLayout({
   children,
@@ -45,29 +46,29 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body suppressHydrationWarning={true}>
-        <div className="dark:bg-boxdark-2 dark:text-bodydark">
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="flex h-screen overflow-hidden">
-              <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                <Header
-                  sidebarOpen={sidebarOpen}
-                  setSidebarOpen={setSidebarOpen}
-                />
-                <ThemeProvider theme={theme} >
-                  <main>
-                    <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-                      {children}
-                    </div>
-                  </main>
-                </ThemeProvider>
-              </div>
+      <VisitProvider>
+        <FrontDeskProvider>
+          <body suppressHydrationWarning={true}>
+            <div className="dark:bg-boxdark-2 dark:text-bodydark">
+              {loading ? (
+                <Loader />
+              ) : (
+                <div className="flex h-screen overflow-hidden">
+                  <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                    <ThemeProvider theme={theme} >
+                      <main>
+                        <div className="w-screen h-screen p-4 md:p-6 2xl:p-10">
+                          {children}
+                        </div>
+                      </main>
+                    </ThemeProvider>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </body>
+          </body>
+        </FrontDeskProvider>
+      </VisitProvider>
     </html>
   );
 }

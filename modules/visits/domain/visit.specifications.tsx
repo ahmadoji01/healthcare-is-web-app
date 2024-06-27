@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { VISIT_STATUS } from "./visit.constants";
 import moment from "moment";
+import { Visit } from "./visit";
 
 
 export function statusEquals(status:string) {
@@ -51,4 +52,9 @@ export function yearFilter(year:number):object {
 
 export function dateRangeFilter(from:Date, to:Date) {
     return { "date_updated": { _between: [moment(from).format("YYYY-MM-DD"), moment(to).format("YYYY-MM-DD")]  } }
+}
+
+export function filterVisitsArray(visits:Visit[], status:string) {
+    let result = visits.filter(v => v.status === status);
+    return result;
 }

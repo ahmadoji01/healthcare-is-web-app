@@ -9,6 +9,7 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import './i18n';
 import { useEffect, useState } from 'react';
 import { DocumentProvider } from '@/contexts/document-context';
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,6 +34,10 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <title>Fourstake for Healthcare | All-in-one Business Efficiency Services for Healthcare Providers</title>
+        <meta property="og:title" content="Fourstake for Healthcare | All-in-one Business Efficiency Services for Healthcare Providers" key="title" />
+      </head>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <UserProvider>
           <DocumentProvider>
