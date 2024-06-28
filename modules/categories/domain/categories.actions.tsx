@@ -10,7 +10,7 @@ export const getAllCategoriesWithFilter = (token:string, filter:object) =>
 export const getAllCategoriesWithFilterPage = (token:string, filter:object, page:number) => 
 	directusClient.request( withToken(token, readItems('categories', { fields: ['*.*'], filter: filter, limit: LIMIT_PER_PAGE, page })) );
 export const getTotalCategoriesWithFilter = (token:string, filter:object) => 
-	directusClient.request( withToken(token, aggregate('_categories', { filter: filter, aggregate: { count: '*' } })) );
+	directusClient.request( withToken(token, aggregate('_categories', { aggregate: { count: '*' }, query: { filter } })) );
 
 export const createACategory = (token:string, category:CategoryCreator) => directusClient.request( withToken(token, createItem('categories', category)) );
 export const updateACategory = (token:string, id:number, data:object) => directusClient.request( withToken(token, updateItem('categories', id, data)) );

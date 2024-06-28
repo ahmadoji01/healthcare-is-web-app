@@ -13,7 +13,7 @@ export const getItemsWithFilter = (token:string, filter:object, page:number) =>
 		})) 
 	);
 export const getTotalItemsWithFilter = (token:string, filter:object) => 
-	directusClient.request( withToken(token, aggregate('items', { filter: filter, aggregate: { count: '*' } })) );
+	directusClient.request( withToken(token, aggregate('items', { aggregate: { count: '*' }, query: { filter } })) );
 
 export const itemExistsChecker = (token:string, name = "") => 
 	directusClient.request( 

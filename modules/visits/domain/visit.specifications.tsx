@@ -51,7 +51,7 @@ export function yearFilter(year:number):object {
 }
 
 export function dateRangeFilter(from:Date, to:Date) {
-    return { "date_updated": { _between: [moment(from).format("YYYY-MM-DD"), moment(to).format("YYYY-MM-DD")]  } }
+    return { "date_updated": { _between: [moment(from.getDate()-1).format("YYYY-MM-DD"), moment(to.getDate()+1).format("YYYY-MM-DD")]  } }
 }
 
 export function filterVisitsArray(visits:Visit[], status:string) {

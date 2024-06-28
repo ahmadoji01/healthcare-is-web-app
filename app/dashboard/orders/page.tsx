@@ -9,7 +9,7 @@ import OrderListTable from "@/modules/orders/application/list/order.list";
 import { Order, defaultOrder, orderMapper } from "@/modules/orders/domain/order";
 import { deleteAnOrder, getAllOrders, getAllOrdersWithFilter, getOrdersWithFilter, getTotalOrdersWithFilter } from "@/modules/orders/domain/order.actions";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
-import { dateRangeFilter, monthFilter, statusFilter, yearFilter } from "@/modules/orders/domain/order.specifications";
+import { statusFilter } from "@/modules/orders/domain/order.specifications";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import MiniSpinner from "@/components/MiniSpinner";
 import { LIMIT_PER_PAGE } from "@/constants/request";
+import { dateRangeFilter } from "@/utils/generic-filters";
 
 const OrdersDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
