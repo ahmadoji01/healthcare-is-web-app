@@ -109,7 +109,7 @@ const QueueManager = () => {
     }
 
     return (
-        <div className="h-screen">
+        <div className="min-h-screen h-full">
             <DashboardModal 
                 open={statusModalOpen} 
                 children={
