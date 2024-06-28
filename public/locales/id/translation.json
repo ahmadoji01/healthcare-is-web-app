@@ -159,6 +159,11 @@
     "print_prescription": "Cetak Resep",
     "vacant": "Kosong",
     "monthly_sales_in": "Penjualan Bulanan Tahun ",
+    "clinic_information": "Informasi Klinik",
+    "clinics_name": "Nama Klinik",
+    "input_clinics_name": "Masukkan Nama Klinik",
+    "tax_rate": "Besar Pajak",
+    "change_clinics_logo": "Ganti Logo Klinik",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

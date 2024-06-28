@@ -24,6 +24,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  header2: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   table: {
     width: 'auto',
     marginBottom: 20,
@@ -77,6 +82,7 @@ const OrderDocument = () => {
   const {ordersDocument, from, to} = useDocumentContext();
   const {t} = useTranslation();
   const router = useRouter();
+  const {organization} = useUserContext();
 
   useEffect( () => {
     if (ordersDocument.length <= 0) {
@@ -90,6 +96,7 @@ const OrderDocument = () => {
         <Page size="A4" style={styles.page}>
           <View style={styles.section}>
             <Text style={styles.header}>{t('order_detail')}</Text>
+            <Text style={styles.header2}>{organization.name}</Text>
             <View style={styles.table}>
               <View style={styles.tableRow}>
                 <View style={styles.emptyCol}>

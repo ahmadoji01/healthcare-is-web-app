@@ -24,6 +24,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  header2: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   table: {
     width: 'auto',
     marginBottom: 20,
@@ -56,7 +61,7 @@ const styles = StyleSheet.create({
   },
   tableCellHeader: {
     backgroundColor: '#f2f2f2',
-    fontWeight: 'bold',
+    fontWeight: 700,
   },
   tableCell: {
     padding: 5,
@@ -84,6 +89,7 @@ const OrderDocument = () => {
         <Page size="A4" style={styles.page}>
           <View style={styles.section}>
             <Text style={styles.header}>{t('order_detail')}</Text>
+            <Text style={styles.header2}>{organization.name}</Text>
             <View style={styles.table}>
                 { orderDocument.visit?.patient?.name &&
                   <>
