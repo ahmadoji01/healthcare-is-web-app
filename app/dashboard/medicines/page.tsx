@@ -215,9 +215,9 @@ const MedicinesDashboardPage = () => {
   
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <ItemForm setCategoryName={setCategoryName} categories={categories} initItem={activeItem} handleSubmit={handleSubmit} /> } title="Medicine's Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <ItemForm setCategoryName={setCategoryName} categories={categories} initItem={activeItem} handleSubmit={handleSubmit} /> } title={t("medicines_detail")} />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <ItemDeleteConfirmation item={activeItem} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
-      <Breadcrumb pageName="Medicines" />
+      <Breadcrumb pageName={t("medicines")} />
 
       <div className="relative mb-4">
         <button className="absolute left-0 top-1/2 -translate-y-1/2">

@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Pagination } from "@mui/material";
 import { Category } from "../../domain/category";
+import { useTranslation } from "react-i18next";
 
 interface CategoryListTableProprs {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -18,24 +19,25 @@ interface CategoryListTableProprs {
 }
 
 const CategoryListTable = ({ handleModal, categories, totalPages, handlePageChange, setActiveCategory }: CategoryListTableProprs) => {
-
+  const {t} = useTranslation();
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
         <div className="grid grid-cols-2 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-2">
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Name
+              {t('name')}
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Actions
+              {t('actions')}
             </h5>
           </div>
         </div>
 
         {typeof(categories) !== "undefined" && categories.map((category, key) => (
+          category.name !== 'Medicines' &&
           <div
             className={`grid grid-cols-2 sm:grid-cols-2 ${
               key === categories.length - 1

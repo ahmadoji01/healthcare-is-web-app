@@ -164,6 +164,9 @@
     "input_clinics_name": "Input Clinic's Name",
     "tax_rate": "Tax Rate",
     "change_clinics_logo": "Change Clinic's Logo",
+    "medicines_detail": "Medicine's Detail",
+    "add_a_category": "Add a Category",
+    "edit_a_category": "Edit a Category",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

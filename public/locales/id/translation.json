@@ -164,6 +164,9 @@
     "input_clinics_name": "Masukkan Nama Klinik",
     "tax_rate": "Besar Pajak",
     "change_clinics_logo": "Ganti Logo Klinik",
+    "medicines_detail": "Detail Obat",
+    "add_a_category": "Tambah Kategori",
+    "edit_a_category": "Edit Kategori",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
