@@ -40,17 +40,20 @@ const MedicationList = ({ mrMedicines, setMRMedicines }:MedicationListProps) => 
                                 required
                                 name="doses"
                                 placeholder={ t("input_doses_example") }
-                                className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 />
                             </div>
                         </div>
                         <p>{ t('quantity') }:</p>
-                        <input
-                            onChange={ e => qtyChange(parseInt(e.target.value), i)}
-                            required
-                            name="quantity"
-                            className="custom-input-date custom-input-date-2 w-1/2 rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
-                            />
+                        <div className="flex flex-row">
+                            <input
+                                onChange={ e => qtyChange(parseInt(e.target.value), i)}
+                                required
+                                name="quantity"
+                                className="text-black dark:text-white custom-input-date custom-input-date-2 w-1/2 rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
+                                />
+                            <p className="text-black dark:text-white w-1/2 my-auto ml-2">{mrMed.items_id.unit}</p>
+                        </div>
                     </div>
                 </div>
             ) }

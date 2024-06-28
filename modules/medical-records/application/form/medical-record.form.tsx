@@ -2,21 +2,19 @@
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-import WindowedSelect, { createFilter, components } from "react-windowed-select";
+import WindowedSelect, { createFilter } from "react-windowed-select";
 import { Illness, MedicalRecord, MedicalRecordItem } from "../../domain/medical-record";
 import SelectOption from "@/interfaces/select-option";
-import { Treatment } from "@/modules/treatments/domain/treatment";
 import Illnesses from "@/constants/illnesses";
 import { getI18n, useTranslation } from "react-i18next";
 import dataID from "@/constants/icd10_select_id.json";
 import { Item, defaultItem } from "@/modules/items/domain/item";
-import { MR_ITEM_TYPES } from "../../domain/medical-records.constants";
 import { defaultCategory } from "@/modules/categories/domain/category";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
     treatments: Item[],
-    mrTreatments: MedicalRecordItem[],
     setMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>,
     setMRTreatments: Dispatch<SetStateAction<MedicalRecordItem[]>>,
 }
@@ -43,7 +41,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
     const treatmentsMapper = (choices: SelectOption[]) => {
         let items:MedicalRecordItem[] = [];
         choices?.map( (choice) => {
-            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0 }, notes: '', type: MR_ITEM_TYPES.treatment, quantity: 1 }); 
+            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0, unit: "", type: ITEM_TYPE.treatment }, notes: '', type: ITEM_TYPE.treatment, quantity: 1 }); 
         });
         setMRTreatments([...items]);
     }
@@ -77,7 +75,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                     onChange={e => setMedicalRecord({ ...medicalRecord, anamnesis: e.target.value })}
                                     rows={4}
                                     placeholder="Anamnesis"
-                                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-2 px-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                    className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-2 px-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                     ></textarea>
                                 </div>
                             </div>
@@ -95,7 +93,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         windowThreshold={5}
                                         options={illnesses}
-                                        className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />
                                 </div>
                             </div>
@@ -113,7 +111,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                         filterOption={createFilter({ ignoreAccents: false })}
                                         windowThreshold={5}
                                         options={treatOptions}
-                                        className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />
                                 </div>
                             </div>

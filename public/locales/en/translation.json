@@ -3,6 +3,7 @@
     "queue_number": "Queue Number",
     "medicines": "Medicines",
     "treatments": "Treatments",
+    "treatments_detail": "Treatment's Detail",
     "tax": "Tax",
     "order_items": "Order Items",
     "quantity": "Quantity",
@@ -117,6 +118,55 @@
     "input_price": "Input the item's price",
     "input_unit": "Input the item's unit (e.g. tablet, strip)",
     "unit": "Unit",
+    "no_order_items": "Any items ordered will appear here",
+    "out_of_stock": "Out of Stock",
+    "month": "Month",
+    "year": "Year",
+    "from": "From",
+    "to": "To",
+    "doctor_visited": "Doctor Visited",
+    "visits_date": "Visit's Date",
+    "medicine_treatment": "Medicine/Treatment",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "this_order": "this order",
+    "this_patient": "this patient",
+    "this_visit": "this visit",
+    "items": "Items",
+    "total": "Total",
+    "ordered_items": "Ordered Items",
+    "patients": "Patients",
+    "patients_detail": "Patient's Detail",
+    "patients_information": "Patient's Information",
+    "visits_detail": "Visit's Detail",
+    "order_detail": "Order Detail",
+    "order_date": "Order Date",
+    "item_name": "Item Name",
+    "subtotal": "Subtotal",
+    "with_exam_fee_and_tax": "With Exam Fee and Tax",
+    "print_order_document": "Print Order Document",
+    "orders": "Orders",
+    "doctors_detail": "Doctor's Detail",
+    "cms": "Centimeters",
+    "kgs": "Kilograms",
+    "no_visit_for_this_doctor_yet": "No incoming visit for this doctor yet. Please wait for a while",
+    "category_name": "Category Name",
+    "input_category_name": "Input Category Name",
+    "medicine_name": "Medicine Name",
+    "staffs_detail": "Staff's Detail",
+    "input_staffs_full_name": "Input the Staff's Full Name",
+    "prescription": "Medicines Prescription",
+    "print_prescription": "Print Prescription",
+    "vacant": "Vacant",
+    "monthly_sales_in": "Monthly Sales in ",
+    "clinic_information": "Clinic Information",
+    "clinics_name": "Clinic's Name",
+    "input_clinics_name": "Input Clinic's Name",
+    "tax_rate": "Tax Rate",
+    "change_clinics_logo": "Change Clinic's Logo",
+    "medicines_detail": "Medicine's Detail",
+    "add_a_category": "Add a Category",
+    "edit_a_category": "Edit a Category",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
@@ -170,7 +220,7 @@
 
     "module_app": {
         "item_name": "Item Name",
-        "delete_confirmation": "Are you sure you want to delete this data?",
+        "delete_confirmation": "Are you sure you want to delete",
         "delete_subtitle": "Any related data to this item will be deleted"
     },
 
@@ -184,7 +234,9 @@
         "amount_not_enough": "Received amount is not enough.",
         "no_payment_selected": "Choose the payment method first!",
         "payment_received": "Payment has been received!",
-        "clinic_is_close": "Clinic is close now. Wait until it's open!"
+        "clinic_is_close": "Clinic is close now. Wait until it's open!",
+        "add_item_first": "Add an item first to check this order out!",
+        "choose_date_first": "Choose the correct date range first"
     },
 
     "menu": {
@@ -213,6 +265,31 @@
         "my_profile": "My Profile",
         "dashboard": "Dashboard",
         "queue_manager": "Queue Manager",
-        "patients_list": "Patients List"
+        "queue_display": "Queue Display",
+        "patients_list": "Patients List",
+        "subscription": "Subscription"
+    },
+
+    "visits_status": {
+        "waiting": "Waiting",
+        "temporary_leave": "Temporary Leave",
+        "examining": "Examining",
+        "examined": "Examined",
+        "to_be_examined": "To be Examined",
+        "active": "Active",
+        "cancelled": "Cancelled",
+        "inactive": "Inactive"
+    },
+
+    "education_levels": {
+        "uneducated": "Uneducated",
+        "elementary": "Elementary",
+        "junior_secondary": "Junior Secondary",
+        "senior_secondary": "Senior Secondary",
+        "associate": "Associate",
+        "bachelor": "Bachelor",
+        "master": "Master",
+        "doctorate": "Doctor",
+        "postdoctorate": "Postdoctorate"
     }
 }

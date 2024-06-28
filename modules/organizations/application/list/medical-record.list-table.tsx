@@ -66,11 +66,11 @@ const PatientListTable = ({ handleEditModal, handleDeleteModal }: PatientListTab
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{patient.residentNumber}</p>
+              <p className="text-black dark:text-white">{patient.id_card_number}</p>
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{moment(patient.birthday).format("MMMM Do YYYY")}</p>
+              <p className="text-meta-3">{moment(patient.birthday).format("Do MMMM YYYY")}</p>
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">

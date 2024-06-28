@@ -1,12 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Pagination } from "@mui/material";
 import { Visit } from "../domain/visit";
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 import { statusDisplay } from "../domain/visit.specifications";
+import { useTranslation } from "react-i18next";
+import { DoctorName } from "@/utils/doctor-name-format";
 
 interface VisitListProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -17,33 +19,36 @@ interface VisitListProps {
 }
 
 const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiveVisit }:VisitListProps) => {
+  
+  const {t} = useTranslation();
+  
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
         <div className="grid grid-cols-5 rounded-sm bg-gray-2 dark:bg-meta-4">
-          <div className="p-2.5 xl:p-5">
+          <div className="text-center p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Date
+              {t('visits_date')}
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Patient's Name
+              {t('patients_name')}
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Doctor's Name
+              {t('doctor_visited')}
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Status
+              {t('status')}
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Actions
+              {t('actions')}
             </h5>
           </div>
         </div>
@@ -59,7 +64,7 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
           >
             <div className="flex items-center gap-3 p-2.5 xl:p-5">
               <p className="hidden text-black dark:text-white sm:block">
-                { moment(visit.date_created).format("MMMM Do YYYY") }
+                { moment(visit.date_created).locale('id').format("Do MMMM YYYY") }
               </p>
             </div>
 
@@ -68,7 +73,7 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
             </div>
 
             <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{visit.doctor.name}</p>
+              <p className="text-black dark:text-white">{DoctorName(visit.doctor.name, visit.doctor.specialization)}</p>
             </div>
 
             <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
@@ -77,15 +82,6 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
               <ul className="flex items-center gap-2 2xsm:gap-4">
-                <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
-                  <Link
-                    href="#"
-                    onClick={() => { handleModal(false, true); setActiveVisit(visit) }}
-                    className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
-                    >
-                    <FontAwesomeIcon width={18} height={18} icon={faPencil} />
-                  </Link>
-                </motion.li>
                 <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
                   <Link
                     href="#"

@@ -6,8 +6,9 @@ import Image from "next/image";
 import { Chip } from "@mui/material";
 import { useUserContext } from "@/contexts/user-context";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import TextSizeIcon from "../Icons/TextSizeIcon";
+import { useEffect, useState } from "react";
 
 let activeTimeout = null;
 
@@ -19,7 +20,19 @@ interface HeaderProps {
 const Header = ({ sidebarOpen, setSidebarOpen }:HeaderProps) => {
 
   const {organization} = useUserContext();
+  const [fontSize, setFontSize] = useState("100%"); 
   const {t} = useTranslation();
+
+  useEffect(() => {
+    let localSize = localStorage.getItem("font-size");
+    if (localSize !== null) {
+      setFontSize(localSize);
+    }
+  }, [])
+
+  useEffect(() => {
+    document.body.style.fontSize = fontSize;
+  }, [fontSize])
 
   const handleStatusChip = () => {
     if (organization.status === ORG_STATUS.open) {
@@ -31,6 +44,11 @@ const Header = ({ sidebarOpen, setSidebarOpen }:HeaderProps) => {
     return <Link href="/operational/front-desk"><Chip label={ t('loading') } color="warning" /></Link>
   }
 
+  const handleFontSizeChange = (size:string) => {
+    localStorage.setItem("font-size", size);
+    setFontSize(size);
+  }
+  
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
@@ -98,7 +116,9 @@ const Header = ({ sidebarOpen, setSidebarOpen }:HeaderProps) => {
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
             <DarkModeSwitcher />
-            <DropdownNotification />
+            <TextSizeIcon size="15px" onClick={() => handleFontSizeChange("100%")} />
+            <TextSizeIcon size="20px" onClick={() => handleFontSizeChange("120%")} />
+            <TextSizeIcon size="25px" onClick={() => handleFontSizeChange("140%")} />
           </ul>
           <DropdownUser />
         </div>

@@ -47,7 +47,7 @@ const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, han
                                         required
                                         onChange={ e => setItem({ ...item, name: e.target.value })}
                                         placeholder={ t("input_items_name") }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
@@ -60,7 +60,7 @@ const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, han
                                         required
                                         onChange={ e => setItem({ ...item, sku: e.target.value })}
                                         placeholder={ t("input_items_code") }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 { (showCategory && typeof(setCategoryName) !== 'undefined') && 
@@ -80,7 +80,7 @@ const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, han
                                                 freeSolo
                                                 options={cats}
                                                 disablePortal
-                                                renderInput={(params) => <TextField {...params} label="" />}
+                                                renderInput={(params) => <TextField {...params} label="" className="text-black dark:text-white " />}
                                             />
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@ const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, han
                                             required
                                             onChange={ e => setItem({ ...item, stock: parseInt(e.target.value) })}
                                             placeholder={ t("input_stock") }
-                                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                            className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                             />
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@ const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, han
                                             required
                                             onChange={ e => setItem({ ...item, unit: e.target.value })}
                                             placeholder={ t("input_unit") }
-                                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                            className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                             />
                                         </div>
                                     </div>
@@ -131,7 +131,7 @@ const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, han
                                         required
                                         onChange={ e => setItem({ ...item, price: parseInt(e.target.value) })}
                                         placeholder={ t("input_price") }
-                                        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                     </div>
                                 </div>

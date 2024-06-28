@@ -196,10 +196,10 @@ const MedicineCategoryPage = () => {
 
     return (
         <>
-            <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <CategoryForm initCategory={activeCategory} handleSubmit={handleSubmit} /> } title="Edit a Medicine Category" />
+            <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <CategoryForm initCategory={activeCategory} handleSubmit={handleSubmit} /> } title={t('edit_a_category')} />
             <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <CategoryDeleteConfirmation category={activeCategory} handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
-            <DashboardModal open={createModalOpen} handleClose={ () => handleModal(true, false) } children={ <CategoryForm initCategory={defaultCategory} handleSubmit={handleCreateSubmit} /> } title="Create a Medicine Category" />
-            <Breadcrumb pageName="Medicine Categories" />
+            <DashboardModal open={createModalOpen} handleClose={ () => handleModal(true, false) } children={ <CategoryForm initCategory={defaultCategory} handleSubmit={handleCreateSubmit} /> } title={t('add_a_category')} />
+            <Breadcrumb pageName={t('medicine_categories')} />
 
             <div className="relative mb-4">
                 <button className="absolute left-0 top-1/2 -translate-y-1/2">
@@ -226,7 +226,7 @@ const MedicineCategoryPage = () => {
                             <span>
                                 <FontAwesomeIcon icon={faAdd} />
                             </span>
-                            Add a Category
+                            {t('add_a_category')}
                         </Link>
                         <CategoryListTable handleModal={handleModal} handlePageChange={handlePageChange} setActiveCategory={setActiveCategory} categories={categories} totalPages={totalPages} /> 
                     </>}

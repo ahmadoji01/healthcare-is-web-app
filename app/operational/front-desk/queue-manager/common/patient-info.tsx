@@ -24,13 +24,13 @@ const PatientInfo = ({ patient }:PatientInfoProps) => {
                         <label className="mb-3 block text-black dark:text-white">
                             {t("name")}
                         </label>
-                        <p>{ patient.name }</p>
+                        <p className="text-black dark:text-white font-bold">{ patient.name }</p>
                     </div>
                     <div>
                         <label className="mb-3 block text-black dark:text-white">
                             {t("resident_number_or_family_id_number")}
                         </label>
-                        <p>{ patient.id_card_number ? patient.id_card_number : patient.family_id_number }</p>
+                        <p className="text-black dark:text-white font-bold">{ patient.id_card_number ? patient.id_card_number : patient.family_id_number }</p>
                     </div>
                     <div>
                         <label className="mb-3 block text-black dark:text-white">

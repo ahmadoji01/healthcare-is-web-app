@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { MAIN_CATEGORY } from "@/modules/categories/domain/category.constants";
 import { isTreatment } from "@/modules/categories/domain/category.specifications";
 import { ORDER_ITEM_TYPE } from "../../domain/order.constants";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 
 interface OrderItemListProps {
   orderItems: OrderItem[]|undefined,
@@ -27,7 +28,7 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
 
   useEffect( () => {
     setItems(orderItems);
-  }, [items]);
+  }, [orderItems]);
 
   useEffect( () => {
     setFee(examFee);
@@ -116,7 +117,7 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{ orderItem.item.name }</p>
+              <p className="text-black dark:text-white">{ orderItem.item.name } { orderItem.item.type !== ITEM_TYPE.treatment && " (" + orderItem.item.stock.toString() + ")" }</p>
             </div>
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
               <p className="text-meta-3"><Currency value={ orderItem.item.price } /></p>

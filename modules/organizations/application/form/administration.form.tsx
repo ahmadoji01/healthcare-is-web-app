@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { LogoURL } from "@/utils/profile-image-url";
 import defaultLogo from "@/public/images/clinic-icon-256.jpg";
 import { imageHandler } from "@/utils/request-handler";
+import { useTranslation } from "react-i18next";
 
 interface AdministrationFormProps {
     initOrg: Organization,
@@ -14,7 +15,8 @@ interface AdministrationFormProps {
 const AdministrationForm = ({ initOrg, handleSubmit, handleFileChange }: AdministrationFormProps) => {
 
     const [organization, setOrganization] = useState(initOrg);
-    const [logo, setLogo] = useState(defaultLogo.src)
+    const [logo, setLogo] = useState(defaultLogo.src);
+    const {t} = useTranslation();
 
     useEffect(() => { setOrganization(initOrg) }, [initOrg]);
 
@@ -32,26 +34,26 @@ const AdministrationForm = ({ initOrg, handleSubmit, handleFileChange }: Adminis
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                                 <h3 className="font-medium text-black dark:text-white">
-                                    Clinic Information
+                                    { t('clinic_information') }    
                                 </h3>
                             </div>
                             <div className="flex flex-col gap-5.5 p-6.5">
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
-                                        Clinic Name
+                                        { t('clinics_name') }    
                                     </label>
                                     <input
                                         type="text"
                                         defaultValue={organization.name}
                                         required
                                         onChange={ e => setOrganization({ ...organization, name: e.target.value })}
-                                        placeholder="Input Clinic's Name"
+                                        placeholder={ t('input_clinics_name') }
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
-                                        Tax Rate
+                                        { t('tax_rate') }    
                                     </label>
                                     <div className="relative">
                                         <input
@@ -59,8 +61,9 @@ const AdministrationForm = ({ initOrg, handleSubmit, handleFileChange }: Adminis
                                             defaultValue={organization.tax_rate}
                                             required
                                             onChange={ e => setOrganization({ ...organization, tax_rate: parseInt(e.target.value) })}
-                                            className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                            className="custom-input-date custom-input-date-2 mr-2 w-1/4 rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                             />
+                                        <span className="w-1/4 font-xl">%</span>
                                     </div>
                                 </div>
                                 <div>
@@ -108,7 +111,7 @@ const AdministrationForm = ({ initOrg, handleSubmit, handleFileChange }: Adminis
                                         <div className="flex flex-col gap-5.5 p-6.5">
                                             <div>
                                                 <label className="mb-3 block text-black dark:text-white">
-                                                    Change Logo
+                                                    { t('change_clinics_logo') }    
                                                 </label>
                                                 <input
                                                     onChange={handleFileChange}

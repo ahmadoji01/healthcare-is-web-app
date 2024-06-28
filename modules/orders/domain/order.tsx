@@ -84,3 +84,16 @@ export function orderPatcherMapper(order:Order, orgID:number) {
     }
     return orderPatcher;
 }
+
+export interface MonthlySales {
+    date_updated_month: number,
+    total: number, 
+}
+
+export function monthlySalesMapper(res:Record<string,any>) {
+    let result:MonthlySales = {
+        date_updated_month: res.date_updated_month? parseInt(res.date_updated_month) : -1,
+        total: res.sum?.total? res.sum.total : 0,
+    }
+    return result;
+}

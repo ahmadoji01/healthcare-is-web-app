@@ -5,13 +5,14 @@ import "@/styles/satoshi.css";
 import { useState, useEffect } from "react";
 import Loader from "@/components/Loader";
 
-import Sidebar from "./common/sidebar";
+import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { DoctorProvider, useDoctorContext } from "@/contexts/doctor-context";
 import { VisitProvider } from "@/contexts/visit-context";
 import Footer from "./common/footer";
 import { FrontDeskProvider } from "@/contexts/front-desk-context";
+import SidebarMenu from "./sidebar-menu";
+import { useDoctorContext } from "@/contexts/doctor-context";
 
 export default function RootLayout({
   children,
@@ -22,6 +23,11 @@ export default function RootLayout({
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
   const {loading} = useDoctorContext();
 
+  let storedSidebarExpanded = "true";
+  const [sidebarExpanded, setSidebarExpanded] = useState(
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
+  );
+
   useEffect(() => {
     const onStorageChange = () => {
       const item = localStorage.getItem("color-theme");
@@ -30,6 +36,26 @@ export default function RootLayout({
     }
     window.addEventListener('storage', onStorageChange);
   }, []);
+
+  useEffect(() => {
+    const onStorageChange = () => {
+      const item = localStorage.getItem("color-theme");
+      const colorTheme = item ? JSON.parse(item) : "light";
+      setTheme(createTheme({ palette: { mode: colorTheme } }));
+    }
+    window.addEventListener('storage', onStorageChange);
+  }, []);
+
+  useEffect(() => {
+    if ( typeof(sidebarExpanded) !== 'undefined' )
+      localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
+    
+    if (sidebarExpanded) {
+      document.querySelector("body")?.classList.add("sidebar-expanded");
+    } else {
+      document.querySelector("body")?.classList.remove("sidebar-expanded");
+    }
+  }, [sidebarExpanded]);
 
   return (
     <html lang="en">
@@ -43,7 +69,9 @@ export default function RootLayout({
                   <div className="flex h-screen overflow-hidden">
                     <Sidebar
                       sidebarOpen={sidebarOpen}
-                      setSidebarOpen={setSidebarOpen} />
+                      setSidebarOpen={setSidebarOpen}>
+                      <SidebarMenu sidebarExpanded={sidebarExpanded} setSidebarExpanded={setSidebarExpanded}  />
+                    </Sidebar>
                     <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                       <Header
                         sidebarOpen={sidebarOpen}

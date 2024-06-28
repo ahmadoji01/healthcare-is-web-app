@@ -21,7 +21,7 @@ const PatientOverview = () => {
         start,
         pause,
         stop, 
-    } = useSpeech({ text: "Atas nama" + patient?.name, lang: "id-ID", rate: 0.3 });
+    } = useSpeech({ text: "Atas nama " + patient?.name, lang: "id-ID", rate: 0.3 });
 
     const callPatient = () => {
         if (!isInQueue) {
@@ -34,7 +34,7 @@ const PatientOverview = () => {
             setPatient(selectedOrder.patient? selectedOrder.patient : undefined);
             setOrder(selectedOrder);
         }
-    }, [patient]);
+    }, [selectedOrder]);
 
     return (
         <>

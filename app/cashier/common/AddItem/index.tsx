@@ -12,6 +12,8 @@ import { useUserContext } from "@/contexts/user-context";
 import { getAllTreatments, searchTreatments } from "@/modules/treatments/domain/treatments.actions";
 import { useTranslation } from "react-i18next";
 import { useAlertContext } from "@/contexts/alert-context";
+import { getAllItems, searchItems } from "@/modules/items/domain/items.actions";
+import { Item, itemMapper } from "@/modules/items/domain/item";
 
 function isAMedicine(obj: Medicine|Treatment) {
     if (obj.hasOwnProperty('category')) {
@@ -27,6 +29,7 @@ const AddItem = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
+    const [items, setItems] = useState<Item[]>([]);
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [treatments, setTreatments] = useState<Treatment[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -37,48 +40,30 @@ const AddItem = () => {
     const { t } = useTranslation();
 
     const fetchAllData = () => {
-        getAllMedicines(accessToken, 1).then( res => {
-            let meds:Medicine[] = [];
-            res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
-            setMedicines(meds);
-            setLoading(false);
-        });
-        getAllTreatments(accessToken, 1).then( res => {
-            let treats:Treatment[] = [];
-            res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
-            setTreatments(treats);
+        getAllItems(accessToken, 1).then( res => {
+            let its:Item[] = [];
+            res?.map( (item) => { its.push(itemMapper(item)); });
+            setItems(its);
             setLoading(false);
         });
     }
 
     useEffect( () => {
-        getAllMedicines(accessToken, 1).then( res => {
-          let meds:Medicine[] = [];
-          res?.map( (medicine) => { meds.push(medicineMapper(medicine)); });
-          setMedicines(meds);
-          setLoading(false);
-        });
-        getAllTreatments(accessToken, 1).then( res => {
-          let treats:Treatment[] = [];
-          res?.map( (treatment) => { treats.push(treatmentMapper(treatment)); });
-          setTreatments(treats);
-          setLoading(false);
+        getAllItems(accessToken, 1).then( res => {
+            let its:Item[] = [];
+            res?.map( (item) => { its.push(itemMapper(item)); });
+            setItems(its);
+            setLoading(false);
         });
     }, []);  
     
     const handleSearch = (query:string) => {
         if (query.length > 3) {
             setLoading(true);
-            searchMedicines(accessToken, query, 1).then( res => {
-                let meds:Medicine[] = [];
-                res?.map( (med) => { meds.push(medicineMapper(med)); });
-                setMedicines(meds);
-                setLoading(false);
-            });
-            searchTreatments(accessToken, query, 1).then( res => {
-                let treats:Treatment[] = [];
-                res?.map( (treat) => { treats.push(treatmentMapper(treat)); });
-                setTreatments(treats);
+            searchItems(accessToken, query, 1).then( res => {
+                let its:Item[] = [];
+                res?.map( (item) => { its.push(itemMapper(item)); });
+                setItems(its);
                 setLoading(false);
             });
         }
@@ -106,7 +91,7 @@ const AddItem = () => {
         setOpenSnackbar(false);
     };
 
-    const handleAddItem = (item:Medicine|Treatment, quantity:number) => {
+    const handleAddItem = (item:Item, quantity:number) => {
         if (typeof(selectedOrder) === 'undefined') {
             openSnackbarNotification(t("alert_msg.no_order_selected"), "warning");
             return;
@@ -114,14 +99,7 @@ const AddItem = () => {
         let newSelectedOrder = {...selectedOrder};
         let items = [...newSelectedOrder.order_items];
 
-        let orderItem:OrderItem = { id: items.length, medicine: null, treatment: null, name: item.name, price: item.price, description: "", quantity: 1, total: item.price, image: "" } 
-        if (isAMedicine(item)) {
-            orderItem.medicine = item;
-            orderItem.quantity = quantity;
-            orderItem.total = item.price * quantity;
-        } else {
-            orderItem.treatment = item;
-        }
+        let orderItem:OrderItem = { id: items.length, item: item, name: item.name, price: item.price, description: "", quantity, total: item.price, type: item.type } 
         newSelectedOrder.order_items[items.length] = orderItem;
         setSelectedOrder(newSelectedOrder);
         openSnackbarNotification(t("alert_msg.item_added"), "success");
@@ -155,25 +133,11 @@ const AddItem = () => {
                         aria-controls="panel1-content"
                         id="panel1-header"
                         >
-                        <h4 className="font-extrabold">{ t("medicines") }</h4>
+                        <h4 className="font-extrabold">{ t("order_items") }</h4>
                     </AccordionSummary>
                     <AccordionDetails>
-                        { medicines?.map( (medicine) => (
-                            <ItemCard item={medicine} showQtyHandler={true} handleAddItem={handleAddItem} />
-                        )) }
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion defaultExpanded sx={{ backgroundColor: 'transparent', boxShadow: 0 }}>
-                    <AccordionSummary
-                        expandIcon={<FontAwesomeIcon icon={faArrowAltCircleUp} />}
-                        aria-controls="panel1-content"
-                        id="panel1-header"
-                        >
-                        <h4 className="font-extrabold">{ t("treatments") }</h4>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        { treatments?.map( (treatment) => (
-                            <ItemCard item={treatment} showQtyHandler={false} handleAddItem={handleAddItem} />
+                        { items?.map( (item) => (
+                            <ItemCard item={item} handleAddItem={handleAddItem} />
                         )) }
                     </AccordionDetails>
                 </Accordion>

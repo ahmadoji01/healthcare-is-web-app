@@ -9,9 +9,15 @@ import MedicalRecordDeleteConfirmation from "@/modules/medical-records/applicati
 import MedicalRecordForm from "@/modules/medical-records/application/form/medical-record.form";
 import MedicalRecordListTable from "@/modules/medical-records/application/list/medical-record.list-table";
 import { MedicalRecord, defaultMedicalRecord, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
-import { deleteAMedicalRecord, getTotalMedicalRecords, searchMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";
+import { deleteAMedicalRecord, getMedicalRecordsWithFilter, getTotalMedicalRecords, searchMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";
 import { MR_STATUS } from "@/modules/medical-records/domain/medical-records.constants";
 import { useEffect, useState } from "react";
+import moment from "moment";
+import { useTranslation } from "react-i18next";
+import { statusEquals } from "@/modules/visits/domain/visit.specifications";
+import { dateRangeFilter } from "@/modules/medical-records/domain/medical-record.specifications";
+import { DatePicker } from "@mui/x-date-pickers";
+import MedicalRecordView from "@/modules/medical-records/application/medical-record.view";
 
 const MedicalRecordsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -19,17 +25,34 @@ const MedicalRecordsDashboardPage = () => {
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const [activeMedicalRecord, setActiveMedicalRecord] = useState(defaultMedicalRecord);
-  const [medicalRecords, setmedicalRecords] = useState<MedicalRecord[]>([]);
+  const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const {t} = useTranslation();
+  const [fromDate, setFromDate] = useState<Date|null>(null);
+  const [toDate, setToDate] = useState<Date|null>(null);
+  
+  const [filter, setFilter] = useState<object>({ _and: [ statusEquals(MR_STATUS.complete) ] })
+
+  const fetchMedicalRecords = (newFilter:object) => {
+    setDataLoaded(false);
+    getMedicalRecordsWithFilter(accessToken, newFilter, 1)
+      .then( res => {
+        let records:MedicalRecord[] = [];
+        res?.map( (record) => { records.push(medicalRecordMapper(record)); });
+        setMedicalRecords(records);
+        setDataLoaded(true);
+      })
+    setFilter(newFilter);
+  }
 
   useEffect( () => {
     if (!dataLoaded || medicalRecords.length == 0) {
-      searchMedicalRecords(accessToken, { status: { _eq: MR_STATUS.complete } }, 1)
+      searchMedicalRecords(accessToken, filter, 1)
         .then( res => {
           let records:MedicalRecord[] = [];
           res?.map( (record) => { records.push(medicalRecordMapper(record)); });
-          setmedicalRecords(records);
+          setMedicalRecords(records);
           setDataLoaded(true);
         });
       getTotalMedicalRecords(accessToken)
@@ -59,11 +82,11 @@ const MedicalRecordsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    searchMedicalRecords(accessToken, { status: { _eq: MR_STATUS.complete } }, value)
+    getMedicalRecordsWithFilter(accessToken, filter, value)
       .then( res => {
         let records:MedicalRecord[] = [];
         res?.map( (record) => { records.push(medicalRecordMapper(record)); });
-        setmedicalRecords(records);
+        setMedicalRecords(records);
         setDataLoaded(true);
       });
   }
@@ -77,12 +100,43 @@ const MedicalRecordsDashboardPage = () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   }
+
+  const onFromChange = (val:Date|undefined) => {
+    if (typeof(val) === "undefined") {
+      return;
+    }
+    setFromDate(val);
+
+    if (toDate === null) {
+      return;
+    }
+    let newFilter:object = { _and: [ statusEquals(MR_STATUS.complete), dateRangeFilter(val, toDate) ] }
+    fetchMedicalRecords(newFilter);
+  }
+
+  const onToChange = (val:Date|undefined) => {
+    if (typeof(val) === "undefined") {
+      return;
+    }
+    setToDate(val);
+    
+    if (fromDate === null) {
+      return;
+    }
+    let newFilter:object = { _and: [ statusEquals(MR_STATUS.complete), dateRangeFilter(fromDate, val) ] }
+    fetchMedicalRecords(newFilter);
+  }
   
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <MedicalRecordForm treatments={activeMedicalRecord.treatments} medicalRecord={activeMedicalRecord} setMedicalRecord={setActiveMedicalRecord} /> } title="Medical Record Detail" />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <MedicalRecordView medicalRecord={activeMedicalRecord} /> } title="Medical Record Detail" />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <MedicalRecordDeleteConfirmation handleClose={ () => handleModal(true, false)} handleDelete={handleDelete} /> } title="" />
-      <Breadcrumb pageName="Medical Records" />
+      <Breadcrumb pageName={t("menu.medical_records")} />
+
+      <div className="flex flex-row gap-3 mb-3">
+        <DatePicker label={t('from')} onChange={ e => onFromChange(e?.toDate()) } maxDate={moment(toDate)} />
+        <DatePicker label={t('to')} onChange={ e => onToChange(e?.toDate()) } minDate={moment(fromDate)} />
+      </div>
 
       <div className="flex flex-col gap-10">
         { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    

@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -62,7 +62,7 @@ const DoctorListTable = ({ handleModal, doctors, totalPages, handlePageChange, s
             key={key}
           >
             <div className="flex items-center justify p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{DoctorName(doctor.name, doctor.specialization)}</p>
+              <p className="text-meta-3">{DoctorName(doctor.name, doctor.specialization)}</p>
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
@@ -70,7 +70,7 @@ const DoctorListTable = ({ handleModal, doctors, totalPages, handlePageChange, s
             </div>
 
             <div className="hidden items-center justify-center sm:flex p-2.5 xl:p-5">
-              <p className="text-meta-3">{moment(doctor.birthday).format("MMMM Do YYYY")}</p>
+              <p className="text-black dark:text-white">{moment(doctor.birthday).locale('id').format("Do MMMM YYYY")}</p>
             </div>
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">

@@ -1,6 +1,6 @@
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { directusClient } from "@/utils/request-handler"
-import { createItem, readItems, updateItem, uploadFiles, withToken } from "@directus/sdk";
+import { createItem, readExtensions, readItems, updateItem, uploadFiles, withToken } from "@directus/sdk";
 import { ORG_STATUS } from "./organizations.constants";
 import Link from "next/link";
 import { Chip } from "@mui/material";
@@ -24,12 +24,8 @@ export const displayStatus = (status:string) => {
 
 }
 
-const handleStatusChip = (status:string) => {
-    if (status === ORG_STATUS.open) {
-      return <Link href="/operational/front-desk"><Chip label="Open" color="primary" /></Link>
-    }
-    if (status === ORG_STATUS.close) {
-      return <Link href="/operational/front-desk"><Chip label="Close" color="error" /></Link>
-    }
-    return <Link href="/operational/front-desk"><Chip label="Loading..." color="warning" /></Link>
-}
+export const updateSubscription = (token:string, orgId:number) => 
+    directusClient.request(withToken(token, () => ({
+        path: '/extensions/payments/' + orgId,
+        method: 'GET',
+    })));

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import Link from "next/link";
 import defaultAvatar from "@/public/images/avatar-256.jpg";
 import { useUserContext } from "@/contexts/user-context";
@@ -101,7 +101,7 @@ const DropdownUser = () => {
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
             <Link
-              href="/dashboard/profile"
+              href="/profile"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg

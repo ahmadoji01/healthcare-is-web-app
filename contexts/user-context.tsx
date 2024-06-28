@@ -2,6 +2,7 @@ import { Organization, defaultOrganization, organizationMapper } from '@/modules
 import { getOrganization } from '@/modules/organizations/domain/organizations.actions';
 import { User, defaultUser, userMapper } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
+import { isURLAllowed, redirectURL } from '@/modules/users/domain/users.specifications';
 import { directusClient } from '@/utils/request-handler';
 import { useRouter, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
@@ -11,8 +12,10 @@ interface UserContextType {
     user: User,
     loading: boolean,
     organization: Organization,
+    fontSize: string,
     setUser: Dispatch<SetStateAction<User>>,
     setOrganization: Dispatch<SetStateAction<Organization>>,
+    setFontSize: Dispatch<SetStateAction<string>>,
     fetchOrganization: () => void,
 }
 
@@ -23,8 +26,10 @@ export const UserContext = createContext<UserContextType | null>({
     user: defaultUser,
     loading: false,
     organization: defaultOrganization,
+    fontSize: "100%",
     setUser: () => {},
     setOrganization: () => {},
+    setFontSize: () => {},
     fetchOrganization: () => {},
 });
  
@@ -40,6 +45,7 @@ export const UserProvider = ({
     const [expiry, setExpiry] = useState(50);
     const [user, setUser] = useState(defaultUser);
     const [loading, setLoading] = useState(true);
+    const [fontSize, setFontSize] = useState("100%");
     const [organization, setOrganization] = useState(defaultOrganization);
 
     const refreshToken = async (interval:NodeJS.Timeout, isLooping:boolean) => {
@@ -111,11 +117,36 @@ export const UserProvider = ({
     }, []);
 
     useEffect(() => {
+        let localFontSize = localStorage.getItem("font-size");
+        if (localFontSize !== null) {
+            setFontSize(localFontSize);
+        }
+    }, []);
+    
+    useEffect(() => {
         fetchOrganization();
-    }, [pathname])
+
+        if (user.role_name === "") {
+            return;
+        }
+
+        if (!isURLAllowed(pathname, user.role_name)) {
+            router.push(redirectURL(user.role_name));
+        }
+    }, [pathname]);
+
+    useEffect(() => {
+        if (user.role_name === "") {
+            return;
+        }
+
+        if (!isURLAllowed(pathname, user.role_name)) {
+            router.push(redirectURL(user.role_name));
+        }
+    }, [user.role_name])
 
     return (
-        <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading, fetchOrganization }}>
+        <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
             {children}
         </UserContext.Provider>
     );

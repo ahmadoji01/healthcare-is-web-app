@@ -7,9 +7,10 @@ import Loader from "@/components/Loader";
 
 import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
-import Sidebar from "./common/Sidebar";
+import Sidebar from "@/components/Sidebar";
 import Footer from "./common/Footer";
 import { OrderSummaryProvider } from "@/contexts/order-summary-context";
+import SidebarMenu from "./sidebar-menu";
 
 export default function RootLayout({
   children,
@@ -19,6 +20,11 @@ export default function RootLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
+
+  let storedSidebarExpanded = "true";
+  const [sidebarExpanded, setSidebarExpanded] = useState(
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
+  );
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
@@ -30,6 +36,17 @@ export default function RootLayout({
     }
     window.addEventListener('storage', onStorageChange);
   }, []);
+
+  useEffect(() => {
+    if ( typeof(sidebarExpanded) !== 'undefined' )
+      localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
+    
+    if (sidebarExpanded) {
+      document.querySelector("body")?.classList.add("sidebar-expanded");
+    } else {
+      document.querySelector("body")?.classList.remove("sidebar-expanded");
+    }
+  }, [sidebarExpanded]);
 
   return (
     <html lang="en">
@@ -43,7 +60,9 @@ export default function RootLayout({
                 <Sidebar
                   sidebarOpen={sidebarOpen}
                   setSidebarOpen={setSidebarOpen}
-                />
+                  >
+                  <SidebarMenu sidebarExpanded={sidebarExpanded} setSidebarExpanded={setSidebarExpanded}  />
+                </Sidebar>
                 <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                   <Header
                     sidebarOpen={sidebarOpen}

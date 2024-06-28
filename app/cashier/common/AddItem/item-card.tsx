@@ -1,20 +1,19 @@
 import Currency from "@/components/Currency";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
-import Medicine from "@/modules/medicines/domain/medicine";
+import { Item } from "@/modules/items/domain/item";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { Treatment } from "@/modules/treatments/domain/treatment";
 import { faAdd, faPills } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next";
 
 interface ItemCardProps {
-    showQtyHandler: boolean,
-    item: Medicine|Treatment,
+    item: Item,
     handleAddItem: (item:any, quantity:number) => void,
 }
 
-const ItemCard = ({ item, showQtyHandler, handleAddItem }:ItemCardProps) => {
+const ItemCard = ({ item, handleAddItem }:ItemCardProps) => {
 
     const [quantity, setQuantity] = useState<number>(1);
     const [hidden, setHidden] = useState<boolean>(false);
@@ -40,11 +39,8 @@ const ItemCard = ({ item, showQtyHandler, handleAddItem }:ItemCardProps) => {
         }
     }
 
-    const isInOrderItems = (item:Medicine|Treatment) => {
-        if (selectedOrder?.order_items.some(val => val.medicine?.id === item.id)) {
-            setHidden(true);
-        }
-        if (selectedOrder?.order_items.some(val => val.treatment?.id === item.id)) {
+    const isInOrderItems = (item:Item) => {
+        if (selectedOrder?.order_items.some(val => val.item?.id === item.id)) {
             setHidden(true);
         }
         return;
@@ -54,13 +50,13 @@ const ItemCard = ({ item, showQtyHandler, handleAddItem }:ItemCardProps) => {
         <div className={`flex rounded-sm border border-stroke p-4 mb-1 bg-white shadow-default dark:border-strokedark dark:bg-boxdark`}>
             <div className="grid grid-cols-8 gap-4 w-full">
                 <div className={`col-span-2 my-auto 'text-black dark:text-white font-bold'`}>
-                    { item.name }
+                    { item.name } { item.type !== ITEM_TYPE.treatment && " (" + item.stock.toString() + ")" }
                 </div>
                 <div className={`col-span-2 my-auto text-black dark:text-white font-bold`}>
                     <Currency value={item.price} />
                 </div>
                 <div className="custom-number-input m-auto col-span-3">
-                    { (showQtyHandler && !hidden) &&
+                    { (item.type !== ITEM_TYPE.treatment && !hidden) &&
                         <div className="flex flex-row w-full rounded-lg mt-1">
                             <button className="h-full w-15 rounded-l cursor-pointer outline-none">
                                 <span className="m-auto text-2xl font-thin" onClick={() => handleChange(0, 'substract')}>−</span>

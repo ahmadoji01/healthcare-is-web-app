@@ -36,7 +36,9 @@ export const searchItems = (token:string, query:string, page:number) =>
 		withToken(token, readItems('items', { fields: ['*.*'], search: query, limit: LIMIT_PER_PAGE, page }))
 	)
 export const getTotalSearchItems = (token:string, query:string) => directusClient.request( withToken(token, readItems('items', { search: query, aggregate: { count: '*' } })));
+
 export const searchItemsWithFilter = (token:string, query:string, filter:object, page:number) =>
 	directusClient.request(
 		withToken(token, readItems('items', { fields: ['*.*'], search: query, filter: filter, limit: LIMIT_PER_PAGE, page }))
 	)
+export const getTotalSearchItemsWithFilter = (token:string, query:string, filter:object) => directusClient.request( withToken(token, readItems('items', { filter: filter, search: query, aggregate: { count: '*' } })));

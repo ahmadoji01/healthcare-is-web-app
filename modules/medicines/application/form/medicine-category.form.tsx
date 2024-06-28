@@ -3,6 +3,7 @@
 import SubmitButton from '@/components/Dashboard/Submit';
 import { useState } from 'react';
 import MedicineCategory from '../../domain/medicine-category';
+import { useTranslation } from 'react-i18next';
 
 interface MedicineCategoryFormProps {
     initCategory: MedicineCategory,
@@ -11,6 +12,7 @@ interface MedicineCategoryFormProps {
 
 const MedicineCategoryForm = ({ initCategory, handleSubmit }:MedicineCategoryFormProps) => {
     const [category, setCategory] = useState(initCategory);
+    const {t} = useTranslation();
 
     return (
         <>
@@ -21,14 +23,14 @@ const MedicineCategoryForm = ({ initCategory, handleSubmit }:MedicineCategoryFor
                             <div className="flex flex-col gap-5.5 p-6.5">
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
-                                        Name
+                                        { t('category_name') }
                                     </label>
                                     <input
                                         type="text" 
                                         defaultValue={category.name}
                                         required
                                         onChange={ e => setCategory({ ...category, name: e.target.value })}
-                                        placeholder="Input Category Name"
+                                        placeholder={t('input_category_name')}
                                         className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                 </div>
