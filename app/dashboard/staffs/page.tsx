@@ -81,7 +81,6 @@ const StaffsDashboardPage = () => {
   };
 
   const handleSubmit = (staff:Staff) => {
-    console.log(staffPatcherMapper(staff));
     updateAStaff(accessToken, staff.id, staffPatcherMapper(staff))
       .then( () => {
         openSnackbarNotification(t('alert_msg.success'), "success");

@@ -99,7 +99,7 @@ const PatientsList = () => {
                 });
             getTotalVisitsWithFilter(accessToken, statusFilter(VISIT_STATUS.to_be_examined))
                 .then( res => { 
-                    let total = res[0].count? parseInt(res[0].count) : 0;console.log(total);
+                    let total = res[0].count? parseInt(res[0].count) : 0;
                     let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
                     setTotalPages(pages);
                 })
