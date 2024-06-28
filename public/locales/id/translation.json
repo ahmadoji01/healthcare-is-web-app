@@ -158,6 +158,7 @@
     "prescription": "Resep Obat",
     "print_prescription": "Cetak Resep",
     "vacant": "Kosong",
+    "monthly_sales_in": "Penjualan Bulanan Tahun ",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

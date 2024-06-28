@@ -1,7 +1,15 @@
 "use client";
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { monthlySalesMapper } from "@/modules/orders/domain/order";
+import { useTranslation } from "react-i18next";
+import { defaultMonthlySalesData } from "@/utils/chart-data-format";
+import { useUserContext } from "@/contexts/user-context";
+import { useAlertContext } from "@/contexts/alert-context";
+import { statusFilter, yearFilter } from "@/modules/orders/domain/order.specifications";
+import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
+import { getTotalSales } from "@/modules/orders/domain/order.actions";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -14,11 +22,6 @@ const options: ApexOptions = {
   },
   colors: ["#3C50E0", "#80CAEE"],
   chart: {
-    // events: {
-    //   beforeMount: (chart) => {
-    //     chart.windowResizeHandler();
-    //   },
-    // },
     fontFamily: "Satoshi, sans-serif",
     height: 335,
     type: "area",
@@ -57,10 +60,6 @@ const options: ApexOptions = {
     width: [2, 2],
     curve: "straight",
   },
-  // labels: {
-  //   show: false,
-  //   position: "top",
-  // },
   grid: {
     xaxis: {
       lines: {
@@ -93,10 +92,6 @@ const options: ApexOptions = {
   xaxis: {
     type: "category",
     categories: [
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
       "Jan",
       "Feb",
       "Mar",
@@ -105,6 +100,10 @@ const options: ApexOptions = {
       "Jun",
       "Jul",
       "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ],
     axisBorder: {
       show: false,
@@ -120,7 +119,7 @@ const options: ApexOptions = {
       },
     },
     min: 0,
-    max: 100,
+    max: 1000000,
   },
 };
 
@@ -131,28 +130,117 @@ interface ChartOneState {
   }[];
 }
 
-const ChartOne: React.FC = () => {
+const ChartOne = () => {
+
+  const {t} = useTranslation();
+  const [chartOptions, setChartOptions] = useState(options);
+  const dateNow = new Date;
+  const {accessToken} = useUserContext();
+  const {openSnackbarNotification} = useAlertContext();
+  const [thisYearSales, setThisYearSales] = useState<number[]>([0,0,0,0,0,0,0,0,0,0,0,0]);
+  const [lastYearSales, setLastYearSales] = useState<number[]>([0,0,0,0,0,0,0,0,0,0,0,0]);
+
+  const setYAxisMax = (val:number) => {
+    if (val <= 0) {
+      return;
+    }
+    let newOpts = {...chartOptions};
+    let yAxis = {...chartOptions.yaxis};
+    setChartOptions(newOpts);
+    if (yAxis.max < val) {
+      yAxis.max = val + (0.2 * val);
+      newOpts.yaxis = yAxis;
+      setChartOptions(newOpts);
+    }
+  }
+
+  const stateSetter = (thisYear:number[], lastYear:number[]) => {
+    setState({
+      series: [
+        {
+          name: t('monthly_sales_in') + dateNow.getFullYear(),
+          data: thisYear,
+        },
+        {
+          name: t('monthly_sales_in') + (dateNow.getFullYear() - 1),
+          data: lastYear,
+        }
+      ]
+    })
+  }
+
+  const fetchTotalSales = (year:number, sales:number[], setSales:Dispatch<SetStateAction<number[]>>) => {
+    let monthlySales = [...sales];
+    let filter = { _and: [ statusFilter(ORDER_STATUS.paid), yearFilter(year) ] };
+    let dateNow = new Date;
+    getTotalSales(accessToken, filter, 'month(date_updated)')
+      .then( res => {
+        if (year === dateNow.getFullYear() && res.length > 0) {
+          res.map( (sales) => {
+            let sls = monthlySalesMapper(sales);
+            monthlySales[sls.date_updated_month] = sls.total;
+          });
+        }
+        setYAxisMax(Math.max(...monthlySales));
+        setSales(monthlySales);
+      })
+      .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
+  }
+
   const [state, setState] = useState<ChartOneState>({
     series: [
       {
-        name: "Product One",
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
+        name: t('monthly_sales_in') + dateNow.getFullYear(),
+        data: thisYearSales,
       },
 
       {
-        name: "Product Two",
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
+        name: t('monthly_sales_in') + (dateNow.getFullYear() - 1),
+        data: lastYearSales,
       },
     ],
   });
 
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState,
-    }));
-  };
+  useEffect( () => {
+    let dateNow = new Date;
+    let filter = { _and: [ statusFilter(ORDER_STATUS.paid), yearFilter(dateNow.getFullYear()) ] };
+    let monthlySales = [...thisYearSales];
+    getTotalSales(accessToken, filter, 'month(date_updated)')
+      .then( res => {
+        if (res.length > 0) {
+          res.map( (sales) => {
+            let sls = monthlySalesMapper(sales);
+            monthlySales[sls.date_updated_month] = sls.total;
+          });
+        }
+        setYAxisMax(Math.max(...monthlySales));
+        setThisYearSales(monthlySales);
+      })
+      .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
+  }, []);
 
-  handleReset;
+  useEffect( () => {
+    let dateNow = new Date;
+    let filter = { _and: [ statusFilter(ORDER_STATUS.paid), yearFilter(dateNow.getFullYear()-1) ] };
+    let monthlySales = [...lastYearSales];
+    getTotalSales(accessToken, filter, 'month(date_updated)')
+      .then( res => {
+        if (res.length > 0) {
+          res.map( (sales) => {
+            let sls = monthlySalesMapper(sales);
+            monthlySales[sls.date_updated_month] = sls.total;
+          });
+        }
+        setYAxisMax(Math.max(...monthlySales));
+        setLastYearSales(monthlySales);
+      })
+      .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
+  }, [thisYearSales]);
+
+  
+  useEffect( () => {
+    stateSetter(thisYearSales, lastYearSales);
+  }, [lastYearSales])
 
   const isWindowAvailable = () => typeof window !== "undefined";
 
@@ -167,8 +255,8 @@ const ChartOne: React.FC = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-primary">Total Revenue</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="font-semibold text-primary">{ t('monthly_sales_in') + dateNow.getFullYear() }</p>
+              <p className="text-sm font-medium">01.01.{ dateNow.getFullYear() } - 31.12.{ dateNow.getFullYear() }</p>
             </div>
           </div>
           <div className="flex min-w-47.5">
@@ -176,22 +264,9 @@ const ChartOne: React.FC = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-secondary">Total Sales</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="font-semibold text-secondary">{ t('monthly_sales_in') + (dateNow.getFullYear()-1) }</p>
+              <p className="text-sm font-medium">01.01.{ dateNow.getFullYear()-1 } - 31.12.{ dateNow.getFullYear()-1 }</p>
             </div>
-          </div>
-        </div>
-        <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
-            <button className="rounded bg-white py-1 px-3 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark">
-              Day
-            </button>
-            <button className="rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
-              Week
-            </button>
-            <button className="rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
-              Month
-            </button>
           </div>
         </div>
       </div>
@@ -199,7 +274,7 @@ const ChartOne: React.FC = () => {
       <div>
         <div id="chartOne" className="-ml-5 h-[355px] w-[105%]">
           <ReactApexChart
-            options={options}
+            options={chartOptions}
             series={state.series}
             type="area"
             width="100%"

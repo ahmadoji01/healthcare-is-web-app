@@ -158,6 +158,7 @@
     "prescription": "Medicines Prescription",
     "print_prescription": "Print Prescription",
     "vacant": "Vacant",
+    "monthly_sales_in": "Monthly Sales in ",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

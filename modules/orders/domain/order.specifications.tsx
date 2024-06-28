@@ -10,12 +10,16 @@ export function statusFilter(status:string):object {
     return { status: { _eq: status } };
 }
 
+export function orderStatusFilter(status:string):object {
+    return { order: { status: { _eq: status } } };
+}
+
 export function monthFilter(month:number):object {
     return { "month(date_created)": { _eq: month } }
 }
 
 export function yearFilter(year:number):object {
-    return { "year(date_created)": { _eq: year } }
+    return { "year(date_updated)": { _eq: year } }
 }
 
 export function dateRangeFilter(from:Date, to:Date) {
