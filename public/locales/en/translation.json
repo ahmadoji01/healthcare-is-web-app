@@ -167,6 +167,10 @@
     "medicines_detail": "Medicine's Detail",
     "add_a_category": "Add a Category",
     "edit_a_category": "Edit a Category",
+    "total_visits_this_month": "Total Visits This Month",
+    "total_visits_all_time": "Total Visits All Time",
+    "most_sold_medicines": "Most Sold Medicines",
+    "total_medicines": "Total Medicines",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

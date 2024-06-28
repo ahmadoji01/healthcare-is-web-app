@@ -97,3 +97,16 @@ export function monthlySalesMapper(res:Record<string,any>) {
     }
     return result;
 }
+
+export interface ItemQuantitySold {
+    item: number,
+    quantity: number,
+}
+
+export function itemQuantitySoldMapper(res:Record<string,any>) {
+    let result:ItemQuantitySold = {
+        item: res.item? parseInt(res.item) : -1,
+        quantity: res.sum?.quantity? res.sum.quantity : 0,
+    }
+    return result;
+}

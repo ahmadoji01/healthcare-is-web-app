@@ -158,7 +158,7 @@
     "prescription": "Resep Obat",
     "print_prescription": "Cetak Resep",
     "vacant": "Kosong",
-    "monthly_sales_in": "Penjualan Bulanan Tahun ",
+    "monthly_sales_in": "Penjualan Tahun ",
     "clinic_information": "Informasi Klinik",
     "clinics_name": "Nama Klinik",
     "input_clinics_name": "Masukkan Nama Klinik",
@@ -167,6 +167,10 @@
     "medicines_detail": "Detail Obat",
     "add_a_category": "Tambah Kategori",
     "edit_a_category": "Edit Kategori",
+    "total_visits_this_month": "Jumlah Kunjungan Bulan Ini",
+    "total_visits_all_time": "Jumlah Semua Kunjungan",
+    "most_sold_medicines": "Obat Paling Banyak Terjual",
+    "total_medicines": "Jumlah Semua Obat",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

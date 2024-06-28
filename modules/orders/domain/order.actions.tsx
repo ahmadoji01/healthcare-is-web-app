@@ -30,7 +30,7 @@ export const deleteAnOrder = (token:string, id:number) => directusClient.request
 export const deleteAnOrderItem = (token:string, id:number) => directusClient.request( withToken(token, deleteItem('order_items', id)) );
 
 export const getQuantityCountByItems = (token:string, filter:object) =>
-	directusClient.request( withToken(token, aggregate('order_items', { aggregate: { count: ['quantity'] }, groupBy: ['item'], query: { filter } })) );
+	directusClient.request( withToken(token, aggregate('order_items', { aggregate: { sum: ['quantity'] }, groupBy: ['item'], query: { filter, limit: 5, sort: ['-sum.quantity']  } })) );
 
 export const getTotalSales = (token:string, filter:object, groupBy:string) =>
 	directusClient.request( withToken(token, aggregate('orders', { aggregate: { sum: ['total'] }, groupBy: [groupBy], query: { filter } })) );
