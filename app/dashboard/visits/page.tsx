@@ -145,8 +145,8 @@ const VisitsDashboardPage = () => {
       </div>
       
       <div className="flex flex-col gap-10">
-      { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-      { dataLoaded && <VisitList visits={visits} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveVisit={setActiveVisit} /> }
+        { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
+        <VisitList visits={visits} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveVisit={setActiveVisit} />
       </div>
     </>
   );

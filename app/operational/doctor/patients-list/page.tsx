@@ -7,7 +7,7 @@ import { useUserContext } from "@/contexts/user-context";
 import { getPatientsToBeExamined, getTotalPatients } from "@/modules/patients/domain/patients.actions";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useMedicalRecordContext } from "@/contexts/medical-record-context";
-import { getTotalVisits, getVisitByStatus } from "@/modules/visits/domain/visits.actions";
+import { getTotalVisits, getTotalVisitsWithFilter, getVisitByStatus } from "@/modules/visits/domain/visits.actions";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { Visit, visitMapper } from "@/modules/visits/domain/visit";
 import { useVisitContext } from "@/contexts/visit-context";
@@ -16,6 +16,7 @@ import { WebSocketClient } from "@directus/sdk";
 import { subsOutputMapper } from "@/modules/websockets/domain/websocket";
 import { WS_EVENT_TYPE } from "@/modules/websockets/domain/websocket.constants";
 import { websocketClient } from "@/utils/request-handler";
+import { statusFilter } from "@/modules/orders/domain/order.specifications";
 
 const PatientsList = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
@@ -96,9 +97,9 @@ const PatientsList = () => {
                     setPatients(pats);
                     setDataLoaded(true);
                 });
-            getTotalVisits(accessToken)
+            getTotalVisitsWithFilter(accessToken, statusFilter(VISIT_STATUS.to_be_examined))
                 .then( res => { 
-                    let total = res[0].count? parseInt(res[0].count) : 0;
+                    let total = res[0].count? parseInt(res[0].count) : 0;console.log(total);
                     let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
                     setTotalPages(pages);
                 })
