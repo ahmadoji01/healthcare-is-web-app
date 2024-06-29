@@ -54,4 +54,4 @@ export const updateVisit = (token:string, id:number, data:object) => directusCli
 export const deleteAVisit = (token:string, id:number) => directusClient.request( withToken(token, deleteItem('visits', id)));
 
 export const getVisitByCount = (token:string, filter:object, groupBy:string) => 
-	directusClient.request( withToken(token, aggregate('visits', { aggregate: { count: '*' }, groupBy: [groupBy], query: { filter: filter } }  )) )
+	directusClient.request( withToken(token, aggregate('visits', { aggregate: { count: '*' }, groupBy: [groupBy], query: { filter: filter, limit: 5, sort: ['-count'] } }  )) )

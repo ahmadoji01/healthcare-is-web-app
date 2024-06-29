@@ -1,10 +1,9 @@
 "use client";
 import { ApexOptions } from "apexcharts";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { monthlySalesMapper } from "@/modules/orders/domain/order";
 import { useTranslation } from "react-i18next";
-import { defaultMonthlySalesData } from "@/utils/chart-data-format";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
 import { statusFilter, yearFilter } from "@/modules/orders/domain/order.specifications";
@@ -169,24 +168,6 @@ const ChartOne = () => {
     })
   }
 
-  const fetchTotalSales = (year:number, sales:number[], setSales:Dispatch<SetStateAction<number[]>>) => {
-    let monthlySales = [...sales];
-    let filter = { _and: [ statusFilter(ORDER_STATUS.paid), yearFilter(year) ] };
-    let dateNow = new Date;
-    getTotalSales(accessToken, filter, 'month(date_updated)')
-      .then( res => {
-        if (year === dateNow.getFullYear() && res.length > 0) {
-          res.map( (sales) => {
-            let sls = monthlySalesMapper(sales);
-            monthlySales[sls.date_updated_month] = sls.total;
-          });
-        }
-        setYAxisMax(Math.max(...monthlySales));
-        setSales(monthlySales);
-      })
-      .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
-  }
-
   const [state, setState] = useState<ChartOneState>({
     series: [
       {
@@ -273,13 +254,15 @@ const ChartOne = () => {
 
       <div>
         <div id="chartOne" className="-ml-5 h-[355px] w-[105%]">
-          <ReactApexChart
-            options={chartOptions}
-            series={state.series}
-            type="area"
-            width="100%"
-            height="100%"
-          />
+          { typeof(state) !== 'undefined' &&
+            <ReactApexChart
+              options={chartOptions}
+              series={state.series}
+              type="area"
+              width="100%"
+              height="100%"
+            />
+          }
         </div>
       </div>
     </div>

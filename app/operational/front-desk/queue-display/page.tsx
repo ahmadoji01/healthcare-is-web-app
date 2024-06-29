@@ -12,7 +12,6 @@ import { Visit, visitMapper } from '@/modules/visits/domain/visit';
 import { doctorIDEquals, filterVisitsArray, statusEquals } from '@/modules/visits/domain/visit.specifications';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { WebSocketClient } from '@directus/sdk';
 import { subsOutputMapper } from '@/modules/websockets/domain/websocket';
 import { WS_EVENT_TYPE } from '@/modules/websockets/domain/websocket.constants';

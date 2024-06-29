@@ -37,3 +37,5 @@ export const updateDoctorOrgs = (token:string, ids:number[], data:object) =>
 
 export const searchDoctors = (token:string, query:string, page:number) => directusClient.request( withToken(token, readItems('doctors', { fields: ['*.*'], search: query, limit: LIMIT_PER_PAGE, page })));
 export const getTotalSearchDoctors = (token:string, query:string) => directusClient.request( withToken(token, readItems('doctors', { search: query, aggregate: { count: '*' } })));
+export const getDoctorsWithFilter = (token:string, filter:object) => 
+	directusClient.request( withToken(token, readItems('doctors', { filter })) );

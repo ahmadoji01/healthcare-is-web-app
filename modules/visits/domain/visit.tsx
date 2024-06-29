@@ -64,3 +64,18 @@ export function visitCreatorMapper(visit:Visit, medicalRecordID:number, orgID:nu
     }
     return visitCreator;
 }
+
+export interface VisitCount {
+    doctor: number,
+    count: number,
+}
+
+export function visitCountMapper(res:Record<string,any>) {
+    let visitCount:VisitCount = {
+        doctor: res.doctor? parseInt(res.doctor) : 0,
+        count: res.count? parseInt(res.count) : 0,
+    }
+    return visitCount;
+}
+
+export type VisitCountDoctor = Doctor & { count:number };

@@ -171,6 +171,7 @@
     "total_visits_all_time": "Jumlah Semua Kunjungan",
     "most_sold_medicines": "Obat Paling Banyak Terjual",
     "total_medicines": "Jumlah Semua Obat",
+    "doctor_visit_analytics": "Analisis Kunjungan Dokter Bulanan",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
