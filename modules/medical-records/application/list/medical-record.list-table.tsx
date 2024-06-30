@@ -24,6 +24,9 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
+        <div className="py-3">
+          <Pagination count={totalPages} onChange={handlePageChange} />
+        </div>
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
