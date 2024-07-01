@@ -24,14 +24,18 @@ const PatientsList = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [visits, setVisits] = useState<Visit[]>([]);
     const [totalPages, setTotalPages] = useState(0);
+    const [notifSound, setNotifSound] = useState<HTMLAudioElement>(new Audio(''));
     const {accessToken, user} = useUserContext();
     const {setActiveMedicalRecord} = useMedicalRecordContext();
     const {setActiveVisit} = useVisitContext();
     const {t} = useTranslation();
-    const notifySound = new Audio('/sounds/notification-sound.mp3');
+
+    useEffect( () => {
+        setNotifSound(new Audio('/sounds/notification-sound.mp3'));
+    }, []);
 
     const playNotificationSound = () => {
-        notifySound.play();
+        notifSound.play();
     }
 
     async function subsToVisit() { 

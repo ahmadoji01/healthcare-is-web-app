@@ -1,10 +1,19 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { Page, Text, View, Document, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+import React from 'react';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { useTranslation } from 'react-i18next';
 import { MedicalRecord } from '@/modules/medical-records/domain/medical-record';
 import { ITEM_TYPE } from '@/modules/items/domain/item.constants';
+import dynamic from "next/dynamic";
+
+const PDFViewer = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
+  {
+    ssr: false,
+    loading: () => <p>Loading...</p>,
+  },
+);
 
 const styles = StyleSheet.create({
   page: {
@@ -63,7 +72,7 @@ const styles = StyleSheet.create({
 });
 
 interface PrescriptionProps {
-    medicalRecord:MedicalRecord,
+    medicalRecord: MedicalRecord,
 }
 
 const Prescription = ({ medicalRecord }:PrescriptionProps) => {

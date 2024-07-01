@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { Page, Text, View, Document, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import moment from 'moment/min/moment-with-locales';
 import Currency from '../../../components/Currency';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,15 @@ import { useDocumentContext } from '../../../contexts/document-context';
 import { useUserContext } from '../../../contexts/user-context';
 import { orderItemDisplayName } from "../../../modules/orders/domain/order.specifications";
 import { useRouter } from 'next/navigation';
+import dynamic from "next/dynamic";
 
+const PDFViewer = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
+  {
+    ssr: false,
+    loading: () => <p>Loading...</p>,
+  },
+);
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',

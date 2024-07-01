@@ -1,3 +1,5 @@
+'use client';
+
 import AlertModal from '@/components/Modal/AlertModal';
 import { ALERT_MESSAGE, ALERT_STATUS } from '@/constants/alert';
 import { Order, defaultOrder, orderMapper, orderPatcherMapper } from '@/modules/orders/domain/order';
@@ -87,6 +89,7 @@ export const OrderSummaryProvider = ({
     const [examFee, setExamFee] = useState<number>(0);
     const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
     const [orderLoaded, setOrderLoaded] = useState(true);
+    const [notifSound, setNotifSound] = useState<HTMLAudioElement>(new Audio(''));
 
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -98,10 +101,9 @@ export const OrderSummaryProvider = ({
     const {accessToken, organization, user} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const {t} = useTranslation();
-    const notifySound = new Audio('/sounds/notification-sound.mp3');
 
     const playNotificationSound = () => {
-        notifySound.play();
+        notifSound.play();
     }
 
     const loadAnOrder = async (order:Order) => {
@@ -117,6 +119,7 @@ export const OrderSummaryProvider = ({
     }
 
     useEffect( () => {
+        setNotifSound(new Audio('/sounds/notification-sound.mp3'));
         getAllOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay))
             .then( (res) => {
                 let ords:Order[] = [];
