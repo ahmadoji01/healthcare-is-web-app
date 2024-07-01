@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "@/modules/users/domain/users.actions";
 import { useRouter } from "next/navigation";
+import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
 
 const Login = () => {
 
@@ -25,6 +26,9 @@ const Login = () => {
 
     return (
         <>
+            <div className="fixed top-[2%] right-[2%]">
+                <DarkModeSwitcher />
+            </div>
             <div className="h-screen rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="h-screen flex flex-wrap items-center">
                     <div className="hidden w-full xl:block xl:w-1/2">
@@ -32,23 +36,22 @@ const Login = () => {
                             <Link className="mb-5.5 inline-block" href="/">
                                 <Image
                                 className="hidden dark:block"
-                                src={"/images/logo/logo.svg"}
+                                src={"/images/logo/logo-white.svg"}
                                 alt="Logo"
                                 width={176}
                                 height={32}
                                 />
                                 <Image
                                 className="dark:hidden"
-                                src={"/images/logo/logo-dark.svg"}
+                                src={"/images/logo/logo.svg"}
                                 alt="Logo"
                                 width={176}
                                 height={32}
                                 />
                             </Link>
 
-                            <p className="2xl:px-20">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                                suspendisse.
+                            <p className="text-black dark:text-white 2xl:px-20">
+                                All in One Business Efficiency Services for Healthcare
                             </p>
 
                             <span className="mt-15 inline-block">
@@ -178,9 +181,8 @@ const Login = () => {
 
                     <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
                         <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-                            <span className="mb-1.5 block font-medium">Start for free</span>
                             <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                                Sign In to TailAdmin
+                                Sign In to Fourstake
                             </h2>
 
                             <form onSubmit={ e => { e.preventDefault(); handleSignIn}  }>
@@ -264,7 +266,7 @@ const Login = () => {
                                 <div className="mt-6 text-center">
                                     <p>
                                         <Link href="/auth/signup" className="text-primary">
-                                        Forgot your password?
+                                        { '' }
                                         </Link>
                                     </p>
                                 </div>

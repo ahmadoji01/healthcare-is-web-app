@@ -146,7 +146,7 @@ const MedicalRecord = () => {
 
     return (
       <form onSubmit={e => { e.preventDefault(); handleSubmit() } }>
-        <div className="w-full">
+        <div className="w-full min-h-screen">
           { activeMedicalRecord.id !== 0 &&
             <>
               <Box>

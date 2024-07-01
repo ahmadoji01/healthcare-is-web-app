@@ -220,7 +220,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
       </div>
       {
         !visitsOnQueue &&
-          <div className="mt-2 flex flex-col gap-y-4 rounded-sm p-3 shadow-default sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-2 flex flex-col gap-y-4 rounded-sm p-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h3 className="pl-2 text-title-lg font-semibold text-black dark:text-white">
                 {t("no_visit_for_this_doctor_yet")}

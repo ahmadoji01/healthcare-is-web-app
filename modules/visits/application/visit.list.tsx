@@ -25,7 +25,7 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">
-        <div className="grid grid-cols-5 rounded-sm bg-gray-2 dark:bg-meta-4">
+        <div className="grid grid-cols-4 rounded-sm bg-gray-2 dark:bg-meta-4">
           <div className="text-center p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
               {t('visits_date')}
@@ -43,11 +43,6 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              {t('status')}
-            </h5>
-          </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
               {t('actions')}
             </h5>
           </div>
@@ -55,7 +50,7 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
 
         {visits?.map((visit, key) => (
           <div
-            className={`grid grid-cols-5 ${
+            className={`grid grid-cols-4 ${
               key === visits.length - 1
                 ? ""
                 : "border-b border-stroke dark:border-strokedark"
@@ -74,10 +69,6 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
 
             <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
               <p className="text-black dark:text-white">{DoctorName(visit.doctor.name, visit.doctor.specialization)}</p>
-            </div>
-
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{statusDisplay(visit.status)}</p>
             </div>
 
             <div className="items-center justify-center p-2.5 sm:flex xl:p-5">

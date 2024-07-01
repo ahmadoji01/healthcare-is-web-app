@@ -30,3 +30,5 @@ export const getMedicalRecordsWithFilter = (token:string, filter:object, page:nu
 		filter: filter
 	}) 
 ));
+export const getTotalMedicalRecordsWithFilter = (token:string, filter:object) =>
+	directusClient.request( withToken(token, aggregate('medical_records', { aggregate: { count: '*' }, query: { filter } })) );	

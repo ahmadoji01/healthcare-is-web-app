@@ -5,20 +5,18 @@ import DashboardModal from "@/components/Modal/Modal";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
-import { dateRangeFilter } from "@/modules/orders/domain/order.specifications";
-import VisitDeleteConfirmation from "@/modules/visits/application/form/visit.delete-confirmation";
-import VisitForm from "@/modules/visits/application/form/visit.form";
 import VisitList from "@/modules/visits/application/visit.list";
 import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
-import { monthFilter, statusNotEqual, yearFilter } from "@/modules/visits/domain/visit.specifications";
-import { deleteAVisit, getTotalVisits, getTotalVisitsWithFilter, getVisitsWithFilter, updateVisit } from "@/modules/visits/domain/visits.actions";
-import { DatePicker, MonthCalendar, YearCalendar } from "@mui/x-date-pickers";
+import { statusNotEqual } from "@/modules/visits/domain/visit.specifications";
+import { deleteAVisit, getTotalVisitsWithFilter, getVisitsWithFilter } from "@/modules/visits/domain/visits.actions";
+import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import VisitView from "@/modules/visits/application/form/visit.view";
 import DeleteModal from "@/components/Modal/DeleteModal";
+import { dateRangeFilter } from "@/utils/generic-filters";
 
 const VisitsDashboardPage = () => {
 
@@ -147,8 +145,8 @@ const VisitsDashboardPage = () => {
       </div>
       
       <div className="flex flex-col gap-10">
-      { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
-      { dataLoaded && <VisitList visits={visits} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveVisit={setActiveVisit} /> }
+        { !dataLoaded && <div className="flex"><div className="h-16 w-16 m-auto animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" /></div> }    
+        <VisitList visits={visits} totalPages={totalPages} handleModal={handleModal} handlePageChange={handlePageChange} setActiveVisit={setActiveVisit} />
       </div>
     </>
   );

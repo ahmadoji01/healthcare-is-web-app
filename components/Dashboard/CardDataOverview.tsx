@@ -1,12 +1,14 @@
 import React, { ReactNode } from 'react';
 
 interface CardDataOverviewProps {
+  subtitle?: string;
   title: string;
   total: string;
   children: ReactNode;
 }
 
 const CardDataOverview: React.FC<CardDataOverviewProps> = ({
+  subtitle,
   title,
   total,
   children,
@@ -22,6 +24,7 @@ const CardDataOverview: React.FC<CardDataOverviewProps> = ({
           <h4 className="text-title-md font-bold text-black dark:text-white">
             {total}
           </h4>
+          { subtitle && <h5 className="w-full text-sm font-small">{subtitle}</h5>}
           <span className="text-sm font-medium">{title}</span>
         </div>
       </div>

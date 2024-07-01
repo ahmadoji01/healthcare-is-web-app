@@ -9,7 +9,6 @@ interface MedicalHistoryCardProps {
 const MedicalHistoryCard = ({ medicalRecord }:MedicalHistoryCardProps) => {
 
     const {t} = useTranslation();
-    console.log(medicalRecord);
 
     return (
         <div className="mb-1 task rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">

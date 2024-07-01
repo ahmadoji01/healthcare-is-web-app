@@ -17,7 +17,7 @@ export const getOrdersWithFilter = (token:string, filter:object, page:number) =>
 		})) 
 	)
 export const getTotalOrdersWithFilter = (token:string, filter:object) => 
-	directusClient.request( withToken(token, aggregate('orders', { filter, aggregate: { count: '*' } })) );
+	directusClient.request( withToken(token, aggregate('orders', { aggregate: { count: '*' }, query: { filter } })) );
 
 
 export const getAnOrder = (token:string, id:number) => 
@@ -30,7 +30,7 @@ export const deleteAnOrder = (token:string, id:number) => directusClient.request
 export const deleteAnOrderItem = (token:string, id:number) => directusClient.request( withToken(token, deleteItem('order_items', id)) );
 
 export const getQuantityCountByItems = (token:string, filter:object) =>
-	directusClient.request( withToken(token, aggregate('order_items', { filter, aggregate: { count: ['quantity'] }, groupBy: ['item'] })) );
+	directusClient.request( withToken(token, aggregate('order_items', { aggregate: { sum: ['quantity'] }, groupBy: ['item'], query: { filter, limit: 5, sort: ['-sum.quantity']  } })) );
 
 export const getTotalSales = (token:string, filter:object, groupBy:string) =>
-	directusClient.request( withToken(token, aggregate('orders', { aggregate: { sum: ['total'] }, groupBy: [groupBy], query: { filter: filter } })) );
+	directusClient.request( withToken(token, aggregate('orders', { aggregate: { sum: ['total'] }, groupBy: [groupBy], query: { filter } })) );

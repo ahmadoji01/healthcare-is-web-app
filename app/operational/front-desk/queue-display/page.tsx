@@ -12,7 +12,6 @@ import { Visit, visitMapper } from '@/modules/visits/domain/visit';
 import { doctorIDEquals, filterVisitsArray, statusEquals } from '@/modules/visits/domain/visit.specifications';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { WebSocketClient } from '@directus/sdk';
 import { subsOutputMapper } from '@/modules/websockets/domain/websocket';
 import { WS_EVENT_TYPE } from '@/modules/websockets/domain/websocket.constants';
@@ -21,6 +20,7 @@ import { websocketClient } from '@/utils/request-handler';
 import QueueCard from './common/queue-card';
 import { getVisitsWithFilter } from '@/modules/visits/domain/visits.actions';
 import { useAlertContext } from '@/contexts/alert-context';
+import DarkModeSwitcher from '@/components/Header/DarkModeSwitcher';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -65,6 +65,7 @@ const QueueDisplay = () => {
     const [toBeExaminedVisit, setToBeExaminedVisit] = useState<Visit[]>([]);
     const [waitingVisits, setWaitingVisits] = useState<Visit[]>([]);
     const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
+    const [nextTab, setNextTab] = useState(0);
     const router = useRouter();
 
     const fetchVisits = async () => {
@@ -76,7 +77,6 @@ const QueueDisplay = () => {
         let filter = { _and: [ doctorIDEquals(presentDoctors[value].id), { _or: [statusEquals(VISIT_STATUS.waiting), statusEquals(VISIT_STATUS.temporary_leave), statusEquals(VISIT_STATUS.to_be_examined)] } ] };
         await getVisitsWithFilter(accessToken, filter, 'date_created', 1).then( res => {
             res?.map( (visit) => { vits.push(visitMapper(visit)); });
-            console.log(res);
         }).catch( err => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
 
         let toBeExamined = filterVisitsArray(vits, VISIT_STATUS.to_be_examined);
@@ -98,7 +98,7 @@ const QueueDisplay = () => {
         subs.push(subscription);
     
         for await (const item of subscription) {
-            let output = subsOutputMapper(item);console.log(item);
+            let output = subsOutputMapper(item);
             if (output.event === WS_EVENT_TYPE.update && output.data.length > 0) {
                 let visit = visitMapper(output.data[0]);
                 
@@ -166,7 +166,18 @@ const QueueDisplay = () => {
 
     useEffect( () => {
         fetchVisits();
+        if (value+1 >= presentDoctors.length) {
+            setNextTab(0);
+        } else {
+            setNextTab(value+1);
+        }
     }, [presentDoctors]);
+
+    useEffect( () => {
+        setInterval(function () {
+            onTabClick(nextTab);
+        }, 120000);
+    }, [nextTab]);
 
     const onTabClick = (index:number) => {
         window.location.href = '/operational/front-desk/queue-display?activetab=' + index;
@@ -174,6 +185,9 @@ const QueueDisplay = () => {
 
     return (
         <>
+            <div className="fixed top-[1%] right-[1%]">
+                <DarkModeSwitcher />
+            </div>
             <Box>
                 <Tabs value={value} aria-label="basic tabs example" centered style={{ fontSize: 24 }}>
                     { presentDoctors.map( (doctor, index) => 

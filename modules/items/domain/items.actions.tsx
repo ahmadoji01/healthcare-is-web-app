@@ -1,6 +1,6 @@
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { directusClient } from "@/utils/request-handler"
-import { aggregate, createItem, deleteItem, readItems, updateItem, withToken } from "@directus/sdk";
+import { aggregate, createItem, deleteItem, readItem, readItems, updateItem, withToken } from "@directus/sdk";
 import { ItemCreator } from "./item";
 
 export const getAllItems = (token:string, page:number) => directusClient.request( withToken(token, readItems('items', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
@@ -13,7 +13,7 @@ export const getItemsWithFilter = (token:string, filter:object, page:number) =>
 		})) 
 	);
 export const getTotalItemsWithFilter = (token:string, filter:object) => 
-	directusClient.request( withToken(token, aggregate('items', { filter: filter, aggregate: { count: '*' } })) );
+	directusClient.request( withToken(token, aggregate('items', { aggregate: { count: '*' }, query: { filter } })) );
 
 export const itemExistsChecker = (token:string, name = "") => 
 	directusClient.request( 
@@ -30,6 +30,8 @@ export const updateAnItem = (token:string, id:number, data:object) =>
 	directusClient.request( withToken(token, updateItem('items', id, data)) );
 export const deleteAnItem = (token:string, id:number) =>
 	directusClient.request( withToken(token, deleteItem('items', id)) );
+export const getAnItem = (token:string, id:number) =>
+	directusClient.request( withToken(token, readItem('items', id)) );
 
 export const searchItems = (token:string, query:string, page:number) =>
 	directusClient.request(

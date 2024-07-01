@@ -1,1 +1,0 @@
-export const defaultMonthlySalesData = [0,0,0,0,0,0,0,0,0,0,0,0];

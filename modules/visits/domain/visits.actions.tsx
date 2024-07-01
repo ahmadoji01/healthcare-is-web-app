@@ -46,7 +46,7 @@ export const getVisitsWithFilter = (token:string, filter:object, sort:string, pa
 	)
 export const getTotalVisitsWithFilter = (token:string, filter:object) => 
 	directusClient.request( 
-		withToken(token, aggregate('visits', { aggregate: { count: '*' }, filter })) 
+		withToken(token, aggregate('visits', { aggregate: { count: '*' }, query: { filter: filter } })) 
 	)
 
 export const getAVisit = (token:string, id:number) => directusClient.request( withToken(token, readItem('visits', id, { fields: ['*.*.*'] })));
@@ -54,4 +54,4 @@ export const updateVisit = (token:string, id:number, data:object) => directusCli
 export const deleteAVisit = (token:string, id:number) => directusClient.request( withToken(token, deleteItem('visits', id)));
 
 export const getVisitByCount = (token:string, filter:object, groupBy:string) => 
-	directusClient.request( withToken(token, aggregate('visits', { filter, aggregate: { count: '*' }, groupBy: [groupBy] }  )) )
+	directusClient.request( withToken(token, aggregate('visits', { aggregate: { count: '*' }, groupBy: [groupBy], query: { filter: filter, limit: 5, sort: ['-count'] } }  )) )

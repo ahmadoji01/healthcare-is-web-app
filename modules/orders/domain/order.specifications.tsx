@@ -14,8 +14,12 @@ export function orderStatusFilter(status:string):object {
     return { order: { status: { _eq: status } } };
 }
 
+export function itemTypeFilter(type:string):object {
+    return { type: { _eq: type } };
+}
+
 export function monthFilter(month:number):object {
-    return { "month(date_created)": { _eq: month } }
+    return { "month(date_updated)": { _eq: month } }
 }
 
 export function yearFilter(year:number):object {

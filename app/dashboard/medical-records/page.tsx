@@ -9,7 +9,7 @@ import MedicalRecordDeleteConfirmation from "@/modules/medical-records/applicati
 import MedicalRecordForm from "@/modules/medical-records/application/form/medical-record.form";
 import MedicalRecordListTable from "@/modules/medical-records/application/list/medical-record.list-table";
 import { MedicalRecord, defaultMedicalRecord, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
-import { deleteAMedicalRecord, getMedicalRecordsWithFilter, getTotalMedicalRecords, searchMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";
+import { deleteAMedicalRecord, getMedicalRecordsWithFilter, getTotalMedicalRecords, getTotalMedicalRecordsWithFilter, searchMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";
 import { MR_STATUS } from "@/modules/medical-records/domain/medical-records.constants";
 import { useEffect, useState } from "react";
 import moment from "moment";
@@ -42,7 +42,13 @@ const MedicalRecordsDashboardPage = () => {
         res?.map( (record) => { records.push(medicalRecordMapper(record)); });
         setMedicalRecords(records);
         setDataLoaded(true);
-      })
+      });
+    getTotalMedicalRecordsWithFilter(accessToken, newFilter)
+      .then( res => {
+        let total = res[0].count? parseInt(res[0].count) : 0;
+        let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
+        setTotalPages(pages);
+      });
     setFilter(newFilter);
   }
 
@@ -55,7 +61,7 @@ const MedicalRecordsDashboardPage = () => {
           setMedicalRecords(records);
           setDataLoaded(true);
         });
-      getTotalMedicalRecords(accessToken)
+      getTotalMedicalRecordsWithFilter(accessToken, filter)
         .then( res => {
           let total = res[0].count? parseInt(res[0].count) : 0;
           let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
