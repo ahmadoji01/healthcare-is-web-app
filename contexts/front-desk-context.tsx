@@ -1,6 +1,8 @@
+'use client';
+
 import { Doctor, DoctorOrganization, defaultDoctor, doctorMapper, doctorOrgMapper } from '@/modules/doctors/domain/doctor';
 import { getAllDoctors, getDoctorsInOrg, getPresentDoctors } from '@/modules/doctors/domain/doctors.actions';
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useRef, useState } from 'react';
 import { useUserContext } from './user-context';
 import { useVisitContext } from './visit-context';
  
@@ -37,10 +39,15 @@ export const FrontDeskProvider = ({
     const [loading, setLoading] = useState(false);
     const {accessToken} = useUserContext();
     const {handleDoctorVisits} = useVisitContext();
-    const notifySound = new Audio('/sounds/notification-sound.mp3');
+    
+    const notifSound = useRef<HTMLAudioElement | undefined>(
+        typeof Audio !== "undefined" ? new Audio('/sounds/notification-sound.mp3') : undefined
+    );
 
     const playNotificationSound = () => {
-        notifySound.play();
+        if (typeof(notifSound) === 'undefined')
+            return;
+        notifSound.current?.play();
     }
 
     useEffect( () => {
