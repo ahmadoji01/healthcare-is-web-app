@@ -1,7 +1,7 @@
 const appConfig = {
-    API_HOST: process.env.NEXT_PUBLIC_API_HOST,
+    API_HOST: process.env.API_HOST,
     CURRENCY_FORMAT: 'IDR',
-    WEBSOCKET_HOST: process.env.NEXT_PUBLIC_WEBSOCKET_HOST,
+    WEBSOCKET_HOST: process.env.WEBSOCKET_HOST,
 };
   
 export default appConfig;
