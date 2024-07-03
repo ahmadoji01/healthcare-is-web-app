@@ -2,6 +2,7 @@
 
 import { Inter } from 'next/font/google';
 import './globals.css';
+import "@/styles/satoshi.css";
 import { UserProvider, useUserContext } from '@/contexts/user-context';
 import { AlertProvider } from '@/contexts/alert-context';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -41,7 +42,7 @@ export default function RootLayout({
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <UserProvider>
           <DocumentProvider>
-            <body className={inter.className}>
+            <body className={inter.className + 'bg-white dark:bg-boxdark'}>
               <AlertProvider>
                 {children}
               </AlertProvider>
