@@ -238,7 +238,8 @@
         "payment_received": "Pembayaran telah diterima!",
         "clinic_is_close": "Klinik saat ini tutup. Harap tunggu sampai buka!",
         "add_item_first": "Tambahkan minimal satu item dulu untuk menyelesaikan pesanan ini!",
-        "choose_date_first": "Pilih rentang tanggal pemesanan dulu!"
+        "choose_date_first": "Pilih rentang tanggal pemesanan dulu!",
+        "wrong_credentials": "Email/kata sandi yang Anda masukkan salah"
     },
     "menu": {
         "patient_header": "PASIEN",

@@ -6,22 +6,30 @@ import Image from "next/image";
 import { signIn } from "@/modules/users/domain/users.actions";
 import { useRouter } from "next/navigation";
 import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
+import { useAlertContext } from "@/contexts/alert-context";
+import MiniSpinner from "@/components/MiniSpinner";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
 
     const router = useRouter();
+    const {openSnackbarNotification} = useAlertContext();
+    const {t} = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSignIn = () => {
+        setLoading(true);
         signIn(email, password).then(() => {
+            setLoading(false);
             if (location.pathname === "/" && window.history.length == 2) {
                 router.push("/dashboard");
             }
             if (location.pathname === "/" && window.history.length > 2) {
                 router.back();
             }
-        });
+        }).catch( () => { openSnackbarNotification(t('alert_msg.wrong_credentials'), 'error'); setLoading(false); });
     }
 
     return (
@@ -255,6 +263,7 @@ const Login = () => {
                                 </div>
 
                                 <div className="mb-5">
+                                    { loading && <MiniSpinner size={8} /> }
                                     <input
                                         onClick={handleSignIn}
                                         type="submit"

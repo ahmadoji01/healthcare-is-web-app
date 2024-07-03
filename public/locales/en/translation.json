@@ -241,7 +241,8 @@
         "payment_received": "Payment has been received!",
         "clinic_is_close": "Clinic is close now. Wait until it's open!",
         "add_item_first": "Add an item first to check this order out!",
-        "choose_date_first": "Choose the correct date range first"
+        "choose_date_first": "Choose the correct date range first",
+        "wrong_credentials": "Email/password you entered is incorrect"
     },
 
     "menu": {

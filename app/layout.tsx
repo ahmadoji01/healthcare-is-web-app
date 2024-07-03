@@ -9,7 +9,6 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import './i18n';
 import { useEffect, useState } from 'react';
 import { DocumentProvider } from '@/contexts/document-context';
-import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,6 +25,7 @@ export default function RootLayout({
     if (localSize !== null) {
       setSize(localSize);
     }
+    document.body.style.fontFamily = 'Satoshi';
   }, [])
 
   useEffect(() => {

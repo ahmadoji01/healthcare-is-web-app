@@ -49,6 +49,20 @@ export const UserProvider = ({
     const [organization, setOrganization] = useState(defaultOrganization);
 
     const refreshToken = async (interval:NodeJS.Timeout, isLooping:boolean) => {
+        let isError = false;
+        await getUserMe(accessToken).then(res => {
+            let usr = defaultUser;
+            usr = userMapper(res);
+            setUser(usr);
+            return;
+        }).catch( () => {
+            isError = true;
+            return;
+        });
+
+        if (!isError)
+            return;
+
         await directusClient.refresh().then( (res) => {
             if (res.access_token === null) {
                 router.push('/');
@@ -97,12 +111,13 @@ export const UserProvider = ({
                 return;
             }
             setOrganization(organizationMapper(res[0]));
-        })
+        }).catch( () => {})
     }
 
     useEffect(() => {
         let interval = setInterval(async () => {
             refreshToken(interval, false);
+            clearInterval(interval);
         }, 100);
 
         return () => clearInterval(interval);    
