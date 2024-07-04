@@ -173,6 +173,7 @@
     "total_medicines": "Total Medicines",
     "doctor_visit_analytics": "Monthly Doctor Visit Analytics",
     "this_months_data_not_available": "This month's data is not available",
+    "dashboard_welcome": "Welcome to ",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

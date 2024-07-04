@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 const DashboardHome = () => {
 
   const t = useTranslations();
-  const {accessToken} = useUserContext();
+  const {accessToken, user, organization} = useUserContext();
 
   const [totalMonthlyVisits, setTotalMonthlyVisits] = useState(0);
   const [totalAllVisits, setTotalAllVisits] = useState(0);
@@ -62,6 +62,11 @@ const DashboardHome = () => {
 
   return (
     <>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-title-md2 font-semibold text-black dark:text-white">
+          Hi, {user.first_name}. {t('dashboard_welcome')} {organization.name}
+        </h2>
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataOverview title={t('total_visits_this_month')} total={totalMonthlyVisits.toString()}>
           <FontAwesomeIcon icon={faUser} width={22} />

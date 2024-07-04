@@ -173,6 +173,7 @@
     "total_medicines": "Jumlah Semua Obat",
     "doctor_visit_analytics": "Analisis Kunjungan Dokter Bulanan",
     "this_months_data_not_available": "Data bulan ini belum tersedia",
+    "dashboard_welcome": "Selamat datang di ",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

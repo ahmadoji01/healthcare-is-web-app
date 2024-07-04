@@ -21,11 +21,11 @@ const CardDataOverview: React.FC<CardDataOverviewProps> = ({
 
       <div className="mt-4 flex items-end justify-between">
         <div>
-          <h4 className="text-title-md font-bold text-black dark:text-white">
+          <h4 className="font-bold text-black dark:text-white">
             {total}
           </h4>
-          { subtitle && <h5 className="w-full text-sm font-small">{subtitle}</h5>}
-          <span className="text-sm font-medium">{title}</span>
+          { subtitle && <h5 className="w-full font-small">{subtitle}</h5>}
+          <span className="font-medium">{title}</span>
         </div>
       </div>
     </div>
