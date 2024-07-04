@@ -17,6 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [fetching, setFetching] = useState(false);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
   const {loading} = useUserContext();
 
@@ -45,11 +46,15 @@ export default function RootLayout({
     }
   }, [sidebarExpanded]);
 
+  useEffect(() => {
+    setFetching(loading);
+  }, [loading])
+
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
         <div className="dark:bg-boxdark-2 dark:text-bodydark">
-          {loading ? (
+          {fetching ? (
             <Loader />
           ) : (
             <div className="flex h-screen overflow-hidden">

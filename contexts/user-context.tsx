@@ -54,9 +54,11 @@ export const UserProvider = ({
             let usr = defaultUser;
             usr = userMapper(res);
             setUser(usr);
+            setLoading(false);
             return;
         }).catch( () => {
             isError = true;
+            setLoading(false);
             return;
         });
 
