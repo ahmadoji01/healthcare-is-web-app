@@ -36,7 +36,7 @@ const OrderTotals = () => {
         let taxRate = organization.tax_rate? (organization.tax_rate/100) : TAX_RATE;
         setTax((examFee + treatmentFee + medicineFee - discount) * taxRate);
         setTotal(examFee + treatmentFee + medicineFee + tax - discount);   
-    }, [selectedOrder]);
+    });
 
     return (
         <div className="grid grid-cols-2 gap-2">
