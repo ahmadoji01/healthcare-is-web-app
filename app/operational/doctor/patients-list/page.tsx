@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PatientToExamineListTable from "../common/patient-to-examine-list-table";
 import { Patient, patientMapper } from "@/modules/patients/domain/patient";
 import { useUserContext } from "@/contexts/user-context";
@@ -24,18 +24,16 @@ const PatientsList = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [visits, setVisits] = useState<Visit[]>([]);
     const [totalPages, setTotalPages] = useState(0);
-    const [notifSound, setNotifSound] = useState<HTMLAudioElement>(new Audio(''));
     const {accessToken, user} = useUserContext();
     const {setActiveMedicalRecord} = useMedicalRecordContext();
     const {setActiveVisit} = useVisitContext();
     const t = useTranslations();
-
-    useEffect( () => {
-        setNotifSound(new Audio('/sounds/notification-sound.mp3'));
-    }, []);
+    const notifSound = useRef<HTMLAudioElement | undefined>(
+        typeof Audio !== "undefined" ? new Audio('/sounds/notification-sound.mp3') : undefined
+    );
 
     const playNotificationSound = () => {
-        notifSound.play();
+        notifSound.current?.play();
     }
 
     async function subsToVisit() { 

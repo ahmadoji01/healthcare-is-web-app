@@ -23,11 +23,11 @@ import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
 import { OrderItemCreator, orderItemCreatorMapper } from '@/modules/orders/domain/order-item';
 import { visitFilter } from '@/modules/orders/domain/order.specifications';
 import { MR_STATUS } from '@/modules/medical-records/domain/medical-records.constants';
-import { useTranslation } from 'react-i18next';
 import { getItemsWithFilter } from '@/modules/items/domain/items.actions';
 import { medicineItemsFilter, treatmentItemsFilter } from '@/modules/items/domain/item.specifications';
 import { Item, itemMapper } from '@/modules/items/domain/item';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -74,6 +74,7 @@ const MedicalRecords = () => {
     const {organization, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();  
     const t = useTranslations();
+    const router = useRouter();
     
     useEffect( () => {
       getItemsWithFilter(accessToken, medicineItemsFilter, 1).then( res => {
@@ -100,7 +101,7 @@ const MedicalRecords = () => {
     }, []);
 
     if (activeMedicalRecord.id === 0) {
-      window.location.href = '/operational/doctor/patients-list';
+      router.push('/operational/doctor/patients-list');
     }
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -135,9 +136,9 @@ const MedicalRecords = () => {
       let orderUpdate = { order_items: orderItems, status: ORDER_STATUS.waiting_to_pay };
       
       updateOrder(accessToken, order.id, orderUpdate).then( () => {
-        location.reload();
+        router.refresh();
         openSnackbarNotification(t('alert_msg.success'), 'success');
-        window.location.href = "/operational/doctor/patients-list";
+        router.push("/operational/doctor/patients-list");
         setLoading(false);
         return;
       }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
