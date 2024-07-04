@@ -64,7 +64,7 @@ const DropdownUser = () => {
   const handleSignOut = () => {
     directusClient.logout().then( () => {
       setAccessToken('');
-      router.replace('/');
+      window.location.href = '/';
     });
   }
 

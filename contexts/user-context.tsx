@@ -107,7 +107,7 @@ export const UserProvider = ({
             return;
         }).catch( err => {
             if (pathname !== '/') {
-                router.replace("/");
+                window.location.href = '/';
             }
             setLoading(false);
             clearInterval(interval);

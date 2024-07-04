@@ -77,6 +77,9 @@ const MedicalRecords = () => {
     const router = useRouter();
     
     useEffect( () => {
+      if (activeMedicalRecord.id === 0) {
+        router.push('/operational/doctor/patients-list');
+      }
       getItemsWithFilter(accessToken, medicineItemsFilter, 1).then( res => {
         let items:Item[] = [];
         res?.map( (item) => { items.push(itemMapper(item)); });
@@ -99,10 +102,6 @@ const MedicalRecords = () => {
         setMedHistories(mrs);
       });
     }, []);
-
-    if (activeMedicalRecord.id === 0) {
-      router.push('/operational/doctor/patients-list');
-    }
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
