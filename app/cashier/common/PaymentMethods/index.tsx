@@ -21,6 +21,7 @@ const PaymentMethods = () => {
             <div className="mt-5 grid grid-cols-3 gap-2">
                 { paymentMethods.map( (method, key) => 
                     <PaymentOption
+                        key={key}
                         method={method}
                         selected={method.id === selectedPayment?.id} />
                 )}

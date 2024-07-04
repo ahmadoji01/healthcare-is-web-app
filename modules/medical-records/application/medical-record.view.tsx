@@ -38,7 +38,7 @@ const MedicalRecordView = ({ medicalRecord }:MedicalRecordFormProps) => {
                                     <p className="text-black dark:text-white">
                                         <ul>
                                             { medicalRecord.illnesses?.map( (illness, key) => (
-                                                <li className="list-outside" style={ { listStyle: "disc" } }>
+                                                <li className="list-outside" style={ { listStyle: "disc" } } key={key}>
                                                     { illness.name }
                                                 </li>
                                             )) }
@@ -54,7 +54,7 @@ const MedicalRecordView = ({ medicalRecord }:MedicalRecordFormProps) => {
                                     <p className="text-black dark:text-white">
                                         <ul>
                                             { medicalRecord.items?.map( (item, key) => (
-                                                <li className="list-outside" style={ { listStyle: "disc" } }>
+                                                <li className="list-outside" style={ { listStyle: "disc" } } key={key}>
                                                     { item.items_id.name }
                                                 </li>
                                             )) }

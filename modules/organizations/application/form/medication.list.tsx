@@ -13,8 +13,8 @@ const MedicationList = ({ medications }:MedicationListProps) => {
 
     return (
         <>
-            { medications?.map( (medication) => 
-                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            { medications?.map( (medication, key) => 
+                <div key={key} className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                         <h3 className="text-black font-extrabold dark:text-white text-xl">
                             { medication.medicine.name }

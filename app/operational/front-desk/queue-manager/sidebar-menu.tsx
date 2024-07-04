@@ -61,6 +61,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarMenuProps) 
                                 "bg-graydark dark:bg-meta-4"
                             }`}
                             onClick={(e) => { handleClick(e, doctor, key) }}
+                            key={key}
                             >
                             <FontAwesomeIcon icon={faUserDoctor} width={18} height={18} />
                             { DoctorName(doctor.name, doctor.specialization) }

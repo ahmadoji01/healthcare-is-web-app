@@ -189,7 +189,7 @@ const QueueDisplay = () => {
             <Box>
                 <Tabs value={value} aria-label="basic tabs example" centered style={{ fontSize: 24 }}>
                     { presentDoctors.map( (doctor, index) => 
-                        <Tab onClick={() => onTabClick(index)} label={ DoctorName(doctor.name, doctor.specialization) } {...a11yProps(index)} />
+                        <Tab key={index} onClick={() => onTabClick(index)} label={ DoctorName(doctor.name, doctor.specialization) } {...a11yProps(index)} />
                     )}
                 </Tabs>
             </Box>
@@ -214,7 +214,7 @@ const QueueDisplay = () => {
                                 <div className="flex flex-wrap">
                                     {
                                         waitingVisits?.map( (visit, index) =>
-                                            <QueueCard number={parseInt(visit.queue_number)} name={visit.patient.name} />
+                                            <QueueCard key={index} number={parseInt(visit.queue_number)} name={visit.patient.name} />
                                         )
                                     }
                                 </div>

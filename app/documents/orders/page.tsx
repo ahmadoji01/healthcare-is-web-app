@@ -154,8 +154,8 @@ const OrderDocument = () => {
                 </View>
                 <View style={styles.tableCol}>
                   <View style={styles.table}>
-                    {order.order_items?.map( (orderItem) => 
-                      <View style={styles.tableRow}>
+                    {order.order_items?.map( (orderItem, key) => 
+                      <View style={styles.tableRow} key={key}>
                         <View style={styles.bullet}>
                           <Text>{'\u2022' + " "}</Text>
                         </View>

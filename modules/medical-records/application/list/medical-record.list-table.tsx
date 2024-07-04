@@ -75,7 +75,7 @@ const MedicalRecordListTable = ({ medicalRecords, setActiveMedicalRecord, totalP
 
             <div className="hidden justify p-2.5 sm:flex xl:p-5 text-black dark:text-white w-full">
               <ul className="list-outside" style={{ listStyle: "auto" }}>
-                {record.items?.map( (item) => <li>{item.items_id.name}</li> )}
+                {record.items?.map( (item,key) => <li key={key}>{item.items_id.name}</li> )}
               </ul>
             </div>
             

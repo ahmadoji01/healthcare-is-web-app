@@ -134,8 +134,8 @@ const AddItem = () => {
                         <h4 className="font-extrabold">{ t("order_items") }</h4>
                     </AccordionSummary>
                     <AccordionDetails>
-                        { items?.map( (item) => (
-                            <ItemCard item={item} handleAddItem={handleAddItem} />
+                        { items?.map( (item, key) => (
+                            <ItemCard key={key} item={item} handleAddItem={handleAddItem} />
                         )) }
                     </AccordionDetails>
                 </Accordion>

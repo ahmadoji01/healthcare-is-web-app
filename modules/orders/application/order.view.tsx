@@ -40,7 +40,7 @@ const OrderView = ({ order }:OrderViewProps) => {
                                     <p className="text-black dark:text-white">
                                         <ul>
                                             { order.order_items?.map( (item, key) => (
-                                                <li className="list-outside" style={ { listStyle: "disc" } }>
+                                                <li className="list-outside" style={ { listStyle: "disc" } } key={key}>
                                                     { orderItemDisplayName(item) }
                                                 </li>
                                             )) }

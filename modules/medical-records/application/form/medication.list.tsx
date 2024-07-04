@@ -26,7 +26,7 @@ const MedicationList = ({ mrMedicines, setMRMedicines }:MedicationListProps) => 
     return (
         <>
             { mrMedicines?.map( (mrMed, i) => 
-                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                <div key={i} className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                         <h3 className="text-black font-extrabold dark:text-white text-xl">
                             { mrMed.items_id.name }

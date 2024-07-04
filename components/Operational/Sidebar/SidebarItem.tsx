@@ -17,7 +17,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
     return (
         <>
             { sidebarMenuItems.map((item, key) => (
-                <div>
+                <div key={key}>
                     <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
                         { item.headerTitle }
                     </h3>
@@ -25,6 +25,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                     <ul className="mb-6 flex flex-col gap-1.5">
                         { item.menuItems.map((subitem, key) => (
                             <SidebarLinkGroup
+                            key={key}
                             activeCondition={
                                 pathname === "/dashboard/" + subitem.url || pathname.includes(subitem.url)
                             }
@@ -78,7 +79,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                                             >
                                             <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                                                 { subitem.subMenu.map((submenu, key) => (
-                                                    <li>
+                                                    <li key={key}>
                                                         <Link
                                                             href={"/dashboard/" + submenu.url}
                                                             className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${

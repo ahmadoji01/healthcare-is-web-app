@@ -74,7 +74,7 @@ const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal, handl
 
             <div className="hidden items-center justify p-2.5 sm:flex xl:p-5">
               <ul className="list-outside text-black dark:text-white" style={{ listStyle: "auto" }}>
-                {order.order_items?.map( (orderItem) => <li>{orderItemDisplayName(orderItem)}</li> )}
+                {order.order_items?.map( (orderItem, key) => <li key={key}>{orderItemDisplayName(orderItem)}</li> )}
               </ul>
             </div>
 

@@ -49,7 +49,7 @@ const PatientOverview = ({ medicalRecord, medicalHistories }:PatientOverviewProp
                         {t('no_medical_history_found')}
                     </h2>
                 }
-                { medicalHistories?.map( history => <MedicalHistoryCard medicalRecord={history} />) }
+                { medicalHistories?.map( (history, key) => <MedicalHistoryCard key={key} medicalRecord={history} />) }
             </div> 
         </div>
     )

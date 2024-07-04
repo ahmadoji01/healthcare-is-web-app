@@ -240,11 +240,12 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd} >
-          {Object.keys(boardSections).map((boardSectionKey) => (
+          {Object.keys(boardSections).map((boardSectionKey, key) => (
             <BoardSection
               id={boardSectionKey}
               title={boardTitle[boardSectionKey]}
               visits={boardSections[boardSectionKey]}
+              key={key}
               />
           ))}
           <DragOverlay dropAnimation={dropAnimation}>
