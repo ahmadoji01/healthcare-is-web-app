@@ -206,8 +206,7 @@ const ChartOne = () => {
         }
         setYAxisMax(Math.max(...monthlySales));
         setThisYearSales(monthlySales);
-      })
-      .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
+      });
   }, []);
 
   useEffect( () => {
@@ -224,8 +223,7 @@ const ChartOne = () => {
         }
         setYAxisMax(Math.max(...monthlySales));
         setLastYearSales(monthlySales);
-      })
-      .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
+      });
   }, [thisYearSales]);
 
   

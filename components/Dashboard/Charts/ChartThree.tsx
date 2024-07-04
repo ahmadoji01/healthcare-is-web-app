@@ -23,8 +23,8 @@ const options: ApexOptions = {
   chart: {
     type: "donut",
   },
-  colors: ["#10B981", "#375E83", "#259AE6", "#FFA70B"],
-  labels: ["Remote", "Hybrid", "Onsite", "Leave"],
+  colors: [],
+  labels: [],
   legend: {
     show: true,
     position: "bottom",
@@ -68,7 +68,7 @@ const ChartThree = () => {
   const [chartOpts, setChartOpts] = useState(options);
   const [counts, setCounts] = useState<VisitCount[]>([]);
   const [visitCountDoctors, setVisitCountDoctors] = useState<VisitCountDoctor[]>([]);
-  const {accessToken} = useUserContext();
+  const {accessToken, user} = useUserContext();
   const t = useTranslations();
 
   if (!series.length || !series) {
@@ -140,11 +140,16 @@ const ChartThree = () => {
 
       <div className="mb-2">
         <div id="chartThree" className="mx-auto flex justify-center">
+          { visitCountDoctors.length > 0 ?
           <ReactApexChart
             options={chartOpts}
             series={series}
             type="donut"
           />
+          : <h5 className="text-xl font-semibold text-black dark:text-white">
+              { t('this_months_data_not_available') }
+            </h5>
+          }
         </div>
       </div>
     </div>

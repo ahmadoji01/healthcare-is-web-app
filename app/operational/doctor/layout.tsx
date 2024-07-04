@@ -13,12 +13,8 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale}>
-      <body suppressHydrationWarning={true}>
-        <DoctorProviders>
-          {children}
-        </DoctorProviders>
-      </body>
-    </html>
+    <DoctorProviders>
+      {children}
+    </DoctorProviders>
   );
 }

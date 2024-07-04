@@ -6,7 +6,6 @@ import WindowedSelect, { createFilter } from "react-windowed-select";
 import { Illness, MedicalRecord, MedicalRecordItem } from "../../domain/medical-record";
 import SelectOption from "@/interfaces/select-option";
 import Illnesses from "@/constants/illnesses";
-import { getI18n } from "react-i18next";
 import dataID from "@/constants/icd10_select_id.json";
 import { Item } from "@/modules/items/domain/item";
 import { defaultCategory } from "@/modules/categories/domain/category";
@@ -24,7 +23,6 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
     
     const [treatOptions, setTreatOptions] = useState<SelectOption[]>([]);
     const t = useTranslations();
-    const i = getI18n();
     const [illnesses, setIllnesses] = useState(Illnesses);
 
     useEffect(() => {
@@ -34,10 +32,8 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
     }, [treatments]);
 
     useEffect(() => {
-        if (i.language === 'id-ID') {
-            setIllnesses(dataID);
-        }
-    }, [t])
+        setIllnesses(dataID);
+    }, [])
 
     const treatmentsMapper = (choices: SelectOption[]) => {
         let items:MedicalRecordItem[] = [];

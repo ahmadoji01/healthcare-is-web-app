@@ -14,6 +14,7 @@ export default function DoctorProviders({
 }: {
   children: React.ReactNode;
 }) {
+  const [fetching, setFetching] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
 
@@ -29,9 +30,13 @@ export default function DoctorProviders({
     window.addEventListener('storage', onStorageChange);
   }, []);
 
+  useEffect(() => {
+    setFetching(loading);
+  }, [loading])
+
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
-        {loading ? (
+        {fetching ? (
         <Loader />
         ) : (
         <VisitProvider>

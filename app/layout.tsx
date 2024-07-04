@@ -25,7 +25,7 @@ export default async function RootLayout({
       </head>
       <NextIntlWrapper>
         <Providers>
-          <body className={inter.className + 'bg-white dark:bg-boxdark'}>
+          <body className={inter.className + 'bg-white dark:bg-boxdark'} suppressHydrationWarning={true}>
             {children}
           </body>
         </Providers>

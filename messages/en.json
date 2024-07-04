@@ -172,6 +172,7 @@
     "most_sold_medicines": "Most Sold Medicines",
     "total_medicines": "Total Medicines",
     "doctor_visit_analytics": "Monthly Doctor Visit Analytics",
+    "this_months_data_not_available": "This month's data is not available",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
