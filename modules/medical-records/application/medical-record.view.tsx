@@ -1,7 +1,7 @@
 'use client';
 
+import { useTranslations } from "next-intl";
 import { MedicalRecord } from "../domain/medical-record";
-import { useTranslation } from "react-i18next";
 
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
@@ -9,7 +9,7 @@ interface MedicalRecordFormProps {
 
 const MedicalRecordView = ({ medicalRecord }:MedicalRecordFormProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>

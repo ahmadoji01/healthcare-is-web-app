@@ -1,3 +1,6 @@
+//const createNextIntlPlugin = require('next-intl/plugin');
+const withNextIntl = require('next-intl/plugin')('./app/i18n.tsx');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     typescript: {
@@ -6,4 +9,4 @@ const nextConfig = {
     output: 'standalone'
 }
 
-module.exports = nextConfig
+module.exports = withNextIntl(nextConfig);

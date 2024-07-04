@@ -9,6 +9,7 @@ import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constan
 import { useTranslation } from "react-i18next";
 import TextSizeIcon from "../Icons/TextSizeIcon";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 let activeTimeout = null;
 
@@ -21,7 +22,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }:HeaderProps) => {
 
   const {organization} = useUserContext();
   const [fontSize, setFontSize] = useState("100%"); 
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   useEffect(() => {
     let localSize = localStorage.getItem("font-size");

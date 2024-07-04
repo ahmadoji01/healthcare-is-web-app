@@ -3,7 +3,7 @@
 import SubmitButton from '@/components/Dashboard/Submit';
 import { useState } from 'react';
 import MedicineCategory from '../../domain/medicine-category';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 interface MedicineCategoryFormProps {
     initCategory: MedicineCategory,
@@ -12,7 +12,7 @@ interface MedicineCategoryFormProps {
 
 const MedicineCategoryForm = ({ initCategory, handleSubmit }:MedicineCategoryFormProps) => {
     const [category, setCategory] = useState(initCategory);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>

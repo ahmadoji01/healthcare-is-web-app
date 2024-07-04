@@ -23,15 +23,15 @@ import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, 
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultVisit, visitCreatorMapper, visitMapper } from "@/modules/visits/domain/visit";
-import { createAVisit, getTotalQueueByDoctorID } from "@/modules/visits/domain/visits.actions";
+import { createAVisit } from "@/modules/visits/domain/visits.actions";
 import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
 import { DOCTOR_PAID, ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
-import { useTranslation } from "react-i18next";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 import { getADoctorOrg, updateDoctorOrgs } from "@/modules/doctors/domain/doctors.actions";
 import { defaultDoctorOrganization, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
+import { useTranslations } from "next-intl";
 
 const steps = ['search_your_data', 'doctor_to_visit', 'visit_status', 'review_input'];
 
@@ -58,7 +58,7 @@ const ExistingPatient = () => {
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
     const {activeDoctor} = useFrontDeskContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
 
     const handleNext = () => {

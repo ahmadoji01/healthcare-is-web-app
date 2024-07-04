@@ -5,7 +5,7 @@ import { Item } from '../../domain/item';
 import { useEffect, useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { Category } from '@/modules/categories/domain/category';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 interface ItemFormProps {
     initItem: Item,
@@ -20,8 +20,7 @@ const ItemForm = ({ initItem, categories, showCategory=true, showStock=true, han
     const [item, setItem] = useState(initItem);
     const [cats, setCats] = useState<string[]>([]);
 
-    const {t} = useTranslation();
-
+    const t = useTranslations();
     useEffect(() => {
         if (typeof(categories) !== 'undefined') {
             let cas:string[] = [];

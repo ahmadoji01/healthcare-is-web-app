@@ -1,7 +1,7 @@
 import Currency from "@/components/Currency";
 import appConfig from "@/config";
+import { useTranslations } from "next-intl";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 interface CashPaymentProps {
     total: number,
@@ -11,7 +11,7 @@ interface CashPaymentProps {
 const CashPayment = ({ total, handleChange }: CashPaymentProps) => {
 
     const [cashReceived, setCashReceived] = useState<number>(0);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const handleCashChange = (event: React.BaseSyntheticEvent) => {
         let received = 0;

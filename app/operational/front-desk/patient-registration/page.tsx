@@ -5,13 +5,13 @@ import "@/styles/data-tables-css.css";
 import "@/styles/satoshi.css";
 
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 const PatientRegistration = () => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
     const params = useSearchParams();
     const [redirect, setRedirect] = useState("");
 

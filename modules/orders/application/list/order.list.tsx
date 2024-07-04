@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faPrint, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPrint, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { Order } from "../../domain/order";
 import Currency from "@/components/Currency";
 import moment from 'moment/min/moment-with-locales';
 import { Pagination } from "@mui/material";
 import { orderItemDisplayName } from "../../domain/order.specifications";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface OrderListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -22,7 +21,7 @@ interface OrderListTableProps {
 
 const OrderListTable = ({ orders, setActiveOrder, totalPages, handleModal, handlePageChange, handleDocument }: OrderListTableProps) => {
   
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">

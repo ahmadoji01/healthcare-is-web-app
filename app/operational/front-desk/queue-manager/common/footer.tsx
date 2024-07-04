@@ -1,12 +1,12 @@
 import { useUserContext } from "@/contexts/user-context";
 import { displayStatus, getOrganization } from "@/modules/organizations/domain/organizations.actions";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 
 const Footer = () => {
 
     const {organization} = useUserContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
     
     return (
         <footer className="sticky bottom-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">

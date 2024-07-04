@@ -9,6 +9,7 @@ import { Dispatch, SetStateAction } from "react";
 import { MedicalRecord } from "@/modules/medical-records/domain/medical-record";
 import { Visit } from "@/modules/visits/domain/visit";
 import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface PatientToExamineListTableProps {
     visits: Visit[],
@@ -20,8 +21,7 @@ interface PatientToExamineListTableProps {
 
 const PatientToExamineListTable = ({ visits, totalPages, handlePageChange, setActiveMedicalRecord, setActiveVisit }: PatientToExamineListTableProps) => {
     
-    const {t} = useTranslation();
-
+  const t = useTranslations();
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           { visits.length <= 0 &&

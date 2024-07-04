@@ -2,7 +2,7 @@ import SubmitButton from "@/components/Dashboard/Submit";
 import { PhysicalCheckup } from "../../domain/physical-checkup";
 import { useEffect, useState } from "react";
 import { Patient } from "@/modules/patients/domain/patient";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface PhysicalCheckupFormProps {
     patient: Patient,
@@ -12,7 +12,7 @@ interface PhysicalCheckupFormProps {
 
 const PhysicalCheckupForm = ({ patient, initCheckup, handleSubmit }:PhysicalCheckupFormProps) => {
     const [checkup, setCheckup] = useState(initCheckup);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     useEffect( () => {
         setCheckup({ ...checkup, patient })

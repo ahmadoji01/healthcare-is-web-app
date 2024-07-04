@@ -2,16 +2,15 @@ import Currency from "@/components/Currency";
 import { TAX_RATE } from "@/config/tax";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { useUserContext } from "@/contexts/user-context";
-import { isMedicine, isTreatment } from "@/modules/categories/domain/category.specifications";
 import { ORDER_ITEM_TYPE } from "@/modules/orders/domain/order.constants";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const OrderTotals = () => {
 
     const { selectedOrder, total, setTotal, examFee } = useOrderSummaryContext();
     const { organization } = useUserContext();
-    const { t } = useTranslation();
+    const t = useTranslations();
     const [treatmentFee, setTreatmentFee] = useState<number>(0);
     const [medicineFee, setMedicineFee] = useState<number>(0);
     const [discount, setDiscount] = useState<number>(0);

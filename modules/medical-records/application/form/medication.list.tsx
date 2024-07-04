@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import WindowedSelect, { createFilter } from "react-windowed-select";
-import { MedicalRecordItem, MedicineDoses } from "../../domain/medical-record";
-import { useTranslation } from "react-i18next";
+import { Dispatch, SetStateAction } from "react";
+import { MedicalRecordItem } from "../../domain/medical-record";
+import { useTranslations } from "next-intl";
 
 interface MedicationListProps {
     mrMedicines: MedicalRecordItem[],
@@ -10,7 +9,7 @@ interface MedicationListProps {
 
 const MedicationList = ({ mrMedicines, setMRMedicines }:MedicationListProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const dosesChange = (doses:string, i:number) => {
         let newDoses = [...mrMedicines];

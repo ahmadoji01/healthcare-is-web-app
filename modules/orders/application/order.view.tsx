@@ -1,9 +1,9 @@
 'use client';
 
-import { useTranslation } from "react-i18next";
 import { Order } from "../domain/order";
 import { orderItemDisplayName } from "../domain/order.specifications";
 import Currency from "@/components/Currency";
+import { useTranslations } from "next-intl";
 
 interface OrderViewProps {
     order: Order,
@@ -11,7 +11,7 @@ interface OrderViewProps {
 
 const OrderView = ({ order }:OrderViewProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>

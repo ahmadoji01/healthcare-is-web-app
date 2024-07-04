@@ -1,7 +1,7 @@
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
+import { useTranslations } from "next-intl";
 import Link from "next/link"
 import { Dispatch, SetStateAction } from "react";
-import { useTranslation } from "react-i18next";
 
 interface ExaminationTimeProps {
     handleNext: () => void,
@@ -10,7 +10,7 @@ interface ExaminationTimeProps {
 
 const ExaminationTime = ({ handleNext, setVisitStatus }: ExaminationTimeProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>

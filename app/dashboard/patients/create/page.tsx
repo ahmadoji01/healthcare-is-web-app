@@ -6,15 +6,15 @@ import { useUserContext } from "@/contexts/user-context";
 import PatientForm from "@/modules/patients/application/form/patient.form";
 import { Patient, defaultPatient, patientNoIDMapper } from "@/modules/patients/domain/patient";
 import { createAPatient, patientExistChecker } from "@/modules/patients/domain/patients.actions";
+import { useTranslations } from "next-intl";
 
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const PatientCreatePage = () => {
   const [patient, setPatient] = useState(defaultPatient);
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   const handleSubmit = async (patient:Patient) => {
     let patientExists = false;

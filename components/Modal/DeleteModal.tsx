@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface DeleteModalProps {
     name: string,
@@ -8,7 +8,7 @@ interface DeleteModalProps {
 
 const DeleteModal = ({ name, handleClose, handleDelete }: DeleteModalProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <div className="w-full rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">

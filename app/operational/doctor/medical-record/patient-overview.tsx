@@ -1,9 +1,8 @@
-import { Patient } from "@/modules/patients/domain/patient";
 import PatientAvatar from "../common/patient-avatar";
 import { MedicalRecord } from "@/modules/medical-records/domain/medical-record";
 import moment from "moment";
 import MedicalHistoryCard from "../common/medical-history-card";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface PatientOverviewProps {
     medicalRecord: MedicalRecord,
@@ -11,8 +10,7 @@ interface PatientOverviewProps {
 }
 
 const PatientOverview = ({ medicalRecord, medicalHistories }:PatientOverviewProps) => {
-
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <div className="flex flex-col md:flex-row">

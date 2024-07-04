@@ -12,16 +12,11 @@ import CategoryListTable from "@/modules/categories/application/list/category.li
 import { createACategory, deleteACategory, getAllCategoriesWithFilterPage, getTotalCategoriesWithFilter, getTotalSearchCategoriesWithFilter, searchCategories, searchCategoriesWithFilter, updateACategory } from "@/modules/categories/domain/categories.actions";
 import { Category, categoryCreatorMapper, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
 import { medicineCategoriesFilter } from "@/modules/categories/domain/category.specifications";
-import MedicineCategoryDeleteConfirmation from "@/modules/medicines/application/form/medicine-category.delete-confirmation";
-import MedicineCategoryForm from "@/modules/medicines/application/form/medicine-category.form";
-import MedicineCategoryListTable from "@/modules/medicines/application/list/medicine-category.list-table";
-import { createAMedicineCategory, deleteAMedicineCategory, getAllMedicineCategories, getTotalMedicineCategories, getTotalSearchMedicineCategories, searchMedicineCategories, updateAMedicineCategory } from "@/modules/medicines/domain/medicine-categories.actions";
-import MedicineCategory, { defaultMedicineCategory, medicineCategoryCreatorMapper, medicineCategoryMapper } from "@/modules/medicines/domain/medicine-category";
 import { faAdd, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -39,7 +34,7 @@ const MedicineCategoryPage = () => {
     
     const {accessToken, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const fetchAllCategories = () => {
         getAllCategoriesWithFilterPage(accessToken, medicineCategoriesFilter, 1).then( res => {

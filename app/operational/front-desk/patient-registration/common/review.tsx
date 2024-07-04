@@ -6,6 +6,7 @@ import { defaultVisit } from '@/modules/visits/domain/visit';
 import { useEffect, useState } from 'react';
 import { useFrontDeskContext } from '@/contexts/front-desk-context';
 import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 interface ReviewProps {
   status: string,
@@ -17,7 +18,7 @@ export default function Review({ status }:ReviewProps) {
 
   const {activePatient} = usePatientContext();
   const {activeDoctor} = useFrontDeskContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   useEffect( () => { 
     let visit = defaultVisit; 

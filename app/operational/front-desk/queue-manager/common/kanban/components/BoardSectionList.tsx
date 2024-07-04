@@ -38,13 +38,11 @@ import { PhysicalCheckup, defaultPhysicalCheckup } from '@/modules/physical-chec
 import { deleteAVisit, updateVisit } from '@/modules/visits/domain/visits.actions';
 import { useUserContext } from '@/contexts/user-context';
 import { useAlertContext } from '@/contexts/alert-context';
-import { useTranslation } from 'react-i18next';
 import { DoctorName } from '@/utils/doctor-name-format';
-import { defaultDoctor } from '@/modules/doctors/domain/doctor';
 import { useFrontDeskContext } from '@/contexts/front-desk-context';
 import DeleteModal from '@/components/Modal/DeleteModal';
-import { Visit } from '@/modules/visits/domain/visit';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
+import { useTranslations } from 'next-intl';
 
 interface BoardSectionListProps {
   handleSubmit: (checkup:PhysicalCheckup) => void,
@@ -54,7 +52,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
   const {doctorVisits, activePatient, activeVisit} = useVisitContext();
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   const initialBoardSections = initializeBoard(doctorVisits);
   const [boardSections, setBoardSections] =

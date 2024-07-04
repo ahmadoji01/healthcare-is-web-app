@@ -1,9 +1,9 @@
 import { EDUCATION } from "@/modules/patients/domain/patient.constants";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 export function educationDisplay(education:string) {
     
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     switch (education) {
         case EDUCATION.uneducated:

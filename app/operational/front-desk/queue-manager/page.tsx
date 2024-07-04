@@ -7,11 +7,10 @@ import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physi
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
-import { defaultMedicalRecord, defaultMedicalRecordItem, medicalRecordCreatorMapper, medicalRecordMapper, medicalRecordNoIDMapper } from "@/modules/medical-records/domain/medical-record";
+import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
 import { updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useVisitContext } from "@/contexts/visit-context";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
-import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 import DashboardModal from "@/components/Modal/Modal";
@@ -22,6 +21,7 @@ import { useFrontDeskContext } from "@/contexts/front-desk-context";
 import { subsOutputMapper } from "@/modules/websockets/domain/websocket";
 import { visitMapper } from "@/modules/visits/domain/visit";
 import { WS_EVENT_TYPE } from "@/modules/websockets/domain/websocket.constants";
+import { useTranslations } from "next-intl";
 
 const QueueManager = () => {
 
@@ -31,8 +31,8 @@ const QueueManager = () => {
     const {activeVisit} = useVisitContext();
     const {openSnackbarNotification} = useAlertContext();
     const {handleModal} = useDataModalContext();
-    const {notifyNewQueue, activeDoctor} = useFrontDeskContext();
-    const {t} = useTranslation();
+    const {notifyNewQueue} = useFrontDeskContext();
+    const t = useTranslations();
 
     async function subsToVisit() {
         if ( typeof(wsClient) === 'undefined')

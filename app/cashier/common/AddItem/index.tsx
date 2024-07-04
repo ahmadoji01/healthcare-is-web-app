@@ -3,17 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import ItemCard from "./item-card";
-import { Medicine, medicineMapper } from "@/modules/medicines/domain/medicine";
-import { Treatment, treatmentMapper } from "@/modules/treatments/domain/treatment";
+import { Medicine } from "@/modules/medicines/domain/medicine";
+import { Treatment } from "@/modules/treatments/domain/treatment";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { OrderItem } from "@/modules/orders/domain/order-item";
-import { getAllMedicines, searchMedicines } from "@/modules/medicines/domain/medicines.actions";
 import { useUserContext } from "@/contexts/user-context";
-import { getAllTreatments, searchTreatments } from "@/modules/treatments/domain/treatments.actions";
-import { useTranslation } from "react-i18next";
 import { useAlertContext } from "@/contexts/alert-context";
 import { getAllItems, searchItems } from "@/modules/items/domain/items.actions";
 import { Item, itemMapper } from "@/modules/items/domain/item";
+import { useTranslations } from "next-intl";
 
 function isAMedicine(obj: Medicine|Treatment) {
     if (obj.hasOwnProperty('category')) {
@@ -37,7 +35,7 @@ const AddItem = () => {
     const { selectedOrder, handleModal, setSelectedOrder } = useOrderSummaryContext();
     const {accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
-    const { t } = useTranslation();
+    const t = useTranslations();
 
     const fetchAllData = () => {
         getAllItems(accessToken, 1).then( res => {

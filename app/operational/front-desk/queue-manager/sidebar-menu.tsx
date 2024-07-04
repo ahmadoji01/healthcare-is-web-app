@@ -6,8 +6,8 @@ import Spinner from "@/components/Spinner";
 import { Doctor } from "@/modules/doctors/domain/doctor";
 import { useVisitContext } from "@/contexts/visit-context";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
-import { useTranslation } from "react-i18next";
 import { DoctorName } from "@/utils/doctor-name-format";
+import { useTranslations } from "next-intl";
 
 interface SidebarMenuProps {
     sidebarExpanded: Boolean,
@@ -18,7 +18,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarMenuProps) 
     const { loading, presentDoctors, activeDoctor, setActiveDoctor, newQueues, setNewQueues } = useFrontDeskContext();
     const {handleDoctorVisits} = useVisitContext();
     const [showBadges, setShowBadges] = useState<boolean[]>([]);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     useEffect( () => {
         let displays:boolean[] = [];

@@ -1,7 +1,6 @@
-import SubmitButton from "@/components/Dashboard/Submit";
 import { Patient } from "@/modules/patients/domain/patient";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 
 interface PatientInfoProps {
     patient: Patient,
@@ -9,7 +8,7 @@ interface PatientInfoProps {
 
 const PatientInfo = ({ patient }:PatientInfoProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <div className="flex flex-col gap-9 mb-4">

@@ -6,8 +6,8 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction } from "react";
 import { Pagination } from "@mui/material";
 import { Doctor } from "../../domain/doctor";
-import { useTranslation } from "react-i18next";
 import { DoctorName } from "@/utils/doctor-name-format";
+import { useTranslations } from 'next-intl';
 
 interface DoctorListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -19,7 +19,7 @@ interface DoctorListTableProps {
 
 const DoctorListTable = ({ handleModal, doctors, totalPages, handlePageChange, setActiveDoctor }: DoctorListTableProps) => {
   
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">

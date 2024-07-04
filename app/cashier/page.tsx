@@ -8,7 +8,6 @@ import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import DashboardModal from "@/components/Modal/Modal";
 import Checkout from "./common/Checkout";
 import AddItem from "./common/AddItem";
-import { useTranslation } from "react-i18next";
 import OrderItemDeleteConfirmation from "@/modules/orders/application/form/order-item.delete-confirmation";
 import { OrderItem } from "@/modules/orders/domain/order-item";
 import { deleteAnOrderItem, updateOrder } from "@/modules/orders/domain/order.actions";
@@ -22,6 +21,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { getAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultMedicalRecord, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
+import { useTranslations } from "next-intl";
 
 const OrderSummary = () => {
 
@@ -30,7 +30,7 @@ const OrderSummary = () => {
     const [presModalOpen, setPresModalOpen] = useState<boolean>(false);
     const [medicalRecord, setMedicalRecord] = useState(defaultMedicalRecord);
 
-    const { t } = useTranslation();
+    const t = useTranslations();
     const { accessToken, organization } = useUserContext();
     const { openSnackbarNotification } = useAlertContext();
     const { orderLoaded, examFee, orders, selectedOrder, deleteModalOpen, itemModalOpen, checkoutModalOpen, selectedItem, setSelectedOrder, setSelectedItem, handleModal } = useOrderSummaryContext();

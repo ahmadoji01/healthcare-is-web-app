@@ -12,11 +12,11 @@ import { statusNotEqual } from "@/modules/visits/domain/visit.specifications";
 import { deleteAVisit, getTotalVisitsWithFilter, getVisitsWithFilter } from "@/modules/visits/domain/visits.actions";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import moment from "moment";
 import VisitView from "@/modules/visits/application/form/visit.view";
 import DeleteModal from "@/components/Modal/DeleteModal";
 import { dateRangeFilter } from "@/utils/generic-filters";
+import { useTranslations } from "next-intl";
 
 const VisitsDashboardPage = () => {
 
@@ -24,7 +24,7 @@ const VisitsDashboardPage = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
   const [activeVisit, setActiveVisit] = useState(defaultVisit);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [totalPages, setTotalPages] = useState(0);

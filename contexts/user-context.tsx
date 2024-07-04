@@ -47,6 +47,19 @@ export const UserProvider = ({
     const [loading, setLoading] = useState(true);
     const [fontSize, setFontSize] = useState("100%");
     const [organization, setOrganization] = useState(defaultOrganization);
+    const [size, setSize] = useState("100% !important");
+  
+    useEffect(() => {
+      let localSize = localStorage.getItem("font-size");
+      if (localSize !== null) {
+        setSize(localSize);
+      }
+      document.body.style.fontFamily = 'Satoshi';
+    }, [])
+  
+    useEffect(() => {
+      document.body.style.fontSize = size;
+    }, [size]);
 
     const refreshToken = async (interval:NodeJS.Timeout, isLooping:boolean) => {
         let isError = false;
@@ -131,13 +144,6 @@ export const UserProvider = ({
         }, 900000);
 
         return () => clearInterval(interval);    
-    }, []);
-
-    useEffect(() => {
-        let localFontSize = localStorage.getItem("font-size");
-        if (localFontSize !== null) {
-            setFontSize(localFontSize);
-        }
     }, []);
     
     useEffect(() => {

@@ -1,6 +1,3 @@
-import { Patient } from "@/modules/patients/domain/patient";
-import moment from "moment";
-import { patientsFakeData } from "@/modules/patients/infrastructure/patients.fakes";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -8,7 +5,7 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Pagination } from "@mui/material";
 import { Category } from "../../domain/category";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface CategoryListTableProprs {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -19,7 +16,7 @@ interface CategoryListTableProprs {
 }
 
 const CategoryListTable = ({ handleModal, categories, totalPages, handlePageChange, setActiveCategory }: CategoryListTableProprs) => {
-  const {t} = useTranslation();
+  const t = useTranslations();
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex flex-col">

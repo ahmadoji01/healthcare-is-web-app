@@ -1,6 +1,6 @@
 import { MedicalRecord } from "@/modules/medical-records/domain/medical-record";
 import moment from "moment";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface MedicalHistoryCardProps {
     medicalRecord: MedicalRecord,
@@ -8,7 +8,7 @@ interface MedicalHistoryCardProps {
 
 const MedicalHistoryCard = ({ medicalRecord }:MedicalHistoryCardProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <div className="mb-1 task rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">

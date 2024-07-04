@@ -1,61 +1,24 @@
-'use client';
-
 import "@/styles/globals.css";
 import "@/styles/data-tables-css.css";
 import "@/styles/satoshi.css";
+import { getLocale } from "next-intl/server";
+import PatientRegistrationProviders from "@/contexts/patient-registration-providers";
 
-import * as React from 'react';
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
-import DarkModeSwitcher from "@/components/Operational/Header/DarkModeSwitcher";
-import { PatientProvider } from "@/contexts/patient-context";
-import { DoctorProvider } from "@/contexts/doctor-context";
-import { FrontDeskProvider } from "@/contexts/front-desk-context";
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
 
-const fontFamily = {
-  typography: {
-    fontFamily: 'Satoshi, sans-serif',
-  },
-}
-
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = React.useState(createTheme({ palette: { mode: "light" } }, fontFamily));
-
-  React.useEffect(() => {
-    
-    const onStorageChange = () => {
-      const item = localStorage.getItem("color-theme");
-      const colorTheme = item ? JSON.parse(item) : "light";
-      setTheme(createTheme({ palette: { mode: colorTheme } }));
-    }
-    window.addEventListener('storage', onStorageChange);
-  }, []);
+  const locale = await getLocale();
 
   return (
-    <html lang="en">
-      <PatientProvider>
-        <FrontDeskProvider>
-          <body className="dark">
-            <div className="dark:bg-boxdark-2 dark:text-bodydark min-h-screen">
-              <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                <div className="fixed top-[2%] right-[2%]">
-                  <DarkModeSwitcher />
-                </div>
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  <main>
-                    <div className="relative flex flex-1 flex-col h-dvh p-6">
-                      {children}
-                    </div>
-                  </main>
-                </ThemeProvider>
-              </div>
-            </div>
-          </body>
-        </FrontDeskProvider>
-      </PatientProvider>
+    <html lang={locale}>
+      <body suppressHydrationWarning={true}>
+        <PatientRegistrationProviders>
+          {children}
+        </PatientRegistrationProviders>
+      </body>
     </html>
   );
 }
-
-export default Layout;

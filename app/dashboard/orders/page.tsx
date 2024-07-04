@@ -6,13 +6,12 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { useUserContext } from "@/contexts/user-context";
 import OrderListTable from "@/modules/orders/application/list/order.list";
-import { Order, defaultOrder, orderMapper } from "@/modules/orders/domain/order";
-import { deleteAnOrder, getAllOrders, getAllOrdersWithFilter, getOrdersWithFilter, getTotalOrdersWithFilter } from "@/modules/orders/domain/order.actions";
+import { Order, orderMapper } from "@/modules/orders/domain/order";
+import { deleteAnOrder, getAllOrdersWithFilter, getOrdersWithFilter, getTotalOrdersWithFilter } from "@/modules/orders/domain/order.actions";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { statusFilter } from "@/modules/orders/domain/order.specifications";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import moment from 'moment/min/moment-with-locales';
 import DeleteModal from "@/components/Modal/DeleteModal";
 import { useDocumentContext } from "@/contexts/document-context";
@@ -22,6 +21,7 @@ import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import MiniSpinner from "@/components/MiniSpinner";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { dateRangeFilter } from "@/utils/generic-filters";
+import { useTranslations } from "next-intl";
 
 const OrdersDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -30,7 +30,7 @@ const OrdersDashboardPage = () => {
   const {openSnackbarNotification} = useAlertContext();
   const router = useRouter();
   const {selectedOrder, setSelectedOrder} = useOrderSummaryContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
   const {setOrderDocument, setOrdersDocument, setFrom, setTo} = useDocumentContext();
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalPages, setTotalPages] = useState(0);

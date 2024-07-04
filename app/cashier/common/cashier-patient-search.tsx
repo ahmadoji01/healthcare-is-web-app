@@ -8,6 +8,7 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 let activeTimeout = null;
 
@@ -21,7 +22,7 @@ const CashierPatientSearch = ({ handleSubmit }:CashierPatientSearchProps) => {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [searched, setSearched] = useState(false);
     const {accessToken} = useUserContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const addGuest = () => {
         let patient = defaultPatient;

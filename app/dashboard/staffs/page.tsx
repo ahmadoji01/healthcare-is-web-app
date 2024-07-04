@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAlertContext } from "@/contexts/alert-context";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 let activeTimeout = null;
 
@@ -29,7 +29,7 @@ const StaffsDashboardPage = () => {
 
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   const fetchAllStaffs = () => {
     getAllStaffs(accessToken, 1)

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { sidebarMenuItems } from "@/config/dashboard/menu";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface SidebarItemProps {
     sidebarExpanded: Boolean,
@@ -13,7 +13,7 @@ interface SidebarItemProps {
 
 const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
     const pathname = usePathname();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>

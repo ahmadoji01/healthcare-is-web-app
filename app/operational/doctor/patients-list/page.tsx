@@ -4,19 +4,19 @@ import { useEffect, useState } from "react";
 import PatientToExamineListTable from "../common/patient-to-examine-list-table";
 import { Patient, patientMapper } from "@/modules/patients/domain/patient";
 import { useUserContext } from "@/contexts/user-context";
-import { getPatientsToBeExamined, getTotalPatients } from "@/modules/patients/domain/patients.actions";
+import { getPatientsToBeExamined } from "@/modules/patients/domain/patients.actions";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useMedicalRecordContext } from "@/contexts/medical-record-context";
-import { getTotalVisits, getTotalVisitsWithFilter, getVisitByStatus } from "@/modules/visits/domain/visits.actions";
+import { getTotalVisitsWithFilter, getVisitByStatus } from "@/modules/visits/domain/visits.actions";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { Visit, visitMapper } from "@/modules/visits/domain/visit";
 import { useVisitContext } from "@/contexts/visit-context";
-import { useTranslation } from "react-i18next";
 import { WebSocketClient } from "@directus/sdk";
 import { subsOutputMapper } from "@/modules/websockets/domain/websocket";
 import { WS_EVENT_TYPE } from "@/modules/websockets/domain/websocket.constants";
 import { websocketClient } from "@/utils/request-handler";
 import { statusFilter } from "@/modules/orders/domain/order.specifications";
+import { useTranslations } from "next-intl";
 
 const PatientsList = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
@@ -28,7 +28,7 @@ const PatientsList = () => {
     const {accessToken, user} = useUserContext();
     const {setActiveMedicalRecord} = useMedicalRecordContext();
     const {setActiveVisit} = useVisitContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     useEffect( () => {
         setNotifSound(new Audio('/sounds/notification-sound.mp3'));

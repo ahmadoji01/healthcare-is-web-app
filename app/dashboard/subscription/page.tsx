@@ -2,19 +2,17 @@
 
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
-import { errorMapper } from "@/modules/errors/domains/error";
-import { errorMessage } from "@/modules/errors/domains/errors.specifications";
 import AdministrationForm from "@/modules/organizations/application/form/administration.form";
-import { Organization, defaultOrganization, organizationMapper, organizationPatcherMapper } from "@/modules/organizations/domain/organization";
-import { getOrganization, updateOrganization, updateSubscription, uploadClinicLogo } from "@/modules/organizations/domain/organizations.actions";
+import { Organization } from "@/modules/organizations/domain/organization";
+import { updateOrganization, updateSubscription, uploadClinicLogo } from "@/modules/organizations/domain/organizations.actions";
+import { useTranslations } from "next-intl";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const SubscriptionPage = () => {
 
     const {organization, setOrganization, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const handleSubmit = (organization:Organization) => {
       updateSubscription(accessToken, organization.id)

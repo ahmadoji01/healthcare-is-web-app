@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Patient } from "../../domain/patient";
 import moment from "moment";
 import SubmitButton from "@/components/Dashboard/Submit";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface PatientFormProps {
     initPatient: Patient,
@@ -13,7 +13,7 @@ interface PatientFormProps {
 
 const PatientForm = ({ initPatient, handleSubmit }:PatientFormProps) => {
     const [patient, setPatient] = useState(initPatient);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>

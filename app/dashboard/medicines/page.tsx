@@ -18,8 +18,8 @@ import { medicineItemsFilter } from "@/modules/items/domain/item.specifications"
 import { deleteAnItem, getItemsWithFilter, getTotalItems, getTotalItemsWithFilter, getTotalSearchItems, getTotalSearchItemsWithFilter, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -38,7 +38,7 @@ const MedicinesDashboardPage = () => {
 
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
   
   const fetchAllMedicines = () => {
     getItemsWithFilter(accessToken, medicineItemsFilter, 1)

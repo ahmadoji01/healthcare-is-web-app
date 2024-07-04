@@ -8,13 +8,13 @@ import { useRouter } from "next/navigation";
 import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
 import { useAlertContext } from "@/contexts/alert-context";
 import MiniSpinner from "@/components/MiniSpinner";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 const Login = () => {
 
     const router = useRouter();
     const {openSnackbarNotification} = useAlertContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);

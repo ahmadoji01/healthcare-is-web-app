@@ -1,9 +1,9 @@
-import { Button, Card, CardActions, CardContent, Typography } from "@mui/material"
-import { useTranslation } from "react-i18next"
+import { Card, CardContent, Typography } from "@mui/material"
+import { useTranslations } from "next-intl";
 
 const QueueCard = ({ number=0, name="" }) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <div className="w-1/6 p-2 flex-col">

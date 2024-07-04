@@ -1,12 +1,11 @@
 import { motion } from "framer-motion";
-import { Task } from '../types';
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDataModalContext } from "@/contexts/data-modal-context";
 import { Visit } from "@/modules/visits/domain/visit";
 import { useVisitContext } from "@/contexts/visit-context";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 type TaskItemProps = {
   visit: Visit,
@@ -15,7 +14,7 @@ type TaskItemProps = {
 const TaskItem = ({ visit }: TaskItemProps) => {
   const { handleModal } = useDataModalContext();
   const { setActivePatient, setActiveVisit } = useVisitContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   return (
     <div className="mb-1 task rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">

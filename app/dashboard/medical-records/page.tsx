@@ -13,11 +13,11 @@ import { deleteAMedicalRecord, getMedicalRecordsWithFilter, getTotalMedicalRecor
 import { MR_STATUS } from "@/modules/medical-records/domain/medical-records.constants";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import { useTranslation } from "react-i18next";
 import { statusEquals } from "@/modules/visits/domain/visit.specifications";
 import { dateRangeFilter } from "@/modules/medical-records/domain/medical-record.specifications";
 import { DatePicker } from "@mui/x-date-pickers";
 import MedicalRecordView from "@/modules/medical-records/application/medical-record.view";
+import { useTranslations } from "next-intl";
 
 const MedicalRecordsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -28,7 +28,7 @@ const MedicalRecordsDashboardPage = () => {
   const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const {t} = useTranslation();
+  const t = useTranslations();
   const [fromDate, setFromDate] = useState<Date|null>(null);
   const [toDate, setToDate] = useState<Date|null>(null);
   

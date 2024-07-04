@@ -9,16 +9,15 @@ import { updateOrganization } from "@/modules/organizations/domain/organizations
 import { useUserContext } from "@/contexts/user-context";
 import { useRouter } from "next/navigation";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
-import { Button } from "@mui/material";
 import DoctorPresence from "@/modules/doctors/application/doctor.presence";
 import { DoctorOrganization, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
 import DashboardModal from "@/components/Modal/Modal";
 import { getDoctorsInOrg, updateDoctorOrgs } from "@/modules/doctors/domain/doctors.actions";
 import { useAlertContext } from "@/contexts/alert-context";
 import Spinner from "@/components/Spinner";
-import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDoorClosed, faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations } from "next-intl";
 
 const OpenCloseClinic = () => {
 
@@ -28,7 +27,7 @@ const OpenCloseClinic = () => {
 
     const {accessToken, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
     const router = useRouter();
 
     const fetchDoctors = () => {

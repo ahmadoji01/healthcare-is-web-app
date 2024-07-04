@@ -5,11 +5,9 @@ import { motion } from "framer-motion";
 import { OrderItem } from "../../domain/order-item";
 import Currency from "@/components/Currency";
 import { FocusEvent, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { MAIN_CATEGORY } from "@/modules/categories/domain/category.constants";
-import { isTreatment } from "@/modules/categories/domain/category.specifications";
 import { ORDER_ITEM_TYPE } from "../../domain/order.constants";
 import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
+import { useTranslations } from "next-intl";
 
 interface OrderItemListProps {
   orderItems: OrderItem[]|undefined,
@@ -24,7 +22,7 @@ const OrderItemList = ({ orderItems, handleDelete, handleQtyChange, examFee = 0 
   const [fee, setFee] = useState<number>(0);
   const qtyRef = useRef<HTMLInputElement>(null)
   const [quantity, setQuantity] = useState(0);
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   useEffect( () => {
     setItems(orderItems);

@@ -5,10 +5,8 @@ import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { Alert, Snackbar } from "@mui/material";
 import { useState } from "react";
 import Currency from "@/components/Currency";
-import AlertModal from "@/components/Modal/AlertModal";
-import { ALERT_STATUS } from "@/constants/alert";
 import { useAlertContext } from "@/contexts/alert-context";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 const Footer = () => {
 
@@ -16,7 +14,7 @@ const Footer = () => {
     const {openSnackbarNotification} = useAlertContext();
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const handleClick = () => {
         if (typeof(selectedOrder) === 'undefined') {

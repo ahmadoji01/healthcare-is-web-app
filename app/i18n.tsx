@@ -1,18 +1,10 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import Backend from 'i18next-http-backend';
-import LanguageDetector from 'i18next-browser-languagedetector';
-
-i18n
-  .use(Backend)
-  .use(LanguageDetector)
-  .use(initReactI18next)
-.init({
-    fallbackLng: 'id',
-    debug: true,
-    interpolation: {
-      escapeValue: false,
-    }
+import {getRequestConfig} from 'next-intl/server';
+ 
+export default getRequestConfig(async () => {
+  const locale = 'id';
+ 
+  return {
+    locale,
+    messages: (await import(`../messages/${locale}.json`)).default
+  };
 });
-
-export default i18n;

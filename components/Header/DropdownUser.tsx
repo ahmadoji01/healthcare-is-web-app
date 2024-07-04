@@ -5,9 +5,8 @@ import { useUserContext } from "@/contexts/user-context";
 import { directusClient, imageHandler } from "@/utils/request-handler";
 import defaultAvatar from "@/public/images/avatar-256.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import { UserMenuItem, userMenuItems } from "@/config/dashboard/menu";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 const DropdownUser = () => {
   const [avatar, setAvatar] = useState(defaultAvatar.src);
@@ -18,7 +17,7 @@ const DropdownUser = () => {
   const dropdown = useRef<any>(null);
 
   const { user } = useUserContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
   const items = userMenuItems;
 
   useEffect(() => {

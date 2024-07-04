@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { MedicalRecord } from '@/modules/medical-records/domain/medical-record';
 import { ITEM_TYPE } from '@/modules/items/domain/item.constants';
 import dynamic from "next/dynamic";
+import { useTranslations } from 'next-intl';
 
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
@@ -76,7 +77,7 @@ interface PrescriptionProps {
 }
 
 const Prescription = ({ medicalRecord }:PrescriptionProps) => {
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   return (
     <PDFViewer className="w-full h-screen">

@@ -9,15 +9,11 @@ import MedicalRecordForm from '@/modules/medical-records/application/form/medica
 import MedicationForm from '@/modules/medical-records/application/form/medication.form';
 import { useMedicalRecordContext } from '@/contexts/medical-record-context';
 import { useEffect, useState } from 'react';
-import { IllnessPatcher, MRItemCreator, MedicalRecord, MedicalRecordItem, MedicineDosesPatcher, illnessPatcherMapper, medicalRecordMapper, medicalRecordPatcherMapper, medicineDosesPatcherMapper, mrItemCreatorMapper } from '@/modules/medical-records/domain/medical-record';
+import { IllnessPatcher, MRItemCreator, MedicalRecord, MedicalRecordItem, illnessPatcherMapper, medicalRecordMapper, medicalRecordPatcherMapper, mrItemCreatorMapper } from '@/modules/medical-records/domain/medical-record';
 import Footer from '../common/Footer';
 import { getCompleteMedicalRecords, updateAMedicalRecord } from '@/modules/medical-records/domain/medical-records.actions';
 import { useUserContext } from '@/contexts/user-context';
 import { useAlertContext } from '@/contexts/alert-context';
-import { Medicine, medicineMapper } from '@/modules/medicines/domain/medicine';
-import { getAllMedicines } from '@/modules/medicines/domain/medicines.actions';
-import { getAllTreatments } from '@/modules/treatments/domain/treatments.actions';
-import { Treatment, TreatmentOrg, treatmentMapper, treatmentOrgMapper } from '@/modules/treatments/domain/treatment';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
 import { useVisitContext } from '@/contexts/visit-context';
 import { updateVisit } from '@/modules/visits/domain/visits.actions';
@@ -31,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { getItemsWithFilter } from '@/modules/items/domain/items.actions';
 import { medicineItemsFilter, treatmentItemsFilter } from '@/modules/items/domain/item.specifications';
 import { Item, itemMapper } from '@/modules/items/domain/item';
+import { useTranslations } from 'next-intl';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -63,7 +60,7 @@ interface TabPanelProps {
     };
   }
 
-const MedicalRecord = () => {
+const MedicalRecords = () => {
     const [value, setValue] = useState(0);
     const [medicines, setMedicines] = useState<Item[]>([]);
     const [mrMedicines, setMRMedicines] = useState<MedicalRecordItem[]>([]);
@@ -72,11 +69,11 @@ const MedicalRecord = () => {
     const [order, setOrder] = useState(defaultOrder);
     const [medHistories, setMedHistories] = useState<MedicalRecord[]>([]);
     
-    const {activeMedicalRecord, setActiveMedicalRecord} = useMedicalRecordContext();
+    const {activeMedicalRecord, setActiveMedicalRecord, setLoading} = useMedicalRecordContext();
     const {activeVisit} = useVisitContext();
     const {organization, accessToken} = useUserContext();
-    const {openSnackbarNotification} = useAlertContext();
-    const {t} = useTranslation();
+    const {openSnackbarNotification} = useAlertContext();  
+    const t = useTranslations();
     
     useEffect( () => {
       getItemsWithFilter(accessToken, medicineItemsFilter, 1).then( res => {
@@ -114,7 +111,8 @@ const MedicalRecord = () => {
       let illnessPatchers:IllnessPatcher[] = [];
       let itemsCreator:MRItemCreator[] = [];
       let orderItems:OrderItemCreator[] = [];
-
+      
+      setLoading(true);
       mrTreatments?.map( (treatment) => {
         itemsCreator.push(mrItemCreatorMapper(treatment, organization.id));
         orderItems.push(orderItemCreatorMapper(treatment, organization.id));
@@ -128,11 +126,11 @@ const MedicalRecord = () => {
       let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, itemsCreator, illnessPatchers, [], [], organization.id, MR_STATUS.complete);
       
       await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
-        .catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
+        .catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
       
       let visit = { status: VISIT_STATUS.examined };
       updateVisit(accessToken, activeVisit.id, visit).then( () => {
-      }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
+      }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
 
       let orderUpdate = { order_items: orderItems, status: ORDER_STATUS.waiting_to_pay };
       
@@ -140,8 +138,9 @@ const MedicalRecord = () => {
         location.reload();
         openSnackbarNotification(t('alert_msg.success'), 'success');
         window.location.href = "/operational/doctor/patients-list";
+        setLoading(false);
         return;
-      }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
+      }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
     }
 
     return (
@@ -151,8 +150,8 @@ const MedicalRecord = () => {
             <>
               <Box>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-                      <Tab label={ t('patient_overview') } {...a11yProps(0)} />
-                      <Tab label={ t('diagnosis') } {...a11yProps(1)} />
+                    <Tab label={ t('patient_overview') } {...a11yProps(0)} />
+                    <Tab label={ t('diagnosis') } {...a11yProps(1)} />
                   </Tabs>
               </Box>
               <CustomTabPanel value={value} index={0}>
@@ -177,4 +176,4 @@ const MedicalRecord = () => {
     );
 }
 
-export default MedicalRecord;
+export default MedicalRecords;

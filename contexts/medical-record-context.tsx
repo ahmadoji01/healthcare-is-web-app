@@ -9,6 +9,7 @@ interface MedicalRecordContextType {
     setMedicalRecords: Dispatch<SetStateAction<MedicalRecord[]>>,
     setActiveMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>,
     setMedicineDoses: Dispatch<SetStateAction<MedicineDoses[]>>,
+    setLoading: Dispatch<SetStateAction<boolean>>,
 }
 
 export const MedicalRecordContext = createContext<MedicalRecordContextType | null>({
@@ -19,6 +20,7 @@ export const MedicalRecordContext = createContext<MedicalRecordContextType | nul
     setMedicalRecords: () => {},
     setActiveMedicalRecord: () => {},
     setMedicineDoses: () => {},
+    setLoading: () => {},
 });
  
 export const MedicalRecordProvider = ({
@@ -32,7 +34,7 @@ export const MedicalRecordProvider = ({
     const [loading, setLoading] = useState(false);
 
     return (
-        <MedicalRecordContext.Provider value={{ medicalRecords, activeMedicalRecord, medicineDoses, loading, setMedicineDoses, setMedicalRecords, setActiveMedicalRecord }}>
+        <MedicalRecordContext.Provider value={{ medicalRecords, activeMedicalRecord, medicineDoses, loading, setLoading, setMedicineDoses, setMedicalRecords, setActiveMedicalRecord }}>
             {children}
         </MedicalRecordContext.Provider>
     );

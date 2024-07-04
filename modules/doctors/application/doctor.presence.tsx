@@ -1,8 +1,8 @@
 import { ChangeEvent, useState } from "react";
-import { Button, Checkbox } from "@mui/material";
+import { Checkbox } from "@mui/material";
 import { DoctorOrganization } from "../domain/doctor";
 import { DoctorName } from "@/modules/doctors/domain/doctor.specifications";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface DoctorListTableProps {
   doctorOrgs: DoctorOrganization[],
@@ -12,7 +12,7 @@ interface DoctorListTableProps {
 const DoctorPresence = ({ doctorOrgs, handleSubmit }: DoctorListTableProps) => {
   
     const [selectedDoctorOrgIds, setSelectedDoctorOrgIds] = useState<number[]>([]);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const handleChecked = (e:ChangeEvent<HTMLInputElement>, index:number) => {
         let checked = e.target.checked;

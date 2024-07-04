@@ -14,12 +14,12 @@ import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { getTotalVisitsWithFilter } from "@/modules/visits/domain/visits.actions";
 import { faClock, faPills, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const DashboardHome = () => {
 
-  const {t} = useTranslation();
+  const t = useTranslations();
   const {accessToken} = useUserContext();
 
   const [totalMonthlyVisits, setTotalMonthlyVisits] = useState(0);

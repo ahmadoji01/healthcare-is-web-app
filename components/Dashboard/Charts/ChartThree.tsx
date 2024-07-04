@@ -12,7 +12,7 @@ import { getDoctorsWithFilter } from "@/modules/doctors/domain/doctors.actions";
 import { doctorIDsInFilter } from "@/modules/doctors/domain/doctor.specifications";
 import { DoctorName } from "@/utils/doctor-name-format";
 import { randomHexColorGenerator } from "@/utils/generic-functions";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface ChartThreeState {
@@ -69,7 +69,7 @@ const ChartThree = () => {
   const [counts, setCounts] = useState<VisitCount[]>([]);
   const [visitCountDoctors, setVisitCountDoctors] = useState<VisitCountDoctor[]>([]);
   const {accessToken} = useUserContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   if (!series.length || !series) {
     return null;

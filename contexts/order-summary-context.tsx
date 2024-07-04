@@ -12,7 +12,6 @@ import { statusFilter } from '@/modules/orders/domain/order.specifications';
 import { ORDER_ITEM_TYPE, ORDER_STATUS } from '@/modules/orders/domain/order.constants';
 import { OrderItem, defaultOrderItem } from '@/modules/orders/domain/order-item';
 import { useAlertContext } from './alert-context';
-import { useTranslation } from 'react-i18next';
 import { getADoctorOrg, getDoctorsInOrg } from '@/modules/doctors/domain/doctors.actions';
 import { defaultDoctorOrganization, doctorOrgMapper } from '@/modules/doctors/domain/doctor';
 import { WebSocketClient } from '@directus/sdk';
@@ -21,6 +20,7 @@ import { WS_EVENT_TYPE } from '@/modules/websockets/domain/websocket.constants';
 import { websocketClient } from '@/utils/request-handler';
 import { Item } from '@/modules/items/domain/item';
 import { updateAnItem } from '@/modules/items/domain/items.actions';
+import { useTranslations } from 'next-intl';
  
 interface OrderSummaryContextType {
     deleteModalOpen: boolean,
@@ -100,7 +100,7 @@ export const OrderSummaryProvider = ({
 
     const {accessToken, organization, user} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const playNotificationSound = () => {
         notifSound.play();

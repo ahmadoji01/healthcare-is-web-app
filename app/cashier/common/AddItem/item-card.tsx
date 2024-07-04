@@ -2,11 +2,10 @@ import Currency from "@/components/Currency";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
 import { Item } from "@/modules/items/domain/item";
 import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
-import { Treatment } from "@/modules/treatments/domain/treatment";
-import { faAdd, faPills } from "@fortawesome/free-solid-svg-icons";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next";
 
 interface ItemCardProps {
     item: Item,
@@ -18,7 +17,7 @@ const ItemCard = ({ item, handleAddItem }:ItemCardProps) => {
     const [quantity, setQuantity] = useState<number>(1);
     const [hidden, setHidden] = useState<boolean>(false);
     const { selectedOrder } = useOrderSummaryContext();
-    const { t } = useTranslation();
+    const t = useTranslations();
 
     useEffect( () => {
         isInOrderItems(item);

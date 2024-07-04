@@ -14,7 +14,6 @@ import PatientInputForm from "./patient-input-form";
 import RegisterFinished from "../common/register-finished";
 import ExaminationTime from "../common/examination-time";
 import DoctorToVisit from "../common/doctor-to-visit";
-import { useDoctorContext } from "@/contexts/doctor-context";
 import { usePatientContext } from "@/contexts/patient-context";
 import { createAPatient } from "@/modules/patients/domain/patients.actions";
 import { defaultPatient, patientMapper, patientNoIDMapper } from "@/modules/patients/domain/patient";
@@ -30,9 +29,9 @@ import { DOCTOR_PAID, ORDER_STATUS } from "@/modules/orders/domain/order.constan
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
 import { defaultPhysicalCheckup, physicalCheckupMapper, physicalCheckupNoIDMapper } from "@/modules/physical-checkups/domain/physical-checkup";
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
-import { useTranslation } from "react-i18next";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
+import { useTranslations } from "next-intl";
 
 const steps = ['personal_information', 'doctor_to_visit', 'visit_status', 'review_input'];
 
@@ -59,7 +58,7 @@ const NewPatient = () => {
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
     const {activeDoctor} = useFrontDeskContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
