@@ -39,14 +39,6 @@ const VisitReview = ({ doctor, visit }:VisitReviewProps) => {
                                     { DoctorName(doctor.name, doctor.specialization) }
                                 </div>
                             </div>
-                            <div>
-                                <label className="mb-3 block">
-                                    { t('visit_status') }
-                                </label>
-                                <div className="relative font-bold">
-                                    { t(vis.status) }
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

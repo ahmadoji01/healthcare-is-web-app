@@ -14,7 +14,7 @@ import ExaminationTime from "../common/examination-time";
 import PatientSearchForm from "./patient-search-form";
 import DoctorToVisit from "../common/doctor-to-visit";
 import { defaultPhysicalCheckup, physicalCheckupMapper, physicalCheckupNoIDMapper } from "@/modules/physical-checkups/domain/physical-checkup";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { usePatientContext } from "@/contexts/patient-context";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
@@ -54,12 +54,12 @@ const ExistingPatient = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [visitStatus, setVisitStatus] = useState("");
     const [queueNumber, setQueueNumber] = useState("");
+    const [loading, setLoading] = useState(false);
     const {accessToken, organization} = useUserContext();
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
     const {activeDoctor} = useFrontDeskContext();
     const t = useTranslations();
-
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);

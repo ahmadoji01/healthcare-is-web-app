@@ -26,10 +26,8 @@ export default function QueueDisplayProviders({
   }, []);
 
   return (
-    <html lang="en">
       <VisitProvider>
         <FrontDeskProvider>
-          <body suppressHydrationWarning={true}>
             <div className="dark:bg-boxdark-2 dark:text-bodydark">
               {loading ? (
                 <Loader />
@@ -47,9 +45,7 @@ export default function QueueDisplayProviders({
                 </div>
               )}
             </div>
-          </body>
         </FrontDeskProvider>
       </VisitProvider>
-    </html>
   );
 }

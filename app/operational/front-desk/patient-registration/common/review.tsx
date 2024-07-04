@@ -24,7 +24,7 @@ export default function Review({ status }:ReviewProps) {
     let visit = defaultVisit; 
     visit.status = status; 
     setVisit(visit);
-  }, [visit])
+  }, [status])
 
   return (
     <>
