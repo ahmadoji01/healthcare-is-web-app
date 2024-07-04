@@ -17,7 +17,7 @@ export default function DashboardProviders({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [fetching, setFetching] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
   const {loading} = useUserContext();
 

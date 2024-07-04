@@ -17,6 +17,7 @@ import VisitView from "@/modules/visits/application/form/visit.view";
 import DeleteModal from "@/components/Modal/DeleteModal";
 import { dateRangeFilter } from "@/utils/generic-filters";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 const VisitsDashboardPage = () => {
 
@@ -25,6 +26,7 @@ const VisitsDashboardPage = () => {
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const t = useTranslations();
+  const router = useRouter();
   const [activeVisit, setActiveVisit] = useState(defaultVisit);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -101,7 +103,7 @@ const VisitsDashboardPage = () => {
     deleteAVisit(accessToken, activeVisit.id)
       .then( () => {
         openSnackbarNotification(t('alert_msg.success'), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t('alert_msg.server_error'), "error");
       })

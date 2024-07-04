@@ -83,7 +83,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
         createAnOrder(accessToken, orderCreator)
             .then( () => {
                 openSnackbarNotification(ALERT_MESSAGE.success, "success");
-                window.location.reload();
+                router.refresh();
             }).catch( () => {
                 isError = true;
             })

@@ -6,9 +6,9 @@ import Spinner from "@/components/Spinner";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
-import { createACategory, getAllCategories, getAllCategoriesWithFilter, searchCategories } from "@/modules/categories/domain/categories.actions";
+import { createACategory, getAllCategoriesWithFilter, searchCategories } from "@/modules/categories/domain/categories.actions";
 import { Category, categoryCreatorMapper, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
-import { medicineCategoriesFilter, nameEquals, superNameEquals } from "@/modules/categories/domain/category.specifications";
+import { medicineCategoriesFilter } from "@/modules/categories/domain/category.specifications";
 import ItemDeleteConfirmation from "@/modules/items/application/form/item.delete-confirmation";
 import ItemForm from "@/modules/items/application/form/item.form";
 import ItemListTable from "@/modules/items/application/list/item.list-table";
@@ -19,6 +19,7 @@ import { deleteAnItem, getItemsWithFilter, getTotalItems, getTotalItemsWithFilte
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 let activeTimeout = null;
@@ -39,6 +40,7 @@ const MedicinesDashboardPage = () => {
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const t = useTranslations();
+  const router = useRouter();
   
   const fetchAllMedicines = () => {
     getItemsWithFilter(accessToken, medicineItemsFilter, 1)
@@ -125,7 +127,7 @@ const MedicinesDashboardPage = () => {
     updateAnItem(accessToken, item.id, itemPatcherMapper(item))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
@@ -168,7 +170,7 @@ const MedicinesDashboardPage = () => {
     deleteAnItem(accessToken, activeItem.id)
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })

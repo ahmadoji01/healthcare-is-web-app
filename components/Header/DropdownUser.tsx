@@ -7,6 +7,7 @@ import defaultAvatar from "@/public/images/avatar-256.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UserMenuItem, userMenuItems } from "@/config/dashboard/menu";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 const DropdownUser = () => {
   const [avatar, setAvatar] = useState(defaultAvatar.src);
@@ -16,9 +17,10 @@ const DropdownUser = () => {
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
-  const { user } = useUserContext();
+  const { user, setAccessToken } = useUserContext();
   const t = useTranslations();
   const items = userMenuItems;
+  const router = useRouter();
 
   useEffect(() => {
     let its:UserMenuItem[] = [];
@@ -61,7 +63,8 @@ const DropdownUser = () => {
 
   const handleSignOut = () => {
     directusClient.logout().then( () => {
-      window.location.href = '/';
+      setAccessToken('');
+      router.replace('/');
     });
   }
 

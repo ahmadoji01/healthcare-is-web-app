@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { sidebarMenuItems } from "@/config/dashboard/menu";
-import { useTranslation } from "react-i18next";
 import { useTranslations } from "next-intl";
 
 interface SidebarItemProps {

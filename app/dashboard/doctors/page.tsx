@@ -13,6 +13,7 @@ import { deleteADoctor, getAllDoctors, getTotalDoctors, getTotalSearchDoctors, s
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 let activeTimeout = null;
@@ -29,6 +30,7 @@ const DoctorsDashboardPage = () => {
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const t = useTranslations();
+  const router = useRouter();
 
   const fetchAllDoctors = () => {
     getAllDoctors(accessToken, 1)
@@ -83,7 +85,7 @@ const DoctorsDashboardPage = () => {
     updateADoctor(accessToken, doctor.id, doctorPatcherMapper(doctor))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
@@ -126,7 +128,7 @@ const DoctorsDashboardPage = () => {
     deleteADoctor(accessToken, activeDoctor.id)
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })

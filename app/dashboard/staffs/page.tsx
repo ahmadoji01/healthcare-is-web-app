@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAlertContext } from "@/contexts/alert-context";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 let activeTimeout = null;
 
@@ -30,6 +31,7 @@ const StaffsDashboardPage = () => {
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const t = useTranslations();
+  const router = useRouter();
 
   const fetchAllStaffs = () => {
     getAllStaffs(accessToken, 1)
@@ -84,7 +86,7 @@ const StaffsDashboardPage = () => {
     updateAStaff(accessToken, staff.id, staffPatcherMapper(staff))
       .then( () => {
         openSnackbarNotification(t('alert_msg.success'), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t('alert_msg.error'), "error");
       })
@@ -127,7 +129,7 @@ const StaffsDashboardPage = () => {
     deleteAStaff(accessToken, activeStaff.id)
       .then( () => {
         openSnackbarNotification(t('alert_msg.success'), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t('alert_msg.server_error'), "error");
       })

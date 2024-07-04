@@ -16,6 +16,7 @@ import { faAdd, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 let activeTimeout = null;
@@ -35,6 +36,7 @@ const MedicineCategoryPage = () => {
     const {accessToken, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const t = useTranslations();
+    const router = useRouter();
 
     const fetchAllCategories = () => {
         getAllCategoriesWithFilterPage(accessToken, medicineCategoriesFilter, 1).then( res => {
@@ -90,7 +92,7 @@ const MedicineCategoryPage = () => {
         deleteACategory(accessToken, activeCategory.id)
           .then( () => {
             openSnackbarNotification(t("alert_msg.success"), "success");
-            window.location.reload();
+            router.refresh();
           }).catch( () => {
             openSnackbarNotification(t("alert_msg.server_error"), "error");
           })
@@ -157,7 +159,7 @@ const MedicineCategoryPage = () => {
 
         updateACategory(accessToken, category.id, {name: category.name}).then( res => {
             openSnackbarNotification(t("alert_msg.success"), "success");
-            window.location.reload();
+            router.refresh();
         }).catch( err => {
             openSnackbarNotification(t("alert_msg.server_error"), "error")
         });
@@ -183,7 +185,7 @@ const MedicineCategoryPage = () => {
 
         createACategory(accessToken, categoryCreator).then( res => {
             openSnackbarNotification(t("alert_msg.success"), "success");
-            window.location.reload();
+            router.refresh();
         }).catch( err => {
             openSnackbarNotification(t("alert_msg.server_error"), "error")
         });

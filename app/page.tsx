@@ -4,16 +4,19 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "@/modules/users/domain/users.actions";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
 import { useAlertContext } from "@/contexts/alert-context";
 import MiniSpinner from "@/components/MiniSpinner";
 import { useTranslations } from "next-intl";
+import { useUserContext } from "@/contexts/user-context";
 
 const Login = () => {
 
     const router = useRouter();
+    const pathname = usePathname();
     const {openSnackbarNotification} = useAlertContext();
+    const {setAccessToken} = useUserContext();
     const t = useTranslations();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -21,12 +24,13 @@ const Login = () => {
 
     const handleSignIn = () => {
         setLoading(true);
-        signIn(email, password).then(() => {
+        signIn(email, password).then(res => {
             setLoading(false);
-            if (location.pathname === "/" && window.history.length == 2) {
+            setAccessToken(res?.access_token? res.access_token : '');
+            if (pathname === "/" && window.history.length == 2) {
                 router.push("/dashboard");
             }
-            if (location.pathname === "/" && window.history.length > 2) {
+            if (pathname === "/" && window.history.length > 2) {
                 router.back();
             }
         }).catch( () => { openSnackbarNotification(t('alert_msg.wrong_credentials'), 'error'); setLoading(false); });

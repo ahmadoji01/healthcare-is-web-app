@@ -7,6 +7,7 @@ import PatientForm from "@/modules/patients/application/form/patient.form";
 import { Patient, defaultPatient, patientNoIDMapper } from "@/modules/patients/domain/patient";
 import { createAPatient, patientExistChecker } from "@/modules/patients/domain/patients.actions";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 
@@ -15,6 +16,7 @@ const PatientCreatePage = () => {
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const t = useTranslations();
+  const router = useRouter();
 
   const handleSubmit = async (patient:Patient) => {
     let patientExists = false;
@@ -34,7 +36,7 @@ const PatientCreatePage = () => {
     let patientNoID = patientNoIDMapper(patient, organization.id);
     await createAPatient(accessToken, patientNoID).then( () => {
       openSnackbarNotification(t("alert_msg.success"), "success");
-      window.location.href = '/dashboard/patients'
+      router.push('/dashboard/patients');
       return;
     }).catch( err => {
       openSnackbarNotification(t("alert_msg.server_error"), "error");

@@ -43,6 +43,7 @@ import { useFrontDeskContext } from '@/contexts/front-desk-context';
 import DeleteModal from '@/components/Modal/DeleteModal';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 interface BoardSectionListProps {
   handleSubmit: (checkup:PhysicalCheckup) => void,
@@ -53,6 +54,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const t = useTranslations();
+  const router = useRouter();
 
   const initialBoardSections = initializeBoard(doctorVisits);
   const [boardSections, setBoardSections] =
@@ -193,7 +195,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
     deleteAVisit(accessToken, activeVisit.id)
       .then( () => {
         openSnackbarNotification(t('alert_msg.success'), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t('alert_msg.server_error'), "error");
       })

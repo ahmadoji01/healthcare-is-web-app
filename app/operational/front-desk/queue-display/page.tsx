@@ -178,7 +178,8 @@ const QueueDisplay = () => {
     }, [nextTab]);
 
     const onTabClick = (index:number) => {
-        window.location.href = '/operational/front-desk/queue-display?activetab=' + index;
+        router.refresh();
+        router.push('/operational/front-desk/queue-display?activetab=' + index);
     }
 
     return (

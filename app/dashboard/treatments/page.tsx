@@ -18,6 +18,7 @@ import { deleteAnItem, getItemsWithFilter, getTotalItemsWithFilter, getTotalSear
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 
@@ -37,6 +38,7 @@ const TreatmentsDashboardPage = () => {
   const {openSnackbarNotification} = useAlertContext();
   const {accessToken} = useUserContext();
   const t = useTranslations();
+  const router = useRouter();
 
   const fetchAllTreatments = () => {
     getItemsWithFilter(accessToken, treatmentItemsFilter, 1)
@@ -109,7 +111,7 @@ const TreatmentsDashboardPage = () => {
     updateAnItem(accessToken, item.id, itemPatcherMapper(item))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
@@ -152,7 +154,7 @@ const TreatmentsDashboardPage = () => {
     deleteAnItem(accessToken, activeItem.id)
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })

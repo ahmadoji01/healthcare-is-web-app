@@ -16,6 +16,7 @@ interface UserContextType {
     setUser: Dispatch<SetStateAction<User>>,
     setOrganization: Dispatch<SetStateAction<Organization>>,
     setFontSize: Dispatch<SetStateAction<string>>,
+    setAccessToken: Dispatch<SetStateAction<string>>,
     fetchOrganization: () => void,
 }
 
@@ -30,6 +31,7 @@ export const UserContext = createContext<UserContextType | null>({
     setUser: () => {},
     setOrganization: () => {},
     setFontSize: () => {},
+    setAccessToken: () => {},
     fetchOrganization: () => {},
 });
  
@@ -92,27 +94,20 @@ export const UserProvider = ({
                 usr = userMapper(res);
                 setUser(usr);
             }).catch( () => {
-                if (location.pathname !== '/') {
+                if (pathname !== '/') {
                     router.push('/');
                 }
                 return;
             });
             fetchOrganization();
-
-            if (location.pathname === "/" && window.history.length == 2) {
-                router.push("/dashboard");
-            }
-            if (location.pathname === "/" && window.history.length > 2) {
-                router.back();
-            }
-            
+            router.push("/dashboard");
             setLoading(false);
             if (!isLooping)
                 clearInterval(interval);
             return;
         }).catch( err => {
-            if (location.pathname !== '/' && (err.response.status === 400 || err.response.status === 401 || err.response.status === 403)) {
-                router.push("/");
+            if (pathname !== '/') {
+                router.replace("/");
             }
             setLoading(false);
             clearInterval(interval);
@@ -169,7 +164,7 @@ export const UserProvider = ({
     }, [user.role_name])
 
     return (
-        <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
+        <UserContext.Provider value={{ accessToken, setAccessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
             {children}
         </UserContext.Provider>
     );

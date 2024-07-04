@@ -22,6 +22,7 @@ import { subsOutputMapper } from "@/modules/websockets/domain/websocket";
 import { visitMapper } from "@/modules/visits/domain/visit";
 import { WS_EVENT_TYPE } from "@/modules/websockets/domain/websocket.constants";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 const QueueManager = () => {
 
@@ -33,6 +34,7 @@ const QueueManager = () => {
     const {handleModal} = useDataModalContext();
     const {notifyNewQueue} = useFrontDeskContext();
     const t = useTranslations();
+    const router = useRouter();
 
     async function subsToVisit() {
         if ( typeof(wsClient) === 'undefined')
@@ -101,7 +103,7 @@ const QueueManager = () => {
         let visit = { medical_record: medicalRecordRes.id, status: VISIT_STATUS.to_be_examined };
         updateVisit(accessToken, activeVisit.id, visit).then( () => {
             handleModal(true, true);
-            location.reload();
+            router.refresh();
             openSnackbarNotification(t('alert_msg.success'), 'success');
             return;
         }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });

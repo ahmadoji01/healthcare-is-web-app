@@ -4,11 +4,13 @@ import Link from "next/link";
 import defaultAvatar from "@/public/images/avatar-256.jpg";
 import { useUserContext } from "@/contexts/user-context";
 import { directusClient, imageHandler } from "@/utils/request-handler";
+import { useRouter } from "next/navigation";
 
 const DropdownUser = () => {
   const [avatar, setAvatar] = useState(defaultAvatar.src);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const {user} = useUserContext();
+  const {user, setAccessToken} = useUserContext();
+  const router = useRouter();
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -45,7 +47,8 @@ const DropdownUser = () => {
 
   const handleSignOut = () => {
     directusClient.logout().then( () => {
-      window.location.href = '/';
+      setAccessToken('');
+      router.replace('/');
     });
   }
 

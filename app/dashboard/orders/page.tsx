@@ -112,7 +112,7 @@ const OrdersDashboardPage = () => {
     deleteAnOrder(accessToken, selectedOrder.id)
       .then( () => {
         openSnackbarNotification(t('alert_msg.success'), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t('alert_msg.server_error'), "error");
       })

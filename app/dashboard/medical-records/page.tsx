@@ -17,6 +17,7 @@ import { dateRangeFilter } from "@/modules/medical-records/domain/medical-record
 import { DatePicker } from "@mui/x-date-pickers";
 import MedicalRecordView from "@/modules/medical-records/application/medical-record.view";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 const MedicalRecordsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -30,6 +31,7 @@ const MedicalRecordsDashboardPage = () => {
   const t = useTranslations();
   const [fromDate, setFromDate] = useState<Date|null>(null);
   const [toDate, setToDate] = useState<Date|null>(null);
+  const router = useRouter();
   
   const [filter, setFilter] = useState<object>({ _and: [ statusEquals(MR_STATUS.complete) ] })
 
@@ -100,7 +102,7 @@ const MedicalRecordsDashboardPage = () => {
     deleteAMedicalRecord(accessToken, activeMedicalRecord.id)
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        window.location.reload();
+        router.refresh();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
