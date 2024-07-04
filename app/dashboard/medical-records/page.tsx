@@ -6,7 +6,6 @@ import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import MedicalRecordDeleteConfirmation from "@/modules/medical-records/application/form/medical-record.delete-confirmation";
-import MedicalRecordForm from "@/modules/medical-records/application/form/medical-record.form";
 import MedicalRecordListTable from "@/modules/medical-records/application/list/medical-record.list-table";
 import { MedicalRecord, defaultMedicalRecord, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
 import { deleteAMedicalRecord, getMedicalRecordsWithFilter, getTotalMedicalRecords, getTotalMedicalRecordsWithFilter, searchMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";

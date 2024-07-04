@@ -6,7 +6,13 @@ const nextConfig = {
     typescript: {
         ignoreBuildErrors: true,
     },
-    output: 'standalone'
+    output: 'standalone',
+    compiler: {
+        styledComponents: true,
+    },
+    experimental: {
+        appDir: true,
+    },
 }
 
 module.exports = withNextIntl(nextConfig);
