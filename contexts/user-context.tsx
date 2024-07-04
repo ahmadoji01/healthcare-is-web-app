@@ -65,17 +65,34 @@ export const UserProvider = ({
 
     const refreshToken = async (interval:NodeJS.Timeout, isLooping:boolean) => {
         let isError = false;
-        await getUserMe(accessToken).then(res => {
-            let usr = defaultUser;
-            usr = userMapper(res);
-            setUser(usr);
-            setLoading(false);
-            return;
-        }).catch( () => {
+
+        if (accessToken === "")
             isError = true;
-            setLoading(false);
-            return;
-        });
+
+        if (!isError) {
+            await getUserMe(accessToken).then(res => {
+                let usr = defaultUser;
+                usr = userMapper(res);
+                setUser(usr);
+                setLoading(false);
+                return;
+            }).catch( () => {
+                isError = true;
+                setLoading(false);
+                return;
+            });
+
+            await getOrganization(accessToken, 1).then( res => {
+                if (res.length < 1) {
+                    return;
+                }
+                setOrganization(organizationMapper(res[0]));
+            }).catch( err => {
+                isError = true;
+                setLoading(false);
+                return;
+            });
+        }
 
         if (!isError)
             return;
@@ -99,14 +116,23 @@ export const UserProvider = ({
                 }
                 return;
             });
-            fetchOrganization();
+            getOrganization(token, 1).then( res => {
+                if (res.length < 1) {
+                    return;
+                }
+                setOrganization(organizationMapper(res[0]));
+            }).catch( err => {
+                isError = true;
+                setLoading(false);
+                return;
+            });
             router.push("/dashboard");
             setLoading(false);
             if (!isLooping)
                 clearInterval(interval);
             return;
         }).catch( err => {
-            if (pathname !== '/') {
+            if (pathname !== '/' && ( err.response.status === 400 || err.response.status === 401 || err.response.status === 403)) {
                 window.location.href = '/';
             }
             setLoading(false);
@@ -142,8 +168,6 @@ export const UserProvider = ({
     }, []);
     
     useEffect(() => {
-        fetchOrganization();
-
         if (user.role_name === "") {
             return;
         }

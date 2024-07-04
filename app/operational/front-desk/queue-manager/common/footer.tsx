@@ -1,5 +1,5 @@
 import { useUserContext } from "@/contexts/user-context";
-import { displayStatus, getOrganization } from "@/modules/organizations/domain/organizations.actions";
+import { displayStatus } from "@/modules/organizations/domain/organizations.actions";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 

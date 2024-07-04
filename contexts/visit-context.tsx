@@ -10,7 +10,6 @@ import { doctorIDEquals, statusEquals } from '@/modules/visits/domain/visit.spec
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
  
 interface VisitContextType {
-    visits: Visit[],
     doctorVisits: Visit[],
     activePatient: Patient,
     activeVisit: Visit,
@@ -22,7 +21,6 @@ interface VisitContextType {
 }
 
 export const VisitContext = createContext<VisitContextType | null>({
-    visits: [],
     doctorVisits: [],
     activePatient: defaultPatient,
     activeVisit: defaultVisit,
@@ -38,7 +36,6 @@ export const VisitProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const [visits, setVisits] = useState<Visit[]>([]);
     const [doctorVisits, setDoctorVisits] = useState<Visit[]>([]);
     const [activePatient, setActivePatient] = useState<Patient>(defaultPatient);
     const [activeVisit, setActiveVisit] = useState<Visit>(defaultVisit);
@@ -58,26 +55,8 @@ export const VisitProvider = ({
         })
     }
 
-    useEffect( () => {
-        setLoading(true);
-        let interval = setInterval(async () => {
-            await getAllVisits(accessToken, 1).then( res => { 
-                let vits:Visit[] = [];
-                res?.map( (visit) => { vits.push(visitMapper(visit)); });
-                setVisits(vits);
-                setLoading(false);
-                clearInterval(interval);
-            }).catch( err => {
-                setLoading(false);
-                clearInterval(interval);
-            })
-        }, 100)
-
-        return () => clearInterval(interval);
-    }, [])
-
     return (
-        <VisitContext.Provider value={{ visits, activeVisit, loading, doctorVisits, activePatient, setActivePatient, setActiveVisit, setDoctorVisits, handleDoctorVisits }}>
+        <VisitContext.Provider value={{ activeVisit, loading, doctorVisits, activePatient, setActivePatient, setActiveVisit, setDoctorVisits, handleDoctorVisits }}>
             {children}
         </VisitContext.Provider>
     );
