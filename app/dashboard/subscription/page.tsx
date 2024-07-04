@@ -6,7 +6,7 @@ import AdministrationForm from "@/modules/organizations/application/form/adminis
 import { Organization } from "@/modules/organizations/domain/organization";
 import { updateOrganization, updateSubscription, uploadClinicLogo } from "@/modules/organizations/domain/organizations.actions";
 import { useTranslations } from "next-intl";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent } from "react";
 
 const SubscriptionPage = () => {
 

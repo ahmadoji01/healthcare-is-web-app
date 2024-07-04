@@ -85,7 +85,7 @@ const DoctorsDashboardPage = () => {
     updateADoctor(accessToken, doctor.id, doctorPatcherMapper(doctor))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        router.refresh();
+        window.location.reload();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
@@ -128,7 +128,7 @@ const DoctorsDashboardPage = () => {
     deleteADoctor(accessToken, activeDoctor.id)
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        router.refresh();
+        window.location.reload();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })

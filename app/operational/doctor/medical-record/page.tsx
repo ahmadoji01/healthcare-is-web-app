@@ -135,7 +135,7 @@ const MedicalRecords = () => {
       let orderUpdate = { order_items: orderItems, status: ORDER_STATUS.waiting_to_pay };
       
       updateOrder(accessToken, order.id, orderUpdate).then( () => {
-        router.refresh();
+        window.location.reload();
         openSnackbarNotification(t('alert_msg.success'), 'success');
         router.push("/operational/doctor/patients-list");
         setLoading(false);

@@ -7,8 +7,7 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { VisitProvider } from "@/contexts/visit-context";
-import { FrontDeskProvider } from "@/contexts/front-desk-context";
-import { useDoctorContext } from "@/contexts/doctor-context";
+import { FrontDeskProvider, useFrontDeskContext } from "@/contexts/front-desk-context";
 import SidebarMenu from "@/app/operational/front-desk/queue-manager/sidebar-menu";
 import Footer from "@/app/operational/front-desk/queue-manager/common/footer";
 
@@ -19,7 +18,7 @@ export default function QueueManagerProviders({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
-  const {loading} = useDoctorContext();
+  const {loading} = useFrontDeskContext();
 
   let storedSidebarExpanded = "true";
   const [sidebarExpanded, setSidebarExpanded] = useState(

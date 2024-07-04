@@ -8,7 +8,7 @@ import AdministrationForm from "@/modules/organizations/application/form/adminis
 import { Organization, organizationPatcherMapper } from "@/modules/organizations/domain/organization";
 import { updateOrganization, uploadClinicLogo } from "@/modules/organizations/domain/organizations.actions";
 import { useTranslations } from "next-intl";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent } from "react";
 
 const AdministrationPage = () => {
 

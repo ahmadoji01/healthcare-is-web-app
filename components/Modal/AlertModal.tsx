@@ -1,6 +1,6 @@
 import { Modal } from "@mui/material"
 import Link from "next/link";
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction } from "react"
 import { motion } from 'framer-motion';
 import AlertTitle from "../AlertTitle";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ const AlertModal = ({ message, alertStatus, action, open, setOpen }:AlertModalPr
     const handleClose = () => {
         if (action === 'refresh') {
             setOpen(false);
-            router.refresh();
+            window.location.reload();
             return;
         }
         setOpen(false);

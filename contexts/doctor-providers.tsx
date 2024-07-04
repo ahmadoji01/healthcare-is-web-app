@@ -4,7 +4,6 @@ import Loader from "@/components/Loader";
 
 import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { DoctorProvider } from "@/contexts/doctor-context";
 import { useUserContext } from "@/contexts/user-context";
 import { MedicalRecordProvider } from "@/contexts/medical-record-context";
 import { VisitProvider } from "@/contexts/visit-context";
@@ -41,23 +40,21 @@ export default function DoctorProviders({
         ) : (
         <VisitProvider>
             <MedicalRecordProvider>
-            <DoctorProvider>
                 <div className="flex h-screen overflow-hidden">
-                    <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                        <Header
-                        sidebarOpen={sidebarOpen}
-                        setSidebarOpen={setSidebarOpen}
-                        />
-                        <ThemeProvider theme={theme} >
-                        <main>
-                            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
-                            {children}
-                            </div>
-                        </main>
-                        </ThemeProvider>
-                    </div>
+                  <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                    <Header
+                    sidebarOpen={sidebarOpen}
+                    setSidebarOpen={setSidebarOpen}
+                    />
+                    <ThemeProvider theme={theme} >
+                      <main>
+                        <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10" style={ { touchAction: 'none' } }>
+                          {children}
+                        </div>
+                      </main>
+                    </ThemeProvider>
+                  </div>
                 </div>
-            </DoctorProvider>
             </MedicalRecordProvider>
         </VisitProvider>
         )}

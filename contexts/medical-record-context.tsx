@@ -1,5 +1,5 @@
-import { MedicalRecord, MedicineDoses, defaultMedicalRecord, defaultMedicineDoses, medicalRecordMapper } from '@/modules/medical-records/domain/medical-record';
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { MedicalRecord, MedicineDoses, defaultMedicalRecord, defaultMedicineDoses } from '@/modules/medical-records/domain/medical-record';
+import { Dispatch, SetStateAction, createContext, useContext, useState } from 'react';
  
 interface MedicalRecordContextType {
     medicalRecords: MedicalRecord[],

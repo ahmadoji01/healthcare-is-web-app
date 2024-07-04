@@ -1,5 +1,5 @@
 import { Patient, defaultPatient, patientMapper } from '@/modules/patients/domain/patient';
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext, useState } from 'react';
  
 interface PatientContextType {
     patients: Patient[],

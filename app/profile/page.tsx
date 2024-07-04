@@ -20,7 +20,7 @@ const Profile = () => {
     if (user.avatar !== null) {
       setAvatar(imageHandler(user.avatar.id, user.avatar.filename_download));
     }
-  });
+  }, [user]);
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {

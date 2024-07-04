@@ -70,7 +70,7 @@ const VisitsDashboardPage = () => {
           setTotalPages(pages);
         })
     }
-  });
+  }, []);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {
@@ -103,7 +103,7 @@ const VisitsDashboardPage = () => {
     deleteAVisit(accessToken, activeVisit.id)
       .then( () => {
         openSnackbarNotification(t('alert_msg.success'), "success");
-        router.refresh();
+        window.location.reload();
       }).catch( () => {
         openSnackbarNotification(t('alert_msg.server_error'), "error");
       })

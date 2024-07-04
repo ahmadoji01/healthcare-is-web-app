@@ -31,27 +31,6 @@ export const DoctorProvider = ({
     const {accessToken} = useUserContext();
     const {handleDoctorVisits} = useVisitContext();
 
-    useEffect( () => {
-        setLoading(true);
-        let interval = setInterval(async () => {
-            await getAllDoctors(accessToken, 1).then( res => { 
-                let docs:Doctor[] = [];
-                res?.map( (doctor) => { docs.push(doctorMapper(doctor)); });
-                setDoctors(docs);
-                if (docs.length >= 1) {
-                    setActiveDoctor(docs[0]);
-                    handleDoctorVisits(docs[0].id);
-                }
-                setLoading(false);
-                clearInterval(interval);
-            }).catch( err => {
-                setLoading(false);
-            })
-        }, 110)
-
-        return () => clearInterval(interval);
-    }, [])
-
     return (
         <DoctorContext.Provider value={{ doctors, activeDoctor, loading, setDoctors, setActiveDoctor }}>
             {children}

@@ -21,7 +21,7 @@ const ItemCard = ({ item, handleAddItem }:ItemCardProps) => {
 
     useEffect( () => {
         isInOrderItems(item);
-    })
+    }, [selectedOrder]);
 
     const handleChange = (value:number, action:string) => {
         if (action === 'add') {

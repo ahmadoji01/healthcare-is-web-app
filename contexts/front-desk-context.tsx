@@ -37,7 +37,7 @@ export const FrontDeskProvider = ({
     const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
     const [newQueues, setNewQueues] = useState<boolean[]>([]);
     const [loading, setLoading] = useState(false);
-    const {accessToken} = useUserContext();
+    const {accessToken, user} = useUserContext();
     const {handleDoctorVisits} = useVisitContext();
     
     const notifSound = useRef<HTMLAudioElement | undefined>(
@@ -52,30 +52,28 @@ export const FrontDeskProvider = ({
 
     useEffect( () => {
         setLoading(true);
-        let interval = setInterval(async () => {
-            await getPresentDoctors(accessToken).then( res => { 
-                let docs:Doctor[] = [];
-                let newQs:boolean[] = [];
-                res?.map( (docOrg) => { 
-                    let org = doctorOrgMapper(docOrg);
-                    docs.push(org.doctor);
-                    newQs.push(false);
-                });
-                setPresentDoctors(docs);
-                setNewQueues(newQs);
-                if (docs.length >= 1) {
-                    setActiveDoctor(docs[0]);
-                    handleDoctorVisits(docs[0].id);
-                }
-                setLoading(false);
-                clearInterval(interval);
-            }).catch( err => {
-                setLoading(false);
-            });
-        }, 110)
+        if (user.id === '')
+            return;
 
-        return () => clearInterval(interval);
-    }, [])
+        getPresentDoctors(accessToken).then( res => { 
+            let docs:Doctor[] = [];
+            let newQs:boolean[] = [];
+            res?.map( (docOrg) => { 
+                let org = doctorOrgMapper(docOrg);
+                docs.push(org.doctor);
+                newQs.push(false);
+            });
+            setPresentDoctors(docs);
+            setNewQueues(newQs);
+            if (docs.length >= 1) {
+                setActiveDoctor(docs[0]);
+                handleDoctorVisits(docs[0].id);
+            }
+            setLoading(false);
+        }).catch( () => {
+            setLoading(false);
+        });
+    }, [user])
 
     const notifyNewQueue = (doctorId:number) => {
         let key = presentDoctors.findIndex( (doc) => doc.id === doctorId );

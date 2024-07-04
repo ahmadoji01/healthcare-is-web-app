@@ -81,7 +81,7 @@ const PatientsDashboardPage = () => {
     updateAPatient(accessToken, patient.id, patientPatcherMapper(patient))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        router.refresh();
+        window.location.reload();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
@@ -120,7 +120,7 @@ const PatientsDashboardPage = () => {
     deleteAPatient(accessToken, activePatient.id)
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        router.refresh();
+        window.location.reload();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })

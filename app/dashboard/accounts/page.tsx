@@ -26,7 +26,7 @@ const AccountManagementDashboardPage = () => {
           setDataLoaded(true);
         });
     }
-  });
+  }, []);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {

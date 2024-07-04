@@ -92,10 +92,10 @@ const MedicineCategoryPage = () => {
         deleteACategory(accessToken, activeCategory.id)
           .then( () => {
             openSnackbarNotification(t("alert_msg.success"), "success");
-            router.refresh();
-          }).catch( () => {
+            window.location.reload();
+        }).catch( () => {
             openSnackbarNotification(t("alert_msg.server_error"), "error");
-          })
+        })
     }
 
     const handleSearch = (query:string) => {
@@ -159,7 +159,7 @@ const MedicineCategoryPage = () => {
 
         updateACategory(accessToken, category.id, {name: category.name}).then( res => {
             openSnackbarNotification(t("alert_msg.success"), "success");
-            router.refresh();
+            window.location.reload();
         }).catch( err => {
             openSnackbarNotification(t("alert_msg.server_error"), "error")
         });
@@ -185,7 +185,7 @@ const MedicineCategoryPage = () => {
 
         createACategory(accessToken, categoryCreator).then( res => {
             openSnackbarNotification(t("alert_msg.success"), "success");
-            router.refresh();
+            window.location.reload();
         }).catch( err => {
             openSnackbarNotification(t("alert_msg.server_error"), "error")
         });

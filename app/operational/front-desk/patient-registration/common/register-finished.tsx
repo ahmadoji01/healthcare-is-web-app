@@ -17,7 +17,7 @@ const RegisterFinished = ({ queueNumber }:RegisterFinishedProps) => {
         if (params.has("from")) {
             router.push('/operational/front-desk/queue-manager');
         }
-    })
+    }, [params])
 
     return (
         <>

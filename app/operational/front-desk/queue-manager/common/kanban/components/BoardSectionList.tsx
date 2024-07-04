@@ -24,7 +24,6 @@ import TaskItem from './TaskItem';
 import { BOARD_SECTIONS } from '../constants';
 import { useDataModalContext } from '@/contexts/data-modal-context';
 import DashboardModal from '@/components/Modal/Modal';
-import { useDoctorContext } from '@/contexts/doctor-context';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -195,7 +194,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
     deleteAVisit(accessToken, activeVisit.id)
       .then( () => {
         openSnackbarNotification(t('alert_msg.success'), "success");
-        router.refresh();
+        window.location.reload();
       }).catch( () => {
         openSnackbarNotification(t('alert_msg.server_error'), "error");
       })

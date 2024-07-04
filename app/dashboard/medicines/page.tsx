@@ -127,7 +127,7 @@ const MedicinesDashboardPage = () => {
     updateAnItem(accessToken, item.id, itemPatcherMapper(item))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        router.refresh();
+        window.location.reload();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
@@ -170,7 +170,7 @@ const MedicinesDashboardPage = () => {
     deleteAnItem(accessToken, activeItem.id)
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
-        router.refresh();
+        window.location.reload();
       }).catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })

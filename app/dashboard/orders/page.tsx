@@ -75,7 +75,7 @@ const OrdersDashboardPage = () => {
           setTotalPages(pages);
         });
     }
-  });
+  }, []);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {
@@ -112,7 +112,7 @@ const OrdersDashboardPage = () => {
     deleteAnOrder(accessToken, selectedOrder.id)
       .then( () => {
         openSnackbarNotification(t('alert_msg.success'), "success");
-        router.refresh();
+        window.location.reload();
       }).catch( () => {
         openSnackbarNotification(t('alert_msg.server_error'), "error");
       })

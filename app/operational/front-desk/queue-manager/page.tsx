@@ -103,7 +103,7 @@ const QueueManager = () => {
         let visit = { medical_record: medicalRecordRes.id, status: VISIT_STATUS.to_be_examined };
         updateVisit(accessToken, activeVisit.id, visit).then( () => {
             handleModal(true, true);
-            router.refresh();
+            window.location.reload();
             openSnackbarNotification(t('alert_msg.success'), 'success');
             return;
         }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });

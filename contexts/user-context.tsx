@@ -126,7 +126,7 @@ export const UserProvider = ({
                 setLoading(false);
                 return;
             });
-            router.push("/dashboard");
+            //router.push("/dashboard");
             setLoading(false);
             if (!isLooping)
                 clearInterval(interval);

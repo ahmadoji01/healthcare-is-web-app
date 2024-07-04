@@ -1,11 +1,8 @@
 import { Visit, defaultVisit, visitMapper } from '@/modules/visits/domain/visit';
 import { getAllVisits, getVisitByDoctorID, getVisitsWithFilter } from '@/modules/visits/domain/visits.actions';
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext, useState } from 'react';
 import { useUserContext } from './user-context';
-import { useAlertContext } from './alert-context';
-import { ALERT_MESSAGE } from '@/constants/alert';
 import { Patient, defaultPatient } from '@/modules/patients/domain/patient';
-import { PhysicalCheckup } from '@/modules/physical-checkups/domain/physical-checkup';
 import { doctorIDEquals, statusEquals } from '@/modules/visits/domain/visit.specifications';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
  
