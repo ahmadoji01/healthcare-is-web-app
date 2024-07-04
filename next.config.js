@@ -9,10 +9,7 @@ const nextConfig = {
     output: 'standalone',
     compiler: {
         styledComponents: true,
-    },
-    experimental: {
-        appDir: true,
-    },
+    }
 }
 
 module.exports = withNextIntl(nextConfig);
