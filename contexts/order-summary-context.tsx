@@ -101,6 +101,7 @@ export const OrderSummaryProvider = ({
     const {accessToken, organization, user} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const t = useTranslations();
+    const fields = ['id', 'patient.name']; 
 
     const playNotificationSound = () => {
         notifSound.play();
@@ -120,7 +121,7 @@ export const OrderSummaryProvider = ({
 
     useEffect( () => {
         setNotifSound(new Audio('/sounds/notification-sound.mp3'));
-        getAllOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay))
+        getAllOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay), fields)
             .then( (res) => {
                 let ords:Order[] = [];
                 res?.map( (order) => { ords.push(orderMapper(order)) });
@@ -235,15 +236,13 @@ export const OrderSummaryProvider = ({
         return;
     }
 
-
-
     async function subsToOrder() { 
         if ( typeof(wsClient) === 'undefined')
             return;
 
         const { subscription } = await wsClient.subscribe('orders', {
             event: 'update',
-            query: { fields: ['*.*.*'] },
+            query: { fields: ['id', 'status', 'patient.id','patient.name'] },
         });
     
         for await (const item of subscription) {

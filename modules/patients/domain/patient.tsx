@@ -40,20 +40,20 @@ export function patientMapper(res:Record<string,any>) {
     }
     
     patient = { 
-        id: res.id, 
-        name: res.name, 
-        fathers_name: res.fathers_name,
-        mothers_name: res.mothers_name,
-        birthday: res.birthday, 
-        religion: res.religion, 
-        job: res.job, 
-        education: res.education, 
-        marrital_status: res.marrital_status,
-        gender: res.gender,
-        id_card_number: res.id_card_number,
-        address: res.address,
-        slug: res.slug,
-        family_id_number: res.family_id_number,
+        id: res.id? res.id:0,
+        name: res.name? res.name:'', 
+        fathers_name: res.fathers_name? res.fathers_name:'',
+        mothers_name: res.mothers_name? res.mothers_name:'',
+        birthday: res.birthday? res.birthday:new Date, 
+        religion: res.religion? res.religion:'', 
+        job: res.job? res.job:'', 
+        education: res.education? res.education:'', 
+        marrital_status: res.marrital_status? res.marrital_status:'',
+        gender: res.gender? res.gender:'',
+        id_card_number: res.id_card_number? res.id_card_number:'',
+        address: res.address? res.address:'',
+        slug: res.slug? res.slug:'',
+        family_id_number: res.family_id_number? res.family_id_number:'',
     }
     return patient;
 }
