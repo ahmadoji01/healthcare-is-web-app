@@ -87,7 +87,6 @@ export const OrderSummaryProvider = ({
     const [total, setTotal] = useState<number>(1);
     const [cashReceived, setCashReceived] = useState<number>(0);
     const [examFee, setExamFee] = useState<number>(0);
-    const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
     const [orderLoaded, setOrderLoaded] = useState(true);
     const [notifSound, setNotifSound] = useState<HTMLAudioElement>(new Audio(''));
 
@@ -98,7 +97,7 @@ export const OrderSummaryProvider = ({
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertAction, setAlertAction] = useState<string>("");
 
-    const {accessToken, organization, user} = useUserContext();
+    const {accessToken, organization, user, wsClient} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const t = useTranslations();
     const fields = ['id', 'patient.name']; 
@@ -121,13 +120,16 @@ export const OrderSummaryProvider = ({
 
     useEffect( () => {
         setNotifSound(new Audio('/sounds/notification-sound.mp3'));
+        if (user.id === '')
+            return;
+
         getAllOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.waiting_to_pay), fields)
             .then( (res) => {
                 let ords:Order[] = [];
                 res?.map( (order) => { ords.push(orderMapper(order)) });
                 setOrders(ords);
             })
-    }, []);
+    }, [user]);
 
     useEffect( () => {
         getADoctorOrg(accessToken, { _and: [ { doctors_id: { _eq: selectedOrder?.visit.doctor.id } }, { organizations_id: { _eq: organization.id } } ] })
@@ -236,23 +238,19 @@ export const OrderSummaryProvider = ({
         return;
     }
 
-    async function subsToOrder() { 
-        if ( typeof(wsClient) === 'undefined')
-            return;
-
+    async function subsToOrder() {
         const { subscription } = await wsClient.subscribe('orders', {
             event: 'update',
             query: { fields: ['id', 'status', 'patient.id','patient.name'] },
         });
     
         for await (const item of subscription) {
-            let output = subsOutputMapper(item);
+            let output = subsOutputMapper(item);console.log(item);
             if (output.event === WS_EVENT_TYPE.update && output.data.length > 0) {
                 let order = orderMapper(output.data[0]);
                 if (order.status === ORDER_STATUS.waiting_to_pay && !orders.some( ord => ord.id === order.id )) {
                     playNotificationSound();
-                    let newOrders = [...orders];
-                    newOrders.push(order);
+                    let newOrders = [...orders, order];
                     setOrders(newOrders);
                 }
             }
@@ -260,26 +258,11 @@ export const OrderSummaryProvider = ({
     }
 
     useEffect( () => {
-        let interval = setInterval(async () => {
-            if (user.id !== "") {
-                let client = websocketClient(accessToken);
-                setWSClient(client);
-                client.connect();
-            }
-            clearInterval(interval);
-        }, 110);
-        return () => clearInterval(interval);
-    }, [user]);
-
-    useEffect( () => {
-        let interval = setInterval(async () => {
-            if (typeof(wsClient) !== "undefined") {
-                subsToOrder();
-            }
-            clearInterval(interval);
-        }, 110);
-        return () => clearInterval(interval);
-    }, [wsClient]);
+        if (typeof(wsClient) === "undefined") 
+            return;
+        
+        subsToOrder();
+    }, [orders]);
 
     return (
         <OrderSummaryContext.Provider value={{ orderLoaded, examFee, deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedItem, selectedPayment, cashReceived, loadAnOrder, setExamFee, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, setSelectedItem, confirmPayment }}>

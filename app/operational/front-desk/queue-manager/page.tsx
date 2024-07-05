@@ -63,11 +63,7 @@ const QueueManager = () => {
         if (typeof(wsClient) === "undefined") 
             return;
         
-        wsClient.onWebSocket('message', function (data) {
-            if (data.type == 'auth' && data.status == 'ok') {
-                subsToVisit();
-            }
-        });
+        subsToVisit();
     }, [presentDoctors]);
 
     useEffect( () => {
