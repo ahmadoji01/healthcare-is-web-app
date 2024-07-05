@@ -1,5 +1,5 @@
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient";
-import { OrderItem, OrderItemCreator, OrderItemPatcher, orderItemPatcherMapper, orderItemsMapper } from "./order-item";
+import { defaultOrderItem, OrderItem, OrderItemCreator, OrderItemPatcher, orderItemPatcherMapper, orderItemsMapper } from "./order-item";
 import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
 import { DOCTOR_PAID, ORDER_STATUS } from "./order.constants";
 
@@ -31,12 +31,12 @@ export function orderMapper(res:Record<string,any>) {
     let order = defaultOrder;
     order = { 
         id: res.id, 
-        patient: res.patient,
-        order_items: orderItemsMapper(res.order_items),
+        patient: res.patient? res.patient:defaultPatient,
+        order_items: res.order_items? orderItemsMapper(res.order_items):[],
         total: res.total,
         status: res.status,
         doctor_paid: res.doctor_paid? res.doctor_paid : DOCTOR_PAID.no_doctor,
-        visit: visitMapper(res.visit),
+        visit: res.visit? visitMapper(res.visit):defaultVisit,
         date_created: res.date_created,
         date_updated: res.date_updated,
     }

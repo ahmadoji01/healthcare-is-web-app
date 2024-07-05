@@ -33,12 +33,13 @@ const VisitsDashboardPage = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [fromDate, setFromDate] = useState<Date|null>(null);
   const [toDate, setToDate] = useState<Date|null>(null);
+  const fields = ['id', 'date_updated', 'patient.name', 'doctor.name', 'doctor.specialization'];
 
   const [filter, setFilter] = useState<object>({ _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] })
 
   const fetchVisits = (newFilter:object) => {
     setDataLoaded(false);
-    getVisitsWithFilter(accessToken, newFilter, '-date_updated', 1)
+    getVisitsWithFilter(accessToken, newFilter, '-date_updated', 1, fields)
       .then( res => {
         let vits:Visit[] = [];
         res?.map( (visit) => { vits.push(visitMapper(visit)); });
@@ -56,7 +57,7 @@ const VisitsDashboardPage = () => {
 
   useEffect( () => {
     if (!dataLoaded && visits.length == 0) {
-      getVisitsWithFilter(accessToken, filter, '-date_updated', 1)
+      getVisitsWithFilter(accessToken, filter, '-date_updated', 1, fields)
         .then( res => {
           let vits:Visit[] = [];
           res?.map( (visit) => { vits.push(visitMapper(visit)); });
@@ -90,7 +91,7 @@ const VisitsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getVisitsWithFilter(accessToken, filter, '-date_updated', value)
+    getVisitsWithFilter(accessToken, filter, '-date_updated', value, fields)
       .then( res => {
         let vits:Visit[] = [];
         res?.map( (visit) => { vits.push(visitMapper(visit)); });

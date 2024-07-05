@@ -22,6 +22,7 @@ import MiniSpinner from "@/components/MiniSpinner";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { dateRangeFilter } from "@/utils/generic-filters";
 import { useTranslations } from "next-intl";
+import Spinner from "@/components/Spinner";
 
 const OrdersDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -31,6 +32,7 @@ const OrdersDashboardPage = () => {
   const router = useRouter();
   const {selectedOrder, setSelectedOrder} = useOrderSummaryContext();
   const t = useTranslations();
+  const fields = ['id', 'patient.name', 'order_items.id', 'order_items.name', 'order_items.quantity', 'order_items.item.id', 'order_items.item.name', 'order_items.item.price', 'total', 'date_updated']
   const {setOrderDocument, setOrdersDocument, setFrom, setTo} = useDocumentContext();
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -43,7 +45,7 @@ const OrdersDashboardPage = () => {
 
   const fetchOrders = (newFilter:object) => {
     setDataLoaded(false);
-    getOrdersWithFilter(accessToken, newFilter, 1)
+    getOrdersWithFilter(accessToken, newFilter, 1, fields)
       .then( res => {
         let ords:Order[] = [];
         res?.map( (order) => { ords.push(orderMapper(order)); });
@@ -61,7 +63,7 @@ const OrdersDashboardPage = () => {
 
   useEffect( () => {
     if (!dataLoaded && orders.length == 0) {
-      getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.paid), 1)
+      getOrdersWithFilter(accessToken, statusFilter(ORDER_STATUS.paid), 1, fields)
         .then( res => {
           let ords:Order[] = [];
           res?.map( (order) => { ords.push(orderMapper(order)); });
@@ -95,7 +97,7 @@ const OrdersDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getOrdersWithFilter(accessToken, filter, value)
+    getOrdersWithFilter(accessToken, filter, value, fields)
       .then( res => {
         let ords:Order[] = [];
         res?.map( (order) => { ords.push(orderMapper(order)); });
@@ -159,7 +161,7 @@ const OrdersDashboardPage = () => {
     let ords:Order[] = [];
     let filter:object = { _and: [ statusFilter(ORDER_STATUS.paid), dateRangeFilter(fromDate, toDate) ] };
     setPrintLoading(true);
-    await getAllOrdersWithFilter(accessToken, filter)
+    await getAllOrdersWithFilter(accessToken, filter, fields)
       .then( res => {
         res?.map( (order) => { ords.push(orderMapper(order)); });
       })
@@ -194,6 +196,7 @@ const OrdersDashboardPage = () => {
       </div>
 
       <div className="flex flex-col gap-10">
+        { !dataLoaded && <Spinner />  }
         <OrderListTable handleDocument={handleDocument} orders={orders} handleModal={handleModal} totalPages={totalPages} handlePageChange={handlePageChange} setActiveOrder={setSelectedOrder} />
       </div>
     </>
