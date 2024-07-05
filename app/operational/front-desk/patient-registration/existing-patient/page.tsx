@@ -220,9 +220,9 @@ const ExistingPatient = () => {
                                 )}
                             </div>
                             <div className="flex-1">
-                                { activeStep === steps.length - 1 &&
+                                { loading && <Spinner /> }
+                                { (activeStep === steps.length - 1 && !loading) &&
                                     <>
-                                        { loading && <Spinner /> }
                                         <button
                                             onClick={() => {handleSubmit()}}
                                             className="w-full flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">

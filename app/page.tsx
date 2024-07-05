@@ -269,6 +269,7 @@ const Login = () => {
                                 <div className="mb-5">
                                     { loading && <MiniSpinner size={8} /> }
                                     <input
+                                        disabled={loading}
                                         onClick={handleSignIn}
                                         type="submit"
                                         value="Sign In"

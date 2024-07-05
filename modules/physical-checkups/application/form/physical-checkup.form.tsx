@@ -101,6 +101,8 @@ const PhysicalCheckupForm = ({ loading, patient, initCheckup, handleSubmit }:Phy
                     </div>
                 </div>
                 <button
+                    type="submit"
+                    disabled={submitting}
                     className="sticky bottom-0 z-50 mt-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray">
                     { submitting && <MiniSpinner /> }
                     Submit
