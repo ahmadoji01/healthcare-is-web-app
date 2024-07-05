@@ -12,7 +12,7 @@ type TaskItemProps = {
 };
 
 const TaskItem = ({ visit }: TaskItemProps) => {
-  const { handleModal } = useDataModalContext();
+  const { setEditModalOpen, setDeleteModalOpen } = useDataModalContext();
   const { setActivePatient, setActiveVisit } = useVisitContext();
   const t = useTranslations();
 
@@ -28,8 +28,8 @@ const TaskItem = ({ visit }: TaskItemProps) => {
           <ul className="flex items-center gap-1 2xsm:gap-2">
             <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
               <Link
-                href="#"
-                onMouseDown={ () => { setActiveVisit(visit); setActivePatient(visit?.patient); handleModal(false, true) } }
+                href=""
+                onMouseDown={ () => { setActiveVisit(visit); setActivePatient(visit?.patient); setEditModalOpen(true) } }
                 className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                 >
                 <FontAwesomeIcon width={18} height={18} icon={faBullhorn} />
@@ -37,9 +37,9 @@ const TaskItem = ({ visit }: TaskItemProps) => {
             </motion.li>
             <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
               <Link
-                href="#"
+                href=""
                 style={{ background: "red" }}
-                onMouseDown={ () => { setActiveVisit(visit); handleModal(false, false);} }
+                onMouseDown={ () => { setActiveVisit(visit); setDeleteModalOpen(true)} }
                 className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                 >
                 <FontAwesomeIcon width={18} height={18} icon={faTrash} style={{ color: 'white' }} />

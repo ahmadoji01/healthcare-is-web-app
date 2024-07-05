@@ -21,35 +21,21 @@ import { getVisitById } from '../utils/tasks';
 import { findBoardSectionContainer, initializeBoard } from '../utils/board';
 import BoardSection from './BoardSection';
 import TaskItem from './TaskItem';
-import { BOARD_SECTIONS } from '../constants';
-import { useDataModalContext } from '@/contexts/data-modal-context';
-import DashboardModal from '@/components/Modal/Modal';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useVisitContext } from '@/contexts/visit-context';
-import VisitDeleteConfirmation from '@/modules/visits/application/form/visit.delete-confirmation';
-import { Patient } from '@/modules/patients/domain/patient';
-import QueueModal from '../../Modal';
-import PhysicalCheckupForm from '@/modules/physical-checkups/application/form/physical-checkup.form';
-import PatientInfo from '../../patient-info';
-import { PhysicalCheckup, defaultPhysicalCheckup } from '@/modules/physical-checkups/domain/physical-checkup';
-import { deleteAVisit, updateVisit } from '@/modules/visits/domain/visits.actions';
+import { PhysicalCheckup } from '@/modules/physical-checkups/domain/physical-checkup';
+import { updateVisit } from '@/modules/visits/domain/visits.actions';
 import { useUserContext } from '@/contexts/user-context';
 import { useAlertContext } from '@/contexts/alert-context';
 import { DoctorName } from '@/utils/doctor-name-format';
 import { useFrontDeskContext } from '@/contexts/front-desk-context';
-import DeleteModal from '@/components/Modal/DeleteModal';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 
-interface BoardSectionListProps {
-  handleSubmit: (checkup:PhysicalCheckup) => void,
-}
-
-const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
-  const {doctorVisits, activePatient, activeVisit} = useVisitContext();
+const BoardSectionList = () => {
+  const {doctorVisits} = useVisitContext();
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const t = useTranslations();
@@ -186,18 +172,7 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
     temporary_leave: t('front_desk.temporary_leave'),
   };
 
-  const { editModalOpen, deleteModalOpen, handleModal } = useDataModalContext();
   const { activeDoctor } = useFrontDeskContext();
-
-  const handleDelete = () => {
-    deleteAVisit(accessToken, activeVisit.id)
-      .then( () => {
-        openSnackbarNotification(t('alert_msg.success'), "success");
-        window.location.reload();
-      }).catch( () => {
-        openSnackbarNotification(t('alert_msg.server_error'), "error");
-      })
-  }
 
   return (
     <>
@@ -227,13 +202,6 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
           </div>
       }
       <div className="grid grid-cols-1 gap-7.5 grid-cols-2">
-        <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } title={t("front_desk.initial_checkup")} queueNumber={activeVisit.queue_number} patientName={activePatient.name}>
-          <>
-            <PatientInfo patient={activePatient} />
-            <PhysicalCheckupForm patient={activePatient} initCheckup={defaultPhysicalCheckup} handleSubmit={handleSubmit} />
-          </>
-        </QueueModal>
-        <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DeleteModal name={t("this_visit")} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}

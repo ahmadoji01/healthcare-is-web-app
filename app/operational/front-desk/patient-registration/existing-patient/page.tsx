@@ -71,12 +71,12 @@ const ExistingPatient = () => {
     };
 
     const handleSubmit = async () => {
-        setLoading(true);
         if (organization.status === ORG_STATUS.close) {
             openSnackbarNotification(t('alert_msg.clinic_is_close'), "error");
             return;
         }
 
+        setLoading(true);
         let physicalCheckup = defaultPhysicalCheckup;
         physicalCheckup.patient = activePatient;
         let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, organization.id, activePatient.id);

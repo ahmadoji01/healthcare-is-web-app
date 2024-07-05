@@ -10,6 +10,7 @@ import { VisitProvider } from "@/contexts/visit-context";
 import { FrontDeskProvider, useFrontDeskContext } from "@/contexts/front-desk-context";
 import SidebarMenu from "@/app/operational/front-desk/queue-manager/sidebar-menu";
 import Footer from "@/app/operational/front-desk/queue-manager/common/footer";
+import { DataModalProvider } from "./data-modal-context";
 
 export default function QueueManagerProviders({
   children,
@@ -57,6 +58,7 @@ export default function QueueManagerProviders({
   return (
     <VisitProvider>
       <FrontDeskProvider>
+        <DataModalProvider>
           <div className="dark:bg-boxdark-2 dark:text-bodydark">
             {loading ? (
               <Loader />
@@ -84,6 +86,7 @@ export default function QueueManagerProviders({
                 </div>
             )}
           </div>
+        </DataModalProvider>
       </FrontDeskProvider>
     </VisitProvider>
   );

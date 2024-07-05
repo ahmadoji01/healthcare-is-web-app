@@ -8,7 +8,7 @@ import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
-import { updateVisit } from "@/modules/visits/domain/visits.actions";
+import { deleteAVisit, updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useVisitContext } from "@/contexts/visit-context";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { useEffect, useState } from "react";
@@ -22,19 +22,22 @@ import { subsOutputMapper } from "@/modules/websockets/domain/websocket";
 import { visitMapper } from "@/modules/visits/domain/visit";
 import { WS_EVENT_TYPE } from "@/modules/websockets/domain/websocket.constants";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import QueueModal from "./common/Modal";
+import PatientInfo from "./common/patient-info";
+import PhysicalCheckupForm from "@/modules/physical-checkups/application/form/physical-checkup.form";
+import DeleteModal from "@/components/Modal/DeleteModal";
 
 const QueueManager = () => {
 
     const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
     const [statusModalOpen, setStatusModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const {accessToken, user, organization} = useUserContext();
-    const {activeVisit} = useVisitContext();
+    const {activePatient, activeVisit} = useVisitContext();
     const {openSnackbarNotification} = useAlertContext();
-    const {handleModal} = useDataModalContext();
+    const {editModalOpen, deleteModalOpen, handleModal} = useDataModalContext();
     const {notifyNewQueue} = useFrontDeskContext();
     const t = useTranslations();
-    const router = useRouter();
 
     async function subsToVisit() {
         if ( typeof(wsClient) === 'undefined')
@@ -84,12 +87,31 @@ const QueueManager = () => {
         }
     }, [organization]);
 
+    const handleDelete = () => {
+        deleteAVisit(accessToken, activeVisit.id)
+        .then( () => {
+            openSnackbarNotification(t('alert_msg.success'), "success");
+            window.location.reload();
+        }).catch( () => {
+            openSnackbarNotification(t('alert_msg.server_error'), "error");
+        })
+    }
+
     const handleSubmit = async (checkup:PhysicalCheckup) => {
+        setLoading(true);
+        let isError = false;
         let checkupNoID = physicalCheckupNoIDMapper(checkup, organization.id, checkup.patient.id);
         let checkupRes = defaultPhysicalCheckup;
         await createAPhysicalCheckup(accessToken, checkupNoID).then( res => {
             checkupRes = physicalCheckupMapper(res);
-        }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
+            return;
+        }).catch( err => { isError=true; return; });
+
+        if (isError) {
+            setLoading(false);
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
 
         let medicalRecordCreator = medicalRecordCreatorMapper(defaultMedicalRecord, [], organization.id);
         let medicalRecordRes = defaultMedicalRecord;
@@ -98,19 +120,34 @@ const QueueManager = () => {
         medicalRecordCreator.physical_checkup = checkupRes.id;
         await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
             medicalRecordRes = medicalRecordMapper(res);
-        }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
+        }).catch( err => { isError=true; return; });
+
+        if (isError) {
+            setLoading(false);
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
 
         let visit = { medical_record: medicalRecordRes.id, status: VISIT_STATUS.to_be_examined };
         updateVisit(accessToken, activeVisit.id, visit).then( () => {
             handleModal(true, true);
             window.location.reload();
             openSnackbarNotification(t('alert_msg.success'), 'success');
+            setLoading(false);
             return;
-        }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
+        }).catch( err => { setLoading(false); openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; });
     }
 
     return (
         <div className="min-h-screen h-full">
+            <QueueModal open={editModalOpen} handleClose={ () => handleModal(true, true) } title={t("front_desk.initial_checkup")} queueNumber={activeVisit.queue_number} patientName={activePatient.name}>
+                <>
+                    <PatientInfo patient={activePatient} />
+                    <PhysicalCheckupForm loading={loading} patient={activePatient} initCheckup={defaultPhysicalCheckup} handleSubmit={handleSubmit} />
+                </>
+            </QueueModal>
+            <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DeleteModal name={t("this_visit")} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
+            
             <DashboardModal 
                 open={statusModalOpen} 
                 children={
@@ -126,9 +163,7 @@ const QueueManager = () => {
                     </>
                 } 
                 title={ t('clinic_close') } />
-            <DataModalProvider>
-                <BoardSectionList handleSubmit={handleSubmit} />
-            </DataModalProvider>
+            <BoardSectionList />
         </div>
     );
 }

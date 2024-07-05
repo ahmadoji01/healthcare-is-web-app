@@ -3,20 +3,28 @@ import { PhysicalCheckup } from "../../domain/physical-checkup";
 import { useEffect, useState } from "react";
 import { Patient } from "@/modules/patients/domain/patient";
 import { useTranslations } from "next-intl";
+import Spinner from "@/components/Spinner";
+import MiniSpinner from "@/components/MiniSpinner";
 
 interface PhysicalCheckupFormProps {
+    loading: boolean,
     patient: Patient,
     initCheckup: PhysicalCheckup,
     handleSubmit: (checkup:PhysicalCheckup) => void,
 }
 
-const PhysicalCheckupForm = ({ patient, initCheckup, handleSubmit }:PhysicalCheckupFormProps) => {
+const PhysicalCheckupForm = ({ loading, patient, initCheckup, handleSubmit }:PhysicalCheckupFormProps) => {
     const [checkup, setCheckup] = useState(initCheckup);
+    const [submitting, setSubmitting] = useState(false);
     const t = useTranslations();
 
     useEffect( () => {
         setCheckup({ ...checkup, patient })
-    }, [patient])
+    }, [patient]);
+
+    useEffect( () => {
+        setSubmitting(loading);
+    }, [loading]);
 
     return (
         <div className="flex flex-col gap-9">
@@ -92,7 +100,11 @@ const PhysicalCheckupForm = ({ patient, initCheckup, handleSubmit }:PhysicalChec
                         </div>
                     </div>
                 </div>
-                <SubmitButton />
+                <button
+                    className="sticky bottom-0 z-50 mt-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray">
+                    { submitting && <MiniSpinner /> }
+                    Submit
+                </button>
             </form>
         </div>
     );

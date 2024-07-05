@@ -32,6 +32,7 @@ import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physi
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 import { useTranslations } from "next-intl";
+import Spinner from "@/components/Spinner";
 
 const steps = ['personal_information', 'doctor_to_visit', 'visit_status', 'review_input'];
 
@@ -54,6 +55,7 @@ const NewPatient = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [visitStatus, setVisitStatus] = useState("");
     const [queueNumber, setQueueNumber] = useState("");
+    const [loading, setLoading] = useState(false);
     const {accessToken, user, organization} = useUserContext();
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
@@ -74,6 +76,7 @@ const NewPatient = () => {
             return;
         }
 
+        setLoading(true);
         let patientNoID = patientNoIDMapper(activePatient, organization.id);
         let patient = defaultPatient;
         let isError = false;
@@ -85,7 +88,8 @@ const NewPatient = () => {
             return;
         });
 
-        if (isError) {
+        if (isError) {        
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -100,6 +104,7 @@ const NewPatient = () => {
         });
 
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -113,6 +118,12 @@ const NewPatient = () => {
             isError = true;
             return;
         });
+
+        if (isError) {
+            setLoading(false);
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
         
         let medicalRecord = defaultMedicalRecord;
         medicalRecord.care_type = CARE_TYPE.outpatient;
@@ -128,6 +139,7 @@ const NewPatient = () => {
         });
 
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -147,6 +159,12 @@ const NewPatient = () => {
             return;
         });
         
+        if (isError) {
+            setLoading(false);
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            return;
+        }
+        
         let order = defaultOrder;
         order.visit = visit;
         order.patient = patient;
@@ -161,6 +179,7 @@ const NewPatient = () => {
         });
 
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -189,7 +208,7 @@ const NewPatient = () => {
                     {getStepContent(activeStep, handleNext, visitStatus, setVisitStatus)}
                     <div className="flex justify-end mt-2 gap-x-2">
                         <div className="flex-1 space-x-2">
-                            {activeStep !== 0 && (
+                            { (activeStep !== 0 && !loading) && (
                                 <Link
                                     href="#"
                                     onClick={handleBack}
@@ -199,13 +218,13 @@ const NewPatient = () => {
                             )}
                         </div>
                         <div className="flex-1">
-                            { activeStep === steps.length - 1 &&
-                                <Link
-                                href="#"
-                                onClick={() => {handleSubmit();}}
-                                className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
+                            { loading && <Spinner /> }
+                            { (activeStep === steps.length - 1 && !loading) &&
+                                <button
+                                onClick={() => {handleSubmit()}}
+                                className="w-full flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
                                     { t('submit_registration') }
-                                </Link>
+                                </button>
                             }
                         </div>
                     </div>
