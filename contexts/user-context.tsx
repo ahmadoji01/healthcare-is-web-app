@@ -3,7 +3,8 @@ import { getOrganization } from '@/modules/organizations/domain/organizations.ac
 import { User, defaultUser, userMapper } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
 import { isURLAllowed, redirectURL } from '@/modules/users/domain/users.specifications';
-import { directusClient } from '@/utils/request-handler';
+import { directusClient, websocketClient } from '@/utils/request-handler';
+import { WebSocketClient } from '@directus/sdk';
 import { useRouter, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
  
@@ -13,10 +14,12 @@ interface UserContextType {
     loading: boolean,
     organization: Organization,
     fontSize: string,
+    wsClient: WebSocketClient<any>,
     setUser: Dispatch<SetStateAction<User>>,
     setOrganization: Dispatch<SetStateAction<Organization>>,
     setFontSize: Dispatch<SetStateAction<string>>,
     setAccessToken: Dispatch<SetStateAction<string>>,
+    setWSClient: Dispatch<SetStateAction<WebSocketClient<any>>>,
     fetchOrganization: () => void,
 }
 
@@ -28,10 +31,12 @@ export const UserContext = createContext<UserContextType | null>({
     loading: false,
     organization: defaultOrganization,
     fontSize: "100%",
+    wsClient: websocketClient(""),
     setUser: () => {},
     setOrganization: () => {},
     setFontSize: () => {},
     setAccessToken: () => {},
+    setWSClient: () => {},
     fetchOrganization: () => {},
 });
  
@@ -50,6 +55,7 @@ export const UserProvider = ({
     const [fontSize, setFontSize] = useState("100%");
     const [organization, setOrganization] = useState(defaultOrganization);
     const [size, setSize] = useState("100% !important");
+    const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
   
     useEffect(() => {
       let localSize = localStorage.getItem("font-size");
@@ -62,6 +68,12 @@ export const UserProvider = ({
     useEffect(() => {
       document.body.style.fontSize = size;
     }, [size]);
+
+    const connectWS = (token:string) => {
+        let client = websocketClient(token);
+        setWSClient(client);
+        client.connect();
+    }
 
     const refreshToken = async (interval:NodeJS.Timeout, isLooping:boolean) => {
         let isError = false;
@@ -82,7 +94,7 @@ export const UserProvider = ({
                 return;
             });
 
-            await getOrganization(accessToken, 1).then( res => {
+            getOrganization(accessToken, 1).then( res => {
                 if (res.length < 1) {
                     return;
                 }
@@ -94,8 +106,10 @@ export const UserProvider = ({
             });
         }
 
-        if (!isError)
+        if (!isError) {
+            connectWS(accessToken);
             return;
+        }
 
         await directusClient.refresh().then( (res) => {
             if (res.access_token === null) {
@@ -116,6 +130,7 @@ export const UserProvider = ({
                 }
                 return;
             });
+            connectWS(token);
             getOrganization(token, 1).then( res => {
                 if (res.length < 1) {
                     return;
@@ -187,7 +202,7 @@ export const UserProvider = ({
     }, [user.role_name])
 
     return (
-        <UserContext.Provider value={{ accessToken, setAccessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
+        <UserContext.Provider value={{ wsClient, setWSClient, accessToken, setAccessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
             {children}
         </UserContext.Provider>
     );

@@ -29,14 +29,13 @@ import DeleteModal from "@/components/Modal/DeleteModal";
 
 const QueueManager = () => {
 
-    const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
     const [statusModalOpen, setStatusModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const {accessToken, user, organization} = useUserContext();
+    const {accessToken, user, organization, wsClient} = useUserContext();
     const {activePatient, activeVisit} = useVisitContext();
     const {openSnackbarNotification} = useAlertContext();
     const {editModalOpen, deleteModalOpen, handleModal} = useDataModalContext();
-    const {notifyNewQueue} = useFrontDeskContext();
+    const {presentDoctors, notifyNewQueue} = useFrontDeskContext();
     const t = useTranslations();
 
     async function subsToVisit() {
@@ -57,27 +56,19 @@ const QueueManager = () => {
         }
     }
 
-    useEffect( () => {
-        let interval = setInterval(async () => {
-            if (user.id !== "") {
-                let client = websocketClient(accessToken);
-                setWSClient(client);
-                client.connect();
-            }
-            clearInterval(interval);
-        }, 110);
-        return () => clearInterval(interval);
-    }, [user]);
-
-    useEffect( () => {
-        let interval = setInterval(async () => {
-            if (typeof(wsClient) !== "undefined") {
+    useEffect(() => {
+        if (presentDoctors.length === 0)
+            return;
+        
+        if (typeof(wsClient) === "undefined") 
+            return;
+        
+        wsClient.onWebSocket('message', function (data) {
+            if (data.type == 'auth' && data.status == 'ok') {
                 subsToVisit();
             }
-            clearInterval(interval);
-        }, 110);
-        return () => clearInterval(interval);
-    }, [wsClient]);
+        });
+    }, [presentDoctors]);
 
     useEffect( () => {
         if (organization.status === ORG_STATUS.close && organization.id !== 0) {
