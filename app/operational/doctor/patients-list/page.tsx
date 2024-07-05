@@ -7,7 +7,7 @@ import { useUserContext } from "@/contexts/user-context";
 import { getPatientsToBeExamined } from "@/modules/patients/domain/patients.actions";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useMedicalRecordContext } from "@/contexts/medical-record-context";
-import { getTotalVisitsWithFilter, getVisitByStatus } from "@/modules/visits/domain/visits.actions";
+import { getTotalVisitsWithFilter, getVisitByStatus, getVisitsWithFilter } from "@/modules/visits/domain/visits.actions";
 import { VISIT_STATUS } from "@/modules/visits/domain/visit.constants";
 import { Visit, visitMapper } from "@/modules/visits/domain/visit";
 import { useVisitContext } from "@/contexts/visit-context";
@@ -25,9 +25,11 @@ const PatientsList = () => {
     const [visits, setVisits] = useState<Visit[]>([]);
     const [totalPages, setTotalPages] = useState(0);
     const {accessToken, user} = useUserContext();
-    const {setActiveMedicalRecord} = useMedicalRecordContext();
+    const {setActiveMRID} = useMedicalRecordContext();
     const {setActiveVisit} = useVisitContext();
     const t = useTranslations();
+    const filter = statusFilter(VISIT_STATUS.to_be_examined);
+    const fields = ['id', 'patient.id', 'patient.name', 'patient.address', 'patient.id_card_number', 'doctor.id', 'doctor.name', 'doctor.specialization', 'medical_record.id'];
     const notifSound = useRef<HTMLAudioElement | undefined>(
         typeof Audio !== "undefined" ? new Audio('/sounds/notification-sound.mp3') : undefined
     );
@@ -42,7 +44,7 @@ const PatientsList = () => {
 
         const { subscription } = await wsClient.subscribe('visits', {
             event: 'update',
-            query: { fields: ['*.*.*'] },
+            query: { fields: ['id', 'patient.id', 'patient.name', 'patient.address', 'patient.id_card_number', 'doctor.id', 'doctor.name', 'doctor.specialization', 'medical_record.id'] },
         });
     
         for await (const item of subscription) {
@@ -84,33 +86,26 @@ const PatientsList = () => {
     }, [wsClient]);
 
     useEffect( () => {
-        if (!dataLoaded || patients.length == 0) {
-            getVisitByStatus(accessToken, VISIT_STATUS.to_be_examined)
+        if (!dataLoaded || visits.length == 0) {
+            getVisitsWithFilter(accessToken, filter, '-date_updated', 1, fields)
                 .then( res => {
                     let vits:Visit[] = [];
                     res?.map( (visit) => { vits.push(visitMapper(visit)); });
                     setVisits(vits);
                     setDataLoaded(true);
                 });
-            getPatientsToBeExamined(accessToken, 1)
-                .then( res => {
-                    let pats:Patient[] = [];
-                    res?.map( (patient) => { pats.push(patientMapper(patient)); });
-                    setPatients(pats);
-                    setDataLoaded(true);
-                });
-            getTotalVisitsWithFilter(accessToken, statusFilter(VISIT_STATUS.to_be_examined))
+            getTotalVisitsWithFilter(accessToken, filter)
                 .then( res => { 
                     let total = res[0].count? parseInt(res[0].count) : 0;
                     let pages = Math.floor(total/LIMIT_PER_PAGE) + 1;
                     setTotalPages(pages);
                 })
         }
-    }, []);
+    }, [user]);
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setDataLoaded(false);
-        getPatientsToBeExamined(accessToken, value)
+        getVisitsWithFilter(accessToken, filter, '-date_updated', value, fields)
           .then( res => {
             let pats:Patient[] = [];
             res?.map( (patient) => { pats.push(patientMapper(patient)); });
@@ -122,7 +117,7 @@ const PatientsList = () => {
     return (
         <>
             <h2 className="text-3xl font-extrabold text-black dark:text-white mb-2">{ t('patients_to_be_examined') }</h2>
-            <PatientToExamineListTable visits={visits} totalPages={totalPages} handlePageChange={handlePageChange} setActiveMedicalRecord={setActiveMedicalRecord} setActiveVisit={setActiveVisit} />
+            <PatientToExamineListTable visits={visits} totalPages={totalPages} handlePageChange={handlePageChange} setActiveMRID={setActiveMRID} setActiveVisit={setActiveVisit} />
         </>
     )
 }

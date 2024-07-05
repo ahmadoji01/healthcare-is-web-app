@@ -1,6 +1,6 @@
 import { Medicine, defaultMedicine, medicineMapper } from "@/modules/medicines/domain/medicine"
 import { Patient, defaultPatient } from "@/modules/patients/domain/patient"
-import { PhysicalCheckup, defaultPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup"
+import { PhysicalCheckup, PhysicalCheckupPatcher, defaultPhysicalCheckup, physicalCheckupPatcherMapper } from "@/modules/physical-checkups/domain/physical-checkup"
 import { Treatment, TreatmentOrg, treatmentMapper } from "@/modules/treatments/domain/treatment"
 import { Doctor, defaultDoctor } from "@/modules/doctors/domain/doctor"
 import { Item, defaultItem, itemMapper } from "@/modules/items/domain/item"
@@ -233,8 +233,9 @@ type MedicineDosesPatchers = {
     medicines: MedicineDosesPatcher[],
 }
 
-export type MedicalRecordPatcher = Omit<MedicalRecord, 'items'|'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'> & IllnessPatchers & TreatmentPatchers & MedicineDosesPatchers & { items:MRItemCreator[], organization:number, status:string };
-export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, items: MRItemCreator[], illnesses: IllnessPatcher[], meds: MedicineDosesPatcher[], treatments:TreatmentOrg[], orgID:number, status:string) {
+export type MedicalRecordPatcher = Omit<MedicalRecord, 'items'|'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'|'physical_checkup'> 
+& IllnessPatchers & { items:MRItemCreator[], organization:number, status:string, physical_checkup: PhysicalCheckupPatcher };
+export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, items: MRItemCreator[], illnesses: IllnessPatcher[], orgID:number, status:string) {
 
     let medicalRecordPatcher: MedicalRecordPatcher = { 
         id: medicalRecord.id,
@@ -244,10 +245,8 @@ export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, items: M
         signature: medicalRecord.signature,
         death: medicalRecord.death,
         illnesses: illnesses,
-        medicines: meds,
-        treatments: treatments,
         items: items,
-        physical_checkup: medicalRecord.physical_checkup,
+        physical_checkup: physicalCheckupPatcherMapper(medicalRecord.physical_checkup, orgID),
         date_updated: medicalRecord.date_updated,
         status: status,
         organization: orgID,

@@ -38,11 +38,12 @@ export const VisitProvider = ({
     const [activeVisit, setActiveVisit] = useState<Visit>(defaultVisit);
     const [loading, setLoading] = useState(false);
     const {accessToken} = useUserContext();
+    const fields = ['id', 'date_updated', 'patient.id', 'patient.name', 'patient.id_card_number', 'patient.family_id_number', 'doctor.id', 'doctor.name', 'queue_number', 'doctor.specialization', 'status'];
 
     const handleDoctorVisits = (doctorID:number) => {
         setLoading(true);
         let filter = { _and: [ doctorIDEquals(doctorID), { _or: [statusEquals(VISIT_STATUS.waiting), statusEquals(VISIT_STATUS.temporary_leave)] } ] }
-        getVisitsWithFilter(accessToken, filter, 'date_created', 1).then( res => {
+        getVisitsWithFilter(accessToken, filter, 'date_created', 1, fields).then( res => {
             let vits:Visit[] = [];
             res?.map( (visit) => { vits.push(visitMapper(visit)); });
             setDoctorVisits(vits);

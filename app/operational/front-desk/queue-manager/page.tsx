@@ -42,7 +42,7 @@ const QueueManager = () => {
 
         const { subscription } = await wsClient.subscribe('visits', {
             event: 'create',
-            query: { fields: ['*.*'] },
+            query: { fields: ['id', 'date_updated', 'patient.id', 'patient.name', 'patient.id_card_number', 'patient.family_id_number', 'doctor.id', 'doctor.name', 'queue_number', 'doctor.specialization', 'status'] },
         });
     
         for await (const item of subscription) {

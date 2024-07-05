@@ -53,7 +53,6 @@ const BoardSectionList = ({ handleSubmit }:BoardSectionListProps) => {
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const t = useTranslations();
-  const router = useRouter();
 
   const initialBoardSections = initializeBoard(doctorVisits);
   const [boardSections, setBoardSections] =

@@ -28,9 +28,9 @@ export const deleteADoctor = (token:string, id:number) =>
 
 export const getDoctorsInOrg = (token:string) => directusClient.request( withToken(token, readItems('doctors_organizations', { fields: ['*.*'] })) );
 export const getADoctorOrg = (token:string, filter:object) => directusClient.request( withToken(token, readItems('doctors_organizations', { fields: ['*.*'], filter: filter} ) ));
-export const getPresentDoctors = (token:string) => 
+export const getPresentDoctors = (token:string, fields?:string[]) => 
 	directusClient.request( withToken(token, readItems('doctors_organizations', 
-		{ fields: ['*.*'], filter: { status: { _eq: "present" } } 
+		{ fields: fields? fields:['*.*'], filter: { status: { _eq: "present" } } 
 	})) )
 export const updateDoctorOrgs = (token:string, ids:number[], data:object) =>
 	directusClient.request( withToken(token, updateItems('doctors_organizations', ids, data)) );

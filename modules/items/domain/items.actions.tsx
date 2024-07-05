@@ -5,11 +5,11 @@ import { ItemCreator } from "./item";
 
 export const getAllItems = (token:string, page:number) => directusClient.request( withToken(token, readItems('items', { fields: ['*.*'], limit: LIMIT_PER_PAGE, page })) );
 export const getTotalItems = (token:string) => directusClient.request( withToken(token, aggregate('items', { aggregate: { count: '*' } })) );
-export const getItemsWithFilter = (token:string, filter:object, page:number) =>
+export const getItemsWithFilter = (token:string, filter:object, page:number, fields?:string[]) =>
 	directusClient.request( 
 		withToken(token, readItems('items', { 
 			filter: filter,
-			fields: ['*.*'], limit: LIMIT_PER_PAGE, page
+			fields: fields? fields:['*.*'], limit: LIMIT_PER_PAGE, page
 		})) 
 	);
 export const getTotalItemsWithFilter = (token:string, filter:object) => 

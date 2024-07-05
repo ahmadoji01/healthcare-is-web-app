@@ -37,6 +37,7 @@ export const FrontDeskProvider = ({
     const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
     const [newQueues, setNewQueues] = useState<boolean[]>([]);
     const [loading, setLoading] = useState(false);
+    const presDocsFields = ['id', 'doctors_id.id', 'doctors_id.name', 'doctors_id.specialization', 'status'];
     const {accessToken, user} = useUserContext();
     const {handleDoctorVisits} = useVisitContext();
     
@@ -55,10 +56,10 @@ export const FrontDeskProvider = ({
         if (user.id === '')
             return;
 
-        getPresentDoctors(accessToken).then( res => { 
+        getPresentDoctors(accessToken, presDocsFields).then( res => { 
             let docs:Doctor[] = [];
             let newQs:boolean[] = [];
-            res?.map( (docOrg) => { 
+            res?.map( (docOrg) => {
                 let org = doctorOrgMapper(docOrg);
                 docs.push(org.doctor);
                 newQs.push(false);

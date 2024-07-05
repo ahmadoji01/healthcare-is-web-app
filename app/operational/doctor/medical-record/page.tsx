@@ -28,6 +28,7 @@ import { medicineItemsFilter, treatmentItemsFilter } from '@/modules/items/domai
 import { Item, itemMapper } from '@/modules/items/domain/item';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import Spinner from '@/components/Spinner';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -69,23 +70,26 @@ const MedicalRecords = () => {
     const [order, setOrder] = useState(defaultOrder);
     const [medHistories, setMedHistories] = useState<MedicalRecord[]>([]);
     
-    const {activeMedicalRecord, setActiveMedicalRecord, setLoading} = useMedicalRecordContext();
+    const {activeMRID, activeMedicalRecord, loading, setActiveMedicalRecord, setLoading} = useMedicalRecordContext();
     const {activeVisit} = useVisitContext();
     const {organization, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();  
     const t = useTranslations();
     const router = useRouter();
+
+    const medFields = ['id', 'name', 'stock', 'unit', 'type'];
+    const treatFields = ['id', 'name', 'price', 'type'];
     
     useEffect( () => {
-      if (activeMedicalRecord.id === 0) {
+      if (activeMRID === 0) {
         router.push('/operational/doctor/patients-list');
       }
-      getItemsWithFilter(accessToken, medicineItemsFilter, 1).then( res => {
+      getItemsWithFilter(accessToken, medicineItemsFilter, 1, medFields).then( res => {
         let items:Item[] = [];
         res?.map( (item) => { items.push(itemMapper(item)); });
         setMedicines(items);
       });
-      getItemsWithFilter(accessToken, treatmentItemsFilter, 1).then( res => {
+      getItemsWithFilter(accessToken, treatmentItemsFilter, 1, treatFields).then( res => {
         let items:Item[] = [];
         res?.map( (item) => { items.push(itemMapper(item)); });
         setTreatments(items);
@@ -96,12 +100,16 @@ const MedicalRecords = () => {
           setOrder(order);
         }
       });
+    }, []);
+
+    useEffect(() => {
       getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id).then( res => {
         let mrs:MedicalRecord[] = [];
         res?.map( (mr) => { mrs.push(medicalRecordMapper(mr)); });
         setMedHistories(mrs);
       });
-    }, []);
+      setLoading(false);
+    }, [activeMedicalRecord]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
@@ -123,8 +131,7 @@ const MedicalRecords = () => {
       })
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
       
-      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, itemsCreator, illnessPatchers, [], [], organization.id, MR_STATUS.complete);
-      
+      let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, itemsCreator, illnessPatchers, organization.id, MR_STATUS.complete);
       await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
         .catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
       
@@ -135,7 +142,6 @@ const MedicalRecords = () => {
       let orderUpdate = { order_items: orderItems, status: ORDER_STATUS.waiting_to_pay };
       
       updateOrder(accessToken, order.id, orderUpdate).then( () => {
-        window.location.reload();
         openSnackbarNotification(t('alert_msg.success'), 'success');
         router.push("/operational/doctor/patients-list");
         setLoading(false);
@@ -146,7 +152,8 @@ const MedicalRecords = () => {
     return (
       <form onSubmit={e => { e.preventDefault(); handleSubmit() } }>
         <div className="w-full min-h-screen">
-          { activeMedicalRecord.id !== 0 &&
+          { loading && <Spinner /> }
+          { (activeMedicalRecord.id !== 0 && !loading) &&
             <>
               <Box>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
