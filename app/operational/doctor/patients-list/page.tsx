@@ -17,16 +17,17 @@ import { WS_EVENT_TYPE } from "@/modules/websockets/domain/websocket.constants";
 import { websocketClient } from "@/utils/request-handler";
 import { statusFilter } from "@/modules/orders/domain/order.specifications";
 import { useTranslations } from "next-intl";
+import { useAlertContext } from "@/contexts/alert-context";
 
 const PatientsList = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
-    const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
     const [patients, setPatients] = useState<Patient[]>([]);
     const [visits, setVisits] = useState<Visit[]>([]);
     const [totalPages, setTotalPages] = useState(0);
-    const {accessToken, user} = useUserContext();
+    const {accessToken, user, wsClient} = useUserContext();
     const {setActiveMRID} = useMedicalRecordContext();
     const {setActiveVisit} = useVisitContext();
+    const {openSnackbarNotification} = useAlertContext();
     const t = useTranslations();
     const filter = statusFilter(VISIT_STATUS.to_be_examined);
     const fields = ['id', 'patient.id', 'patient.name', 'patient.address', 'patient.id_card_number', 'doctor.id', 'doctor.name', 'doctor.specialization', 'medical_record.id'];
@@ -38,13 +39,10 @@ const PatientsList = () => {
         notifSound.current?.play();
     }
 
-    async function subsToVisit() { 
-        if ( typeof(wsClient) === 'undefined')
-            return;
-
+    async function subsToVisit() {
         const { subscription } = await wsClient.subscribe('visits', {
             event: 'update',
-            query: { fields: ['id', 'patient.id', 'patient.name', 'patient.address', 'patient.id_card_number', 'doctor.id', 'doctor.name', 'doctor.specialization', 'medical_record.id'] },
+            query: { fields: ['id', 'patient.id', 'patient.name', 'patient.address', 'patient.id_card_number', 'doctor.id', 'doctor.name', 'doctor.specialization', 'medical_record.id', 'status'] },
         });
     
         for await (const item of subscription) {
@@ -64,36 +62,25 @@ const PatientsList = () => {
     }
 
     useEffect( () => {
-        let interval = setInterval(async () => {
-            if (user.id !== "") {
-                let client = websocketClient(accessToken);
-                setWSClient(client);
-                client.connect();
-            }
-            clearInterval(interval);
-        }, 110);
-        return () => clearInterval(interval);
-    }, [user]);
+        if (typeof(wsClient) === "undefined") 
+            return;
 
-    useEffect( () => {
-        let interval = setInterval(async () => {
-            if (typeof(wsClient) !== "undefined") {
+        wsClient.onWebSocket('message', function (data) {
+            if (data.type == 'auth' && data.status == 'ok') {
                 subsToVisit();
             }
-            clearInterval(interval);
-        }, 110);
-        return () => clearInterval(interval);
-    }, [wsClient]);
+        });
+    }, [visits]);
 
     useEffect( () => {
-        if (!dataLoaded || visits.length == 0) {
-            getVisitsWithFilter(accessToken, filter, '-date_updated', 1, fields)
+        if ((!dataLoaded || visits.length == 0) && user.id !== '') {
+            getVisitsWithFilter(accessToken, filter, 'date_updated', 1, fields)
                 .then( res => {
                     let vits:Visit[] = [];
                     res?.map( (visit) => { vits.push(visitMapper(visit)); });
                     setVisits(vits);
                     setDataLoaded(true);
-                });
+                }).catch( () => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setDataLoaded(true); });
             getTotalVisitsWithFilter(accessToken, filter)
                 .then( res => { 
                     let total = res[0].count? parseInt(res[0].count) : 0;
