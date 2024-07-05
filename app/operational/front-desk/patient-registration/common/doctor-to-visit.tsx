@@ -11,8 +11,8 @@ const DoctorToVisit = ({ handleNext }: DoctorToVisitProps) => {
 
     return (
         <>
-            {presentDoctors?.map((doctor) => (
-                <div className="flex justify-end mt-2">
+            {presentDoctors?.map((doctor, key) => (
+                <div className="flex justify-end mt-2" key={key}>
                     <Link
                         href="#"
                         onClick={() => { handleNext(); setActiveDoctor(doctor); }}

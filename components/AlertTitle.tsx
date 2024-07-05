@@ -78,7 +78,7 @@ const AlertTitle = ({ alertStatus }:AlertTitleProps) => {
             setTitle(ALERT_MESSAGE.server_error);
             return;
         }
-    })
+    }, [])
 
     return (
         <div>

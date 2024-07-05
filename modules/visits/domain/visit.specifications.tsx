@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
 import { VISIT_STATUS } from "./visit.constants";
 import moment from "moment";
 import { Visit } from "./visit";
+import { useTranslations } from "next-intl";
 
 
 export function statusEquals(status:string) {
@@ -18,7 +18,7 @@ export function doctorIDEquals(docId:number) {
 
 export function statusDisplay(status:string) {
     
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     switch (status) {
         case VISIT_STATUS.active:

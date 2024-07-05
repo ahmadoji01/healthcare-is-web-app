@@ -10,6 +10,7 @@ import { statusFilter, yearFilter } from "@/modules/orders/domain/order.specific
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { getTotalSales } from "@/modules/orders/domain/order.actions";
 import { currency } from "@/utils/generic-functions";
+import { useTranslations } from "next-intl";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -140,7 +141,7 @@ interface ChartOneState {
 
 const ChartOne = () => {
 
-  const {t} = useTranslation();
+  const t = useTranslations();
   const [chartOptions, setChartOptions] = useState(options);
   const dateNow = new Date;
   const {accessToken} = useUserContext();
@@ -205,8 +206,7 @@ const ChartOne = () => {
         }
         setYAxisMax(Math.max(...monthlySales));
         setThisYearSales(monthlySales);
-      })
-      .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
+      });
   }, []);
 
   useEffect( () => {
@@ -223,8 +223,7 @@ const ChartOne = () => {
         }
         setYAxisMax(Math.max(...monthlySales));
         setLastYearSales(monthlySales);
-      })
-      .catch( () => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
+      });
   }, [thisYearSales]);
 
   

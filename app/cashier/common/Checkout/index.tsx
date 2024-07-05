@@ -14,7 +14,7 @@ import Payment from "./payment";
 import OrderItemReview from "@/modules/orders/application/list/order-item.review";
 import { OrderItem } from "@/modules/orders/domain/order-item";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 const steps = ['Review Items', 'Payment'];
 
@@ -32,7 +32,7 @@ function getStepContent(step: number, orderItems: OrderItem[]|undefined, total: 
 const Checkout = () => {
     const [activeStep, setActiveStep] = React.useState(0);
     const { selectedOrder, total, confirmPayment, examFee } = useOrderSummaryContext();
-    const { t } = useTranslation();
+    const t = useTranslations();
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);

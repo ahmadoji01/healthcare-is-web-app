@@ -4,7 +4,7 @@ import { Doctor } from "@/modules/doctors/domain/doctor";
 import { Visit, defaultVisit } from "../domain/visit";
 import { useEffect, useState } from "react";
 import { DoctorName } from "@/utils/doctor-name-format";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface VisitReviewProps {
     doctor: Doctor,
@@ -13,7 +13,7 @@ interface VisitReviewProps {
 
 const VisitReview = ({ doctor, visit }:VisitReviewProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const [vis, setVis] = useState(defaultVisit)
     useEffect( () => {
@@ -37,14 +37,6 @@ const VisitReview = ({ doctor, visit }:VisitReviewProps) => {
                                 </label>
                                 <div className="relative font-bold">
                                     { DoctorName(doctor.name, doctor.specialization) }
-                                </div>
-                            </div>
-                            <div>
-                                <label className="mb-3 block">
-                                    { t('visit_status') }
-                                </label>
-                                <div className="relative font-bold">
-                                    { t(vis.status) }
                                 </div>
                             </div>
                         </div>

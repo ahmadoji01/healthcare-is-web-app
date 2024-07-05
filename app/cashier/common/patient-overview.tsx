@@ -1,12 +1,11 @@
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
-import moment from 'moment';
 import PatientAvatar from "./patient-avatar";
 import { useEffect, useState } from "react";
 import { Patient } from "@/modules/patients/domain/patient";
 import { Order } from "@/modules/orders/domain/order";
 import { DoctorName } from "@/modules/doctors/domain/doctor.specifications";
-import { useTranslation } from "react-i18next";
 import { useSpeech } from "react-text-to-speech";
+import { useTranslations } from "next-intl";
 
 
 const PatientOverview = () => {
@@ -14,7 +13,7 @@ const PatientOverview = () => {
     const { selectedOrder } = useOrderSummaryContext();
     const [patient, setPatient] = useState<Patient>();
     const [order, setOrder] = useState<Order>();
-    const { t } = useTranslation();
+    const t = useTranslations();
 
     const {
         isInQueue,

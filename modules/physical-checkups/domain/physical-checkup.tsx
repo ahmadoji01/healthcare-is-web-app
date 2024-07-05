@@ -71,3 +71,22 @@ export function physicalCheckupNoIDMapper(checkup:PhysicalCheckup, orgID:number,
     }
     return physicalCheckupNoID;
 }
+
+export type PhysicalCheckupPatcher = Omit<PhysicalCheckup, 'patient'> & { organization: number };
+export function physicalCheckupPatcherMapper(checkup:PhysicalCheckup, orgID:number) {
+
+    let physicalCheckupPatcher: PhysicalCheckupPatcher = { 
+        id: checkup.id,
+        past_medical_concern: checkup.past_medical_concern,
+        head_to_toe_checkup: checkup.head_to_toe_checkup,
+        height: checkup.height,
+        weight: checkup.weight,
+        tension: checkup.tension,
+        temperature: checkup.temperature,
+        breath_rate: checkup.breath_rate,
+        heart_rate: checkup.heart_rate,
+        complaint: checkup.complaint,
+        organization: orgID,
+    }
+    return physicalCheckupPatcher;
+}

@@ -3,13 +3,13 @@ import PaymentOption from "../payment-option";
 import { PaymentMethod } from "@/modules/payment-methods/domain/payment-method";
 import { paymentMethodsFakeData } from "@/modules/payment-methods/infrastructure/payment-methods.fakes";
 import { useOrderSummaryContext } from "@/contexts/order-summary-context";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 const PaymentMethods = () => {
 
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-    const { selectedPayment, setSelectedPayment } = useOrderSummaryContext();
-    const { t } = useTranslation();
+    const { selectedPayment } = useOrderSummaryContext();
+    const t = useTranslations();
 
     useEffect( () => {
         setPaymentMethods(paymentMethodsFakeData);
@@ -21,6 +21,7 @@ const PaymentMethods = () => {
             <div className="mt-5 grid grid-cols-3 gap-2">
                 { paymentMethods.map( (method, key) => 
                     <PaymentOption
+                        key={key}
                         method={method}
                         selected={method.id === selectedPayment?.id} />
                 )}

@@ -1,9 +1,9 @@
 'use client';
 
-import { useTranslation } from "react-i18next";
 import { Order } from "../domain/order";
 import { orderItemDisplayName } from "../domain/order.specifications";
 import Currency from "@/components/Currency";
+import { useTranslations } from "next-intl";
 
 interface OrderViewProps {
     order: Order,
@@ -11,7 +11,7 @@ interface OrderViewProps {
 
 const OrderView = ({ order }:OrderViewProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>
@@ -40,7 +40,7 @@ const OrderView = ({ order }:OrderViewProps) => {
                                     <p className="text-black dark:text-white">
                                         <ul>
                                             { order.order_items?.map( (item, key) => (
-                                                <li className="list-outside" style={ { listStyle: "disc" } }>
+                                                <li className="list-outside" style={ { listStyle: "disc" } } key={key}>
                                                     { orderItemDisplayName(item) }
                                                 </li>
                                             )) }

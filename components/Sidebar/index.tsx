@@ -28,7 +28,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, children }: SidebarProps) => {
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, []);
 
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
@@ -37,7 +37,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, children }: SidebarProps) => {
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
-  });
+  }, []);
 
   return (
     <aside

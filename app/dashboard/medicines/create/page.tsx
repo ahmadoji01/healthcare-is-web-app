@@ -10,10 +10,10 @@ import ItemForm from "@/modules/items/application/form/item.form";
 import { Item, defaultItem, itemCreatorMapper } from "@/modules/items/domain/item";
 import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { createAnItem, itemExistsChecker } from "@/modules/items/domain/items.actions";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const MedicineCreatePage = () => {
   const [item, setItem] = useState(defaultItem);
@@ -22,7 +22,7 @@ const MedicineCreatePage = () => {
   const [categoryName, setCategoryName] = useState("");
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
   const router = useRouter();
 
   useEffect( () => {

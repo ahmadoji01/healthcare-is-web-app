@@ -1,6 +1,6 @@
 import { BoardSections, Status, Task } from '../types';
 import { BOARD_SECTIONS } from '../constants';
-import { getTasksByStatus, getVisitsByStatus } from './tasks';
+import { getVisitsByStatus } from './tasks';
 import { Visit } from '@/modules/visits/domain/visit';
 
 export const initializeBoard = (visits: Visit[]) => {

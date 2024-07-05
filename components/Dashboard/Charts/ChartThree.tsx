@@ -12,7 +12,7 @@ import { getDoctorsWithFilter } from "@/modules/doctors/domain/doctors.actions";
 import { doctorIDsInFilter } from "@/modules/doctors/domain/doctor.specifications";
 import { DoctorName } from "@/utils/doctor-name-format";
 import { randomHexColorGenerator } from "@/utils/generic-functions";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface ChartThreeState {
@@ -23,8 +23,8 @@ const options: ApexOptions = {
   chart: {
     type: "donut",
   },
-  colors: ["#10B981", "#375E83", "#259AE6", "#FFA70B"],
-  labels: ["Remote", "Hybrid", "Onsite", "Leave"],
+  colors: [],
+  labels: [],
   legend: {
     show: true,
     position: "bottom",
@@ -68,8 +68,8 @@ const ChartThree = () => {
   const [chartOpts, setChartOpts] = useState(options);
   const [counts, setCounts] = useState<VisitCount[]>([]);
   const [visitCountDoctors, setVisitCountDoctors] = useState<VisitCountDoctor[]>([]);
-  const {accessToken} = useUserContext();
-  const {t} = useTranslation();
+  const {accessToken, user} = useUserContext();
+  const t = useTranslations();
 
   if (!series.length || !series) {
     return null;
@@ -140,11 +140,16 @@ const ChartThree = () => {
 
       <div className="mb-2">
         <div id="chartThree" className="mx-auto flex justify-center">
+          { visitCountDoctors.length > 0 ?
           <ReactApexChart
             options={chartOpts}
             series={series}
             type="donut"
           />
+          : <h5 className="text-xl font-semibold text-black dark:text-white">
+              { t('this_months_data_not_available') }
+            </h5>
+          }
         </div>
       </div>
     </div>

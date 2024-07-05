@@ -16,6 +16,7 @@ interface UserContextType {
     setUser: Dispatch<SetStateAction<User>>,
     setOrganization: Dispatch<SetStateAction<Organization>>,
     setFontSize: Dispatch<SetStateAction<string>>,
+    setAccessToken: Dispatch<SetStateAction<string>>,
     fetchOrganization: () => void,
 }
 
@@ -30,6 +31,7 @@ export const UserContext = createContext<UserContextType | null>({
     setUser: () => {},
     setOrganization: () => {},
     setFontSize: () => {},
+    setAccessToken: () => {},
     fetchOrganization: () => {},
 });
  
@@ -47,20 +49,50 @@ export const UserProvider = ({
     const [loading, setLoading] = useState(true);
     const [fontSize, setFontSize] = useState("100%");
     const [organization, setOrganization] = useState(defaultOrganization);
+    const [size, setSize] = useState("100% !important");
+  
+    useEffect(() => {
+      let localSize = localStorage.getItem("font-size");
+      if (localSize !== null) {
+        setSize(localSize);
+      }
+      document.body.style.fontFamily = 'Satoshi';
+    }, [])
+  
+    useEffect(() => {
+      document.body.style.fontSize = size;
+    }, [size]);
 
     const refreshToken = async (interval:NodeJS.Timeout, isLooping:boolean) => {
         let isError = false;
-        await getUserMe(accessToken).then(res => {
-            let usr = defaultUser;
-            usr = userMapper(res);
-            setUser(usr);
-            setLoading(false);
-            return;
-        }).catch( () => {
+
+        if (accessToken === "")
             isError = true;
-            setLoading(false);
-            return;
-        });
+
+        if (!isError) {
+            await getUserMe(accessToken).then(res => {
+                let usr = defaultUser;
+                usr = userMapper(res);
+                setUser(usr);
+                setLoading(false);
+                return;
+            }).catch( () => {
+                isError = true;
+                setLoading(false);
+                return;
+            });
+
+            await getOrganization(accessToken, 1).then( res => {
+                if (res.length < 1) {
+                    return;
+                }
+                setOrganization(organizationMapper(res[0]));
+            }).catch( err => {
+                isError = true;
+                setLoading(false);
+                return;
+            });
+        }
 
         if (!isError)
             return;
@@ -79,27 +111,29 @@ export const UserProvider = ({
                 usr = userMapper(res);
                 setUser(usr);
             }).catch( () => {
-                if (location.pathname !== '/') {
+                if (pathname !== '/') {
                     router.push('/');
                 }
                 return;
             });
-            fetchOrganization();
-
-            if (location.pathname === "/" && window.history.length == 2) {
-                router.push("/dashboard");
-            }
-            if (location.pathname === "/" && window.history.length > 2) {
-                router.back();
-            }
-            
+            getOrganization(token, 1).then( res => {
+                if (res.length < 1) {
+                    return;
+                }
+                setOrganization(organizationMapper(res[0]));
+            }).catch( err => {
+                isError = true;
+                setLoading(false);
+                return;
+            });
+            //router.push("/dashboard");
             setLoading(false);
             if (!isLooping)
                 clearInterval(interval);
             return;
         }).catch( err => {
-            if (location.pathname !== '/' && (err.response.status === 400 || err.response.status === 401 || err.response.status === 403)) {
-                router.push("/");
+            if (pathname !== '/' && ( err.response.status === 400 || err.response.status === 401 || err.response.status === 403)) {
+                window.location.href = '/';
             }
             setLoading(false);
             clearInterval(interval);
@@ -132,17 +166,8 @@ export const UserProvider = ({
 
         return () => clearInterval(interval);    
     }, []);
-
-    useEffect(() => {
-        let localFontSize = localStorage.getItem("font-size");
-        if (localFontSize !== null) {
-            setFontSize(localFontSize);
-        }
-    }, []);
     
     useEffect(() => {
-        fetchOrganization();
-
         if (user.role_name === "") {
             return;
         }
@@ -163,7 +188,7 @@ export const UserProvider = ({
     }, [user.role_name])
 
     return (
-        <UserContext.Provider value={{ accessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
+        <UserContext.Provider value={{ accessToken, setAccessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
             {children}
         </UserContext.Provider>
     );

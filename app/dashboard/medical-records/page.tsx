@@ -6,18 +6,18 @@ import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import MedicalRecordDeleteConfirmation from "@/modules/medical-records/application/form/medical-record.delete-confirmation";
-import MedicalRecordForm from "@/modules/medical-records/application/form/medical-record.form";
 import MedicalRecordListTable from "@/modules/medical-records/application/list/medical-record.list-table";
 import { MedicalRecord, defaultMedicalRecord, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
 import { deleteAMedicalRecord, getMedicalRecordsWithFilter, getTotalMedicalRecords, getTotalMedicalRecordsWithFilter, searchMedicalRecords } from "@/modules/medical-records/domain/medical-records.actions";
 import { MR_STATUS } from "@/modules/medical-records/domain/medical-records.constants";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import { useTranslation } from "react-i18next";
 import { statusEquals } from "@/modules/visits/domain/visit.specifications";
 import { dateRangeFilter } from "@/modules/medical-records/domain/medical-record.specifications";
 import { DatePicker } from "@mui/x-date-pickers";
 import MedicalRecordView from "@/modules/medical-records/application/medical-record.view";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 const MedicalRecordsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -28,9 +28,10 @@ const MedicalRecordsDashboardPage = () => {
   const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const {t} = useTranslation();
+  const t = useTranslations();
   const [fromDate, setFromDate] = useState<Date|null>(null);
   const [toDate, setToDate] = useState<Date|null>(null);
+  const router = useRouter();
   
   const [filter, setFilter] = useState<object>({ _and: [ statusEquals(MR_STATUS.complete) ] })
 
@@ -68,7 +69,7 @@ const MedicalRecordsDashboardPage = () => {
           setTotalPages(pages);
         });
     }
-  });
+  }, []);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {

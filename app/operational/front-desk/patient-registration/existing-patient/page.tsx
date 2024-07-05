@@ -14,7 +14,7 @@ import ExaminationTime from "../common/examination-time";
 import PatientSearchForm from "./patient-search-form";
 import DoctorToVisit from "../common/doctor-to-visit";
 import { defaultPhysicalCheckup, physicalCheckupMapper, physicalCheckupNoIDMapper } from "@/modules/physical-checkups/domain/physical-checkup";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { usePatientContext } from "@/contexts/patient-context";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
@@ -23,15 +23,16 @@ import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper, 
 import { CARE_TYPE } from "@/modules/medical-records/domain/medical-records.constants";
 import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultVisit, visitCreatorMapper, visitMapper } from "@/modules/visits/domain/visit";
-import { createAVisit, getTotalQueueByDoctorID } from "@/modules/visits/domain/visits.actions";
+import { createAVisit } from "@/modules/visits/domain/visits.actions";
 import { defaultOrder, orderCreatorMapper, orderMapper } from "@/modules/orders/domain/order";
 import { DOCTOR_PAID, ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { useFrontDeskContext } from "@/contexts/front-desk-context";
-import { useTranslation } from "react-i18next";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 import { getADoctorOrg, updateDoctorOrgs } from "@/modules/doctors/domain/doctors.actions";
 import { defaultDoctorOrganization, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
+import { useTranslations } from "next-intl";
+import Spinner from "@/components/Spinner";
 
 const steps = ['search_your_data', 'doctor_to_visit', 'visit_status', 'review_input'];
 
@@ -54,12 +55,12 @@ const ExistingPatient = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [visitStatus, setVisitStatus] = useState("");
     const [queueNumber, setQueueNumber] = useState("");
+    const [loading, setLoading] = useState(false);
     const {accessToken, organization} = useUserContext();
     const {activePatient} = usePatientContext();
     const {openSnackbarNotification} = useAlertContext();
     const {activeDoctor} = useFrontDeskContext();
-    const {t} = useTranslation();
-
+    const t = useTranslations();
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
@@ -75,6 +76,7 @@ const ExistingPatient = () => {
             return;
         }
 
+        setLoading(true);
         let physicalCheckup = defaultPhysicalCheckup;
         physicalCheckup.patient = activePatient;
         let physicalCheckupNoID = physicalCheckupNoIDMapper(physicalCheckup, organization.id, activePatient.id);
@@ -93,6 +95,12 @@ const ExistingPatient = () => {
             return;
         });
 
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            setLoading(false);
+            return;
+        }
+
         await updateDoctorOrgs(accessToken, [docOrg.id], { queue: parseInt(queueNum) })
             .catch( err => {
                 isError = true;
@@ -101,6 +109,7 @@ const ExistingPatient = () => {
 
         if (isError) {
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            setLoading(false);
             return;
         }
         
@@ -112,6 +121,7 @@ const ExistingPatient = () => {
         });
         
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -130,6 +140,7 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -149,6 +160,7 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -167,10 +179,12 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
 
+        setLoading(false);
         openSnackbarNotification(t('alert_msg.success'), 'success');
         setActiveStep(activeStep + 1);
         return;
@@ -196,7 +210,7 @@ const ExistingPatient = () => {
                     { activeStep > 0 &&
                         <div className="flex justify-end mt-2 gap-x-2">
                             <div className="flex-1 space-x-2">
-                                {activeStep !== 0 && (
+                                {(activeStep !== 0 && !loading) && (
                                     <Link
                                         href="#"
                                         onClick={handleBack}
@@ -207,12 +221,14 @@ const ExistingPatient = () => {
                             </div>
                             <div className="flex-1">
                                 { activeStep === steps.length - 1 &&
-                                    <Link
-                                    href="#"
-                                    onClick={() => {handleSubmit();}}
-                                    className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                        { t('submit_registration') }
-                                    </Link>
+                                    <>
+                                        { loading && <Spinner /> }
+                                        <button
+                                            onClick={() => {handleSubmit()}}
+                                            className="w-full flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
+                                            { t('submit_registration') }
+                                        </button>
+                                    </>
                                 }
                             </div>
                         </div>

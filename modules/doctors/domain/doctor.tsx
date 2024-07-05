@@ -91,7 +91,7 @@ export function doctorOrgMapper(res:Record<string,any>) {
     doctorOrg = {
         id: res.id, 
         doctor: doctorMapper(res.doctors_id),
-        organization: organizationMapper(res.organizations_id),
+        organization:res.organizations_id? organizationMapper(res.organizations_id):defaultOrganization,
         status: res.status? res.status : DOCTOR_STATUS.absent, 
         examination_fee: res.examination_fee? parseFloat(res.examination_fee) : 0.0,
         queue: res.queue? parseInt(res.queue) : 0,

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Staff } from "../../domain/staff";
 import moment from "moment";
 import SubmitButton from "@/components/Dashboard/Submit";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface StaffFormProps {
     initStaff: Staff,
@@ -13,7 +13,7 @@ interface StaffFormProps {
 
 const StaffForm = ({ initStaff, handleSubmit }:StaffFormProps) => {
     const [staff, setStaff] = useState(initStaff);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>

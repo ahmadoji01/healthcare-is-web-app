@@ -1,10 +1,9 @@
 import SubmitButton from "@/components/Dashboard/Submit";
 import { Organization } from "../../domain/organization";
 import { ChangeEvent, useEffect, useState } from "react";
-import { LogoURL } from "@/utils/profile-image-url";
 import defaultLogo from "@/public/images/clinic-icon-256.jpg";
 import { imageHandler } from "@/utils/request-handler";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface AdministrationFormProps {
     initOrg: Organization,
@@ -16,7 +15,7 @@ const AdministrationForm = ({ initOrg, handleSubmit, handleFileChange }: Adminis
 
     const [organization, setOrganization] = useState(initOrg);
     const [logo, setLogo] = useState(defaultLogo.src);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     useEffect(() => { setOrganization(initOrg) }, [initOrg]);
 

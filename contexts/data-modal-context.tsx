@@ -1,15 +1,21 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
  
 interface DataModalContextType {
     editModalOpen: boolean,
     deleteModalOpen: boolean,
+    setEditModalOpen: Dispatch<SetStateAction<boolean>>,
+    setDeleteModalOpen: Dispatch<SetStateAction<boolean>>,
+    closeModal: () => void,
     handleModal: (closeModal: boolean, whichModal: boolean) => void,
 }
 
 export const DataModalContext = createContext<DataModalContextType | null>({
     editModalOpen: false,
     deleteModalOpen: false,
-    handleModal: (closeModal: boolean, whichModal: boolean) => {},
+    setEditModalOpen: () => {},
+    setDeleteModalOpen: () => {},
+    closeModal: () => {},
+    handleModal: () => {},
 });
  
 export const DataModalProvider = ({
@@ -26,18 +32,25 @@ export const DataModalProvider = ({
           setDeleteModalOpen(false);
           return;
         }
-    
+        
         if (whichModal) {
           setEditModalOpen(true);
           setDeleteModalOpen(false);
-        } else {
-          setEditModalOpen(false);
-          setDeleteModalOpen(true);
-        }
+          return;
+        } 
+
+        setEditModalOpen(false);
+        setDeleteModalOpen(true);
+        return;
+    }
+
+    const closeModal = () => {
+        setEditModalOpen(false);
+        setDeleteModalOpen(false);
     }
 
     return (
-        <DataModalContext.Provider value={{ editModalOpen, deleteModalOpen, handleModal }}>
+        <DataModalContext.Provider value={{ editModalOpen, deleteModalOpen, setEditModalOpen, setDeleteModalOpen, closeModal, handleModal }}>
             {children}
         </DataModalContext.Provider>
     );

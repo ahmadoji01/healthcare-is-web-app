@@ -1,21 +1,20 @@
 import { motion } from "framer-motion";
-import { Task } from '../types';
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDataModalContext } from "@/contexts/data-modal-context";
 import { Visit } from "@/modules/visits/domain/visit";
 import { useVisitContext } from "@/contexts/visit-context";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 type TaskItemProps = {
   visit: Visit,
 };
 
 const TaskItem = ({ visit }: TaskItemProps) => {
-  const { handleModal } = useDataModalContext();
+  const { setEditModalOpen, setDeleteModalOpen } = useDataModalContext();
   const { setActivePatient, setActiveVisit } = useVisitContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   return (
     <div className="mb-1 task rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -29,8 +28,8 @@ const TaskItem = ({ visit }: TaskItemProps) => {
           <ul className="flex items-center gap-1 2xsm:gap-2">
             <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
               <Link
-                href="#"
-                onMouseDown={ () => { setActiveVisit(visit); setActivePatient(visit?.patient); handleModal(false, true) } }
+                href=""
+                onMouseDown={ () => { setActiveVisit(visit); setActivePatient(visit?.patient); setEditModalOpen(true) } }
                 className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                 >
                 <FontAwesomeIcon width={18} height={18} icon={faBullhorn} />
@@ -38,9 +37,9 @@ const TaskItem = ({ visit }: TaskItemProps) => {
             </motion.li>
             <motion.li className="relative" whileHover={{ scale: 1.2, transition: { duration: 0.2 }}} whileTap={{ scale:0.9 }} >  
               <Link
-                href="#"
+                href=""
                 style={{ background: "red" }}
-                onMouseDown={ () => { setActiveVisit(visit); handleModal(false, false);} }
+                onMouseDown={ () => { setActiveVisit(visit); setDeleteModalOpen(true)} }
                 className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                 >
                 <FontAwesomeIcon width={18} height={18} icon={faTrash} style={{ color: 'white' }} />

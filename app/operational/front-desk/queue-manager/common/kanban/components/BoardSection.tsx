@@ -27,8 +27,8 @@ const BoardSection = ({ id, title, visits }: BoardSectionProps) => {
         items={visits}
         strategy={verticalListSortingStrategy}>
         <div ref={setNodeRef}>
-          { typeof(visits) !== 'undefined' && visits.map((visit) => (
-            <SortableTaskItem id={visit.id}>
+          { typeof(visits) !== 'undefined' && visits.map((visit, key) => (
+            <SortableTaskItem id={visit.id} key={key}>
               <TaskItem visit={visit} />
             </SortableTaskItem>
           ))}

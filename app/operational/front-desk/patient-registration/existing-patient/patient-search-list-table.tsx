@@ -1,15 +1,12 @@
-import PatientSearch from "@/modules/patients/application/patient.search"
 import { Patient } from "@/modules/patients/domain/patient"
 import moment from "moment";
-import { useState } from "react"
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import PageNav from "@/components/Dashboard/PageNav/PageNav";
 import Spinner from "@/components/Spinner";
 import { usePatientContext } from "@/contexts/patient-context";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface PatientSearchListTableProps {
     patients: Patient[],
@@ -20,7 +17,7 @@ interface PatientSearchListTableProps {
 const PatientSearchListTable = ({ patients, searched, loading, handleNext }:PatientSearchListTableProps) => {
     
     const {setActivePatient} = usePatientContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">

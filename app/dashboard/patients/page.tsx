@@ -6,17 +6,16 @@ import DashboardModal from "@/components/Modal/Modal";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
-import PatientDeleteConfirmation from "@/modules/patients/application/form/patient.delete-confirmation";
 import PatientForm from "@/modules/patients/application/form/patient.form";
 import PatientListTable from "@/modules/patients/application/list/patient.list-table";
 import { Patient, defaultPatient, patientMapper, patientPatcherMapper } from "@/modules/patients/domain/patient";
 import { deleteAPatient, getAllPatients, getTotalPatients, getTotalSearchPatients, searchPatients, updateAPatient } from "@/modules/patients/domain/patients.actions";
-import { faArrowRight, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -31,7 +30,7 @@ const PatientsDashboardPage = () => {
   const {accessToken} = useUserContext();
   const router = useRouter();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   useEffect( () => {
     if (!dataLoaded || patients.length == 0) {

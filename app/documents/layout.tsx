@@ -1,5 +1,3 @@
-'use client';
-
 export default function RootLayout({
   children,
 }: {
@@ -7,10 +5,8 @@ export default function RootLayout({
 }) {
 
   return (
-    <html lang="en">
-      <body>
-        {children}
-      </body>
-    </html>
+    <div className="p-0 m-0">
+      {children}
+    </div>
   )
 }

@@ -10,12 +10,12 @@ import { errorMessage } from "@/modules/errors/domains/errors.specifications";
 import { Staff, staffNoIDMapper } from "@/modules/staffs/domain/staff";
 import { createAStaff } from "@/modules/staffs/domain/staffs.actions";
 import UserForm from "@/modules/users/application/form/user.form";
-import { User, UserRole, defaultRole, defaultUser, roleMapper, userCreatorMapper, userMapper } from "@/modules/users/domain/user";
+import { User, UserRole, defaultUser, roleMapper, userCreatorMapper, userMapper } from "@/modules/users/domain/user";
 import { createAUser, getAllRoles } from "@/modules/users/domain/users.actions";
 import { ROLES } from "@/modules/users/domain/users.constants";
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 
 const AccountCreatePage = () => {
@@ -27,7 +27,7 @@ const AccountCreatePage = () => {
   const [roles, setRoles] = useState<UserRole[]>([]);
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   useEffect( () => {
     getAllRoles(accessToken).then( res => {

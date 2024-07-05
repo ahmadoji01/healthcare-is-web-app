@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface DeleteConfirmationProps {
     handleClose: () => void,
@@ -7,7 +7,7 @@ interface DeleteConfirmationProps {
 
 const VisitDeleteConfirmation = ({ handleClose, handleDelete }: DeleteConfirmationProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">

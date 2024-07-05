@@ -38,9 +38,9 @@ export const getVisitByStatus = (token:string, status = "") =>
 			} 
 		})) 
 	)
-export const getVisitsWithFilter = (token:string, filter:object, sort:string, page:number) => 
+export const getVisitsWithFilter = (token:string, filter:object, sort:string, page:number, fields?:string[]) => 
 	directusClient.request( 
-		withToken(token, readItems('visits', { fields: ['*.*.*'], sort: ['sort', sort],
+		withToken(token, readItems('visits', { fields: fields? fields:['*.*.*'], sort: ['sort', sort],
 			filter: filter,
 		limit: LIMIT_PER_PAGE, page})) 
 	)

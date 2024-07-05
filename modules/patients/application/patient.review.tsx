@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from "react";
 import { Patient } from "../domain/patient";
 import moment from "moment";
-import SubmitButton from "@/components/Dashboard/Submit";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface PatientReviewProps {
     patient: Patient,
@@ -12,7 +10,7 @@ interface PatientReviewProps {
 
 const PatientReview = ({ patient }:PatientReviewProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>

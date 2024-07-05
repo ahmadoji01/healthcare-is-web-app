@@ -1,14 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { Pagination } from "@mui/material";
 import { Visit } from "../domain/visit";
 import moment from 'moment/min/moment-with-locales';
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
-import { statusDisplay } from "../domain/visit.specifications";
-import { useTranslation } from "react-i18next";
 import { DoctorName } from "@/utils/doctor-name-format";
+import { useTranslations } from "next-intl";
 
 interface VisitListProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -20,7 +19,7 @@ interface VisitListProps {
 
 const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiveVisit }:VisitListProps) => {
   
-  const {t} = useTranslation();
+  const t = useTranslations();
   
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -59,7 +58,7 @@ const VisitList = ({ visits, totalPages, handleModal, handlePageChange, setActiv
           >
             <div className="flex items-center gap-3 p-2.5 xl:p-5">
               <p className="hidden text-black dark:text-white sm:block">
-                { moment(visit.date_created).locale('id').format("Do MMMM YYYY") }
+                { moment(visit.date_updated).locale('id').format("Do MMMM YYYY") }
               </p>
             </div>
 

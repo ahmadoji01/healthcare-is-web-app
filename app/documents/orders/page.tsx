@@ -4,12 +4,12 @@ import React, { useEffect } from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import moment from 'moment/min/moment-with-locales';
 import Currency from '../../../components/Currency';
-import { useTranslation } from 'react-i18next';
 import { useDocumentContext } from '../../../contexts/document-context';
 import { useUserContext } from '../../../contexts/user-context';
 import { orderItemDisplayName } from "../../../modules/orders/domain/order.specifications";
 import { useRouter } from 'next/navigation';
 import dynamic from "next/dynamic";
+import { useTranslations } from 'next-intl';
 
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 
 const OrderDocument = () => {
   const {ordersDocument, from, to} = useDocumentContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
   const router = useRouter();
   const {organization} = useUserContext();
 
@@ -154,8 +154,8 @@ const OrderDocument = () => {
                 </View>
                 <View style={styles.tableCol}>
                   <View style={styles.table}>
-                    {order.order_items?.map( (orderItem) => 
-                      <View style={styles.tableRow}>
+                    {order.order_items?.map( (orderItem, key) => 
+                      <View style={styles.tableRow} key={key}>
                         <View style={styles.bullet}>
                           <Text>{'\u2022' + " "}</Text>
                         </View>

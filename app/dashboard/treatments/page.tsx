@@ -5,7 +5,7 @@ import DashboardModal from "@/components/Modal/Modal";
 import { LIMIT_PER_PAGE } from "@/constants/request";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
-import { getAllCategories, getAllCategoriesWithFilter, searchCategories } from "@/modules/categories/domain/categories.actions";
+import { getAllCategoriesWithFilter, searchCategories } from "@/modules/categories/domain/categories.actions";
 import { Category, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
 import { treatmentCategoriesFilter } from "@/modules/categories/domain/category.specifications";
 import ItemDeleteConfirmation from "@/modules/items/application/form/item.delete-confirmation";
@@ -17,9 +17,10 @@ import { treatmentItemsFilter } from "@/modules/items/domain/item.specifications
 import { deleteAnItem, getItemsWithFilter, getTotalItemsWithFilter, getTotalSearchItemsWithFilter, searchItemsWithFilter, updateAnItem } from "@/modules/items/domain/items.actions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -36,7 +37,8 @@ const TreatmentsDashboardPage = () => {
 
   const {openSnackbarNotification} = useAlertContext();
   const {accessToken} = useUserContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
+  const router = useRouter();
 
   const fetchAllTreatments = () => {
     getItemsWithFilter(accessToken, treatmentItemsFilter, 1)

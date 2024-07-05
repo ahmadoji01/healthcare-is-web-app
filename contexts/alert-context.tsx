@@ -1,5 +1,5 @@
 import { Alert, AlertColor, Snackbar } from '@mui/material';
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext, useState } from 'react';
  
 interface AlertContextType {
     setOpen: (open:boolean) => void,

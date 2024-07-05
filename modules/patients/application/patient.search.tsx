@@ -1,7 +1,6 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface PatientSearchProps {
     handleChange: (name:string) => void,
@@ -9,7 +8,7 @@ interface PatientSearchProps {
 
 const PatientSearch = ({ handleChange }:PatientSearchProps) => {
     
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <div className="relative mb-4">

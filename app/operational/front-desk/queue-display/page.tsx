@@ -2,12 +2,10 @@
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { useTranslation } from "react-i18next";
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useFrontDeskContext } from '@/contexts/front-desk-context';
 import { DoctorName } from '@/utils/doctor-name-format';
-import { useVisitContext } from '@/contexts/visit-context';
 import { Visit, visitMapper } from '@/modules/visits/domain/visit';
 import { doctorIDEquals, filterVisitsArray, statusEquals } from '@/modules/visits/domain/visit.specifications';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
@@ -21,6 +19,7 @@ import QueueCard from './common/queue-card';
 import { getVisitsWithFilter } from '@/modules/visits/domain/visits.actions';
 import { useAlertContext } from '@/contexts/alert-context';
 import DarkModeSwitcher from '@/components/Header/DarkModeSwitcher';
+import { useTranslations } from 'next-intl';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -56,10 +55,9 @@ function a11yProps(index: number) {
 const QueueDisplay = () => {
 
     const [value, setValue] = useState(0);
-    const {t} = useTranslation();
+    const t = useTranslations();
     const searchParams = useSearchParams();
     const { presentDoctors } = useFrontDeskContext();
-    const { doctorVisits, handleDoctorVisits } = useVisitContext();
     const {openSnackbarNotification} = useAlertContext();
     const { user, accessToken } = useUserContext();
     const [toBeExaminedVisit, setToBeExaminedVisit] = useState<Visit[]>([]);
@@ -191,7 +189,7 @@ const QueueDisplay = () => {
             <Box>
                 <Tabs value={value} aria-label="basic tabs example" centered style={{ fontSize: 24 }}>
                     { presentDoctors.map( (doctor, index) => 
-                        <Tab onClick={() => onTabClick(index)} label={ DoctorName(doctor.name, doctor.specialization) } {...a11yProps(index)} />
+                        <Tab key={index} onClick={() => onTabClick(index)} label={ DoctorName(doctor.name, doctor.specialization) } {...a11yProps(index)} />
                     )}
                 </Tabs>
             </Box>
@@ -216,7 +214,7 @@ const QueueDisplay = () => {
                                 <div className="flex flex-wrap">
                                     {
                                         waitingVisits?.map( (visit, index) =>
-                                            <QueueCard number={parseInt(visit.queue_number)} name={visit.patient.name} />
+                                            <QueueCard key={index} number={parseInt(visit.queue_number)} name={visit.patient.name} />
                                         )
                                     }
                                 </div>

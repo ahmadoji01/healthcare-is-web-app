@@ -1,15 +1,9 @@
-import { Patient } from "@/modules/patients/domain/patient";
-import moment from "moment";
-import { patientsFakeData } from "@/modules/patients/infrastructure/patients.fakes";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Pagination } from "@mui/material";
-import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
-import { Medicine } from "../../domain/item";
-import Currency from "@/components/Currency";
 import MedicineCategory from "../../domain/medicine-category";
 
 interface MedicineCategoryListTableProps {

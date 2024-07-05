@@ -1,7 +1,7 @@
-import { OrderItem, orderItemCategory, orderItemName } from "../../domain/order-item";
+import { OrderItem } from "../../domain/order-item";
 import Currency from "@/components/Currency";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 interface OrderItemReviewProps {
   orderItems: OrderItem[]|undefined,
@@ -12,7 +12,7 @@ interface OrderItemReviewProps {
 const OrderItemReview = ({ orderItems, total = 0, examFee = 0 }:OrderItemReviewProps) => {
   const [fee, setFee] = useState(0);
 
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   useEffect( () => {
     setFee(examFee);

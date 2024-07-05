@@ -12,11 +12,12 @@ import { statusNotEqual } from "@/modules/visits/domain/visit.specifications";
 import { deleteAVisit, getTotalVisitsWithFilter, getVisitsWithFilter } from "@/modules/visits/domain/visits.actions";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import moment from "moment";
 import VisitView from "@/modules/visits/application/form/visit.view";
 import DeleteModal from "@/components/Modal/DeleteModal";
 import { dateRangeFilter } from "@/utils/generic-filters";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 const VisitsDashboardPage = () => {
 
@@ -24,19 +25,21 @@ const VisitsDashboardPage = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
+  const router = useRouter();
   const [activeVisit, setActiveVisit] = useState(defaultVisit);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [fromDate, setFromDate] = useState<Date|null>(null);
   const [toDate, setToDate] = useState<Date|null>(null);
+  const fields = ['id', 'date_updated', 'patient.name', 'doctor.name', 'doctor.specialization'];
 
   const [filter, setFilter] = useState<object>({ _and: [ statusNotEqual(VISIT_STATUS.inactive), statusNotEqual(VISIT_STATUS.active) ] })
 
   const fetchVisits = (newFilter:object) => {
     setDataLoaded(false);
-    getVisitsWithFilter(accessToken, newFilter, '-date_updated', 1)
+    getVisitsWithFilter(accessToken, newFilter, '-date_updated', 1, fields)
       .then( res => {
         let vits:Visit[] = [];
         res?.map( (visit) => { vits.push(visitMapper(visit)); });
@@ -54,7 +57,7 @@ const VisitsDashboardPage = () => {
 
   useEffect( () => {
     if (!dataLoaded && visits.length == 0) {
-      getVisitsWithFilter(accessToken, filter, '-date_updated', 1)
+      getVisitsWithFilter(accessToken, filter, '-date_updated', 1, fields)
         .then( res => {
           let vits:Visit[] = [];
           res?.map( (visit) => { vits.push(visitMapper(visit)); });
@@ -68,7 +71,7 @@ const VisitsDashboardPage = () => {
           setTotalPages(pages);
         })
     }
-  });
+  }, []);
 
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {
@@ -88,7 +91,7 @@ const VisitsDashboardPage = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setDataLoaded(false);
-    getVisitsWithFilter(accessToken, filter, '-date_updated', value)
+    getVisitsWithFilter(accessToken, filter, '-date_updated', value, fields)
       .then( res => {
         let vits:Visit[] = [];
         res?.map( (visit) => { vits.push(visitMapper(visit)); });

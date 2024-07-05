@@ -5,16 +5,16 @@ import { useUserContext } from "@/contexts/user-context";
 import { errorMapper } from "@/modules/errors/domains/error";
 import { errorMessage } from "@/modules/errors/domains/errors.specifications";
 import AdministrationForm from "@/modules/organizations/application/form/administration.form";
-import { Organization, defaultOrganization, organizationMapper, organizationPatcherMapper } from "@/modules/organizations/domain/organization";
-import { getOrganization, updateOrganization, uploadClinicLogo } from "@/modules/organizations/domain/organizations.actions";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Organization, organizationPatcherMapper } from "@/modules/organizations/domain/organization";
+import { updateOrganization, uploadClinicLogo } from "@/modules/organizations/domain/organizations.actions";
+import { useTranslations } from "next-intl";
+import { ChangeEvent } from "react";
 
 const AdministrationPage = () => {
 
     const {organization, setOrganization, accessToken} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const handleSubmit = (organization:Organization) => {
       let orgPatcher = organizationPatcherMapper(organization);

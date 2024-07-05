@@ -1,7 +1,7 @@
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
 
 interface RegisterFinishedProps {
     queueNumber: string,
@@ -9,7 +9,7 @@ interface RegisterFinishedProps {
 
 const RegisterFinished = ({ queueNumber }:RegisterFinishedProps) => {
     
-    const {t} = useTranslation();
+    const t = useTranslations();
     const router = useRouter();
     const params = useSearchParams();
 
@@ -17,7 +17,7 @@ const RegisterFinished = ({ queueNumber }:RegisterFinishedProps) => {
         if (params.has("from")) {
             router.push('/operational/front-desk/queue-manager');
         }
-    })
+    }, [params])
 
     return (
         <>

@@ -5,15 +5,15 @@ import { useAlertContext } from "@/contexts/alert-context";
 import { useUserContext } from "@/contexts/user-context";
 import { createACategory, getAllCategoriesWithFilter, searchCategories } from "@/modules/categories/domain/categories.actions";
 import { Category, categoryCreatorMapper, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
-import { medicineCategoriesFilter, treatmentCategoriesFilter } from "@/modules/categories/domain/category.specifications";
+import { treatmentCategoriesFilter } from "@/modules/categories/domain/category.specifications";
 import ItemForm from "@/modules/items/application/form/item.form";
 import { Item, defaultItem, itemCreatorMapper } from "@/modules/items/domain/item";
 import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { createAnItem, itemExistsChecker } from "@/modules/items/domain/items.actions";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const TreatmentCreatePage = () => {
   const [item, setItem] = useState(defaultItem);
@@ -22,7 +22,7 @@ const TreatmentCreatePage = () => {
   const [categoryName, setCategoryName] = useState("");
   const {accessToken, organization} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
   const router = useRouter();
 
   useEffect( () => {

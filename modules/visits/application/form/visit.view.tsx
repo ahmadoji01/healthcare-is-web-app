@@ -1,12 +1,8 @@
 'use client';
 
-import { useState } from "react";
-import moment from "moment";
-import SubmitButton from "@/components/Dashboard/Submit";
 import { Visit } from "../../domain/visit";
-import { VISIT_STATUS } from "../../domain/visit.constants";
-import { useTranslation } from "react-i18next";
 import { statusDisplay } from "../../domain/visit.specifications";
+import { useTranslations } from "next-intl";
 
 interface VisitViewProps {
     visit: Visit,
@@ -14,7 +10,7 @@ interface VisitViewProps {
 
 const VisitView = ({ visit }:VisitViewProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>

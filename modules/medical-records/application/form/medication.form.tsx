@@ -6,10 +6,10 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import WindowedSelect, { createFilter } from "react-windowed-select";
 import { MedicalRecordItem, MedicineDoses, defaultMedicineDoses } from "@/modules/medical-records/domain/medical-record";
 import MedicationList from "./medication.list";
-import { useTranslation } from "react-i18next";
 import { Item } from "@/modules/items/domain/item";
 import { defaultCategory } from "@/modules/categories/domain/category";
 import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
+import { useTranslations } from "next-intl";
 
 interface MedicationFormProps {
     medicines: Item[],
@@ -20,7 +20,7 @@ interface MedicationFormProps {
 const MedicationForm = ({ medicines, mrMedicines, setMRMedicines }:MedicationFormProps) => {
 
     const [medOptions, setMedOptions] = useState<SelectOption[]>([]);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     useEffect(() => {
         let options:SelectOption[] = [];

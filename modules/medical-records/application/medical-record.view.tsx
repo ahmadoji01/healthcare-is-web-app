@@ -1,7 +1,7 @@
 'use client';
 
+import { useTranslations } from "next-intl";
 import { MedicalRecord } from "../domain/medical-record";
-import { useTranslation } from "react-i18next";
 
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
@@ -9,7 +9,7 @@ interface MedicalRecordFormProps {
 
 const MedicalRecordView = ({ medicalRecord }:MedicalRecordFormProps) => {
 
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>
@@ -38,7 +38,7 @@ const MedicalRecordView = ({ medicalRecord }:MedicalRecordFormProps) => {
                                     <p className="text-black dark:text-white">
                                         <ul>
                                             { medicalRecord.illnesses?.map( (illness, key) => (
-                                                <li className="list-outside" style={ { listStyle: "disc" } }>
+                                                <li className="list-outside" style={ { listStyle: "disc" } } key={key}>
                                                     { illness.name }
                                                 </li>
                                             )) }
@@ -54,7 +54,7 @@ const MedicalRecordView = ({ medicalRecord }:MedicalRecordFormProps) => {
                                     <p className="text-black dark:text-white">
                                         <ul>
                                             { medicalRecord.items?.map( (item, key) => (
-                                                <li className="list-outside" style={ { listStyle: "disc" } }>
+                                                <li className="list-outside" style={ { listStyle: "disc" } } key={key}>
                                                     { item.items_id.name }
                                                 </li>
                                             )) }

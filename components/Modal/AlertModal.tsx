@@ -1,9 +1,9 @@
-import { ALERT_STATUS } from "@/constants/alert";
 import { Modal } from "@mui/material"
 import Link from "next/link";
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction } from "react"
 import { motion } from 'framer-motion';
 import AlertTitle from "../AlertTitle";
+import { useRouter } from "next/navigation";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -23,6 +23,8 @@ interface AlertModalProps {
 }
 
 const AlertModal = ({ message, alertStatus, action, open, setOpen }:AlertModalProps) => {
+
+    const router = useRouter();
 
     const handleClose = () => {
         if (action === 'refresh') {

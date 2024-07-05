@@ -12,8 +12,9 @@ import { Doctor, defaultDoctor, doctorMapper, doctorPatcherMapper } from "@/modu
 import { deleteADoctor, getAllDoctors, getTotalDoctors, getTotalSearchDoctors, searchDoctors, updateADoctor } from "@/modules/doctors/domain/doctors.actions";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 let activeTimeout = null;
 
@@ -28,7 +29,8 @@ const DoctorsDashboardPage = () => {
 
   const {accessToken} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
+  const router = useRouter();
 
   const fetchAllDoctors = () => {
     getAllDoctors(accessToken, 1)

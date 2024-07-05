@@ -17,6 +17,7 @@ import { createAnOrder } from "@/modules/orders/domain/order.actions";
 import { defaultVisit } from "@/modules/visits/domain/visit";
 import { ORDER_STATUS } from "@/modules/orders/domain/order.constants";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface SidebarItemProps {
     sidebarExpanded: Boolean,
@@ -31,7 +32,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
     const { orders, selectedOrder, setSelectedOrder, loadAnOrder } = useOrderSummaryContext();
     const {accessToken, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
-    const {t} = useTranslation();
+    const t = useTranslations();
     const router = useRouter();
 
     useEffect( () => {

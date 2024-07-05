@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from 'framer-motion';
 import Link from "next/link";
 import { useSpeech } from "react-text-to-speech";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -31,7 +31,7 @@ const QueueModal = ({ open, handleClose, children, title, queueNumber, patientNa
         pause,
         stop, 
     } = useSpeech({ text: "Nomor antrian " + queueNumber + ". Atas nama" + patientName, lang: "id-ID", rate: 0.3 });
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     const callPatient = () => {
         if (!isInQueue) {

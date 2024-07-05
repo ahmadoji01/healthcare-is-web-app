@@ -1,16 +1,12 @@
-import { Patient } from "@/modules/patients/domain/patient";
-import moment from "moment";
-import { patientsFakeData } from "@/modules/patients/infrastructure/patients.fakes";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, } from "react";
 import { Pagination } from "@mui/material";
-import { PageNav } from "@/components/Dashboard/PageNav/PageNav";
 import { Item, defaultItem } from "../../domain/item";
 import Currency from "@/components/Currency";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 interface ItemListTableProps {
   handleModal: (closeModal:boolean, whichModal:boolean) => void,
@@ -25,7 +21,7 @@ interface ItemListTableProps {
 
 const ItemListTable = ({ handleModal, showCategory=true, showStock=true, items, totalPages, handlePageChange, setActiveItem, handleQtyChange }: ItemListTableProps) => {
 
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   const handleChange = (action:string, item:Item, index:number, qty:number) => {
     handleQtyChange(action, item, index, qty);

@@ -1,6 +1,5 @@
 'use client';
 
-import Breadcrumb from "@/components/Dashboard/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
 import defaultAvatar from "@/public/images/avatar-256.jpg";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -8,20 +7,20 @@ import { useUserContext } from "@/contexts/user-context";
 import { imageHandler } from "@/utils/request-handler";
 import { updateUserMe, uploadAvatar } from "@/modules/users/domain/users.actions";
 import { useAlertContext } from "@/contexts/alert-context";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 const Profile = () => {
 
   const [avatar, setAvatar] = useState(defaultAvatar.src);
   const {accessToken, user, setUser} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
-  const {t} = useTranslation();
+  const t = useTranslations();
 
   useEffect(() => {
     if (user.avatar !== null) {
       setAvatar(imageHandler(user.avatar.id, user.avatar.filename_download));
     }
-  });
+  }, [user]);
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {

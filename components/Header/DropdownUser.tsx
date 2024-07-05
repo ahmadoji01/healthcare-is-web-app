@@ -5,9 +5,9 @@ import { useUserContext } from "@/contexts/user-context";
 import { directusClient, imageHandler } from "@/utils/request-handler";
 import defaultAvatar from "@/public/images/avatar-256.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import { UserMenuItem, userMenuItems } from "@/config/dashboard/menu";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 const DropdownUser = () => {
   const [avatar, setAvatar] = useState(defaultAvatar.src);
@@ -17,9 +17,10 @@ const DropdownUser = () => {
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
-  const { user } = useUserContext();
-  const {t} = useTranslation();
+  const { user, setAccessToken } = useUserContext();
+  const t = useTranslations();
   const items = userMenuItems;
+  const router = useRouter();
 
   useEffect(() => {
     let its:UserMenuItem[] = [];
@@ -43,7 +44,7 @@ const DropdownUser = () => {
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, []);
 
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
@@ -52,7 +53,7 @@ const DropdownUser = () => {
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
-  });
+  }, []);
 
   useEffect(() => {
     if (user.avatar !== null) {
@@ -62,6 +63,7 @@ const DropdownUser = () => {
 
   const handleSignOut = () => {
     directusClient.logout().then( () => {
+      setAccessToken('');
       window.location.href = '/';
     });
   }

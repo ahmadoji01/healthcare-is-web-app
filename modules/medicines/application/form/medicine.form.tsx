@@ -5,7 +5,7 @@ import { Medicine } from '../../domain/medicine';
 import { useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import MedicineCategory from '../../domain/medicine-category';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 interface MedicineFormProps {
     initMedicine: Medicine,
@@ -16,7 +16,7 @@ interface MedicineFormProps {
 
 const MedicineForm = ({ initMedicine, categories, handleSubmit, setCategoryName }:MedicineFormProps) => {
     const [medicine, setMedicine] = useState(initMedicine);
-    const {t} = useTranslation();
+    const t = useTranslations();
 
     return (
         <>
