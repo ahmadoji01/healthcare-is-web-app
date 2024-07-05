@@ -53,8 +53,7 @@ const PatientsList = () => {
                 if (visit.status !== VISIT_STATUS.to_be_examined)
                     return;
 
-                let newVisits = [...visits];
-                newVisits.push(visit);
+                let newVisits = [...visits, visit];
                 setVisits(newVisits);
                 playNotificationSound();
             }
