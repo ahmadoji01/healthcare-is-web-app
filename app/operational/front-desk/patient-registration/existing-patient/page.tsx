@@ -32,6 +32,7 @@ import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constan
 import { getADoctorOrg, updateDoctorOrgs } from "@/modules/doctors/domain/doctors.actions";
 import { defaultDoctorOrganization, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
 import { useTranslations } from "next-intl";
+import Spinner from "@/components/Spinner";
 
 const steps = ['search_your_data', 'doctor_to_visit', 'visit_status', 'review_input'];
 
@@ -70,6 +71,7 @@ const ExistingPatient = () => {
     };
 
     const handleSubmit = async () => {
+        setLoading(true);
         if (organization.status === ORG_STATUS.close) {
             openSnackbarNotification(t('alert_msg.clinic_is_close'), "error");
             return;
@@ -93,6 +95,12 @@ const ExistingPatient = () => {
             return;
         });
 
+        if (isError) {
+            openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            setLoading(false);
+            return;
+        }
+
         await updateDoctorOrgs(accessToken, [docOrg.id], { queue: parseInt(queueNum) })
             .catch( err => {
                 isError = true;
@@ -101,6 +109,7 @@ const ExistingPatient = () => {
 
         if (isError) {
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
+            setLoading(false);
             return;
         }
         
@@ -112,6 +121,7 @@ const ExistingPatient = () => {
         });
         
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -130,6 +140,7 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -149,6 +160,7 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
@@ -167,10 +179,12 @@ const ExistingPatient = () => {
         });
 
         if (isError) {
+            setLoading(false);
             openSnackbarNotification(t('alert_msg.server_error'), 'error');
             return;
         }
 
+        setLoading(false);
         openSnackbarNotification(t('alert_msg.success'), 'success');
         setActiveStep(activeStep + 1);
         return;
@@ -196,7 +210,7 @@ const ExistingPatient = () => {
                     { activeStep > 0 &&
                         <div className="flex justify-end mt-2 gap-x-2">
                             <div className="flex-1 space-x-2">
-                                {activeStep !== 0 && (
+                                {(activeStep !== 0 && !loading) && (
                                     <Link
                                         href="#"
                                         onClick={handleBack}
@@ -207,12 +221,14 @@ const ExistingPatient = () => {
                             </div>
                             <div className="flex-1">
                                 { activeStep === steps.length - 1 &&
-                                    <Link
-                                    href="#"
-                                    onClick={() => {handleSubmit();}}
-                                    className="flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
-                                        { t('submit_registration') }
-                                    </Link>
+                                    <>
+                                        { loading && <Spinner /> }
+                                        <button
+                                            onClick={() => {handleSubmit()}}
+                                            className="w-full flex flex-col items-center justify-center rounded-full bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 gap-4">
+                                            { t('submit_registration') }
+                                        </button>
+                                    </>
                                 }
                             </div>
                         </div>
