@@ -20,6 +20,7 @@ interface UserContextType {
     setFontSize: Dispatch<SetStateAction<string>>,
     setAccessToken: Dispatch<SetStateAction<string>>,
     setWSClient: Dispatch<SetStateAction<WebSocketClient<any>>>,
+    setLoading: Dispatch<SetStateAction<boolean>>,
     fetchOrganization: () => void,
 }
 
@@ -37,6 +38,7 @@ export const UserContext = createContext<UserContextType | null>({
     setFontSize: () => {},
     setAccessToken: () => {},
     setWSClient: () => {},
+    setLoading: () => {},
     fetchOrganization: () => {},
 });
  
@@ -202,7 +204,7 @@ export const UserProvider = ({
     }, [user.role_name])
 
     return (
-        <UserContext.Provider value={{ wsClient, setWSClient, accessToken, setAccessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
+        <UserContext.Provider value={{ wsClient, setWSClient, accessToken, setAccessToken, user, setUser, organization, setOrganization, loading, setLoading, fontSize, setFontSize, fetchOrganization }}>
             {children}
         </UserContext.Provider>
     );

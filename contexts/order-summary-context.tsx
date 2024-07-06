@@ -12,12 +12,10 @@ import { statusFilter } from '@/modules/orders/domain/order.specifications';
 import { ORDER_ITEM_TYPE, ORDER_STATUS } from '@/modules/orders/domain/order.constants';
 import { OrderItem, defaultOrderItem } from '@/modules/orders/domain/order-item';
 import { useAlertContext } from './alert-context';
-import { getADoctorOrg, getDoctorsInOrg } from '@/modules/doctors/domain/doctors.actions';
+import { getADoctorOrg } from '@/modules/doctors/domain/doctors.actions';
 import { defaultDoctorOrganization, doctorOrgMapper } from '@/modules/doctors/domain/doctor';
-import { WebSocketClient } from '@directus/sdk';
 import { subsOutputMapper } from '@/modules/websockets/domain/websocket';
 import { WS_EVENT_TYPE } from '@/modules/websockets/domain/websocket.constants';
-import { websocketClient } from '@/utils/request-handler';
 import { Item } from '@/modules/items/domain/item';
 import { updateAnItem } from '@/modules/items/domain/items.actions';
 import { useTranslations } from 'next-intl';
@@ -89,6 +87,7 @@ export const OrderSummaryProvider = ({
     const [examFee, setExamFee] = useState<number>(0);
     const [orderLoaded, setOrderLoaded] = useState(true);
     const [notifSound, setNotifSound] = useState<HTMLAudioElement>(new Audio(''));
+    const [ordersLoaded, setOrdersLoaded] = useState(false);
 
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -128,6 +127,7 @@ export const OrderSummaryProvider = ({
                 let ords:Order[] = [];
                 res?.map( (order) => { ords.push(orderMapper(order)) });
                 setOrders(ords);
+                setOrdersLoaded(true);
             })
     }, [user]);
 
@@ -258,11 +258,14 @@ export const OrderSummaryProvider = ({
     }
 
     useEffect( () => {
+        if (!ordersLoaded)
+            return;
+
         if (typeof(wsClient) === "undefined") 
             return;
         
         subsToOrder();
-    }, [orders]);
+    }, [ordersLoaded]);
 
     return (
         <OrderSummaryContext.Provider value={{ orderLoaded, examFee, deleteModalOpen, itemModalOpen, checkoutModalOpen, total, orders, selectedOrder, selectedItem, selectedPayment, cashReceived, loadAnOrder, setExamFee, handleModal, setCashReceived, setSelectedPayment, setTotal, setOrders, setSelectedOrder, setSelectedItem, confirmPayment }}>

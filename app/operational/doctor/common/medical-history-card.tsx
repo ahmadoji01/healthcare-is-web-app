@@ -15,16 +15,9 @@ const MedicalHistoryCard = ({ medicalRecord }:MedicalHistoryCardProps) => {
             <div className="relative flex cursor-move justify-between">
                 <div>
                     <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{ t('visit_date') }</h5>
-                    <p>{ moment(medicalRecord.date_updated).format("Do MMMM YYYY") }</p>
-                    { medicalRecord.medicines?.length > 0 && <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{ t('medicines') }:</h5> }
-                    <ul>
-                        { medicalRecord.medicines?.map( (medicine, key) => (
-                            <li key={key}>{medicine.medicine.name}</li>
-                        )) }
-                    </ul>
-                    { medicalRecord.treatments?.length > 0 && <h5 className="mb-1 text-lg font-medium text-black dark:text-white">{ t('treatments') }:</h5> }
+                    <p className="font-bold text-black dark:text-white">{ moment(medicalRecord.date_updated).format("Do MMMM YYYY") }</p>
                     <p className="mt-4 text-black dark:text-white">Diagnosis:</p>
-                    <ul>
+                    <ul className="font-bold text-black dark:text-white">
                         { medicalRecord.illnesses?.map( (illness, key) => (
                             <li key={key}>{illness.name}</li>
                         )) }

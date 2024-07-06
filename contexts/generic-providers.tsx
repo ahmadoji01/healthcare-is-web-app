@@ -13,13 +13,13 @@ export default function Providers({
   }) {
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
-        <UserProvider>
-            <DocumentProvider>
-                <AlertProvider>
-                    {children}
-                </AlertProvider>
-            </DocumentProvider>
-        </UserProvider>
+      <UserProvider>
+        <DocumentProvider>
+          <AlertProvider>
+            {children}
+          </AlertProvider>
+        </DocumentProvider>
+      </UserProvider>
     </LocalizationProvider>
   );
 }

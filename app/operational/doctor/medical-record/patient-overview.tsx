@@ -13,8 +13,8 @@ const PatientOverview = ({ medicalRecord, medicalHistories }:PatientOverviewProp
     const t = useTranslations();
 
     return (
-        <div className="flex flex-col md:flex-row">
-            <div className="w-full p-2 h-[calc(100vh-12rem)] overflow-y-scroll overscroll-contain">
+        <div className="flex flex-col md:flex-row overflow-y-scroll overscroll-contain">
+            <div className="w-full p-2 h-[calc(100vh-12rem)]">
                 <div className="w-full flex align-center justify-center mb-4">
                     <PatientAvatar name={medicalRecord.patient.name !== "" ? medicalRecord.patient.name : "Jedi Force"} />
                 </div>

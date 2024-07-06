@@ -11,8 +11,8 @@ export const getAllMedicalRecords = (token:string, page:number) => directusClien
 export const getAMedicalRecord = (token:string, id:number) => directusClient.request( withToken(token, readItem('medical_records', id, { fields: ['*.*.*'] })));
 export const deleteAMedicalRecord = (token:string, id:number) => directusClient.request( withToken(token, deleteItem('medical_records', id)));
 export const getTotalMedicalRecords = (token:string) => directusClient.request( withToken(token, aggregate('medical_records', { aggregate: { count: '*' } })) );
-export const getCompleteMedicalRecords = (token:string, patientId: number) => 
-	directusClient.request( withToken(token, readItems('medical_records', { fields: ['*.*'], sort: ['sort', '-date_updated'], 
+export const getCompleteMedicalRecords = (token:string, patientId: number, fields?:string[]) => 
+	directusClient.request( withToken(token, readItems('medical_records', { fields: fields? fields:['*.*'], sort: ['sort', '-date_updated'], 
 		filter: 
 			{ _and: 
 				[ 

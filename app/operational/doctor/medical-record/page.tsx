@@ -72,7 +72,7 @@ const MedicalRecords = () => {
     
     const {activeMRID, activeMedicalRecord, loading, setActiveMedicalRecord, setLoading} = useMedicalRecordContext();
     const {activeVisit} = useVisitContext();
-    const {organization, accessToken} = useUserContext();
+    const {organization, accessToken, user} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();  
     const t = useTranslations();
     const router = useRouter();
@@ -100,10 +100,12 @@ const MedicalRecords = () => {
           setOrder(order);
         }
       });
-    }, []);
+    }, [user]);
 
     useEffect(() => {
-      getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id).then( res => {
+      let fields = ['id', 'date_updated', 'illnesses'];
+      setLoading(true);
+      getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id, fields).then( res => {
         let mrs:MedicalRecord[] = [];
         res?.map( (mr) => { mrs.push(medicalRecordMapper(mr)); });
         setMedHistories(mrs);
@@ -165,7 +167,7 @@ const MedicalRecords = () => {
                 <PatientOverview medicalRecord={activeMedicalRecord} medicalHistories={medHistories} />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
-                <div className="flex flex-col md:flex-row mb-8">
+                <div className="flex flex-col md:flex-row mb-8 overflow-y-scroll overscroll-contain">
                   <div className="w-full p-2 mb-8">
                     <MedicalRecordForm treatments={treatments} medicalRecord={activeMedicalRecord} setMRTreatments={setMRTreatments} setMedicalRecord={setActiveMedicalRecord} />
                     <span className="mb-8" />
