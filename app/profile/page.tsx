@@ -40,10 +40,6 @@ const Profile = () => {
     }
 
     let editProfile = {};
-    
-    if (email !== "") {
-      
-    }
 
     if (password === "")
       editProfile = { email: email };
@@ -207,6 +203,7 @@ const Profile = () => {
                   </label>
                   <input
                     type="password"
+                    minLength={8}
                     defaultValue={password}
                     required
                     onChange={ e => setPassword(e.target.value)}
