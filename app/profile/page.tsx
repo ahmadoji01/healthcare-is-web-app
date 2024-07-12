@@ -5,7 +5,7 @@ import defaultAvatar from "@/public/images/avatar-256.jpg";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useUserContext } from "@/contexts/user-context";
 import { imageHandler } from "@/utils/request-handler";
-import { getAllUsers, updateUserMe, uploadAvatar } from "@/modules/users/domain/users.actions";
+import { updateUserMe, uploadAvatar } from "@/modules/users/domain/users.actions";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useTranslations } from "next-intl";
 import { errorMapper } from "@/modules/errors/domains/error";
@@ -17,7 +17,6 @@ const Profile = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
   const {accessToken, user, setUser} = useUserContext();
   const {openSnackbarNotification} = useAlertContext();
   const t = useTranslations();

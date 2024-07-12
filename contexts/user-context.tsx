@@ -50,6 +50,8 @@ export const UserProvider = ({
 
     const router = useRouter();
     const pathname = usePathname();
+    const userField = ['id', 'email', 'first_name', 'last_name', 'role.name', 'avatar.id', 'avatar.filename_download'];
+    const orgField = ['id', 'name', 'subscription_type', 'subscription_expiry', 'status', 'logo.id', 'logo.filename_download', 'tax_rate', 'satusehat_key', 'payment_methods.*'];
     const [accessToken, setAccessToken] = useState<string>("");
     const [expiry, setExpiry] = useState(50);
     const [user, setUser] = useState(defaultUser);
@@ -84,7 +86,7 @@ export const UserProvider = ({
             isError = true;
 
         if (!isError) {
-            await getUserMe(accessToken).then(res => {
+            await getUserMe(accessToken, userField).then(res => {
                 let usr = defaultUser;
                 usr = userMapper(res);
                 setUser(usr);
@@ -96,7 +98,7 @@ export const UserProvider = ({
                 return;
             });
 
-            getOrganization(accessToken, 1).then( res => {
+            getOrganization(accessToken, 1, orgField).then( res => {
                 if (res.length < 1) {
                     return;
                 }
@@ -122,7 +124,7 @@ export const UserProvider = ({
             let expiry = res.expires? res.expires : 0;
             setAccessToken(token);
             setExpiry(expiry);
-            getUserMe(token).then(res => {
+            getUserMe(token, userField).then(res => {
                 let usr = defaultUser;
                 usr = userMapper(res);
                 setUser(usr);
@@ -133,7 +135,7 @@ export const UserProvider = ({
                 return;
             });
             connectWS(token);
-            getOrganization(token, 1).then( res => {
+            getOrganization(token, 1, orgField).then( res => {
                 if (res.length < 1) {
                     return;
                 }
