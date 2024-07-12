@@ -175,6 +175,16 @@
     "this_months_data_not_available": "Data bulan ini belum tersedia",
     "dashboard_welcome": "Selamat datang di ",
     "date": "Tanggal",
+    "account_info": "Informasi Akun",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "confirm_password": "Konfirmasi Kata Sandi",
+    "input_email": "Masukkan Email",
+    "input_password": "Masukkan Kata Sandi",
+    "input_confirm_password": "Masukkan Kembali Kata Sandi",
+    "choose_role": "Pilih salah satu peran di bawah ini",
+    "password_not_the_same": "Kata sandi tidak sama",
+    "leave_password_blank": "*Kosongkan kata sandi apabila tidak ingin dirubah",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
@@ -242,7 +252,8 @@
         "clinic_is_close": "Klinik saat ini tutup. Harap tunggu sampai buka!",
         "add_item_first": "Tambahkan minimal satu item dulu untuk menyelesaikan pesanan ini!",
         "choose_date_first": "Pilih rentang tanggal pemesanan dulu!",
-        "wrong_credentials": "Email/kata sandi yang Anda masukkan salah"
+        "wrong_credentials": "Email/kata sandi yang Anda masukkan salah",
+        "email_exists": "Email ini sudah digunakan"
     },
     "menu": {
         "patient_header": "PASIEN",

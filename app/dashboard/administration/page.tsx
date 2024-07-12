@@ -53,7 +53,7 @@ const AdministrationPage = () => {
 
     return (
         <>
-            <AdministrationForm initOrg={organization} handleSubmit={handleSubmit} handleFileChange={handleFileChange} />
+          <AdministrationForm initOrg={organization} handleSubmit={handleSubmit} handleFileChange={handleFileChange} />
         </>
     )
 

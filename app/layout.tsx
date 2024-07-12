@@ -1,7 +1,6 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import "@/styles/satoshi.css";
-import {AbstractIntlMessages, NextIntlClientProvider} from 'next-intl';
 import {getLocale, getMessages} from 'next-intl/server';
 import Providers from '@/contexts/generic-providers';
 import NextIntlWrapper from '@/contexts/next-intl-wrapper';
