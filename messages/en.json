@@ -289,7 +289,9 @@
         "queue_manager": "Queue Manager",
         "queue_display": "Queue Display",
         "patients_list": "Patients List",
-        "subscription": "Subscription"
+        "subscription": "Subscription",
+        "privacy_policy": "Privacy Policy",
+        "terms_and_conditions": "Terms and Conditions"
     },
 
     "visits_status": {

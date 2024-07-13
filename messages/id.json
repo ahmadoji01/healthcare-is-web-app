@@ -283,7 +283,9 @@
         "queue_manager": "Pengelola Antrian",
         "queue_display": "Tampilan Antrian",
         "patients_list": "Daftar Pasien",
-        "subscription": "Langganan"
+        "subscription": "Langganan",
+        "privacy_policy": "Kebijakan Privasi Data",
+        "terms_and_conditions": "Syarat dan Ketentuan"
     },
 
     "visits_status": {

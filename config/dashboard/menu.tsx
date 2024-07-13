@@ -1,6 +1,6 @@
 import { ROLES } from "@/modules/users/domain/users.constants";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faCashRegister, faClinicMedical, faClipboard, faClock, faCreditCard, faDashboard, faFileImport, faFileMedical, faHospitalUser, faLinesLeaning, faNewspaper, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faSyringe, faTimes, faUser, faUserDoctor, faUserInjured, faUsers, faUsersBetweenLines } from "@fortawesome/free-solid-svg-icons";
+import { faCashRegister, faClinicMedical, faClipboard, faClock, faCreditCard, faDashboard, faFileImport, faFileMedical, faHospitalUser, faLinesLeaning, faNewspaper, faNoteSticky, faPerson, faPills, faPrescription, faPrescriptionBottle, faScaleBalanced, faSyringe, faTimes, faUser, faUserDoctor, faUserInjured, faUserLock, faUsers, faUsersBetweenLines } from "@fortawesome/free-solid-svg-icons";
 
 interface SubMenuItem {
     title: string,
@@ -168,6 +168,20 @@ export const sidebarMenuItems: MenuGroup[] = [
                 allowedRole: [ROLES.administrator, ROLES.staff],
                 icon: faPrescriptionBottle,
                 url: "bpjs-settings",
+                subMenu: [],
+            },
+            {
+                title: "menu.privacy_policy",
+                allowedRole: [ROLES.administrator, ROLES.staff],
+                icon: faUserLock,
+                url: "../info/privacy-policy",
+                subMenu: [],
+            },
+            {
+                title: "menu.terms_and_conditions",
+                allowedRole: [ROLES.administrator, ROLES.staff],
+                icon: faScaleBalanced,
+                url: "../info/terms-and-conditions",
                 subMenu: [],
             },
         ],

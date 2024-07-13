@@ -1,7 +1,11 @@
 const PrivacyPolicy = () => {
 
     return (
-        <div className="text-black dark:text-white bg-white dark:bg-bg-boxdark p-6">
+        <>
+        <h2 className="text-title-md2 font-semibold text-black dark:text-white mb-6">
+            Kebijakan Privasi
+        </h2>
+        <div className="text-black shadow-default dark:text-white bg-white dark:bg-bg-boxdark p-6">
             <p className="mb-4">Selamat datang di laman aplikasi web Fourstake, 
                 yang berfungsi untuk manajemen usaha di bidang pelayanan kesehatan. Kami sangat menghargai privasi dan keamanan data pribadi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda sesuai dengan Peraturan Menteri Komunikasi dan Informatika Republik Indonesia No. 20 Tahun 2016 tentang Perlindungan Data Pribadi dalam Sistem Elektronik.</p>
             <h4 className="font-extrabold text-xl mb-2">Data Pribadi yang Kami Kumpulkan</h4>
@@ -43,6 +47,7 @@ const PrivacyPolicy = () => {
             <p><strong>Alamat:</strong> Jl. Raya Cibeber No. 12, Cianjur<br /><strong>Email:</strong> <a href="mailto:cs@fourstake.com">cs@fourstake.com</a><br /><strong>Telepon:</strong>+62 812 8793 5234</p>
             <p>Terima kasih telah mempercayakan data pribadi Anda kepada kami. Kami berkomitmen untuk melindungi privasi dan keamanan data Anda sebaik mungkin.</p>
         </div>
+        </>
     )
 }
 

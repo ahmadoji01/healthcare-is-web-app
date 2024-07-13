@@ -1,7 +1,11 @@
 const TermsAndConditions = () => {
 
-    return (
-        <div className="text-black dark:text-white bg-white dark:bg-bg-boxdark p-6">
+    return ( 
+        <>
+        <h2 className="text-title-md2 font-semibold text-black dark:text-white mb-6">
+            Syarat dan Ketentuan Penggunaan Aplikasi
+        </h2>
+        <div className="text-black shadow-default dark:text-white bg-white dark:bg-bg-boxdark p-6">
             <p className="mb-4">Selamat datang di Fourstake, aplikasi web yang dirancang khusus untuk penyedia layanan kesehatan dengan berbagai fitur manajemen organisasi. Dengan menggunakan aplikasi Fourstake, Anda setuju untuk mematuhi dan terikat oleh Syarat dan Ketentuan berikut. Jika Anda tidak setuju dengan Syarat dan Ketentuan ini, harap jangan menggunakan aplikasi ini.</p>
             <h4 className="font-extrabold text-xl mb-2">Definisi</h4>
             <ol className="mb-4">
@@ -62,6 +66,7 @@ const TermsAndConditions = () => {
             <h4 className="font-extrabold text-xl mb-2">Penutup</h4>
             <p>Dengan menggunakan Fourstake, Anda menyetujui Syarat dan Ketentuan ini dan berkomitmen untuk mematuhi semua aturan dan regulasi yang berlaku. Terima kasih telah memilih Fourstake sebagai solusi manajemen layanan kesehatan Anda.</p>
         </div>
+        </>
     )
 }
 
