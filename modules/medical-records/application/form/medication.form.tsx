@@ -14,13 +14,20 @@ import { useTranslations } from "next-intl";
 interface MedicationFormProps {
     medicines: Item[],
     mrMedicines: MedicalRecordItem[],
-    setMRMedicines: Dispatch<SetStateAction<MedicalRecordItem[]>> 
+    medLoading?: boolean,
+    setMRMedicines: Dispatch<SetStateAction<MedicalRecordItem[]>>,
+    handleMedChange: (query:string) => void,
 }
 
-const MedicationForm = ({ medicines, mrMedicines, setMRMedicines }:MedicationFormProps) => {
+const MedicationForm = ({ medicines, mrMedicines, medLoading, setMRMedicines, handleMedChange }:MedicationFormProps) => {
 
     const [medOptions, setMedOptions] = useState<SelectOption[]>([]);
+    const [loading, setLoading] = useState(false);
     const t = useTranslations();
+
+    useEffect(() => {
+        setLoading(medLoading);
+    }, [medLoading])
 
     useEffect(() => {
         let options:SelectOption[] = [];
@@ -65,6 +72,8 @@ const MedicationForm = ({ medicines, mrMedicines, setMRMedicines }:MedicationFor
                                         windowThreshold={5}
                                         isSearchable={true}
                                         options={medOptions}
+                                        isLoading={loading}
+                                        onInputChange={e => handleMedChange(e)}
                                         onChange={choices => handleChange(choices)}
                                         className="text-black dark:text-white custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         classNamePrefix="select" />

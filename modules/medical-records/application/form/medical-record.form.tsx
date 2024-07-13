@@ -15,13 +15,16 @@ import { useTranslations } from "next-intl";
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
     treatments: Item[],
+    treatLoading: boolean,
     setMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>,
     setMRTreatments: Dispatch<SetStateAction<MedicalRecordItem[]>>,
+    handleTreatChange: (query:string) => void,
 }
 
-const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRTreatments }:MedicalRecordFormProps) => {
+const MedicalRecordForm = ({ treatments, medicalRecord, treatLoading, setMedicalRecord, setMRTreatments, handleTreatChange }:MedicalRecordFormProps) => {
     
     const [treatOptions, setTreatOptions] = useState<SelectOption[]>([]);
+    const [loading, setLoading] = useState(false);
     const t = useTranslations();
     const [illnesses, setIllnesses] = useState(Illnesses);
 
@@ -33,7 +36,11 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
 
     useEffect(() => {
         setIllnesses(dataID);
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        setLoading(treatLoading);
+    }, [treatLoading])
 
     const treatmentsMapper = (choices: SelectOption[]) => {
         let items:MedicalRecordItem[] = [];
@@ -103,6 +110,8 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                         isMulti
                                         isSearchable={true}
                                         defaultValue={[]}
+                                        isLoading={loading}
+                                        onInputChange={e => handleTreatChange(e)}
                                         onChange={choices => treatmentsMapper(choices)}
                                         name="treatments"
                                         filterOption={createFilter({ ignoreAccents: false })}
