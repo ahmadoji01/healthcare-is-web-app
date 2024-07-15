@@ -1,5 +1,6 @@
 import { Item } from "@/modules/items/domain/item"
 import { MAIN_CATEGORY } from "./category.constants"
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants"
 
 export function nameEquals(name:string) {
     return  { "name": { _eq: name } } 
@@ -20,7 +21,7 @@ export function superNameEquals(name:string) {
 export const medicineCategoriesFilter = {
     _or: [
         {
-            "super_parent": { "name": { _eq: "Medicines" } }
+            "type": { _eq: ITEM_TYPE.medicine }
         },
         {
             "name": { _eq: "Medicines" } 
@@ -31,7 +32,7 @@ export const medicineCategoriesFilter = {
 export const treatmentCategoriesFilter = {
     _or: [
         {
-            "super_parent": { "name": { _eq: "Treatments" } }
+            "type": { _eq: ITEM_TYPE.treatment }
         },
         {
             "name": { _eq: "Treatments" } 

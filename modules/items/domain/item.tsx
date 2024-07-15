@@ -38,8 +38,8 @@ export function itemMapper(res:Record<string,any>) {
     return item;
 }
 
-export type ItemCreator = Omit<Item, 'id'|'category'> & { category:number, organization: number };
-export function itemCreatorMapper(item:Item, catID:number, orgID:number) {
+export type ItemCreator = Omit<Item, 'id'|'category'> & { category:string, organization: number };
+export function itemCreatorMapper(item:Item, catID:string, orgID:number) {
 
     let itemCreator: ItemCreator = { 
         name: item.name, 
@@ -54,7 +54,7 @@ export function itemCreatorMapper(item:Item, catID:number, orgID:number) {
     return itemCreator;
 }
 
-export type ItemPatcher = Omit<Item, 'id'|'category'> & { category:number };
+export type ItemPatcher = Omit<Item, 'id'|'category'> & { category:string };
 export function itemPatcherMapper(item:Item) {
     let itemPatcher:ItemPatcher = {
         name: item.name, 

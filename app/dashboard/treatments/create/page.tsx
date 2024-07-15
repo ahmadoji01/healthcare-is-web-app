@@ -59,9 +59,7 @@ const TreatmentCreatePage = () => {
     let cats = categories.find(c => c.name === categoryName);
     let cat = defaultCategory;
     cat.name = categoryName;
-    cat.children = [];
-    cat.parent = superParent;
-    cat.super_parent = superParent;
+    cat.type = ITEM_TYPE.treatment;
     if (typeof(cats) === 'undefined') {
       await createACategory(accessToken, categoryCreatorMapper(cat, organization.id)).then( res => {
         cat = categoryMapper(res);
