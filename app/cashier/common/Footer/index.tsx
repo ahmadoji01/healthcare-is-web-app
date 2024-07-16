@@ -7,6 +7,7 @@ import { useState } from "react";
 import Currency from "@/components/Currency";
 import { useAlertContext } from "@/contexts/alert-context";
 import { useTranslations } from "next-intl";
+import { DOCTOR_PAID } from "@/modules/orders/domain/order.constants";
 
 const Footer = () => {
 
@@ -21,7 +22,7 @@ const Footer = () => {
             openSnackbarNotification(t("alert_msg.no_order_selected"), "error");
             return;
         }
-        if (selectedOrder.order_items.length <= 0) {
+        if (selectedOrder.order_items.length <= 0 && selectedOrder.doctor_paid !== DOCTOR_PAID.unpaid) {
             openSnackbarNotification("Add an item first to check this order out!", "error");
             return;
         }

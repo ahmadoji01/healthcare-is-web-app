@@ -44,7 +44,7 @@ const OrderSummary = () => {
             return;
         }
 
-        if (selectedOrder.visit.id === 0) {
+        if (selectedOrder.visit.id === "") {
             setMedicalRecord(defaultMedicalRecord);
             return;
         }
@@ -144,7 +144,7 @@ const OrderSummary = () => {
                             <OrderTotals />
                         </div>
                     </div>
-                    { medicalRecord.id !== 0 && 
+                    { medicalRecord.id !== "" && 
                         <div>
                             <button 
                                 className="top-0 z-50 mt-2 mb-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray"

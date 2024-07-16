@@ -4,7 +4,7 @@ import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit"
 import { DOCTOR_PAID, ORDER_STATUS } from "./order.constants";
 
 export interface Order {
-    id: number,
+    id: string,
     patient: Patient|null,
     order_items: OrderItem[],
     total: number,
@@ -16,7 +16,7 @@ export interface Order {
 }
 
 export const defaultOrder: Order = {
-    id: 0,
+    id: "",
     patient: defaultPatient,
     order_items: [],
     total: 0,
@@ -30,7 +30,7 @@ export const defaultOrder: Order = {
 export function orderMapper(res:Record<string,any>) {
     let order = defaultOrder;
     order = { 
-        id: res.id, 
+        id: res.id? res.id:"", 
         patient: res.patient? patientMapper(res.patient):defaultPatient,
         order_items: res.order_items? orderItemsMapper(res.order_items):[],
         total: res.total? res.total:0,
@@ -47,8 +47,8 @@ type Organization = {
     organization: number,
 }
 
-export type OrderCreator = Omit<Order, 'id'|'patient'|'visit'|'date_created'|'date_updated'> & Organization & { patient:number|null, visit: number|null };
-export function orderCreatorMapper(order:Order, visitID:number|null, orgID:number) {
+export type OrderCreator = Omit<Order, 'id'|'patient'|'visit'|'date_created'|'date_updated'> & Organization & { patient:string|null, visit: string|null };
+export function orderCreatorMapper(order:Order, visitID:string|null, orgID:number) {
 
     let orderCreator: OrderCreator = { 
         patient: order.patient ? order.patient.id : null,
@@ -62,14 +62,14 @@ export function orderCreatorMapper(order:Order, visitID:number|null, orgID:numbe
     return orderCreator;
 }
 
-export type OrderPatcher = Omit<Order, 'id'|'patient'|'visit'|'order_items'|'date_created'|'date_updated'> & Organization & { order_items: OrderItemCreator[], patient:number|null, visit:number|null };
+export type OrderPatcher = Omit<Order, 'id'|'patient'|'visit'|'order_items'|'date_created'|'date_updated'> & Organization & { order_items: OrderItemCreator[], patient:string|null, visit:string|null };
 export function orderPatcherMapper(order:Order, orgID:number) {
 
     let items:OrderItemPatcher[] = [];
     order.order_items?.map( (item) => items.push(orderItemPatcherMapper(item, orgID)));
 
-    let visitID:number|null = null;
-    if (order.visit.id !== 0) {
+    let visitID:string|null = null;
+    if (order.visit.id !== "") {
         visitID = order.visit.id;
     }
 
@@ -105,7 +105,7 @@ export interface ItemQuantitySold {
 
 export function itemQuantitySoldMapper(res:Record<string,any>) {
     let result:ItemQuantitySold = {
-        item: res.item? parseInt(res.item) : -1,
+        item: res.item? res.item : "",
         quantity: res.sum?.quantity? res.sum.quantity : 0,
     }
     return result;

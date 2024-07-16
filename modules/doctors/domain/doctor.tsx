@@ -2,7 +2,7 @@ import { Organization, defaultOrganization, organizationMapper } from "@/modules
 import { DOCTOR_STATUS } from "./doctor.constants";
 
 export interface Doctor {
-    id: number,
+    id: string,
     name: string,
     birthday: Date,
     gender: string,
@@ -14,7 +14,7 @@ export interface Doctor {
 }
 
 export const defaultDoctor: Doctor = {
-    id: 0,
+    id: "",
     name: "",
     birthday: new Date,
     gender: "",

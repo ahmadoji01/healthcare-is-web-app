@@ -18,7 +18,7 @@ export const getVisitByDoctorID = (token:string, doctorID = 0) =>
 		})) 
 	)
 
-export const getTotalQueueByDoctorID = (token:string, doctorID = 0) => 
+export const getTotalQueueByDoctorID = (token:string, doctorID = "") => 
 	directusClient.request( 
 		withToken(token, readItems('visits', {
 			filter: {
@@ -49,9 +49,9 @@ export const getTotalVisitsWithFilter = (token:string, filter:object) =>
 		withToken(token, aggregate('visits', { aggregate: { count: '*' }, query: { filter: filter } })) 
 	)
 
-export const getAVisit = (token:string, id:number) => directusClient.request( withToken(token, readItem('visits', id, { fields: ['*.*.*'] })));
-export const updateVisit = (token:string, id:number, data:object) => directusClient.request( withToken(token, updateItem('visits', id, data)));
-export const deleteAVisit = (token:string, id:number) => directusClient.request( withToken(token, deleteItem('visits', id)));
+export const getAVisit = (token:string, id:string) => directusClient.request( withToken(token, readItem('visits', id, { fields: ['*.*.*'] })));
+export const updateVisit = (token:string, id:string, data:object) => directusClient.request( withToken(token, updateItem('visits', id, data)));
+export const deleteAVisit = (token:string, id:string) => directusClient.request( withToken(token, deleteItem('visits', id)));
 
 export const getVisitByCount = (token:string, filter:object, groupBy:string) => 
 	directusClient.request( withToken(token, aggregate('visits', { aggregate: { count: '*' }, groupBy: [groupBy], query: { filter: filter, limit: 5, sort: ['-count'] } }  )) )

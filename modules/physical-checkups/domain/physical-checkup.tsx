@@ -3,7 +3,7 @@ import { HeadToToeCheckup, defaultHeadToToeCheckup } from "./head-to-toe-checkup
 import { PastMedicalConcern, defaultPastMedicalConcern } from "./past-medical-concern";
 
 export interface PhysicalCheckup {
-    id: number,
+    id: string,
     past_medical_concern: PastMedicalConcern,
     head_to_toe_checkup: HeadToToeCheckup,
     height: number,
@@ -17,7 +17,7 @@ export interface PhysicalCheckup {
 }
 
 export const defaultPhysicalCheckup: PhysicalCheckup = {
-    id: 0,
+    id: "",
     past_medical_concern: defaultPastMedicalConcern,
     head_to_toe_checkup: defaultHeadToToeCheckup,
     height: 0,
@@ -50,11 +50,11 @@ export function physicalCheckupMapper(res:Record<string,any>) {
 
 type ForeignKeys = {
     organization: number,
-    patient: number,
+    patient: string,
 }
 
 export type PhysicalCheckupNoID = Omit<PhysicalCheckup, 'id' | 'patient'> & ForeignKeys;
-export function physicalCheckupNoIDMapper(checkup:PhysicalCheckup, orgID:number, patientID:number) {
+export function physicalCheckupNoIDMapper(checkup:PhysicalCheckup, orgID:number, patientID:string) {
 
     let physicalCheckupNoID: PhysicalCheckupNoID = { 
         past_medical_concern: checkup.past_medical_concern,

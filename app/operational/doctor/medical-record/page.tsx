@@ -196,9 +196,9 @@ const MedicalRecords = () => {
 
     return (
       <form onSubmit={e => { e.preventDefault(); handleSubmit() } }>
-        <div className="w-full min-h-screen">
+        <div className="w-full min-h-screen overflow-y-scroll overscroll-contain">
           { loading && <Spinner /> }
-          { (activeMedicalRecord.id !== 0 && !loading) &&
+          { (activeMedicalRecord.id !== "" && !loading) &&
             <>
               <Box>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
@@ -210,7 +210,7 @@ const MedicalRecords = () => {
                 <PatientOverview medicalRecord={activeMedicalRecord} medicalHistories={medHistories} />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
-                <div className="flex flex-col md:flex-row mb-8 overflow-y-scroll overscroll-contain">
+                <div className="flex flex-col md:flex-row mb-8">
                   <div className="w-full p-2 mb-8">
                     <MedicalRecordForm treatments={treatments} medicalRecord={activeMedicalRecord} setMRTreatments={setMRTreatments} setMedicalRecord={setActiveMedicalRecord} handleTreatChange={handleTreatChange} treatLoading={treatLoading} />
                     <span className="mb-8" />

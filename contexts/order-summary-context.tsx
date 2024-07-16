@@ -132,6 +132,9 @@ export const OrderSummaryProvider = ({
     }, [user]);
 
     useEffect( () => {
+        if (typeof(selectedOrder) === 'undefined')
+            return;
+
         getADoctorOrg(accessToken, { _and: [ { doctors_id: { _eq: selectedOrder?.visit.doctor.id } }, { organizations_id: { _eq: organization.id } } ] })
         .then( res => {
             let doctorOrg = defaultDoctorOrganization;
@@ -140,7 +143,7 @@ export const OrderSummaryProvider = ({
             setExamFee(doctorOrg.examination_fee);
         });
 
-        if (selectedOrder?.visit.id === 0)
+        if (selectedOrder?.visit.id === "")
             setExamFee(0);
 
         let meds:Item[] = [];
@@ -177,7 +180,8 @@ export const OrderSummaryProvider = ({
         let orderPatcher = orderPatcherMapper(selectedOrder, organization.id)
         orderPatcher.status = ORDER_STATUS.paid;
         orderPatcher.total = total;
-        updateOrder(accessToken, selectedOrder.id, orderPatcher).catch( () => {
+        updateOrder(accessToken, selectedOrder.id, orderPatcher).catch( err => {
+            console.log(err);
             isError = true;
             return;
         });

@@ -21,9 +21,9 @@ export const doctorExistChecker = (token:string, licenseNumber = '') =>
     
 export const createADoctor = (token:string, doctor:DoctorNoID) => 
 	directusClient.request( withToken(token, createItem('doctors', doctor)) );
-export const updateADoctor = (token:string, id:number, data:object) =>
+export const updateADoctor = (token:string, id:string, data:object) =>
 	directusClient.request( withToken(token, updateItem('doctors', id, data)) );
-export const deleteADoctor = (token:string, id:number) =>
+export const deleteADoctor = (token:string, id:string) =>
 	directusClient.request( withToken(token, deleteItem('doctors', id)) );
 
 export const getDoctorsInOrg = (token:string) => directusClient.request( withToken(token, readItems('doctors_organizations', { fields: ['*.*'] })) );
@@ -32,7 +32,9 @@ export const getPresentDoctors = (token:string, fields?:string[]) =>
 	directusClient.request( withToken(token, readItems('doctors_organizations', 
 		{ fields: fields? fields:['*.*'], filter: { status: { _eq: "present" } } 
 	})) )
-export const updateDoctorOrgs = (token:string, ids:number[], data:object) =>
+export const updateADoctorOrg = (token:string, id:number, data:object) => 
+	directusClient.request( withToken(token, updateItem('doctors_organizations', id, data)) );
+export const updateDoctorOrgs = (token:string, ids:string[], data:object) =>
 	directusClient.request( withToken(token, updateItems('doctors_organizations', ids, data)) );
 
 export const searchDoctors = (token:string, query:string, page:number) => directusClient.request( withToken(token, readItems('doctors', { fields: ['*.*'], search: query, limit: LIMIT_PER_PAGE, page })));

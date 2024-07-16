@@ -185,6 +185,8 @@
     "choose_role": "Choose One of the Roles Below",
     "password_not_the_same": "Confirmation password is not the same",
     "leave_password_blank": "*Leave password blank to keep it as it is",
+    "exam_fee": "Tarif pemeriksaan",
+    "input_exam_fee": "Masukkan tarif pemeriksaan dokter",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",

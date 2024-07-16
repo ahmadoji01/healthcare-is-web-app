@@ -30,17 +30,14 @@ export interface MedicalRecordItem {
 }
 
 export interface MedicalRecord {
-    id: number,
+    id: string,
     code: string,
     patient: Patient,
     doctor: Doctor,
     anamnesis: string,
     care_type: string,
-    signature: Signature|null,
     death: boolean,
     illnesses: Illness[],
-    medicines: MedicineDoses[],
-    treatments: Treatment[],
     items: MedicalRecordItem[],
     physical_checkup: PhysicalCheckup,
     date_created: Date,
@@ -54,17 +51,14 @@ export const defaultMedicineDoses: MedicineDoses = {
 }
 
 export const defaultMedicalRecord: MedicalRecord = {
-    id: 0,
+    id: "",
     code: "",
     patient: defaultPatient,
     doctor: defaultDoctor,
     anamnesis: "",
     care_type: "",
-    signature: null,
     death: false,
     illnesses: [],
-    medicines: [],
-    treatments: [],
     items: [],
     physical_checkup: defaultPhysicalCheckup,
     date_created: new Date,
@@ -87,11 +81,8 @@ export function medicalRecordMapper(res:Record<string,any>) {
         doctor: res.doctor,
         anamnesis: res.anamnesis,
         care_type: res.care_type,
-        signature: res.signature,
         death: res.death,
         illnesses: res.illnesses,
-        medicines: mrMedicinesMapper(res.medicines),
-        treatments: mrTreatmentsMapper(res.treatments),
         items: mrItemsMapper(res.items),
         physical_checkup: res.physical_checkup,
         date_created: res.date_created,
@@ -165,11 +156,8 @@ export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, items:MRIte
         doctor: medicalRecord.doctor,
         anamnesis: medicalRecord.anamnesis,
         care_type: medicalRecord.care_type,
-        signature: medicalRecord.signature,
         death: medicalRecord.death,
         illnesses: medicalRecord.illnesses,
-        medicines: medicalRecord.medicines,
-        treatments: medicalRecord.treatments,
         items: items,
         physical_checkup: medicalRecord.physical_checkup,
         date_created: medicalRecord.date_created,
@@ -179,7 +167,7 @@ export function medicalRecordNoIDMapper(medicalRecord:MedicalRecord, items:MRIte
     return medicalRecordNoID;
 }
 
-export type MedicalRecordCreator = Omit<MedicalRecord, 'id'|'items'|'patient'|'doctor'|'physical_checkup'> & { patient:number, items: MRItemCreator[], doctor:number, physical_checkup:number } & Organization;
+export type MedicalRecordCreator = Omit<MedicalRecord, 'id'|'items'|'patient'|'doctor'|'physical_checkup'> & { patient:string, items: MRItemCreator[], doctor:string, physical_checkup:string } & Organization;
 export function medicalRecordCreatorMapper(medicalRecord:MedicalRecord, items:MRItemCreator[], orgID:number) {
 
     let medicalRecordNoID: MedicalRecordCreator = { 
@@ -188,11 +176,8 @@ export function medicalRecordCreatorMapper(medicalRecord:MedicalRecord, items:MR
         doctor: medicalRecord.doctor.id,
         anamnesis: medicalRecord.anamnesis,
         care_type: medicalRecord.care_type,
-        signature: medicalRecord.signature,
         death: medicalRecord.death,
         illnesses: medicalRecord.illnesses,
-        medicines: medicalRecord.medicines,
-        treatments: medicalRecord.treatments,
         items: items,
         physical_checkup: medicalRecord.physical_checkup.id,
         date_created: medicalRecord.date_created,
@@ -242,7 +227,6 @@ export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, items: M
         code: medicalRecord.code,
         anamnesis: medicalRecord.anamnesis,
         care_type: medicalRecord.care_type,
-        signature: medicalRecord.signature,
         death: medicalRecord.death,
         illnesses: illnesses,
         items: items,

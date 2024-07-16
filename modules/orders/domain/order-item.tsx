@@ -4,7 +4,7 @@ import { MedicalRecordItem, MedicineDoses } from "@/modules/medical-records/doma
 import { Item, defaultItem, itemMapper } from "@/modules/items/domain/item";
 
 export interface OrderItem {
-    id: number,
+    id: string,
     item: Item,
     name: string,
     description: string,
@@ -15,7 +15,7 @@ export interface OrderItem {
 }
 
 export const defaultOrderItem:OrderItem = {
-  id: 0,
+  id: "",
   item: defaultItem,
   name: "",
   description: "",

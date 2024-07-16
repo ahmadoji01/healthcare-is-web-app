@@ -73,7 +73,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, treatLoading, setMedical
                                 <label className="mb-3 block text-black dark:text-white">
                                     { t('anamnesis') }
                                 </label>
-                                <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
+                                <div className="relative bg-white dark:bg-form-input" style={{zIndex: 100, borderWidth: 0}}>
                                 <textarea
                                     defaultValue={medicalRecord.anamnesis}
                                     onChange={e => setMedicalRecord({ ...medicalRecord, anamnesis: e.target.value })}
@@ -87,7 +87,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, treatLoading, setMedical
                                 <label className="mb-3 block text-black dark:text-white">
                                     { t('illnesses') }
                                 </label>
-                                <div className="relative bg-white dark:bg-form-input" style={{zIndex: 999999999, borderWidth: 0}}>
+                                <div className="relative bg-white dark:bg-form-input" style={{zIndex: 100, borderWidth: 0}}>
                                     <WindowedSelect
                                         isMulti
                                         isSearchable={true}
