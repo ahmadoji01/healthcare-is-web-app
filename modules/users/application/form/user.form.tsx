@@ -57,7 +57,7 @@ const UserForm = ({ initUser, initRoles, initRole = "", handleSubmit }:UserFormP
                         <div className="flex flex-col gap-5.5 p-6.5">
                             <div>
                                 <label className="mb-3 block text-black dark:text-white">
-                                    Email
+                                    {t('email')}
                                 </label>
                                 <input
                                     onChange={ e => setUser({ ...user, email: e.target.value })}
@@ -68,7 +68,7 @@ const UserForm = ({ initUser, initRoles, initRole = "", handleSubmit }:UserFormP
                             </div>
                             <div>
                                 <label className="mb-3 block text-black dark:text-white">
-                                    Password
+                                    {t('password')}
                                 </label>
                                 <input
                                     onChange={ e => setUser({ ...user, password: e.target.value })}
@@ -80,14 +80,14 @@ const UserForm = ({ initUser, initRoles, initRole = "", handleSubmit }:UserFormP
                             </div>
                             <div>
                                 <label className="mb-3 block text-black dark:text-white">
-                                    Roles
+                                    {t('role')}
                                 </label>
                                 <div className="relative z-20 bg-white dark:bg-form-input">
                                     <select
                                         defaultValue={initRole}
                                         required 
                                         onChange={e =>  { roleChange(e) }} className="custom-input-date custom-input-date-2 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
-                                        <option value="">{t("choose_role")}Choose One of the Roles Below</option>
+                                        <option value="">{t("choose_role")}</option>
                                         { roles?.map( (role, key) => (
                                             <option key={key} value={role.id}>{role.name}</option>
                                         )) 

@@ -184,7 +184,8 @@
     "input_email": "Masukkan Email",
     "input_password": "Masukkan Kata Sandi",
     "input_confirm_password": "Masukkan Kembali Kata Sandi",
-    "choose_role": "Pilih salah satu peran di bawah ini",
+    "choose_role": "Pilih salah satu tugas di bawah ini",
+    "role": "Tugas",
     "password_not_the_same": "Kata sandi tidak sama",
     "leave_password_blank": "*Kosongkan kata sandi apabila tidak ingin dirubah",
 
