@@ -157,6 +157,8 @@
     "input_staffs_full_name": "Input the Staff's Full Name",
     "prescription": "Medicines Prescription",
     "print_prescription": "Print Prescription",
+    "receipt": "Receipt",
+    "print_receipt": "Print Receipt",
     "vacant": "Vacant",
     "monthly_sales_in": "Monthly Sales in ",
     "clinic_information": "Clinic Information",

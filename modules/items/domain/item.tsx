@@ -2,7 +2,7 @@ import { Category, categoryMapper } from "@/modules/categories/domain/category";
 import { defaultCategory } from "@/modules/categories/domain/category";
 
 export interface Item {
-    id: number,
+    id: string,
     sku: string,
     name: string,
     stock: number,
@@ -13,7 +13,7 @@ export interface Item {
 }
 
 export const defaultItem: Item = {
-    id: 0,
+    id: "",
     sku: "",
     name: "",
     stock: 0,

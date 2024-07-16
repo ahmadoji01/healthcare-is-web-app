@@ -6,7 +6,7 @@ import { DataModalProvider, useDataModalContext } from "@/contexts/data-modal-co
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
-import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
+import { createAMedicalRecord, updateAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
 import { deleteAVisit, updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useVisitContext } from "@/contexts/visit-context";
@@ -105,7 +105,7 @@ const QueueManager = () => {
         medicalRecordCreator.doctor = activeVisit.doctor.id;
         medicalRecordCreator.patient = checkup.patient.id;
         medicalRecordCreator.physical_checkup = checkupRes.id;
-        await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
+        await updateAMedicalRecord(accessToken, activeVisit.medical_record.id, { doctor: activeVisit.doctor.id, patient: checkup.patient.id, physical_checkup: checkupRes.id }).then( res => {
             medicalRecordRes = medicalRecordMapper(res);
         }).catch( err => { isError=true; return; });
 

@@ -1,5 +1,5 @@
 import { Patient, defaultPatient, patientMapper } from "@/modules/patients/domain/patient";
-import { defaultOrderItem, OrderItem, OrderItemCreator, OrderItemPatcher, orderItemPatcherMapper, orderItemsMapper } from "./order-item";
+import { defaultOrderItem, OrderItem, OrderItemCreator, orderItemPatcherMapper, orderItemsMapper } from "./order-item";
 import { Visit, defaultVisit, visitMapper } from "@/modules/visits/domain/visit";
 import { DOCTOR_PAID, ORDER_STATUS } from "./order.constants";
 
@@ -65,7 +65,7 @@ export function orderCreatorMapper(order:Order, visitID:string|null, orgID:numbe
 export type OrderPatcher = Omit<Order, 'id'|'patient'|'visit'|'order_items'|'date_created'|'date_updated'> & Organization & { order_items: OrderItemCreator[], patient:string|null, visit:string|null };
 export function orderPatcherMapper(order:Order, orgID:number) {
 
-    let items:OrderItemPatcher[] = [];
+    let items:OrderItemCreator[] = [];
     order.order_items?.map( (item) => items.push(orderItemPatcherMapper(item, orgID)));
 
     let visitID:string|null = null;
@@ -99,7 +99,7 @@ export function monthlySalesMapper(res:Record<string,any>) {
 }
 
 export interface ItemQuantitySold {
-    item: number,
+    item: string,
     quantity: number,
 }
 

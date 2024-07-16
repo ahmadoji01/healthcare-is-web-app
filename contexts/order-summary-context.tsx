@@ -181,7 +181,6 @@ export const OrderSummaryProvider = ({
         orderPatcher.status = ORDER_STATUS.paid;
         orderPatcher.total = total;
         updateOrder(accessToken, selectedOrder.id, orderPatcher).catch( err => {
-            console.log(err);
             isError = true;
             return;
         });

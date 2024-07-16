@@ -157,6 +157,8 @@
     "input_staffs_full_name": "Masukkan Nama Lengkap Staf",
     "prescription": "Resep Obat",
     "print_prescription": "Cetak Resep",
+    "receipt": "Bukti Pembayaran",
+    "print_receipt": "Cetak Bukti Pembayaran",
     "vacant": "Kosong",
     "monthly_sales_in": "Penjualan Tahun ",
     "clinic_information": "Informasi Klinik",

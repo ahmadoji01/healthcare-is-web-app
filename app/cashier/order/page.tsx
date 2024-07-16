@@ -10,6 +10,7 @@ import { useUserContext } from '@/contexts/user-context';
 import { useRouter } from 'next/navigation';
 import dynamic from "next/dynamic";
 import { useTranslations } from 'next-intl';
+import { Order } from '@/modules/orders/domain/order';
 
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
@@ -79,27 +80,30 @@ const styles = StyleSheet.create({
   },
 });
 
-const OrderDocument = () => {
-  const {orderDocument} = useDocumentContext();
+interface OrderDocumentProps {
+  order: Order,
+}
+
+const Receipt = ({ order }:OrderDocumentProps) => {
   const {organization} = useUserContext();
   const t = useTranslations();
   const router = useRouter();
 
   useEffect( () => {
-    if (orderDocument.id === "") {
+    if (order.id === "") {
       router.push('/dashboard/orders');
     }
   }, []);
 
   return (
-    <PDFViewer className="w-screen h-screen">
+    <PDFViewer className="w-full h-screen">
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={styles.section}>
             <Text style={styles.header}>{t('order_detail')}</Text>
             <Text style={styles.header2}>{organization.name}</Text>
             <View style={styles.table}>
-                { orderDocument.visit?.patient?.name &&
+                { order.visit?.patient?.name &&
                   <>
                     <View style={styles.tableRow}>
                       <View style={styles.titleCol}>
@@ -109,7 +113,7 @@ const OrderDocument = () => {
                         <Text style={styles.orderDate}>:</Text>
                       </View>
                       <View style={styles.titleCol}>
-                        <Text style={styles.orderDate}>{ orderDocument.visit.patient.name }</Text>
+                        <Text style={styles.orderDate}>{ order.visit.patient.name }</Text>
                       </View>
                     </View>
                   </>
@@ -122,10 +126,10 @@ const OrderDocument = () => {
                     <Text style={styles.orderDate}>:</Text>
                   </View>
                   <View style={styles.titleCol}>
-                    <Text style={styles.orderDate}>{moment(orderDocument.date_created).locale('id').format("Do MMMM YYYY")}</Text>
+                    <Text style={styles.orderDate}>{moment(order.date_created).locale('id').format("Do MMMM YYYY")}</Text>
                   </View>
                 </View>
-                { orderDocument.visit?.doctor?.name &&
+                { order.visit?.doctor?.name &&
                   <>
                     <View style={styles.tableRow}>
                       <View style={styles.titleCol}>
@@ -135,7 +139,7 @@ const OrderDocument = () => {
                         <Text style={styles.orderDate}>:</Text>
                       </View>
                       <View style={styles.titleCol}>
-                        <Text style={styles.orderDate}>{ DoctorName(orderDocument.visit.doctor.name, orderDocument.visit.doctor.specialization) }</Text>
+                        <Text style={styles.orderDate}>{ DoctorName(order.visit.doctor.name, order.visit.doctor.specialization) }</Text>
                       </View>
                     </View>
                   </>
@@ -161,7 +165,7 @@ const OrderDocument = () => {
               </View>
             </View>
 
-            {orderDocument.order_items.map((orderItem, index) => (
+            {order.order_items.map((orderItem, index) => (
               <View key={index} style={styles.tableRow}>
                 <View style={styles.tableCol}>
                   <Text style={styles.tableCell}>{orderItem.item.name}</Text>
@@ -186,7 +190,7 @@ const OrderDocument = () => {
                   <Text style={styles.tableCell}>Total ({t('with_exam_fee_and_tax')} {organization.tax_rate}%)</Text>
                 </View>
                 <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}><Currency value={orderDocument.total} /></Text>
+                  <Text style={styles.tableCell}><Currency value={order.total} /></Text>
                 </View>
               </View>
           </View>
@@ -196,4 +200,4 @@ const OrderDocument = () => {
   )
 };
 
-export default OrderDocument;
+export default Receipt;

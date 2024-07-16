@@ -46,7 +46,7 @@ const MedicationForm = ({ medicines, mrMedicines, medLoading, setMRMedicines, ha
     const handleChange = (choices: SelectOption[]) => {
         let items:MedicalRecordItem[] = [];
         choices?.map( (choice) => {
-            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0, unit: choice.value2, type: ITEM_TYPE.medicine }, type: ITEM_TYPE.medicine, notes: "", quantity: 1 }); 
+            items.push({ items_id: { id: choice.value, sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0, unit: choice.value2, type: ITEM_TYPE.medicine }, type: ITEM_TYPE.medicine, notes: "", quantity: 1 }); 
         });
         setMRMedicines([...items]);
     }

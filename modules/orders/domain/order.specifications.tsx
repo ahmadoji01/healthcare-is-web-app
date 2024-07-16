@@ -2,7 +2,7 @@ import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { OrderItem } from "./order-item";
 import moment from "moment";
 
-export function visitFilter(id:number):object {
+export function visitFilter(id:string):object {
     return { visit: { _eq: id } };
 }
 

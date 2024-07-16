@@ -135,7 +135,7 @@ type Organization = {
     organization: number,
 }
 
-export type MRItemCreator = Omit<MedicalRecordItem, 'items_id'> & { items_id: number, organization: number } 
+export type MRItemCreator = Omit<MedicalRecordItem, 'items_id'> & { items_id: string, organization: number } 
 export function mrItemCreatorMapper(mrItem:MedicalRecordItem, orgID:number) {
     let item:MRItemCreator = {
         items_id: mrItem.items_id.id,
@@ -218,20 +218,18 @@ type MedicineDosesPatchers = {
     medicines: MedicineDosesPatcher[],
 }
 
-export type MedicalRecordPatcher = Omit<MedicalRecord, 'items'|'medicines'|'patient'|'doctor'|'organization'|'date_created'|'treatments'|'illnesses'|'physical_checkup'> 
+export type MedicalRecordPatcher = Omit<MedicalRecord, 'id'|'items'|'medicines'|'patient'|'doctor'|'organization'|'date_created'|'date_updated'|'treatments'|'illnesses'|'physical_checkup'> 
 & IllnessPatchers & { items:MRItemCreator[], organization:number, status:string, physical_checkup: PhysicalCheckupPatcher };
 export function medicalRecordPatcherMapper(medicalRecord:MedicalRecord, items: MRItemCreator[], illnesses: IllnessPatcher[], orgID:number, status:string) {
 
     let medicalRecordPatcher: MedicalRecordPatcher = { 
-        id: medicalRecord.id,
         code: medicalRecord.code,
+        illnesses: illnesses,
         anamnesis: medicalRecord.anamnesis,
         care_type: medicalRecord.care_type,
         death: medicalRecord.death,
-        illnesses: illnesses,
         items: items,
         physical_checkup: physicalCheckupPatcherMapper(medicalRecord.physical_checkup, orgID),
-        date_updated: medicalRecord.date_updated,
         status: status,
         organization: orgID,
     }

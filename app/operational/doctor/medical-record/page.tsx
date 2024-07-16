@@ -177,9 +177,9 @@ const MedicalRecords = () => {
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
       
       let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, itemsCreator, illnessPatchers, organization.id, MR_STATUS.complete);
-      await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
-        .catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
       
+      await updateAMedicalRecord(accessToken, activeMedicalRecord.id, medicalRecordPatcher).then( () => {})
+        .catch( err => { console.log(err); openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
       let visit = { status: VISIT_STATUS.examined };
       updateVisit(accessToken, activeVisit.id, visit).then( () => {
       }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
