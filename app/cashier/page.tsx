@@ -31,6 +31,7 @@ const OrderSummary = () => {
     const [presModalOpen, setPresModalOpen] = useState<boolean>(false);
     const [receiptModalOpen, setReceiptModalOpen] = useState<boolean>(false);
     const [medicalRecord, setMedicalRecord] = useState(defaultMedicalRecord);
+    const [orderID, setOrderID] = useState("");
 
     const t = useTranslations();
     const { accessToken, organization } = useUserContext();
@@ -50,7 +51,12 @@ const OrderSummary = () => {
             setMedicalRecord(defaultMedicalRecord);
             return;
         }
+
+        if (orderID === selectedOrder.id) {
+            return;
+        }
         
+        setOrderID(selectedOrder.id);
         getAMedicalRecord(accessToken, selectedOrder?.visit.medical_record.id)
             .then( res => {
                 let mr = defaultMedicalRecord;

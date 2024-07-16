@@ -88,6 +88,7 @@ export const OrderSummaryProvider = ({
     const [orderLoaded, setOrderLoaded] = useState(true);
     const [notifSound, setNotifSound] = useState<HTMLAudioElement>(new Audio(''));
     const [ordersLoaded, setOrdersLoaded] = useState(false);
+    const [orderID, setOrderID] = useState("");
 
     const [snackbarMsg, setSnackbarMsg] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -135,6 +136,10 @@ export const OrderSummaryProvider = ({
         if (typeof(selectedOrder) === 'undefined')
             return;
 
+        if (orderID === selectedOrder.id)
+            return;
+        
+        setOrderID(selectedOrder.id);
         getADoctorOrg(accessToken, { _and: [ { doctors_id: { _eq: selectedOrder?.visit.doctor.id } }, { organizations_id: { _eq: organization.id } } ] })
         .then( res => {
             let doctorOrg = defaultDoctorOrganization;

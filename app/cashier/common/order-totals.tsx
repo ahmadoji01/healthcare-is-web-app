@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 const OrderTotals = () => {
 
-    const { selectedOrder, total, setTotal, examFee } = useOrderSummaryContext();
+    const { selectedOrder, total, setTotal, examFee, setSelectedOrder } = useOrderSummaryContext();
     const { organization } = useUserContext();
     const t = useTranslations();
     const [treatmentFee, setTreatmentFee] = useState<number>(0);
@@ -34,8 +34,14 @@ const OrderTotals = () => {
             setMedicineFee(medFee);
         }
         let taxRate = organization.tax_rate? (organization.tax_rate/100) : TAX_RATE;
-        setTax((examFee + treatmentFee + medicineFee - discount) * taxRate);
-        setTotal(examFee + treatmentFee + medicineFee + tax - discount);   
+        let totalTax = (examFee + treatmentFee + medicineFee - discount) * taxRate;
+        let tot = examFee + treatmentFee + medicineFee + totalTax - discount;
+        setTax(totalTax);
+        setTotal(tot);
+
+        let newOrder = {...selectedOrder};
+        newOrder.total = tot;
+        setSelectedOrder(newOrder);
     });
 
     return (
