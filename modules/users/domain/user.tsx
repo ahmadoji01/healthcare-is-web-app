@@ -42,7 +42,7 @@ export function userMapper(res:Record<string,any>) {
         first_name: res.first_name, 
         last_name: res.last_name, 
         avatar: res.avatar? res.avatar : null,
-        username: res.username,
+        username: res.username? res.username : '',
 		email: res.email,
 		password: "",
         role_name: res.role? res.role.name : "",

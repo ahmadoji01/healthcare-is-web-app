@@ -12,8 +12,12 @@ export function statusNotEqual(status:string) {
     return { status: { _neq: status }  }
 }
 
-export function doctorIDEquals(docId:number) {
+export function doctorIDEquals(docId:string) {
     return { doctor: { _eq: docId } }
+}
+
+export function doctorOrgIDEquals(docId:string) {
+    return { doctors_id: { _eq: docId } }
 }
 
 export function statusDisplay(status:string) {

@@ -1,8 +1,3 @@
-import { Patient } from "@/modules/patients/domain/patient"
-import { PhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup"
-import { Treatment } from "@/modules/treatments/domain/treatment"
-import Medication from "./medication"
-import { Doctor } from "@/modules/doctors/domain/doctor"
 import { ORG_STATUS } from "./organizations.constants"
 
 interface Logo {

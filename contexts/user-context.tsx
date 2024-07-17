@@ -3,7 +3,8 @@ import { getOrganization } from '@/modules/organizations/domain/organizations.ac
 import { User, defaultUser, userMapper } from '@/modules/users/domain/user';
 import { getUserMe } from '@/modules/users/domain/users.actions';
 import { isURLAllowed, redirectURL } from '@/modules/users/domain/users.specifications';
-import { directusClient } from '@/utils/request-handler';
+import { directusClient, websocketClient } from '@/utils/request-handler';
+import { WebSocketClient } from '@directus/sdk';
 import { useRouter, usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
  
@@ -13,10 +14,13 @@ interface UserContextType {
     loading: boolean,
     organization: Organization,
     fontSize: string,
+    wsClient: WebSocketClient<any>,
     setUser: Dispatch<SetStateAction<User>>,
     setOrganization: Dispatch<SetStateAction<Organization>>,
     setFontSize: Dispatch<SetStateAction<string>>,
     setAccessToken: Dispatch<SetStateAction<string>>,
+    setWSClient: Dispatch<SetStateAction<WebSocketClient<any>>>,
+    setLoading: Dispatch<SetStateAction<boolean>>,
     fetchOrganization: () => void,
 }
 
@@ -28,10 +32,13 @@ export const UserContext = createContext<UserContextType | null>({
     loading: false,
     organization: defaultOrganization,
     fontSize: "100%",
+    wsClient: websocketClient(""),
     setUser: () => {},
     setOrganization: () => {},
     setFontSize: () => {},
     setAccessToken: () => {},
+    setWSClient: () => {},
+    setLoading: () => {},
     fetchOrganization: () => {},
 });
  
@@ -43,6 +50,8 @@ export const UserProvider = ({
 
     const router = useRouter();
     const pathname = usePathname();
+    const userField = ['id', 'email', 'first_name', 'last_name', 'role.name', 'avatar.id', 'avatar.filename_download'];
+    const orgField = ['id', 'name', 'subscription_type', 'subscription_expiry', 'status', 'logo.id', 'logo.filename_download', 'tax_rate', 'satusehat_key', 'payment_methods.*'];
     const [accessToken, setAccessToken] = useState<string>("");
     const [expiry, setExpiry] = useState(50);
     const [user, setUser] = useState(defaultUser);
@@ -50,6 +59,7 @@ export const UserProvider = ({
     const [fontSize, setFontSize] = useState("100%");
     const [organization, setOrganization] = useState(defaultOrganization);
     const [size, setSize] = useState("100% !important");
+    const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
   
     useEffect(() => {
       let localSize = localStorage.getItem("font-size");
@@ -63,6 +73,12 @@ export const UserProvider = ({
       document.body.style.fontSize = size;
     }, [size]);
 
+    const connectWS = (token:string) => {
+        let client = websocketClient(token);
+        setWSClient(client);
+        client.connect();
+    }
+
     const refreshToken = async (interval:NodeJS.Timeout, isLooping:boolean) => {
         let isError = false;
 
@@ -70,7 +86,7 @@ export const UserProvider = ({
             isError = true;
 
         if (!isError) {
-            await getUserMe(accessToken).then(res => {
+            await getUserMe(accessToken, userField).then(res => {
                 let usr = defaultUser;
                 usr = userMapper(res);
                 setUser(usr);
@@ -82,7 +98,7 @@ export const UserProvider = ({
                 return;
             });
 
-            await getOrganization(accessToken, 1).then( res => {
+            getOrganization(accessToken, 1, orgField).then( res => {
                 if (res.length < 1) {
                     return;
                 }
@@ -94,8 +110,10 @@ export const UserProvider = ({
             });
         }
 
-        if (!isError)
+        if (!isError) {
+            connectWS(accessToken);
             return;
+        }
 
         await directusClient.refresh().then( (res) => {
             if (res.access_token === null) {
@@ -106,7 +124,7 @@ export const UserProvider = ({
             let expiry = res.expires? res.expires : 0;
             setAccessToken(token);
             setExpiry(expiry);
-            getUserMe(token).then(res => {
+            getUserMe(token, userField).then(res => {
                 let usr = defaultUser;
                 usr = userMapper(res);
                 setUser(usr);
@@ -116,7 +134,8 @@ export const UserProvider = ({
                 }
                 return;
             });
-            getOrganization(token, 1).then( res => {
+            connectWS(token);
+            getOrganization(token, 1, orgField).then( res => {
                 if (res.length < 1) {
                     return;
                 }
@@ -187,7 +206,7 @@ export const UserProvider = ({
     }, [user.role_name])
 
     return (
-        <UserContext.Provider value={{ accessToken, setAccessToken, user, setUser, organization, setOrganization, loading, fontSize, setFontSize, fetchOrganization }}>
+        <UserContext.Provider value={{ wsClient, setWSClient, accessToken, setAccessToken, user, setUser, organization, setOrganization, loading, setLoading, fontSize, setFontSize, fetchOrganization }}>
             {children}
         </UserContext.Provider>
     );

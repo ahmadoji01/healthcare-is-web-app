@@ -8,8 +8,9 @@ import { useUserContext } from "@/contexts/user-context";
 import DoctorDeleteConfirmation from "@/modules/doctors/application/form/doctor.delete-confirmation";
 import DoctorForm from "@/modules/doctors/application/form/doctor.form";
 import DoctorListTable from "@/modules/doctors/application/list/doctor.list-table";
-import { Doctor, defaultDoctor, doctorMapper, doctorPatcherMapper } from "@/modules/doctors/domain/doctor";
-import { deleteADoctor, getAllDoctors, getTotalDoctors, getTotalSearchDoctors, searchDoctors, updateADoctor } from "@/modules/doctors/domain/doctors.actions";
+import { Doctor, DoctorOrganization, defaultDoctor, defaultDoctorOrganization, doctorMapper, doctorOrgMapper, doctorPatcherMapper } from "@/modules/doctors/domain/doctor";
+import { deleteADoctor, getADoctorOrg, getAllDoctors, getTotalDoctors, getTotalSearchDoctors, searchDoctors, updateADoctor, updateADoctorOrg } from "@/modules/doctors/domain/doctors.actions";
+import { doctorIDEquals, doctorOrgIDEquals } from "@/modules/visits/domain/visit.specifications";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
@@ -22,6 +23,7 @@ const DoctorsDashboardPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [doctorOrg, setDoctorOrg] = useState(defaultDoctorOrganization);
   const [activeDoctor, setActiveDoctor] = useState<Doctor>(defaultDoctor);
   const [totalPages, setTotalPages] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -54,6 +56,19 @@ const DoctorsDashboardPage = () => {
     }
   }, [doctors]);
 
+  useEffect(() => {
+    if (activeDoctor.id === "")
+      return;
+
+    setDataLoaded(false);
+    getADoctorOrg(accessToken, doctorOrgIDEquals(activeDoctor.id))
+      .then( res => {
+        let docOrg = doctorOrgMapper(res[0]);
+        setDoctorOrg(docOrg);
+        setDataLoaded(true);
+      }).catch( () => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setDataLoaded(true);})
+  }, [activeDoctor]);
+
   const handleModal = (closeModal:boolean, whichModal: boolean) => {
     if(closeModal) {
       setEditModalOpen(false);
@@ -81,12 +96,16 @@ const DoctorsDashboardPage = () => {
       });
   };
 
-  const handleSubmit = (doctor:Doctor) => {
+  const handleSubmit = (doctor:Doctor, examFee:number) => {
     updateADoctor(accessToken, doctor.id, doctorPatcherMapper(doctor))
       .then( () => {
         openSnackbarNotification(t("alert_msg.success"), "success");
         window.location.reload();
       }).catch( () => {
+        openSnackbarNotification(t("alert_msg.server_error"), "error");
+      })
+    updateADoctorOrg(accessToken, doctorOrg.id, { examination_fee: examFee })
+      .catch( () => {
         openSnackbarNotification(t("alert_msg.server_error"), "error");
       })
   } 
@@ -136,7 +155,7 @@ const DoctorsDashboardPage = () => {
 
   return (
     <>
-      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <DoctorForm initDoctor={activeDoctor} handleSubmit={handleSubmit} /> } title={t("doctors_detail")} />
+      <DashboardModal open={editModalOpen} handleClose={ () => handleModal(true, true) } children={ <DoctorForm initDoctor={activeDoctor} handleSubmit={handleSubmit} examinationFee={doctorOrg.examination_fee} /> } title={t("doctors_detail")} />
       <DashboardModal open={deleteModalOpen} handleClose={ () => handleModal(true, false) } children={ <DoctorDeleteConfirmation doctor={activeDoctor} handleDelete={handleDelete} handleClose={ () => handleModal(true, false)} /> } title="" />
       <Breadcrumb pageName={t("doctors")} />
 

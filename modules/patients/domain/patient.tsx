@@ -1,5 +1,5 @@
 export type Patient = {
-    id: number,
+    id: string,
     name: string,
     fathers_name: string,
     mothers_name: string,
@@ -11,12 +11,11 @@ export type Patient = {
     gender: string,
     id_card_number: string,
     address: string,
-    slug: string|null,
     family_id_number: string|null
 }
 
 export const defaultPatient: Patient = {
-    id: 0,
+    id: "",
     name: "",
     fathers_name: "",
     mothers_name: "",
@@ -28,7 +27,6 @@ export const defaultPatient: Patient = {
     gender: "",
     id_card_number: "",
     address: "",
-    slug: null,
     family_id_number: null
 }
 
@@ -40,20 +38,19 @@ export function patientMapper(res:Record<string,any>) {
     }
     
     patient = { 
-        id: res.id, 
-        name: res.name, 
-        fathers_name: res.fathers_name,
-        mothers_name: res.mothers_name,
-        birthday: res.birthday, 
-        religion: res.religion, 
-        job: res.job, 
-        education: res.education, 
-        marrital_status: res.marrital_status,
-        gender: res.gender,
-        id_card_number: res.id_card_number,
-        address: res.address,
-        slug: res.slug,
-        family_id_number: res.family_id_number,
+        id: res.id? res.id:"",
+        name: res.name? res.name:'', 
+        fathers_name: res.fathers_name? res.fathers_name:'',
+        mothers_name: res.mothers_name? res.mothers_name:'',
+        birthday: res.birthday? res.birthday:new Date, 
+        religion: res.religion? res.religion:'', 
+        job: res.job? res.job:'', 
+        education: res.education? res.education:'', 
+        marrital_status: res.marrital_status? res.marrital_status:'',
+        gender: res.gender? res.gender:'',
+        id_card_number: res.id_card_number? res.id_card_number:'',
+        address: res.address? res.address:'',
+        family_id_number: res.family_id_number? res.family_id_number:'',
     }
     return patient;
 }
@@ -77,7 +74,6 @@ export function patientNoIDMapper(patient:Patient, orgID:number) {
         gender: patient.gender,
         id_card_number: patient.id_card_number,
         address: patient.address,
-        slug: patient.slug,
         family_id_number: patient.family_id_number,
         patient_organizations: [{ organizations_id: orgID }]
     }

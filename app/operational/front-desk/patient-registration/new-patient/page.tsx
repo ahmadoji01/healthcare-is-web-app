@@ -33,6 +33,8 @@ import { useFrontDeskContext } from "@/contexts/front-desk-context";
 import { ORG_STATUS } from "@/modules/organizations/domain/organizations.constants";
 import { useTranslations } from "next-intl";
 import Spinner from "@/components/Spinner";
+import { defaultDoctorOrganization, doctorOrgMapper } from "@/modules/doctors/domain/doctor";
+import { getADoctorOrg } from "@/modules/doctors/domain/doctors.actions";
 
 const steps = ['personal_information', 'doctor_to_visit', 'visit_status', 'review_input'];
 
@@ -94,10 +96,12 @@ const NewPatient = () => {
             return;
         }
 
-        await getTotalQueueByDoctorID(accessToken, activeDoctor.id).then( res => {
-            let total = res[0].count? parseInt(res[0].count) + 1 : 1;
-            setQueueNumber(total.toString());
-            queueNum = total.toString();
+        let docOrg = defaultDoctorOrganization;
+        await getADoctorOrg(accessToken, { doctors_id: { _eq: activeDoctor.id } }).then( res => {
+            docOrg = res[0]? doctorOrgMapper(res[0]) : defaultDoctorOrganization;
+            let queue = docOrg.queue + 1;
+            setQueueNumber(queue.toString());
+            queueNum = queue.toString();
         }).catch( err => {
             isError = true;
             return;

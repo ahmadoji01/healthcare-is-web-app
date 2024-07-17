@@ -15,13 +15,16 @@ import { useTranslations } from "next-intl";
 interface MedicalRecordFormProps {
     medicalRecord: MedicalRecord,
     treatments: Item[],
+    treatLoading: boolean,
     setMedicalRecord: Dispatch<SetStateAction<MedicalRecord>>,
     setMRTreatments: Dispatch<SetStateAction<MedicalRecordItem[]>>,
+    handleTreatChange: (query:string) => void,
 }
 
-const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRTreatments }:MedicalRecordFormProps) => {
+const MedicalRecordForm = ({ treatments, medicalRecord, treatLoading, setMedicalRecord, setMRTreatments, handleTreatChange }:MedicalRecordFormProps) => {
     
     const [treatOptions, setTreatOptions] = useState<SelectOption[]>([]);
+    const [loading, setLoading] = useState(false);
     const t = useTranslations();
     const [illnesses, setIllnesses] = useState(Illnesses);
 
@@ -33,12 +36,16 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
 
     useEffect(() => {
         setIllnesses(dataID);
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        setLoading(treatLoading);
+    }, [treatLoading])
 
     const treatmentsMapper = (choices: SelectOption[]) => {
         let items:MedicalRecordItem[] = [];
         choices?.map( (choice) => {
-            items.push({ items_id: { id: parseInt(choice.value), sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0, unit: "", type: ITEM_TYPE.treatment }, notes: '', type: ITEM_TYPE.treatment, quantity: 1 }); 
+            items.push({ items_id: { id: choice.value, sku: '', name: choice.label, stock: 0, category: defaultCategory, price: 0, unit: "", type: ITEM_TYPE.treatment }, notes: '', type: ITEM_TYPE.treatment, quantity: 1 }); 
         });
         setMRTreatments([...items]);
     }
@@ -66,7 +73,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                 <label className="mb-3 block text-black dark:text-white">
                                     { t('anamnesis') }
                                 </label>
-                                <div className="relative bg-white dark:bg-form-input" style={{zIndex: 99999999, borderWidth: 0}}>
+                                <div className="relative bg-white dark:bg-form-input" style={{zIndex: 100, borderWidth: 0}}>
                                 <textarea
                                     defaultValue={medicalRecord.anamnesis}
                                     onChange={e => setMedicalRecord({ ...medicalRecord, anamnesis: e.target.value })}
@@ -80,7 +87,7 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                 <label className="mb-3 block text-black dark:text-white">
                                     { t('illnesses') }
                                 </label>
-                                <div className="relative bg-white dark:bg-form-input" style={{zIndex: 999999999, borderWidth: 0}}>
+                                <div className="relative bg-white dark:bg-form-input" style={{zIndex: 100, borderWidth: 0}}>
                                     <WindowedSelect
                                         isMulti
                                         isSearchable={true}
@@ -103,6 +110,8 @@ const MedicalRecordForm = ({ treatments, medicalRecord, setMedicalRecord, setMRT
                                         isMulti
                                         isSearchable={true}
                                         defaultValue={[]}
+                                        isLoading={loading}
+                                        onInputChange={e => handleTreatChange(e)}
                                         onChange={choices => treatmentsMapper(choices)}
                                         name="treatments"
                                         filterOption={createFilter({ ignoreAccents: false })}

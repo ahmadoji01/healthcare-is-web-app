@@ -23,7 +23,7 @@ import { ORDER_STATUS } from '@/modules/orders/domain/order.constants';
 import { OrderItemCreator, orderItemCreatorMapper } from '@/modules/orders/domain/order-item';
 import { visitFilter } from '@/modules/orders/domain/order.specifications';
 import { MR_STATUS } from '@/modules/medical-records/domain/medical-records.constants';
-import { getItemsWithFilter } from '@/modules/items/domain/items.actions';
+import { getItemsWithFilter, searchItemsWithFilter } from '@/modules/items/domain/items.actions';
 import { medicineItemsFilter, treatmentItemsFilter } from '@/modules/items/domain/item.specifications';
 import { Item, itemMapper } from '@/modules/items/domain/item';
 import { useTranslations } from 'next-intl';
@@ -35,31 +35,32 @@ interface TabPanelProps {
   index: number;
   value: number;
 }
-  
-  function CustomTabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-  
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      </div>
-    );
-  }
-  
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
+ 
+let activeTimeout = null; 
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      <Box sx={{ p: 3 }}>
+        <Typography>{children}</Typography>
+      </Box>
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 const MedicalRecords = () => {
     const [value, setValue] = useState(0);
@@ -69,10 +70,12 @@ const MedicalRecords = () => {
     const [mrTreatments, setMRTreatments] = useState<MedicalRecordItem[]>([]);
     const [order, setOrder] = useState(defaultOrder);
     const [medHistories, setMedHistories] = useState<MedicalRecord[]>([]);
+    const [medLoading, setMedLoading] = useState(false);
+    const [treatLoading, setTreatLoading] = useState(false);
     
     const {activeMRID, activeMedicalRecord, loading, setActiveMedicalRecord, setLoading} = useMedicalRecordContext();
     const {activeVisit} = useVisitContext();
-    const {organization, accessToken} = useUserContext();
+    const {organization, accessToken, user} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();  
     const t = useTranslations();
     const router = useRouter();
@@ -100,10 +103,12 @@ const MedicalRecords = () => {
           setOrder(order);
         }
       });
-    }, []);
+    }, [user]);
 
     useEffect(() => {
-      getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id).then( res => {
+      let fields = ['id', 'date_updated', 'illnesses'];
+      setLoading(true);
+      getCompleteMedicalRecords(accessToken, activeMedicalRecord.patient.id, fields).then( res => {
         let mrs:MedicalRecord[] = [];
         res?.map( (mr) => { mrs.push(medicalRecordMapper(mr)); });
         setMedHistories(mrs);
@@ -114,6 +119,46 @@ const MedicalRecords = () => {
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
     };
+
+    const handleTreatChange = (query:string) => {
+      if (query.length < 3) {
+        return;
+      }
+
+      if (activeTimeout) {
+        clearTimeout(activeTimeout);
+      }
+      
+      activeTimeout = setTimeout(() => {
+        setTreatLoading(true);
+        searchItemsWithFilter(accessToken, query, treatmentItemsFilter, 1, treatFields).then( res => {
+          let items:Item[] = [];
+          res?.map( (item) => { items.push(itemMapper(item)); });
+          setTreatments(items);
+          setTreatLoading(false);
+        }).catch(() => setTreatLoading(false));
+      }, 1000);
+    }
+
+    const handleMedChange = (query:string) => {
+      if (query.length < 3) {
+        return;
+      }
+
+      if (activeTimeout) {
+        clearTimeout(activeTimeout);
+      }
+      
+      activeTimeout = setTimeout(() => {
+        setMedLoading(true);
+        searchItemsWithFilter(accessToken, query, medicineItemsFilter, 1, medFields).then( res => {
+          let items:Item[] = [];
+          res?.map( (item) => { items.push(itemMapper(item)); });
+          setMedicines(items);
+          setMedLoading(false);
+        }).catch(() => setMedLoading(false));
+      }, 1000);
+    }
 
     const handleSubmit = async () => {
       let illnessPatchers:IllnessPatcher[] = [];
@@ -132,9 +177,8 @@ const MedicalRecords = () => {
       activeMedicalRecord.illnesses?.map( (illness) => { illnessPatchers.push(illnessPatcherMapper(illness)) });
       
       let medicalRecordPatcher = medicalRecordPatcherMapper(activeMedicalRecord, itemsCreator, illnessPatchers, organization.id, MR_STATUS.complete);
-      await updateAMedicalRecord(accessToken, medicalRecordPatcher.id, medicalRecordPatcher).then( () => {})
-        .catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
-      
+      await updateAMedicalRecord(accessToken, activeMedicalRecord.id, medicalRecordPatcher).then( () => {})
+        .catch( err => { console.log(err); openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
       let visit = { status: VISIT_STATUS.examined };
       updateVisit(accessToken, activeVisit.id, visit).then( () => {
       }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
@@ -151,9 +195,9 @@ const MedicalRecords = () => {
 
     return (
       <form onSubmit={e => { e.preventDefault(); handleSubmit() } }>
-        <div className="w-full min-h-screen">
+        <div className="w-full min-h-screen overflow-y-scroll overscroll-contain">
           { loading && <Spinner /> }
-          { (activeMedicalRecord.id !== 0 && !loading) &&
+          { (activeMedicalRecord.id !== "" && !loading) &&
             <>
               <Box>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
@@ -167,11 +211,11 @@ const MedicalRecords = () => {
               <CustomTabPanel value={value} index={1}>
                 <div className="flex flex-col md:flex-row mb-8">
                   <div className="w-full p-2 mb-8">
-                    <MedicalRecordForm treatments={treatments} medicalRecord={activeMedicalRecord} setMRTreatments={setMRTreatments} setMedicalRecord={setActiveMedicalRecord} />
+                    <MedicalRecordForm treatments={treatments} medicalRecord={activeMedicalRecord} setMRTreatments={setMRTreatments} setMedicalRecord={setActiveMedicalRecord} handleTreatChange={handleTreatChange} treatLoading={treatLoading} />
                     <span className="mb-8" />
                   </div>
                   <div className="w-full p-2">
-                    <MedicationForm medicines={medicines} mrMedicines={mrMedicines} setMRMedicines={setMRMedicines} />    
+                    <MedicationForm medicines={medicines} medLoading={medLoading} mrMedicines={mrMedicines} setMRMedicines={setMRMedicines} handleMedChange={handleMedChange} />    
                   </div>
                 </div>
               </CustomTabPanel>

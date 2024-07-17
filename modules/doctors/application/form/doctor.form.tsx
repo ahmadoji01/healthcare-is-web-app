@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Doctor } from "../../domain/doctor";
 import moment from "moment";
 import SubmitButton from "@/components/Dashboard/Submit";
@@ -8,17 +8,23 @@ import { useTranslations } from "next-intl";
 
 interface DoctorFormProps {
     initDoctor: Doctor,
-    handleSubmit: (doctor:Doctor) => void,
+    handleSubmit: (doctor:Doctor, examFee:number) => void,
+    examinationFee: number,
 }
 
-const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
+const DoctorForm = ({ initDoctor, examinationFee, handleSubmit }:DoctorFormProps) => {
     const [doctor, setDoctor] = useState(initDoctor);
+    const [examFee, setExamFee] = useState(0);
     const t = useTranslations();
+
+    useEffect( () => {
+        setExamFee(examinationFee);
+    }, [examinationFee])
 
     return (
         <>
             <div className="grid gap-9">
-                <form onSubmit={e => { e.preventDefault(); handleSubmit(doctor) } }>
+                <form onSubmit={e => { e.preventDefault(); handleSubmit(doctor, examFee) } }>
                     <div className="flex flex-col gap-9">
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
@@ -27,6 +33,20 @@ const DoctorForm = ({ initDoctor, handleSubmit }:DoctorFormProps) => {
                                 </h3>
                             </div>
                             <div className="flex flex-col gap-5.5 p-6.5">
+                                <div>
+                                    <label className="mb-3 block text-black dark:text-white">
+                                        { t("examination_fee") }
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={examFee}
+                                        required
+                                        min={0}
+                                        onChange={ e => setExamFee(parseFloat(e.target.value))}
+                                        placeholder={ t("input_doctors_name") }
+                                        className="text-black dark:text-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        />
+                                </div>
                                 <div>
                                     <label className="mb-3 block text-black dark:text-white">
                                         { t("full_name") }

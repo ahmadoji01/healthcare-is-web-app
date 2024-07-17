@@ -22,13 +22,16 @@ import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { getAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultMedicalRecord, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
 import { useTranslations } from "next-intl";
+import Receipt from "./order/page";
 
 const OrderSummary = () => {
 
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [orderList, setOrderList] = useState<Order[]>([]);
     const [presModalOpen, setPresModalOpen] = useState<boolean>(false);
+    const [receiptModalOpen, setReceiptModalOpen] = useState<boolean>(false);
     const [medicalRecord, setMedicalRecord] = useState(defaultMedicalRecord);
+    const [orderID, setOrderID] = useState("");
 
     const t = useTranslations();
     const { accessToken, organization } = useUserContext();
@@ -44,11 +47,16 @@ const OrderSummary = () => {
             return;
         }
 
-        if (selectedOrder.visit.id === 0) {
+        if (selectedOrder.visit.id === "") {
             setMedicalRecord(defaultMedicalRecord);
             return;
         }
+
+        if (orderID === selectedOrder.id) {
+            return;
+        }
         
+        setOrderID(selectedOrder.id);
         getAMedicalRecord(accessToken, selectedOrder?.visit.medical_record.id)
             .then( res => {
                 let mr = defaultMedicalRecord;
@@ -133,6 +141,7 @@ const OrderSummary = () => {
             { (orderList.length > 0 && typeof(selectedOrder) !== 'undefined') && 
                 <>
                     <DashboardModal open={presModalOpen} handleClose={() => setPresModalOpen(false)} children={ <Prescription medicalRecord={medicalRecord} /> } title={t('prescription')} />
+                    <DashboardModal open={receiptModalOpen} handleClose={() => setReceiptModalOpen(false)} children={ <Receipt order={selectedOrder} /> } title={t('receipt')} />
                     <DashboardModal open={deleteModalOpen} handleClose={() => handleModal(false, false, false)} children={ <OrderItemDeleteConfirmation orderItem={selectedItem} handleDelete={deleteItem} handleClose={() => handleModal(false, false, false)} /> } title="" /> 
                     <DashboardModal open={itemModalOpen} handleClose={() => handleModal(false, false, false)} children={ <AddItem /> } title="" /> 
                     <DashboardModal open={checkoutModalOpen} handleClose={() => handleModal(false, false, false)} children={ <Checkout /> } title="" /> 
@@ -144,13 +153,19 @@ const OrderSummary = () => {
                             <OrderTotals />
                         </div>
                     </div>
-                    { medicalRecord.id !== 0 && 
+                    { medicalRecord.id !== "" && 
                         <div>
                             <button 
                                 className="top-0 z-50 mt-2 mb-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray"
                                 onClick={() => setPresModalOpen(true)}>
                                 <FontAwesomeIcon width={18} height={18} icon={faPrint} className="mr-2" />
                                 { t("print_prescription") }
+                            </button>
+                            <button 
+                                className="top-0 z-50 mt-2 mb-2 w-full justify-center rounded bg-primary py-5 px-3 font-medium text-2xl text-gray"
+                                onClick={() => setReceiptModalOpen(true)}>
+                                <FontAwesomeIcon width={18} height={18} icon={faPrint} className="mr-2" />
+                                { t("print_receipt") }
                             </button>
                         </div>
                     }

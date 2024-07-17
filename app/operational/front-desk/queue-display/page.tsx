@@ -64,7 +64,7 @@ const QueueDisplay = () => {
     const [waitingVisits, setWaitingVisits] = useState<Visit[]>([]);
     const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
     const [nextTab, setNextTab] = useState(0);
-    const router = useRouter();
+    const fields = ['queue_number','patient.name','doctor.id','status']
 
     const fetchVisits = async () => {
         if (presentDoctors.length <= 0) {
@@ -73,7 +73,7 @@ const QueueDisplay = () => {
 
         let vits:Visit[] = [];
         let filter = { _and: [ doctorIDEquals(presentDoctors[value].id), { _or: [statusEquals(VISIT_STATUS.waiting), statusEquals(VISIT_STATUS.temporary_leave), statusEquals(VISIT_STATUS.to_be_examined)] } ] };
-        await getVisitsWithFilter(accessToken, filter, 'date_created', 1).then( res => {
+        await getVisitsWithFilter(accessToken, filter, 'date_created', 1, fields).then( res => {
             res?.map( (visit) => { vits.push(visitMapper(visit)); });
         }).catch( err => openSnackbarNotification(t('alert_msg.server_error'), 'error'));
 

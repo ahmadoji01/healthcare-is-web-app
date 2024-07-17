@@ -157,6 +157,8 @@
     "input_staffs_full_name": "Input the Staff's Full Name",
     "prescription": "Medicines Prescription",
     "print_prescription": "Print Prescription",
+    "receipt": "Receipt",
+    "print_receipt": "Print Receipt",
     "vacant": "Vacant",
     "monthly_sales_in": "Monthly Sales in ",
     "clinic_information": "Clinic Information",
@@ -174,6 +176,19 @@
     "doctor_visit_analytics": "Monthly Doctor Visit Analytics",
     "this_months_data_not_available": "This month's data is not available",
     "dashboard_welcome": "Welcome to ",
+    "date": "Date",
+    "account_info": "Account Information",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirmation",
+    "input_email": "Input Email",
+    "input_password": "Input Password",
+    "input_confirm_password": "Input Confirmation Password",
+    "choose_role": "Choose One of the Roles Below",
+    "password_not_the_same": "Confirmation password is not the same",
+    "leave_password_blank": "*Leave password blank to keep it as it is",
+    "exam_fee": "Tarif pemeriksaan",
+    "input_exam_fee": "Masukkan tarif pemeriksaan dokter",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
@@ -244,7 +259,10 @@
         "clinic_is_close": "Clinic is close now. Wait until it's open!",
         "add_item_first": "Add an item first to check this order out!",
         "choose_date_first": "Choose the correct date range first",
-        "wrong_credentials": "Email/password you entered is incorrect"
+        "wrong_credentials": "Email/password you entered is incorrect",
+        "same_user_info": "Email/password has not changed",
+        "password_different": "Confirmation password is different",
+        "email_exists": "User with this email already exists"
     },
 
     "menu": {
@@ -275,7 +293,9 @@
         "queue_manager": "Queue Manager",
         "queue_display": "Queue Display",
         "patients_list": "Patients List",
-        "subscription": "Subscription"
+        "subscription": "Subscription",
+        "privacy_policy": "Privacy Policy",
+        "terms_and_conditions": "Terms and Conditions"
     },
 
     "visits_status": {

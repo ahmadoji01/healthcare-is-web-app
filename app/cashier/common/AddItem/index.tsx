@@ -13,13 +13,6 @@ import { getAllItems, searchItems } from "@/modules/items/domain/items.actions";
 import { Item, itemMapper } from "@/modules/items/domain/item";
 import { useTranslations } from "next-intl";
 
-function isAMedicine(obj: Medicine|Treatment) {
-    if (obj.hasOwnProperty('category')) {
-        return true;
-    }
-    return false;
-}
-
 let activeTimeout = null;
 
 const AddItem = () => {
@@ -97,7 +90,7 @@ const AddItem = () => {
         let newSelectedOrder = {...selectedOrder};
         let items = [...newSelectedOrder.order_items];
 
-        let orderItem:OrderItem = { id: items.length, item: item, name: item.name, price: item.price, description: "", quantity, total: item.price, type: item.type } 
+        let orderItem:OrderItem = { id: items.length.toString(), item: item, name: item.name, price: item.price, description: "", quantity, total: item.price, type: item.type } 
         newSelectedOrder.order_items[items.length] = orderItem;
         setSelectedOrder(newSelectedOrder);
         openSnackbarNotification(t("alert_msg.item_added"), "success");

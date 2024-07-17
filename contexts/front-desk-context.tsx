@@ -11,7 +11,7 @@ interface FrontDeskContextType {
     activeDoctor: Doctor,
     loading: boolean,
     newQueues: boolean[],
-    notifyNewQueue: (doctorId:number) => void,
+    notifyNewQueue: (doctorId:string) => void,
     setPresentDoctors: Dispatch<SetStateAction<Doctor[]>>,
     setActiveDoctor: Dispatch<SetStateAction<Doctor>>,
     setNewQueues: Dispatch<SetStateAction<boolean[]>>,
@@ -76,7 +76,7 @@ export const FrontDeskProvider = ({
         });
     }, [user])
 
-    const notifyNewQueue = (doctorId:number) => {
+    const notifyNewQueue = (doctorId:string) => {
         let key = presentDoctors.findIndex( (doc) => doc.id === doctorId );
 
         if (key === -1)

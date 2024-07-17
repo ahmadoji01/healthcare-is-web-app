@@ -1,17 +1,13 @@
 export interface Category {
-    id: number,
+    id: string,
     name: string,
-    parent: Category|null,
-    super_parent: Category|null,
-    children: Category[],
+    type: string,
 }
 
 export const defaultCategory:Category = {
-    id: 0,
+    id: "",
     name: "",
-    parent: null,
-    super_parent: null,
-    children: [],
+    type: "",
 }
 
 export const categoryMapper = (res:Record<string,any>) => {
@@ -19,21 +15,17 @@ export const categoryMapper = (res:Record<string,any>) => {
     category = { 
       id: res.id,
       name: res.name,
-      parent: res.parent,
-      super_parent: res.super_parent,
-      children: res.children,
+      type: res.type,
     }
     return category;
 }
 
-export type CategoryCreator = Omit<Category, 'id'|'parent'|'super_parent'> & { parent:number|null, super_parent:number|null, organization: number };
+export type CategoryCreator = Omit<Category, 'id'> & { organization: number };
 export const categoryCreatorMapper = (category:Category, orgID:number) => {
     let categoryCreator:CategoryCreator = {
         name: category.name,
         organization: orgID,
-        parent: category.parent? category.parent.id : null,
-        super_parent: category.super_parent? category.super_parent.id : null,
-        children: category.children,
+        type: category.type,
     }
     return categoryCreator;
 };

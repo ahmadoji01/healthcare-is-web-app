@@ -3,7 +3,7 @@ import { MedicalRecord, defaultMedicalRecord } from "@/modules/medical-records/d
 import { Patient, defaultPatient, patientMapper } from "@/modules/patients/domain/patient";
 
 export type Visit = {
-    id: number,
+    id: string,
     date_created: Date,
     date_updated: Date,
     queue_number: string,
@@ -15,7 +15,7 @@ export type Visit = {
 }
 
 export const defaultVisit: Visit = {
-    id: 0,
+    id: "",
     date_created: new Date,
     date_updated: new Date,
     queue_number: "",
@@ -33,7 +33,7 @@ export function visitMapper(res:Record<string,any>) {
     }
 
     visit = { 
-        id: parseInt(res.id), 
+        id: res.id, 
         date_created: res.date_created, 
         date_updated: res.date_updated,
         queue_number: res.queue_number,
@@ -49,8 +49,8 @@ type Organization = {
     organization: number,
 }
 
-export type VisitCreator = Omit<Visit, 'id'|'patient'|'doctor'|'medical_record'> & Organization & { patient:number, doctor:number, medical_record: number };
-export function visitCreatorMapper(visit:Visit, medicalRecordID:number, orgID:number) {
+export type VisitCreator = Omit<Visit, 'id'|'patient'|'doctor'|'medical_record'> & Organization & { patient:string, doctor:string, medical_record:string };
+export function visitCreatorMapper(visit:Visit, medicalRecordID:string, orgID:number) {
 
     let visitCreator: VisitCreator = {
         date_created: visit.date_created, 
@@ -66,13 +66,13 @@ export function visitCreatorMapper(visit:Visit, medicalRecordID:number, orgID:nu
 }
 
 export interface VisitCount {
-    doctor: number,
+    doctor: string,
     count: number,
 }
 
 export function visitCountMapper(res:Record<string,any>) {
     let visitCount:VisitCount = {
-        doctor: res.doctor? parseInt(res.doctor) : 0,
+        doctor: res.doctor? res.doctor : "",
         count: res.count? parseInt(res.count) : 0,
     }
     return visitCount;

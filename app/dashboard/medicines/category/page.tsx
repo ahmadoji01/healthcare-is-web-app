@@ -12,6 +12,7 @@ import CategoryListTable from "@/modules/categories/application/list/category.li
 import { createACategory, deleteACategory, getAllCategoriesWithFilterPage, getTotalCategoriesWithFilter, getTotalSearchCategoriesWithFilter, searchCategories, searchCategoriesWithFilter, updateACategory } from "@/modules/categories/domain/categories.actions";
 import { Category, categoryCreatorMapper, categoryMapper, defaultCategory } from "@/modules/categories/domain/category";
 import { medicineCategoriesFilter } from "@/modules/categories/domain/category.specifications";
+import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { faAdd, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
@@ -143,9 +144,7 @@ const MedicineCategoryPage = () => {
 
     const handleSubmit = async (category:Category) => {
         let categoryExists = false;
-        category.parent = superParent;
-        category.super_parent = superParent;
-        category.children = [];
+        category.type = ITEM_TYPE.medicine;
         await searchCategories(accessToken, category.name, 1).then( res => {
             if (res.length !== 0) {
                 categoryExists = true;
@@ -166,9 +165,6 @@ const MedicineCategoryPage = () => {
     }
 
     const handleCreateSubmit = async (category:Category) => {
-        category.parent = superParent;
-        category.super_parent = superParent;
-        category.children = [];
         let categoryCreator = categoryCreatorMapper(category, organization.id);
 
         let categoryExists = false;
@@ -183,6 +179,7 @@ const MedicineCategoryPage = () => {
             return;
         }
 
+        categoryCreator.type = ITEM_TYPE.medicine;
         createACategory(accessToken, categoryCreator).then( res => {
             openSnackbarNotification(t("alert_msg.success"), "success");
             window.location.reload();

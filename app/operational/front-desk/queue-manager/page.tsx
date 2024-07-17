@@ -6,7 +6,7 @@ import { DataModalProvider, useDataModalContext } from "@/contexts/data-modal-co
 import { createAPhysicalCheckup } from "@/modules/physical-checkups/domain/physical-checkup.actions";
 import { useUserContext } from "@/contexts/user-context";
 import { useAlertContext } from "@/contexts/alert-context";
-import { createAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
+import { createAMedicalRecord, updateAMedicalRecord } from "@/modules/medical-records/domain/medical-records.actions";
 import { defaultMedicalRecord, medicalRecordCreatorMapper, medicalRecordMapper } from "@/modules/medical-records/domain/medical-record";
 import { deleteAVisit, updateVisit } from "@/modules/visits/domain/visits.actions";
 import { useVisitContext } from "@/contexts/visit-context";
@@ -29,14 +29,13 @@ import DeleteModal from "@/components/Modal/DeleteModal";
 
 const QueueManager = () => {
 
-    const [wsClient, setWSClient] = useState<WebSocketClient<any>>();
     const [statusModalOpen, setStatusModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const {accessToken, user, organization} = useUserContext();
+    const {accessToken, user, organization, wsClient} = useUserContext();
     const {activePatient, activeVisit} = useVisitContext();
     const {openSnackbarNotification} = useAlertContext();
     const {editModalOpen, deleteModalOpen, handleModal} = useDataModalContext();
-    const {notifyNewQueue} = useFrontDeskContext();
+    const {presentDoctors, notifyNewQueue} = useFrontDeskContext();
     const t = useTranslations();
 
     async function subsToVisit() {
@@ -57,27 +56,15 @@ const QueueManager = () => {
         }
     }
 
-    useEffect( () => {
-        let interval = setInterval(async () => {
-            if (user.id !== "") {
-                let client = websocketClient(accessToken);
-                setWSClient(client);
-                client.connect();
-            }
-            clearInterval(interval);
-        }, 110);
-        return () => clearInterval(interval);
-    }, [user]);
-
-    useEffect( () => {
-        let interval = setInterval(async () => {
-            if (typeof(wsClient) !== "undefined") {
-                subsToVisit();
-            }
-            clearInterval(interval);
-        }, 110);
-        return () => clearInterval(interval);
-    }, [wsClient]);
+    useEffect(() => {
+        if (presentDoctors.length === 0)
+            return;
+        
+        if (typeof(wsClient) === "undefined") 
+            return;
+        
+        subsToVisit();
+    }, [presentDoctors]);
 
     useEffect( () => {
         if (organization.status === ORG_STATUS.close && organization.id !== 0) {
@@ -118,7 +105,7 @@ const QueueManager = () => {
         medicalRecordCreator.doctor = activeVisit.doctor.id;
         medicalRecordCreator.patient = checkup.patient.id;
         medicalRecordCreator.physical_checkup = checkupRes.id;
-        await createAMedicalRecord(accessToken, medicalRecordCreator).then( res => {
+        await updateAMedicalRecord(accessToken, activeVisit.medical_record.id, { doctor: activeVisit.doctor.id, patient: checkup.patient.id, physical_checkup: checkupRes.id }).then( res => {
             medicalRecordRes = medicalRecordMapper(res);
         }).catch( err => { isError=true; return; });
 

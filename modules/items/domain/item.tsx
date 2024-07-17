@@ -2,7 +2,7 @@ import { Category, categoryMapper } from "@/modules/categories/domain/category";
 import { defaultCategory } from "@/modules/categories/domain/category";
 
 export interface Item {
-    id: number,
+    id: string,
     sku: string,
     name: string,
     stock: number,
@@ -13,7 +13,7 @@ export interface Item {
 }
 
 export const defaultItem: Item = {
-    id: 0,
+    id: "",
     sku: "",
     name: "",
     stock: 0,
@@ -38,8 +38,8 @@ export function itemMapper(res:Record<string,any>) {
     return item;
 }
 
-export type ItemCreator = Omit<Item, 'id'|'category'> & { category:number, organization: number };
-export function itemCreatorMapper(item:Item, catID:number, orgID:number) {
+export type ItemCreator = Omit<Item, 'id'|'category'> & { category:string, organization: number };
+export function itemCreatorMapper(item:Item, catID:string, orgID:number) {
 
     let itemCreator: ItemCreator = { 
         name: item.name, 
@@ -54,7 +54,7 @@ export function itemCreatorMapper(item:Item, catID:number, orgID:number) {
     return itemCreator;
 }
 
-export type ItemPatcher = Omit<Item, 'id'|'category'> & { category:number };
+export type ItemPatcher = Omit<Item, 'id'|'category'> & { category:string };
 export function itemPatcherMapper(item:Item) {
     let itemPatcher:ItemPatcher = {
         name: item.name, 

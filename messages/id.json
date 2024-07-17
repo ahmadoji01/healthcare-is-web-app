@@ -157,6 +157,8 @@
     "input_staffs_full_name": "Masukkan Nama Lengkap Staf",
     "prescription": "Resep Obat",
     "print_prescription": "Cetak Resep",
+    "receipt": "Bukti Pembayaran",
+    "print_receipt": "Cetak Bukti Pembayaran",
     "vacant": "Kosong",
     "monthly_sales_in": "Penjualan Tahun ",
     "clinic_information": "Informasi Klinik",
@@ -175,6 +177,17 @@
     "this_months_data_not_available": "Data bulan ini belum tersedia",
     "dashboard_welcome": "Selamat datang di ",
     "date": "Tanggal",
+    "account_info": "Informasi Akun",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "confirm_password": "Konfirmasi Kata Sandi",
+    "input_email": "Masukkan Email",
+    "input_password": "Masukkan Kata Sandi",
+    "input_confirm_password": "Masukkan Kembali Kata Sandi",
+    "choose_role": "Pilih salah satu tugas di bawah ini",
+    "role": "Tugas",
+    "password_not_the_same": "Kata sandi tidak sama",
+    "leave_password_blank": "*Kosongkan kata sandi apabila tidak ingin dirubah",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
@@ -242,7 +255,8 @@
         "clinic_is_close": "Klinik saat ini tutup. Harap tunggu sampai buka!",
         "add_item_first": "Tambahkan minimal satu item dulu untuk menyelesaikan pesanan ini!",
         "choose_date_first": "Pilih rentang tanggal pemesanan dulu!",
-        "wrong_credentials": "Email/kata sandi yang Anda masukkan salah"
+        "wrong_credentials": "Email/kata sandi yang Anda masukkan salah",
+        "email_exists": "Email ini sudah digunakan"
     },
     "menu": {
         "patient_header": "PASIEN",
@@ -272,7 +286,9 @@
         "queue_manager": "Pengelola Antrian",
         "queue_display": "Tampilan Antrian",
         "patients_list": "Daftar Pasien",
-        "subscription": "Langganan"
+        "subscription": "Langganan",
+        "privacy_policy": "Kebijakan Privasi Data",
+        "terms_and_conditions": "Syarat dan Ketentuan"
     },
 
     "visits_status": {
