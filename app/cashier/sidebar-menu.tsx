@@ -27,13 +27,11 @@ interface SidebarItemProps {
 const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
     const [orderList, setOrderList] = useState<Order[]>([]);
     const [openAddOrderModal, setOpenAddOrderModal] = useState(false);
-    const [patient, setPatient] = useState(defaultPatient);
     
-    const { orders, selectedOrder, setSelectedOrder, loadAnOrder } = useOrderSummaryContext();
+    const { orders, selectedOrder, loadAnOrder } = useOrderSummaryContext();
     const {accessToken, organization} = useUserContext();
     const {openSnackbarNotification} = useAlertContext();
     const t = useTranslations();
-    const router = useRouter();
 
     useEffect( () => {
         setOrderList(orders);
@@ -50,7 +48,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) 
                         pat = patientMapper(res[0]);
                 })
                 .catch( () => { isError = true; });
-            if (pat.id === 0) {
+            if (pat.id === "") {
                 pat.name = "Guest";
                 pat.fathers_name = "Guest";
                 pat.mothers_name = "Guest";
