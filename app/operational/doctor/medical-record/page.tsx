@@ -165,7 +165,7 @@ const MedicalRecords = () => {
       let itemsCreator:MRItemCreator[] = [];
       let orderItems:OrderItemCreator[] = [];
       
-      setLoading(true);
+      //setLoading(true);
       mrTreatments?.map( (treatment) => {
         itemsCreator.push(mrItemCreatorMapper(treatment, organization.id));
         orderItems.push(orderItemCreatorMapper(treatment, organization.id));
@@ -184,7 +184,6 @@ const MedicalRecords = () => {
       }).catch( err => { openSnackbarNotification(t('alert_msg.server_error'), 'error'); setLoading(false); return; });
 
       let orderUpdate = { order_items: orderItems, status: ORDER_STATUS.waiting_to_pay };
-      
       updateOrder(accessToken, order.id, orderUpdate).then( () => {
         openSnackbarNotification(t('alert_msg.success'), 'success');
         router.push("/operational/doctor/patients-list");

@@ -46,9 +46,11 @@ const MedicationList = ({ mrMedicines, setMRMedicines }:MedicationListProps) => 
                         <p>{ t('quantity') }:</p>
                         <div className="flex flex-row">
                             <input
+                                type="number"
                                 onChange={ e => qtyChange(parseInt(e.target.value), i)}
                                 required
                                 name="quantity"
+                                min={1}
                                 className="text-black dark:text-white custom-input-date custom-input-date-2 w-1/2 rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
                                 />
                             <p className="text-black dark:text-white w-1/2 my-auto ml-2">{mrMed.items_id.unit}</p>
