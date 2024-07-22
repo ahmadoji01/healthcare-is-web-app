@@ -169,13 +169,16 @@ export const UserProvider = ({
     }
 
     useEffect(() => {
+        if (loading === false)
+            return;
+
         let interval = setInterval(async () => {
             refreshToken(interval, false);
             clearInterval(interval);
         }, 100);
 
         return () => clearInterval(interval);    
-    }, [loading]);
+    }, []);
 
     useEffect(() => {
         let interval = setInterval(async () => {
