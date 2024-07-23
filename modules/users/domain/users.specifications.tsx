@@ -5,11 +5,11 @@ export const allowedURL = (role:string) => {
         case ROLES.administrator:
             return ['/dashboard', '/operational/front-desk', '/operational/doctor', '/cashier', '/profile', '/documents', '/info'];
         case ROLES.cashier:
-            return ['/cashier', '/profile', '/documents', '/info'];
+            return ['/dashboard', '/cashier', '/profile', '/documents', '/info'];
         case ROLES.doctor:
-            return ['/operational/doctor', '/profile', '/documents', '/info'];
+            return ['/dashboard', '/operational/doctor', '/profile', '/documents', '/info'];
         case ROLES.front_desk:
-            return ['/operational/front-desk', '/profile', '/documents', '/info'];
+            return ['/dashboard', '/operational/front-desk', '/profile', '/documents', '/info'];
         case ROLES.staff:
             return ['/dashboard', '/profile', '/documents', '/info'];
         default:

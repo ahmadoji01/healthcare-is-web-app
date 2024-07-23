@@ -1,7 +1,7 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import "@/styles/satoshi.css";
-import {getLocale, getMessages} from 'next-intl/server';
+import {getLocale} from 'next-intl/server';
 import Providers from '@/contexts/generic-providers';
 import NextIntlWrapper from '@/contexts/next-intl-wrapper';
 
@@ -14,7 +14,6 @@ export default async function RootLayout({
 }) {
 
   const locale = await getLocale();
-  const messages = await getMessages();
 
   return (
     <html lang={locale}>

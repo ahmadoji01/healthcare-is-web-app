@@ -33,6 +33,17 @@ export interface UserMenuItem {
     role: string[]
 }
 
+interface HomeMenu {
+    image: string,
+    title: string,
+    url: string,
+}
+
+export interface HomeMenuItem {
+    role: string,
+    homeMenus: HomeMenu[],
+}
+
 export const userMenuItems: UserMenuItem[] = [
     {
         title: "menu.my_profile",
@@ -462,4 +473,67 @@ export const sideMenuItems: SideMenuItem[] = [
             },
         ]
     },
+]
+
+export const homeMenuItems: HomeMenuItem[] = [
+    {
+        role: ROLES.administrator,
+        homeMenus: [
+            {
+                image: '',
+                title: 'home_menu.print_sales',
+                url: '/dashboard/orders',
+            },
+            {
+                image: '',
+                title: 'home_menu.manage_queue',
+                url: '/operational/front-desk/queue-manager',
+            },
+            {
+                image: '',
+                title: 'home_menu.display_queue',
+                url: '/operational/front-desk/queue-display',
+            },
+            {
+                image: '',
+                title: 'home_menu.patient_registration',
+                url: '/operational/front-desk/patient-registration',
+            },
+            {
+                image: '',
+                title: 'home_menu.examine_patient',
+                url: '/operational/doctor/patients-list',
+            },
+            {
+                image: '',
+                title: 'home_menu.edit_profile',
+                url: '/profile',
+            },
+            {
+                image: '',
+                title: 'home_menu.manage_cashier',
+                url: '/cashier',
+            },
+            {
+                image: '',
+                title: 'home_menu.add_treatment',
+                url: '/dashboard/treatments/create',
+            },
+            {
+                image: '',
+                title: 'home_menu.add_medicine',
+                url: '/dashboard/medicines/create',
+            },
+            {
+                image: '',
+                title: 'home_menu.open_close_clinic',
+                url: '/operational/front-desk',
+            },
+            {
+                image: '',
+                title: 'home_menu.clinic_analysis',
+                url: '/dashboard/analysis',
+            }
+        ]
+    }
 ]

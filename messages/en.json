@@ -299,6 +299,20 @@
         "terms_and_conditions": "Terms and Conditions"
     },
 
+    "home_menu": {
+        "print_sales": "Print Sales History",
+        "manage_queue": "Manage Patients' Queue",
+        "display_queue": "Display Patients' Queue",
+        "patient_registration": "Register Patient",
+        "examine_patient": "Start Examining Patient",
+        "edit_profile": "Edit My Profile",
+        "manage_cashier": "Start Managing Cashier",
+        "add_medicine": "Add a Medicine",
+        "add_treatment": "Add a Treatment",
+        "open_close_clinic": "Open/Close Clinic",
+        "clinic_analysis": "Observe Clinic Analysis"
+    },
+
     "visits_status": {
         "waiting": "Waiting",
         "temporary_leave": "Temporary Leave",

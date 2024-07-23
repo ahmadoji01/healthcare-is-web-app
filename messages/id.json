@@ -292,6 +292,20 @@
         "terms_and_conditions": "Syarat dan Ketentuan"
     },
 
+    "home_menu": {
+        "print_sales": "Cetak Riwayat Penjualan",
+        "manage_queue": "Kelola Antrian Pasien",
+        "display_queue": "Tampilkan Informasi Antrian Pasien",
+        "patient_registration": "Daftarkan Pasien",
+        "examine_patient": "Mulai Pemeriksaan Pasien",
+        "edit_profile": "Edit Profil Saya",
+        "manage_cashier": "Mulai Kelola Kasir",
+        "add_medicine": "Tambah Obat",
+        "add_treatment": "Tambah Perawatan",
+        "open_close_clinic": "Buka/Tutup Klinik",
+        "clinic_analysis": "Lihat Analisis Klinik"
+    },
+
     "visits_status": {
         "waiting": "Menunggu",
         "temporary_leave": "Keluar Sementara",
