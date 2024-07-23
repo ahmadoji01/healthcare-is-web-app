@@ -68,6 +68,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             height={32}
             src={"/images/logo/logo-white.svg"}
             alt="Logo"
+            priority={false}
           />
         </Link>
 

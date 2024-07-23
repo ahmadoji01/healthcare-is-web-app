@@ -52,6 +52,7 @@ const Login = () => {
                                 alt="Logo"
                                 width={176}
                                 height={32}
+                                priority={false}
                                 />
                                 <Image
                                 className="dark:hidden"
@@ -59,6 +60,7 @@ const Login = () => {
                                 alt="Logo"
                                 width={176}
                                 height={32}
+                                priority={false}
                                 />
                             </Link>
 
