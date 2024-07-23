@@ -14,7 +14,7 @@ interface VisitContextType {
     setActivePatient: Dispatch<SetStateAction<Patient>>,
     setActiveVisit: Dispatch<SetStateAction<Visit>>,
     setDoctorVisits: Dispatch<SetStateAction<Visit[]>>,
-    handleDoctorVisits: (doctorID:number) => void,
+    handleDoctorVisits: (doctorID:string) => void,
 }
 
 export const VisitContext = createContext<VisitContextType | null>({
