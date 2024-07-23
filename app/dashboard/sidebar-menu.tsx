@@ -3,21 +3,22 @@ import SidebarLinkGroup from "./sidebar-link-group";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { sidebarMenuItems } from "@/config/dashboard/menu";
+import { SideMenuItem } from "@/config/dashboard/menu";
 import { useTranslations } from "next-intl";
 
 interface SidebarItemProps {
     sidebarExpanded: Boolean,
     setSidebarExpanded: React.Dispatch<React.SetStateAction<boolean>>,
+    menu: SideMenuItem,
 }
 
-const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
+const SidebarMenu = ({ menu, sidebarExpanded, setSidebarExpanded }: SidebarItemProps) => {
     const pathname = usePathname();
     const t = useTranslations();
 
     return (
         <>
-            { sidebarMenuItems.map((item, key) => (
+            { menu?.menuGroup.map((item, key) => (
                 <div key={key}>
                     <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
                         { t(item.headerTitle) }

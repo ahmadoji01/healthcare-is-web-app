@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 interface SidebarProps {
@@ -10,8 +9,6 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen, children }: SidebarProps) => {
-  const pathname = usePathname();
-
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
@@ -42,17 +39,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, children }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
+      style={{ zIndex:1000 }}
     >
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      <div className="flex items-center justify-between gap-2 pl-5.5">
         <Link href="/dashboard/">
           <Image
-            width={176}
+            width={225}
             height={32}
             src={"/images/logo/logo-white.svg"}
             alt="Logo"
+            priority={false}
           />
         </Link>
 

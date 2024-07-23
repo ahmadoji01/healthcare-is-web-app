@@ -53,7 +53,7 @@ const SidebarMenu = ({ sidebarExpanded, setSidebarExpanded }: SidebarMenuProps) 
             <ul className="mb-6 flex flex-col gap-1.5">
                 { loading && <Spinner /> }
                 { !loading && presentDoctors?.map((doctor, key) => 
-                    (doctor.id !== 0) &&
+                    (doctor.id !== '') &&
                         <Link
                             href={"/operational/front-desk/queue-manager"}
                             className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${

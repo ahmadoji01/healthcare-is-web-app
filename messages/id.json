@@ -188,6 +188,8 @@
     "role": "Tugas",
     "password_not_the_same": "Kata sandi tidak sama",
     "leave_password_blank": "*Kosongkan kata sandi apabila tidak ingin dirubah",
+    "sign_in_to_fourstake": "Masuk ke Fourstake",
+    "sign_in": "Masuk",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",
@@ -269,6 +271,7 @@
         "submit_to_satusehat": "Kirim Rekam Medis ke Satusehat",
         "clinic_header": "MANAJEMEN KLINIK",
         "account_management": "Manajemen Akun",
+        "clinic_analysis": "Analisis Klinik",
         "all_users": "Semua Pengguna",
         "add_user": "Tambah Pengguna",
         "all_doctors": "Semua Dokter",
@@ -289,6 +292,20 @@
         "subscription": "Langganan",
         "privacy_policy": "Kebijakan Privasi Data",
         "terms_and_conditions": "Syarat dan Ketentuan"
+    },
+
+    "home_menu": {
+        "print_sales": "Cetak Riwayat Penjualan",
+        "manage_queue": "Kelola Antrian Pasien",
+        "display_queue": "Tampilkan Informasi Antrian Pasien",
+        "patient_registration": "Daftarkan Pasien",
+        "examine_patient": "Mulai Pemeriksaan Pasien",
+        "edit_profile": "Edit Profil Saya",
+        "manage_cashier": "Mulai Kelola Kasir",
+        "add_medicine": "Tambah Obat",
+        "add_treatment": "Tambah Perawatan",
+        "open_close_clinic": "Buka/Tutup Klinik",
+        "clinic_analysis": "Lihat Analisis Klinik"
     },
 
     "visits_status": {

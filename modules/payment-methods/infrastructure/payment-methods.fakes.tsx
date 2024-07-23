@@ -1,7 +1,4 @@
 import { PaymentMethod } from "../domain/payment-method";
-import CashIcon from "@/public/icons/cash.svg";
-import PayPalIcon from "@/public/icons/paypal.svg";
-import TransferIcon from "@/public/icons/transfer.svg";
 
 export const paymentMethodsFakeData: PaymentMethod[] = [
 	{

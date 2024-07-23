@@ -187,8 +187,10 @@
     "choose_role": "Choose One of the Roles Below",
     "password_not_the_same": "Confirmation password is not the same",
     "leave_password_blank": "*Leave password blank to keep it as it is",
-    "exam_fee": "Tarif pemeriksaan",
-    "input_exam_fee": "Masukkan tarif pemeriksaan dokter",
+    "exam_fee": "Examination Fee",
+    "input_exam_fee": "Input doctor's examination fee",
+    "sign_in_to_fourstake": "Sign in to Fourstake",
+    "sign_in": "Sign in",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
@@ -276,6 +278,7 @@
         "submit_to_satusehat": "Submit Record to Satusehat",
         "clinic_header": "CLINIC MANAGEMENT",
         "account_management": "Account Management",
+        "clinic_analysis": "Clinic Analysis",
         "all_users": "All Users",
         "add_user": "Add a User",
         "all_doctors": "All Doctors",
@@ -296,6 +299,20 @@
         "subscription": "Subscription",
         "privacy_policy": "Privacy Policy",
         "terms_and_conditions": "Terms and Conditions"
+    },
+
+    "home_menu": {
+        "print_sales": "Print Sales History",
+        "manage_queue": "Manage Patients' Queue",
+        "display_queue": "Display Patients' Queue",
+        "patient_registration": "Register Patient",
+        "examine_patient": "Start Examining Patient",
+        "edit_profile": "Edit My Profile",
+        "manage_cashier": "Start Managing Cashier",
+        "add_medicine": "Add a Medicine",
+        "add_treatment": "Add a Treatment",
+        "open_close_clinic": "Open/Close Clinic",
+        "clinic_analysis": "Observe Clinic Analysis"
     },
 
     "visits_status": {

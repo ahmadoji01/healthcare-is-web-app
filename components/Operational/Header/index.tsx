@@ -1,8 +1,5 @@
 import Link from "next/link";
 import DarkModeSwitcher from "./DarkModeSwitcher";
-import DropdownMessage from "./DropdownMessage";
-import DropdownNotification from "./DropdownNotification";
-import DropdownUser from "./DropdownUser";
 import Image from "next/image";
 
 const Header = () => {
@@ -14,8 +11,9 @@ const Header = () => {
             <Image
               width={176}
               height={32}
-              src={"/images/logo/logo.svg"}
+              src={"/images/logo/logo-white.svg"}
               alt="Logo"
+              priority={false}
               />
           </Link>
         </div>

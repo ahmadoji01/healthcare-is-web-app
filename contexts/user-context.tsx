@@ -150,7 +150,7 @@ export const UserProvider = ({
                 clearInterval(interval);
             return;
         }).catch( err => {
-            if (pathname !== '/' && ( err.response.status === 400 || err.response.status === 401 || err.response.status === 403)) {
+            if (pathname !== '/' && ( err?.response?.status === 400 || err?.response?.status === 401 || err?.response?.status === 403)) {
                 window.location.href = '/';
             }
             setLoading(false);
@@ -169,13 +169,16 @@ export const UserProvider = ({
     }
 
     useEffect(() => {
+        if (loading === false)
+            return;
+
         let interval = setInterval(async () => {
             refreshToken(interval, false);
             clearInterval(interval);
         }, 100);
 
         return () => clearInterval(interval);    
-    }, [loading]);
+    }, []);
 
     useEffect(() => {
         let interval = setInterval(async () => {

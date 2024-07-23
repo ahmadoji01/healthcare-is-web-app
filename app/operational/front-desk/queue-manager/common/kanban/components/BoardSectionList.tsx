@@ -33,6 +33,7 @@ import { DoctorName } from '@/utils/doctor-name-format';
 import { useFrontDeskContext } from '@/contexts/front-desk-context';
 import { VISIT_STATUS } from '@/modules/visits/domain/visit.constants';
 import { useTranslations } from 'next-intl';
+import Spinner from '@/components/Spinner';
 
 const BoardSectionList = () => {
   const {doctorVisits} = useVisitContext();
@@ -135,7 +136,7 @@ const BoardSectionList = () => {
     }
 
     if (prevContainer !== activeContainer) {
-      updateVisit(accessToken, active.id as number, { status: activeContainer })
+      updateVisit(accessToken, active.id as string, { status: activeContainer })
       .then( () => openSnackbarNotification(t('alert_msg.success'), 'success'))
       .catch( () => {openSnackbarNotification(t('alert_msg.server_error'), 'error'); return; } );
     }
@@ -173,6 +174,7 @@ const BoardSectionList = () => {
   };
 
   const { activeDoctor } = useFrontDeskContext();
+  const { loading } = useVisitContext();
 
   return (
     <>
@@ -201,26 +203,29 @@ const BoardSectionList = () => {
             </div>
           </div>
       }
-      <div className="grid grid-cols-1 gap-7.5 grid-cols-2">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCorners}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
-          onDragEnd={handleDragEnd} >
-          {Object.keys(boardSections).map((boardSectionKey, key) => (
-            <BoardSection
-              id={boardSectionKey}
-              title={boardTitle[boardSectionKey]}
-              visits={boardSections[boardSectionKey]}
-              key={key}
-              />
-          ))}
-          <DragOverlay dropAnimation={dropAnimation}>
-            {task ? <TaskItem visit={task} /> : null}
-          </DragOverlay>
-        </DndContext>
-      </div>
+      { loading && <Spinner /> }
+      { !loading && 
+        <div className="grid grid-cols-1 gap-7.5 grid-cols-2">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd} >
+            {Object.keys(boardSections).map((boardSectionKey, key) => (
+              <BoardSection
+                id={boardSectionKey}
+                title={boardTitle[boardSectionKey]}
+                visits={boardSections[boardSectionKey]}
+                key={key}
+                />
+            ))}
+            <DragOverlay dropAnimation={dropAnimation}>
+              {task ? <TaskItem visit={task} /> : null}
+            </DragOverlay>
+          </DndContext>
+        </div>
+      }
     </>
   );
 };
