@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "env-cmd -f ./.env.production next build",
     "start": "next start",
     "lint": "next lint",
-    "build:production": "env-cmd -f ./.env.production npm run-script build"
+    "build:production": "env-cmd -f ./.env.production next build"
   },
   "dependencies": {
     "@directus/sdk": "^14.0.0",

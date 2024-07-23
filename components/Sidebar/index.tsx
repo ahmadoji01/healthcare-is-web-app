@@ -46,10 +46,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, children }: SidebarProps) => {
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      <div className="flex items-center justify-between gap-2 pl-5.5">
         <Link href="/dashboard/">
           <Image
-            width={176}
+            width={225}
             height={32}
             src={"/images/logo/logo-white.svg"}
             alt="Logo"
