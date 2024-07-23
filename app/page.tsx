@@ -16,7 +16,7 @@ const Login = () => {
     const router = useRouter();
     const pathname = usePathname();
     const {openSnackbarNotification} = useAlertContext();
-    const {setAccessToken, retrieveUser} = useUserContext();
+    const {setAccessToken} = useUserContext();
     const t = useTranslations();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

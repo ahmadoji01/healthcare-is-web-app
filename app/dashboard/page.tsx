@@ -6,6 +6,7 @@ import { useUserContext } from "@/contexts/user-context";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -34,7 +35,12 @@ const DashboardHome = () => {
         { homeMenuItem?.homeMenus.map( (item, key) => (
           <Link href={item.url} key={key}>
             <CardMenu title={t(item.title)}>
-              <FontAwesomeIcon icon={faUser} width={22} />
+              <Image
+                src={item.image}
+                alt="Logo"
+                width={64}
+                height={64}
+                />
             </CardMenu>
           </Link>
         ))}

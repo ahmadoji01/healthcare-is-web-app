@@ -150,7 +150,7 @@ export const UserProvider = ({
                 clearInterval(interval);
             return;
         }).catch( err => {
-            if (pathname !== '/' && ( err.response.status === 400 || err.response.status === 401 || err.response.status === 403)) {
+            if (pathname !== '/' && ( err?.response?.status === 400 || err?.response?.status === 401 || err?.response?.status === 403)) {
                 window.location.href = '/';
             }
             setLoading(false);
