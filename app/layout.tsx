@@ -4,6 +4,7 @@ import "@/styles/satoshi.css";
 import {getLocale} from 'next-intl/server';
 import Providers from '@/contexts/generic-providers';
 import NextIntlWrapper from '@/contexts/next-intl-wrapper';
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,6 +25,7 @@ export default async function RootLayout({
       <NextIntlWrapper>
         <Providers>
           <body suppressHydrationWarning={true} className={inter.className + 'bg-white dark:bg-boxdark'}>
+            <NextTopLoader />
             {children}
           </body>
         </Providers>
