@@ -5,11 +5,12 @@ import "@/styles/satoshi.css";
 import { useState, useEffect } from "react";
 import Loader from "@/components/Loader";
 
-import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { useUserContext } from "@/contexts/user-context";
 import SidebarMenu from "@/app/dashboard/sidebar-menu";
+import { SideMenuItem, sideMenuItems } from "@/config/dashboard/menu";
+import Sidebar from "@/components/Sidebar";
 
 export default function DashboardProviders({
   children,
@@ -17,9 +18,10 @@ export default function DashboardProviders({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sideMenu, setSideMenu] = useState<SideMenuItem>();
   const [fetching, setFetching] = useState(true);
   const [theme, setTheme] = useState(createTheme({ palette: { mode: "light" } }));
-  const {loading} = useUserContext();
+  const {user, loading} = useUserContext();
 
   let storedSidebarExpanded = "true";
   const [sidebarExpanded, setSidebarExpanded] = useState(
@@ -48,7 +50,15 @@ export default function DashboardProviders({
 
   useEffect(() => {
     setFetching(loading);
-  }, [loading])
+  }, [loading]);
+
+  useEffect(() => {
+    if (user.id === '')
+      return;
+
+    let index = sideMenuItems.findIndex( item => item.role === user.role_name );
+    setSideMenu(sideMenuItems[index]);
+  }, [user])
 
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
@@ -60,7 +70,7 @@ export default function DashboardProviders({
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}
             >
-            <SidebarMenu sidebarExpanded={sidebarExpanded} setSidebarExpanded={setSidebarExpanded}  />
+            <SidebarMenu menu={sideMenu} sidebarExpanded={sidebarExpanded} setSidebarExpanded={setSidebarExpanded}  />
           </Sidebar>
           <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
             <Header

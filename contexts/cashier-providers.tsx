@@ -4,10 +4,10 @@ import Loader from "@/components/Loader";
 
 import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
-import Sidebar from "@/components/Sidebar";
 import { OrderSummaryProvider } from "@/contexts/order-summary-context";
 import SidebarMenu from "@/app/cashier/sidebar-menu";
 import Footer from "@/app/cashier/common/Footer";
+import Sidebar from "@/components/Sidebar";
 
 export default function CashierProviders({
   children,

@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Loader from "@/components/Loader";
 
-import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { VisitProvider } from "@/contexts/visit-context";
@@ -11,6 +10,7 @@ import { FrontDeskProvider, useFrontDeskContext } from "@/contexts/front-desk-co
 import SidebarMenu from "@/app/operational/front-desk/queue-manager/sidebar-menu";
 import Footer from "@/app/operational/front-desk/queue-manager/common/footer";
 import { DataModalProvider } from "./data-modal-context";
+import Sidebar from "@/components/Sidebar";
 
 export default function QueueManagerProviders({
   children,

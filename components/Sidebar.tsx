@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 interface SidebarProps {
@@ -10,8 +9,6 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen, children }: SidebarProps) => {
-  const pathname = usePathname();
-
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
