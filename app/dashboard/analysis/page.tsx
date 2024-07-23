@@ -1,6 +1,8 @@
 'use client';
 
-import CardMenu from "@/components/Dashboard/CardMenu";
+import CardDataOverview from "@/components/Dashboard/CardDataOverview";
+import ChartOne from "@/components/Dashboard/Charts/ChartOne";
+import ChartThree from "@/components/Dashboard/Charts/ChartThree";
 import { useUserContext } from "@/contexts/user-context";
 import { ITEM_TYPE } from "@/modules/items/domain/item.constants";
 import { getAnItem } from "@/modules/items/domain/items.actions";
@@ -15,7 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
-const DashboardHome = () => {
+const DashboardAnalysis = () => {
 
   const t = useTranslations();
   const {accessToken, user, organization} = useUserContext();
@@ -66,21 +68,23 @@ const DashboardHome = () => {
         </h2>
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardMenu title={t('total_visits_this_month')} total={totalMonthlyVisits.toString()}>
+        <CardDataOverview title={t('total_visits_this_month')} total={totalMonthlyVisits.toString()}>
           <FontAwesomeIcon icon={faUser} width={22} />
-        </CardMenu>
-        <CardMenu title={t('total_visits_all_time')} total={totalAllVisits.toString()}>
+        </CardDataOverview>
+        <CardDataOverview title={t('total_visits_all_time')} total={totalAllVisits.toString()}>
           <FontAwesomeIcon icon={faClock} width={22} />
-        </CardMenu>
-        <CardMenu title={t('most_sold_medicines')} subtitle={topMed.name} total={topMedsSold[0]?.quantity.toString()}>
+        </CardDataOverview>
+        <CardDataOverview title={t('most_sold_medicines')} subtitle={topMed.name} total={topMedsSold[0]?.quantity.toString()}>
           <FontAwesomeIcon icon={faPills} width={22} />
-        </CardMenu>
-        <CardMenu title={t('most_sold_medicines')} subtitle={topMed.name} total={topMedsSold[0]?.quantity.toString()}>
-          <FontAwesomeIcon icon={faPills} width={22} />
-        </CardMenu>
+        </CardDataOverview>
+      </div>
+
+      <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+        <ChartOne />
+        <ChartThree />
       </div>
     </>
   );
 }
 
-export default DashboardHome;
+export default DashboardAnalysis;
