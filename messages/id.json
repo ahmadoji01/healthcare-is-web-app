@@ -188,6 +188,8 @@
     "role": "Tugas",
     "password_not_the_same": "Kata sandi tidak sama",
     "leave_password_blank": "*Kosongkan kata sandi apabila tidak ingin dirubah",
+    "sign_in_to_fourstake": "Masuk ke Fourstake",
+    "sign_in": "Masuk",
 
     "cashier": {
         "select_patient": "Pilih salah satu pasien yang ada di samping kiri untuk memproses pembayaran",

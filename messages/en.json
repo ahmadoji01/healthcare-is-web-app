@@ -187,8 +187,10 @@
     "choose_role": "Choose One of the Roles Below",
     "password_not_the_same": "Confirmation password is not the same",
     "leave_password_blank": "*Leave password blank to keep it as it is",
-    "exam_fee": "Tarif pemeriksaan",
-    "input_exam_fee": "Masukkan tarif pemeriksaan dokter",
+    "exam_fee": "Examination Fee",
+    "input_exam_fee": "Input doctor's examination fee",
+    "sign_in_to_fourstake": "Sign in to Fourstake",
+    "sign_in": "Sign in",
 
     "cashier": {
         "select_patient": "Choose one of patient besides to process the order",
